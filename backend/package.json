@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "prettier": "2.5.1"
+  },
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
