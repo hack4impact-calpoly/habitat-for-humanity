@@ -1,9 +1,20 @@
 <h1 align="center">
   :houses: Habitat For Humanity
 </h1>
-<p align="center">
+<h4 align="center">
   A scheduling platform to help with donation pickups for the nonprofit Habitat for Humanity, San Luis Obispo.
-</p>
+</h4>
+
+---
+
+<h5 align="center">
+  <a href="https://hfhsloco.org/">About the Nonprofit</a> •
+  <a href="#computer-for-devs">For Developers</a> •
+  <a href="#plate_with_cutlery-boilerplate-react-app-readme">Boilerplate Readme</a>
+</h5>
+
+---
+<br>
 
 ## :computer: For Devs
 
