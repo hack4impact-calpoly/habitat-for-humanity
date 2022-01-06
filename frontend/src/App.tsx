@@ -1,7 +1,9 @@
 import './App.css';
+import React from 'react'
+
 
 /* Screens */
-import ComponentName from './components/ComponentName/ComponentName.tsx'
+import ComponentName from './components/ComponentName/ComponentName'
 
 function App() {
   return (
