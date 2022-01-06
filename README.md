@@ -1,4 +1,16 @@
-# Getting Started with Create React App
+# Habitat For Humanity
+A scheduling platform to help with donation pickups for the nonprofit Habitat for Humanity, San Luis Obispo.
+
+# For Devs
+
+1. Clone the repo
+2. Navigate to the `/frontend` or `/backend` folder
+3. Run `npm install`
+4. Run `npm start`
+
+
+
+# Boilerplate React App Readme
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
