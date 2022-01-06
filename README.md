@@ -1,7 +1,11 @@
-# Habitat For Humanity
-A scheduling platform to help with donation pickups for the nonprofit Habitat for Humanity, San Luis Obispo.
+<h1 align="center">
+  :houses: Habitat For Humanity
+</h1>
+<p align="center">
+  A scheduling platform to help with donation pickups for the nonprofit Habitat for Humanity, San Luis Obispo.
+</p>
 
-# For Devs
+## :computer: For Devs
 
 1. Clone the repository...
 ```
@@ -16,10 +20,11 @@ npm i
 ```
 npm start
 ```
+<br>
+<br>
+<br>
 
-
-
-# Boilerplate React App Readme
+## :plate_with_cutlery: Boilerplate React App Readme
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
