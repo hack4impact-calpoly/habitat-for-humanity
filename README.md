@@ -3,10 +3,19 @@ A scheduling platform to help with donation pickups for the nonprofit Habitat fo
 
 # For Devs
 
-1. Clone the repo
-2. Navigate to the `/frontend` or `/backend` folder
-3. Run `npm install`
-4. Run `npm start`
+1. Clone the repository...
+```
+git clone https://github.com/hack4impact-calpoly/habitat-for-humanity.git
+```
+3. Navigate to the `/frontend` or `/backend` folder
+4. Run...
+```
+npm i
+```
+5. Run...
+```
+npm start
+```
 
 
 
