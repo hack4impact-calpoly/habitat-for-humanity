@@ -4,7 +4,8 @@
     background: #FEFEFE;
     border: none;
     margin: auto;
-    margin-top: 18vh;
+    margin-top: 50vh;
+    transform: translateY(-50%);
     box-shadow: 0px 10px 24px rgba(49, 77, 137, 0.15);
     text-align: center;
     padding: 40px 80px;
