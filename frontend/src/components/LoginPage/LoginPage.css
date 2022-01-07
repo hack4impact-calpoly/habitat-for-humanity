@@ -49,7 +49,7 @@
     font-size: 13px;
 }
 
-.loginForgotPassword:hover {
+#loginForgotPassword:hover {
     text-decoration: underline;
     cursor: pointer;
 }
