@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import logo from "./../../images/logo.png";
-//require("./CreateAccount.css");
+require("./CreateAccount.css");
 
 const CreateAccountPage = (): JSX.Element => {
     const [userType, setUserType] = React.useState();
@@ -104,7 +103,23 @@ const CreateAccountPage = (): JSX.Element => {
     //HTML Body
     return(
     <body>
-
+        <div id="createAccountBox">
+            <p id="createAccountText">Create an Account</p>
+            <form id="createAccountForm">
+                <div id="accountTypeBox">
+                    <p id="accountTypeLabel"> I am a </p>
+                    <p className="accountType">donator</p>
+                    <p className="accountType">volunteer</p>
+                    <p className="accountType">administrator</p>
+                </div>
+                <p className="formLabel">First Name</p>
+                <p className="formLabel">Last Name</p>
+                <p className="formLabel">Email</p>
+                <p className="formLabel">Phone Number</p>
+                <p className="formLabel">Password</p>
+            </form>
+            <button id="signUpButton" onClick={validateAccountInfo}>Sign Up</button>
+        </div>
     </body>);
 }
 
