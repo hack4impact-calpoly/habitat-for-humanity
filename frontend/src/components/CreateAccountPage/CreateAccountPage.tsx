@@ -84,7 +84,7 @@ const CreateAccountPage = (): JSX.Element => {
             //alert("Account with this email already exists") 
         return true;    
     }
-    
+
     const validatePassword = (): boolean => {
         /*
         Desc: Validates password
@@ -113,54 +113,62 @@ const CreateAccountPage = (): JSX.Element => {
                 
                 {/*Div for the user type section*/}
                 <div id="accountTypeBox">
-                    <p id="accountTypeLabel"> I am a </p>
-                    <input type="radio" 
-                            value="donator" //Specifies the value for the useState
-                            name="userType" //connects all options under group "userType" -> only one can be selected at a time
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>donator
+                    <p id="formLabel"> I am a </p>
+                    <div className="accountLabel">
+                        <input type="radio"
+                                className="userTypeButton" 
+                                value="donator" //Specifies the value for the useState
+                                name="userType" //connects all options under group "userType" -> only one can be selected at a time
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>donator
 
-                    <input type="radio" 
-                            value="volunteer" 
-                            name="userType" 
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>volunteer
+                        <input type="radio"
+                                className="userTypeButton" 
+                                value="volunteer" 
+                                name="userType" 
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>volunteer
 
-                    <input type="radio" 
-                            value="administrator" 
-                            name="userType"    
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>administrator
+                        <input type="radio"
+                                className="userTypeButton"  
+                                value="administrator" 
+                                name="userType"    
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>administrator
+                    </div>
                 </div>
 
                 <p className="formLabel">First Name</p>
-                <input className="nameInput"
-                        type="text"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
-                />
+                <div id="nameBox">
+                    <input className="inputBox"
+                            type="text"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
+                    />
 
-                <p className="formLabel">Last Name</p>
-                <input className="nameInput"
-                        type="text"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
-                />
-
+                    <p className="formLabel">Last Name</p>
+                    <input className="inputBox"
+                            type="text"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
+                    />
+                </div>
                 <p className="formLabel">Email</p>
-                <input className="formInput"
+                <input className="inputBox"
                         type="text"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 />
                 
                 <p className="formLabel">Phone Number</p>
-                <input className="formInput"
+                <input className="inputBox"
                         type="text"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
                 />
                 <p className="formLabel">Password</p>
-                <input className="formInput"
+                <input className="inputBox"
                         type="text"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 />
 
             </form>
             <button id="signUpButton" onClick={validateAccountInfo}>Sign Up</button>
+            <p className="createAccountLogin">Already have an account?</p>
+            <p className="createAccountLogin" id="logInLink">Log In</p>
         </div>
     </body>);
 }
