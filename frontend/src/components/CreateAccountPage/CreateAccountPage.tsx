@@ -135,35 +135,47 @@ const CreateAccountPage = (): JSX.Element => {
                     </div>
                 </div>
 
-                <p className="formLabel">First Name</p>
+                
                 <div id="nameBox">
-                    <input className="inputBox"
-                            type="text"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
-                    />
+                    <div className="labelInputBox">
+                        <p className="formLabel labelInputBox">First Name</p>
+                        <input className="inputBox"
+                                type="text"
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
+                        />
+                    </div>
+                    <div className="labelInputBox">
+                        <p className="formLabel labelInputBox">Last Name</p>
+                        <input className="inputBox"
+                                type="text"
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
+                        />
+                    </div>
+                </div>
 
-                    <p className="formLabel">Last Name</p>
+                <div className="labelInputBox">
+                    <p className="formLabel">Email</p>
                     <input className="inputBox"
                             type="text"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     />
                 </div>
-                <p className="formLabel">Email</p>
-                <input className="inputBox"
-                        type="text"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                />
                 
-                <p className="formLabel">Phone Number</p>
-                <input className="inputBox"
-                        type="text"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
-                />
-                <p className="formLabel">Password</p>
-                <input className="inputBox"
-                        type="text"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                />
+                <div className="labelInputBox">
+                    <p className="formLabel labelInputBox">Phone Number</p>
+                    <input className="inputBox"
+                            type="text"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
+                    />
+                </div>
+
+                <div className="labelInputBox">
+                    <p className="formLabel labelInputBox">Password</p>
+                    <input className="inputBox"
+                            type="text"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                    />
+                </div>
 
             </form>
             <button id="signUpButton" onClick={validateAccountInfo}>Sign Up</button>
