@@ -1,0 +1,34 @@
+.donationPage {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 24px 12px 0;
+}
+
+.donationPageContainer {
+	width: 100%;
+	max-width: 789px;
+	display: flex;
+	flex-direction: column;
+}
+
+@media only screen and (min-width: 768px) {
+	.donationPage {
+		padding: 42px 24px 0;
+	}
+
+	.donationPageContainer {
+		row-gap: 12px;
+	}
+}
+
+@media only screen and (min-width: 1024px) {
+	.donationPage {
+		padding-top: 82px;
+	}
+
+	.donationPageContainer {
+		row-gap: 30px;
+	}
+}
