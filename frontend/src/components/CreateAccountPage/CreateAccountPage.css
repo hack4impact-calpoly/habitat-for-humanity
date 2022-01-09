@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+
+
+#createAccountBox {
+    height: 715px;
+    width: 825px;
+    margin: auto;
+    padding: 14% 0% 14% 0%;
+
+    box-sizing: border-box;
+    text-align: center;
+
+    background: #FEFEFE;
+    margin: auto;
+    margin-top: 50vh;
+    transform: translateY(-50%);
+    box-shadow: 0px 10px 24px rgba(49, 77, 137, 0.15);
+    text-align: center;
+    padding: 40px 80px;
+}
+
+#createAccountText {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 47px;
+
+    color: #011338;
+}
+
+#accountTypeBox {
+    display: flex;
+}
+
+.userTypeButton {
+    filter: grayscale();
+}
+
+.userTypeButton:hover {
+    cursor: pointer;
+}
+
+#nameBox {
+    display: flex;
+}
+
+.formLabel {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+
+    color: #011338;
+
+    margin: 6% 0px 0px 0px;
+}
+
+.accountLabel {
+    color: #6DB340;
+}
+
+.inputBox {
+    border: 1px solid rgba(143, 143, 143, 0.6);
+    box-sizing: border-box;
+
+
+}
+
+#signUpButton {
+    background: #314D89;
+
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    
+    color: #FFFFFF;
+}
+
+#signUpButton:hover{
+    cursor :pointer;
+}
+
+.createAccountLogin {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #000000;
+}
+
+#logInLink {
+    color: #6DB340;
+}
+
+#logInLink:hover {
+    text-decoration: underline;
+    cursor: pointer
+}
