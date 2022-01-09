@@ -8,7 +8,7 @@ const CreateAccountPage = (): JSX.Element => {
     const [email, setEmail] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
     const [password, setPassword] = React.useState("");
-    console.log(userType);
+
     //Form Validation Functions
     const validateAccountInfo = (): boolean => {
         /*
@@ -31,8 +31,11 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Validates userTypes (donator, volunteer, administrator)
         Return: boolean (true if valid, false if not)
         */
-
-        //Need to implement
+        if (userType === "")
+        {
+            alert("Please select an account type");
+            return false;
+        }
         return true;
     }
 
@@ -81,6 +84,7 @@ const CreateAccountPage = (): JSX.Element => {
             //alert("Account with this email already exists") 
         return true;    
     }
+    
     const validatePassword = (): boolean => {
         /*
         Desc: Validates password
@@ -107,6 +111,7 @@ const CreateAccountPage = (): JSX.Element => {
             <p id="createAccountText">Create an Account</p>
             <form id="createAccountForm">
                 
+                {/*Div for the user type section*/}
                 <div id="accountTypeBox">
                     <p id="accountTypeLabel"> I am a </p>
                     <input type="radio" 
