@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-require("./CreateAccount.css");
+require("./CreateAccountPage.css");
 
 const CreateAccountPage = (): JSX.Element => {
-    const [userType, setUserType] = React.useState();
+    const [userType, setUserType] = React.useState("");
     const [firstName, setFirstName] = React.useState("");
     const [lastName, setLastName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
     const [password, setPassword] = React.useState("");
-
-    //Form Validation
+    console.log(userType);
+    //Form Validation Functions
     const validateAccountInfo = (): boolean => {
         /*
         Desc: Validates all the form fields
@@ -106,20 +106,58 @@ const CreateAccountPage = (): JSX.Element => {
         <div id="createAccountBox">
             <p id="createAccountText">Create an Account</p>
             <form id="createAccountForm">
+                
                 <div id="accountTypeBox">
                     <p id="accountTypeLabel"> I am a </p>
-                    <p className="accountType">donator</p>
-                    <p className="accountType">volunteer</p>
-                    <p className="accountType">administrator</p>
+                    <input type="radio" 
+                            value="donator" //Specifies the value for the useState
+                            name="userType" //connects all options under group "userType" -> only one can be selected at a time
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>donator
+
+                    <input type="radio" 
+                            value="volunteer" 
+                            name="userType" 
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>volunteer
+
+                    <input type="radio" 
+                            value="administrator" 
+                            name="userType"    
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>administrator
                 </div>
+
                 <p className="formLabel">First Name</p>
+                <input className="nameInput"
+                        type="text"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
+                />
+
                 <p className="formLabel">Last Name</p>
+                <input className="nameInput"
+                        type="text"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
+                />
+
                 <p className="formLabel">Email</p>
+                <input className="formInput"
+                        type="text"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                />
+                
                 <p className="formLabel">Phone Number</p>
+                <input className="formInput"
+                        type="text"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
+                />
                 <p className="formLabel">Password</p>
+                <input className="formInput"
+                        type="text"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                />
+
             </form>
             <button id="signUpButton" onClick={validateAccountInfo}>Sign Up</button>
         </div>
     </body>);
 }
 
+export default CreateAccountPage;
