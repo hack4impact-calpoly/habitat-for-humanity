@@ -19,8 +19,8 @@ const CreateAccountPage = (): JSX.Element => {
         (
             validateUserType() &&
             validateName() &&
-            validatePhoneNumber() &&
             validateEmail() &&
+            validatePhoneNumber() &&
             validatePassword()
         )
         return valid;
@@ -113,7 +113,7 @@ const CreateAccountPage = (): JSX.Element => {
                 
                 {/*Div for the user type section*/}
                 <div id="accountTypeBox">
-                    <p id="formLabel"> I am a </p>
+                    <p id="userTypeLabel"> I am a </p>
                     <div className="accountLabel">
                         <input type="radio"
                                 className="userTypeButton" 
@@ -137,15 +137,15 @@ const CreateAccountPage = (): JSX.Element => {
 
                 
                 <div id="nameBox">
-                    <div className="labelInputBox">
-                        <p className="formLabel labelInputBox">First Name</p>
+                    <div className="labelInputBox" id="firstNameBox">
+                        <p className="formLabel">First Name</p>
                         <input className="inputBox"
                                 type="text"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
                         />
                     </div>
-                    <div className="labelInputBox">
-                        <p className="formLabel labelInputBox">Last Name</p>
+                    <div className="labelInputBox" id="lastNameBox">
+                        <p className="formLabel">Last Name</p>
                         <input className="inputBox"
                                 type="text"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
@@ -162,7 +162,7 @@ const CreateAccountPage = (): JSX.Element => {
                 </div>
                 
                 <div className="labelInputBox">
-                    <p className="formLabel labelInputBox">Phone Number</p>
+                    <p className="formLabel">Phone Number</p>
                     <input className="inputBox"
                             type="text"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
@@ -170,7 +170,7 @@ const CreateAccountPage = (): JSX.Element => {
                 </div>
 
                 <div className="labelInputBox">
-                    <p className="formLabel labelInputBox">Password</p>
+                    <p className="formLabel">Password</p>
                     <input className="inputBox"
                             type="text"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
@@ -179,8 +179,10 @@ const CreateAccountPage = (): JSX.Element => {
 
             </form>
             <button id="signUpButton" onClick={validateAccountInfo}>Sign Up</button>
-            <p className="createAccountLogin">Already have an account?</p>
-            <p className="createAccountLogin" id="logInLink">Log In</p>
+            <div className="logInBox">
+                <p className="createAccountLogin">Already have an account?</p>
+                <p className="createAccountLogin" id="logInLink">Log In</p>
+            </div>
         </div>
     </body>);
 }
