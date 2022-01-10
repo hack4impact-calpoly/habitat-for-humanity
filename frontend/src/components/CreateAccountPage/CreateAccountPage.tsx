@@ -8,9 +8,38 @@ const CreateAccountPage = (): JSX.Element => {
     const [email, setEmail] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
     const [password, setPassword] = React.useState("");
+    let processedPhoneNumber : number; //Phone number converted from string
+    
+
+    function submitData() {
+        const validData = validateForm();
+        if (validData)
+        {
+            const JSONstring = getFormData();
+            console.log(JSONstring);
+            //Submit to backend code
+        }
+    }
+
+    function getFormData() : string {
+        /*
+        Desc: Gets all form data and coverts it into JSON
+        Return: JSON string
+        */
+        const accountData = {
+            "accountType": userType,
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email,
+            "phoneNumber": processedPhoneNumber,
+            "password": password
+        };
+        return JSON.stringify(accountData);
+    }
+
 
     //Form Validation Functions
-    const validateAccountInfo = (): boolean => {
+    const validateForm = (): boolean => {
         /*
         Desc: Validates all the form fields
         Return: boolean (true if all are valid, false if one is not)
@@ -21,7 +50,8 @@ const CreateAccountPage = (): JSX.Element => {
             validateName() &&
             validateEmail() &&
             validatePhoneNumber() &&
-            validatePassword()
+            processPhoneNumber() &&
+            validatePassword() 
         )
         return valid;
     }
@@ -103,6 +133,25 @@ const CreateAccountPage = (): JSX.Element => {
         }
         return true;
     }
+
+    function processPhoneNumber() : boolean {
+        /*
+        Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
+        Return: boolean (true if number successfuly processed, false if not)
+        */
+       try 
+       {
+            const processedString = phoneNumber.replace(/[^0-9]/g, "");
+            processedPhoneNumber  = parseInt(processedString);
+       } 
+       catch (error) 
+       {
+           console.error(error);
+           alert("Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX");
+           return false;
+       }
+       return true;
+    }
     
     //HTML Body
     return(
@@ -178,7 +227,7 @@ const CreateAccountPage = (): JSX.Element => {
                 </div>
 
             </form>
-            <button id="signUpButton" onClick={validateAccountInfo}>Sign Up</button>
+            <button id="signUpButton" onClick={submitData}>Sign Up</button>
             <div className="logInBox">
                 <p className="createAccountLogin">Already have an account?</p>
                 <p className="createAccountLogin" id="logInLink">Log In</p>
