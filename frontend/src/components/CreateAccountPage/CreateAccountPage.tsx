@@ -17,7 +17,7 @@ const CreateAccountPage = (): JSX.Element => {
         {
             const JSONstring = getFormData();
             console.log(JSONstring);
-            //Submit to backend code
+            //connect to backend code
         }
     }
 
@@ -31,7 +31,7 @@ const CreateAccountPage = (): JSX.Element => {
             "firstName": firstName,
             "lastName": lastName,
             "email": email,
-            "phoneNumber": processedPhoneNumber,
+            "phoneNumber": processedPhoneNumber, //number(int) in form: 8057562501
             "password": password
         };
         return JSON.stringify(accountData);
