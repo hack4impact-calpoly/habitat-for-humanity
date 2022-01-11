@@ -1,7 +1,10 @@
+@import "../../config/colors.css";
+
+
 #loginBox {
     height: 450px;
     width: 350px;
-    background: #FEFEFE;
+    background: var(--white-gray);
     border: none;
     margin: auto;
     margin-top: 50vh;
@@ -29,7 +32,7 @@
 }
 
 .loginLabel {
-    color: #314D89;
+    color: var(--primary);
     text-align: left;
     margin: 0 0 2px 0;
     font-weight: 500;
@@ -43,7 +46,7 @@
 }
 
 #loginForgotPassword {
-    color: #6DB340;
+    color: var(--secondary);
     margin: 0;
     font-weight: 500;
     font-size: 13px;
@@ -57,8 +60,8 @@
 #loginSubmit {
     margin-top: 20px;
     width: 100%;
-    background-color: #314D89;
-    color: white;
+    background-color: var(--primary);
+    color: var(--white);
     padding: 15px;
     border: none;
     font-weight: bold;
@@ -75,7 +78,7 @@
 }
 
 #createAccountLink {
-    color: #6DB340;
+    color: var(--secondary);
 }
 
 #createAccountLink:hover {
