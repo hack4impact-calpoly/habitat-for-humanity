@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
 
 #createAccountBox {
-    width: 675px;
-    height: 760px;
+    width: 607px;
+    height: 684px;
     margin: auto;
 
     box-sizing: border-box;
@@ -12,16 +12,16 @@
     margin: auto;
     margin-top: 50vh;
     transform: translateY(-50%);
-    box-shadow: 0px 10px 24px rgba(49, 77, 137, 0.15);
-    padding: 60px 90px 80px 90px;
+    box-shadow: 0px 9px 22px rgba(49, 77, 137, 0.15);
+    padding: 65px 81px 72px 81px;
 }
 
 #createAccountText {
     font-family: Rubik;
-    font-weight: 500 ;
-    font-size: 42px;
-    line-height: 47px;
-    margin: 0px 0px 40px 0px;
+    font-weight: 600 ;
+    font-size: 38px;
+    line-height: 42px;
+    margin: 0px 0px 36px 0px;
     text-align: left;
 
     color: #011338;
@@ -37,7 +37,7 @@
 #userTypeLabel {
     margin: 0px 0px 0px 0px;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .accountLabel {
@@ -48,7 +48,7 @@
 
 .userTypeButton {
     filter: grayscale();
-    margin: 2px 10px 0px 30px; 
+    margin: 2px 9px 0px 27px; 
 }
 
 .userTypeButton:hover {
@@ -62,10 +62,10 @@
 }
 
 #firstNameBox {
-    width: 230px;
+    width: 207px;
 }
 #lastNameBox {
-    width: 230px;
+    width: 207px;
 }
 
 .labelInputBox{
@@ -78,22 +78,22 @@
     font-family: Rubik;
     font-style: normal;
     font-weight: bolder;
-    font-size: 16px;
-    line-height: 21px;
+    font-size: 14px;
+    line-height: 19px;
     
     color: #011338;
 
-    margin: 25px 0px 6px 0px;
+    margin: 22px 0px 5px 0px;
 }
 
 .inputBox {
     font-family: Rubik;
     box-sizing: border-box;
-    height: 50px;
+    height: 45px;
     width: 100%;
     border: 1px solid rgba(49, 77, 137, 0.6);
-    padding: 10px;
-    font-size: 15px;
+    padding: 9px;
+    font-size: 13px;
     font-weight: 500;
 }
 
@@ -104,10 +104,10 @@
     font-family: Rubik;
     font-style: normal;
     font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
-    margin: 30px 0px 15px 0px;
-    height: 60px;
+    font-size: 18px;
+    line-height: 22px;
+    margin: 27px 0px 13px 0px;
+    height: 54px;
     width: 100%;
     color: #FFFFFF;
 }
@@ -121,8 +121,8 @@
     font-family: Rubik;
     font-style: normal;
     font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
+    font-size: 14px;
+    line-height: 17px;
     margin: 0px 0px 0px 0px;
 
     color: #000000;
