@@ -6,10 +6,12 @@ import React from 'react'
 // import LoginPage from "./components/LoginPage/LoginPage";
 // import DonatorNavbar from './components/DonatorNavbar/DonatorNavbar';
 import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
+import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 
 function App(): JSX.Element {
   return (
-    <DonatorHomePage />
+    //<DonatorHomePage />
+    <CreateAccountPage />
   );
 }
 
