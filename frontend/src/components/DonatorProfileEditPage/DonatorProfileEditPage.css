@@ -77,6 +77,10 @@
     font-weight: 600;
 }
 
+.buttons:hover{
+    cursor:pointer;
+}
+
 #backButton {
     margin-right: 20px;
     background: var(--white);

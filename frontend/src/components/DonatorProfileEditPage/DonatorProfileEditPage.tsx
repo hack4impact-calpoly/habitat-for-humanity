@@ -9,9 +9,15 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
     const [phoneNumber, setPhoneNumber] = React.useState("");
     let processedPhoneNumber : number; //Phone number converted from string
 
+
+
     /*---------------Form Data Handling---------------------------*/
     function getProfileData() {
         //backend code to get profile data
+    }
+    
+    function displayProfileData(profileData: Object) {
+        //set state variables with profile data, asynchronous
     }
 
     function submitData() {
@@ -132,7 +138,6 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
                             <input className="inputBox"
                                 type="text"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}>
-
                             </input>
                         </div>
                         <div className="labelInputBox" id="lastNameBox">
