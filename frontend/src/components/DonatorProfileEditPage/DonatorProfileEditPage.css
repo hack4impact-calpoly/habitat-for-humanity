@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+@import "../../config/colors.css";
+
+
+#editProfileBox {
+    width: 410px;
+    height: 600px;
+    margin: auto;
+
+    margin-top: 50vh;
+    transform: translateY(-50%);
+    justify-content: center;
+}
+#editProfileText{
+    font-family: Rubik;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 35px;
+    margin: 0px 0px 5px 0px;
+
+    color: var(--primary);
+}
+
+#nameBox {
+    display: flex;
+    align-items: center;
+    margin: 0px 0px 0px 0px;
+}
+
+#firstNameBox {
+    width: 200px;
+    margin: 0px 30px 0px 0px;
+}
+#lastNameBox {
+    width: 200px;
+    margin: 0x 0px 0px 30px;
+}
+
+.labelInputBox {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.formLabel {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: bolder;
+    font-size: 14px;
+    line-height: 19px;
+    
+    color: var(--black);
+
+    margin: 18px 0px 5px 0px;
+}
+
+.inputBox {
+    border: 1px solid rgba(143, 143, 143, 0.6); /*Update after colors.css merge*/
+    font-family: Rubik;
+    box-sizing: border-box;
+    height: 40px;
+    width: 100%;
+    padding: 9px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+#buttonBox {
+    margin: 33px 0px 0px 0px;
+    height: 40px
+}
+
+.buttons{
+    height: 100%;
+    width: 150px;
+    font-family: Rubik;
+    font-weight: 600;
+}
+
+#backButton {
+    margin-right: 20px;
+    background: var(--white);
+    color: #04B2D9;
+    border: 2px solid #04B2D9;
+}
+
+#saveChangesButton {
+    background: #04B2D9;
+    border: 0px solid #04B2D9;
+    color: var(--white);
+}
