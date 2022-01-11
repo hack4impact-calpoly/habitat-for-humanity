@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
 
-
 #createAccountBox {
     width: 675px;
     height: 760px;
@@ -88,7 +87,6 @@
 }
 
 .inputBox {
-    /* border: 1px solid rgba(143, 143, 143, 0.6); */
     font-family: Rubik;
     box-sizing: border-box;
     height: 50px;
@@ -143,4 +141,79 @@
 #logInLink:hover {
     text-decoration: underline;
     cursor: pointer
+}
+
+
+@media only screen and (max-width: 700px) {
+    #createAccountBox {
+        width: 405px;
+        height: 456px;
+
+        margin: auto;
+        margin-top: 50vh;
+        transform: translateY(-50%);
+        padding: 36px 54px 49px 54px;
+    }
+
+    #createAccountText {
+        font-size: 25px;
+        line-height: 28px;
+        margin: 0px 0px 24px 0px;
+    }
+    
+    #accountTypeBox {
+        margin: 0px 0px 3px 0px;
+    }
+    
+    #userTypeLabel {
+        margin: 0px 0px 0px 0px;
+        font-size: 10px;
+    }
+    
+    .accountLabel {
+        font-size: 10px;
+    }
+    
+    .userTypeButton {
+        margin: 1px 6px 0px 18px; 
+    }
+    
+    #firstNameBox {
+        width: 138px;
+    }
+    #lastNameBox {
+        width: 138px;
+    }
+    
+    .formLabel {
+        font-size: 10px;
+        line-height: 13px;
+    
+        margin: 15px 0px 4px 0px;
+    }
+    
+    .inputBox {
+        height: 30px;
+        width: 100%;
+        padding: 6px;
+        font-size: 9px;
+    }
+    
+    #signUpButton {
+        font-size: 12px;
+        line-height: 14px;
+        margin: 18px 0px 9px 0px;
+        height: 36px;
+        width: 100%;
+    }
+    
+    .createAccountLogin {
+        font-size: 10px;
+        line-height: 11px;
+        margin: 0px 0px 0px 0px;
+    }
+    
+    #logInLink {
+        margin: 0px 0px 0px 3px;
+    }
 }
