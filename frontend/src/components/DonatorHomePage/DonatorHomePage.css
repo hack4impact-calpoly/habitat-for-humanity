@@ -1,3 +1,6 @@
+@import "../../config/colors.css";
+
+
 #donatePage {
     text-align: center;
 }
@@ -15,7 +18,7 @@
 }
 
 #donatePageHeader {
-    color: #314D89;
+    color: var(--primary);
 }
 
 #donatePageDesc {
@@ -26,8 +29,8 @@
 #donatePageButton {
     border: none;
     padding: 15px 30px;
-    color: white;
-    background: #6DB340;
+    color: var(--white);
+    background: var(--secondary);
     font-weight: bold;
     font-size: 15px;
 }
