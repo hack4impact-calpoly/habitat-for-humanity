@@ -9,7 +9,7 @@
     margin: auto;
     margin-top: 50vh;
     transform: translateY(-50%);
-    box-shadow: 0px 10px 24px rgba(49, 77, 137, 0.15);
+    box-shadow: 0px 10px 24px var(--box-shadow);
     text-align: center;
     padding: 40px 80px;
 }
@@ -27,7 +27,7 @@
     height: 30px;
     font-size: 15px;
     width: 95%;
-    border: 1.5px solid rgba(49, 77, 137, 0.6);
+    border: 1.5px solid var(--input-box);
     padding: 2%;
 }
 
