@@ -55,7 +55,7 @@
 }
 
 .inputBox {
-    border: 1px solid rgba(143, 143, 143, 0.6); /*Update after colors.css merge*/
+    border: 1px solid var(--input-box);
     font-family: Rubik;
     box-sizing: border-box;
     height: 40px;
@@ -84,12 +84,65 @@
 #backButton {
     margin-right: 20px;
     background: var(--white);
-    color: #04B2D9;
-    border: 2px solid #04B2D9;
+    color: var(--tertiary);
+    border: 2px solid var(--tertiary);
 }
 
 #saveChangesButton {
-    background: #04B2D9;
-    border: 0px solid #04B2D9;
+    background: var(--tertiary);
+    border: 0px solid var(--tertiary);
     color: var(--white);
+}
+
+@media only screen and (max-width: 525px) {
+    /* 85% original size */
+    #editProfileBox {
+        width: 349px;
+        height: 510px;
+    
+        margin-top: 50vh;
+        transform: translateY(-50%);
+    }
+    #editProfileText{
+        font-size: 26px;
+        line-height: 30px;
+        margin: 0px 0px 4px 0px;
+    }
+    
+    #firstNameBox {
+        width: 170px;
+        margin: 0px 25px 0px 0px;
+    }
+    #lastNameBox {
+        width: 170px;
+        margin: 0x 0px 0px 25px;
+    }
+    
+    .formLabel {
+        font-size: 12px;
+        line-height: 16px;
+
+        margin: 15px 0px 4px 0px;
+    }
+    
+    .inputBox {
+        height: 34px;
+        width: 100%;
+        padding: 7px;
+        font-size: 12px;
+    }
+    
+    #buttonBox {
+        margin: 38px 0px 0px 0px;
+        height: 34px
+    }
+    
+    .buttons{
+        height: 100%;
+        width: 127px;
+    }
+    
+    #backButton {
+        margin-right: 17px;
+    }
 }
