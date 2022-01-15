@@ -7,8 +7,18 @@ const DonatorLocationPage = (): JSX.Element => {
     const [city, setCity] = React.useState<string>("")
     const [zip, setZip] = React.useState<number>(0);
 
-    const postDonatorLocation = () => {
+    const nextOnClickDonatorLocation = () => {
         console.log(address, city, zip);
+
+        if (address.length === 0 || city.length === 0) {
+            alert("One or more of the inputs are incomplete. Please try again.");
+        }
+        else if(!(zip >= 1000 && zip <= 99999)) {
+            alert("Please enter a valid 5 digit zip code.");
+        }
+        // else {
+        //     redirect to next page
+        // }
     }
 
     return (
@@ -32,7 +42,7 @@ const DonatorLocationPage = (): JSX.Element => {
                 </div>
                 <div id="docLocButtons">
                     <button className="backButton">Back</button>
-                    <button className="nextButton"onClick={() => postDonatorLocation()}>Next</button>
+                    <button className="nextButton"onClick={() => nextOnClickDonatorLocation()}>Next</button>
                 </div>
             </div>
         </body>
