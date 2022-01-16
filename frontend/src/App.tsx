@@ -1,6 +1,5 @@
 import './App.css';
 import React from 'react'
-import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
 
 /* Screens */
 // import ComponentName from './components/ComponentName/ComponentName';
@@ -9,6 +8,8 @@ import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextS
 // import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
+// import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
+import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
 
 function App(): JSX.Element {
   return (
@@ -16,6 +17,7 @@ function App(): JSX.Element {
     //<DonatorHomePage />
     //<CreateAccountPage />
     // <DonatorProfileEditPage />
+    // <DonatorLocationPage />
     <DonatorNextStepsPage />
   );
 }
