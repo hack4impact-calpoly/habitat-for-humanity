@@ -1,0 +1,32 @@
+@import "./../../config/colors.css";
+
+#donNextStepsPage {
+    padding: 0 18%;
+}
+
+#donNextStepsHeader {
+    color: var(--orange);
+}
+
+#donNextStepsDesc, #donNextStepsQuestions, #donNextStepsPhone {
+    font-weight: 400;
+}
+
+#donNextStepsDesc {
+    padding-right: 30%;
+}
+
+#donNextStepsQuestions {
+    display: inline;
+}
+
+#donNextStepsPhone {
+    display: inline;
+    color: var(--tertiary);
+}
+
+@media only screen and (max-width: 1400px) {
+    #donNextStepsPage {
+        padding: 0 15%;
+    }
+}
