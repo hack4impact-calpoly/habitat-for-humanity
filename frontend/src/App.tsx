@@ -10,6 +10,7 @@ import React from 'react'
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
 import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
 
+
 function App(): JSX.Element {
   return (
     //<LoginPage />
