@@ -25,6 +25,10 @@
     color: var(--tertiary);
 }
 
+#donNextStepsPhone:hover {
+    text-decoration: underline;
+}
+
 @media only screen and (max-width: 1050px) {
     #donNextStepsDesc {
         padding-right: 15%;
