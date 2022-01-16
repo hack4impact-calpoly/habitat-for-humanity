@@ -8,7 +8,7 @@ import React from 'react'
 // import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
-import DonatorScheduleDropoffPage from './components/DonatorScheduleDropoffPage/DonatorScheduleDropoffPage';
+import DonatorScheduleDropoffPickupPage from './components/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage';
 
 function App(): JSX.Element {
   return (
@@ -16,7 +16,7 @@ function App(): JSX.Element {
     //<DonatorHomePage />
     //<CreateAccountPage />
     // <DonatorProfileEditPage />
-    <DonatorScheduleDropoffPage />
+    <DonatorScheduleDropoffPickupPage />
   );
 }
 

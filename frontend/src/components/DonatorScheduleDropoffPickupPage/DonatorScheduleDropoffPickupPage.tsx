@@ -1,16 +1,7 @@
 import React from "react";
 import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
-require("./DonatorScheduleDropoffPage.css");
-
-const weeklyHours = [
-    { day: "Monday", hours: "Closed" },
-    { day: "Tuesday", hours: "10:00 AM to 5:00 PM" },
-    { day: "Wednesday", hours: "10:00 AM to 5:00 PM" },
-    { day: "Thursday", hours: "10:00 AM to 5:00 PM" },
-    { day: "Friday", hours: "10:00 AM to 5:00 PM" },
-    { day: "Saturday", hours: "10:00 AM to 5:00 PM" },
-    { day: "Sunday", hours: "Closed" },
-];
+import DonatorScheduleDropoff from "./DonatorScheduleDropoff";
+require("./DonatorScheduleDropoffPickupPage.css");
 
 const DonatorScheduleDropoffPage = (): JSX.Element => {
     const [isDropoff, setIsDropoff] = React.useState<boolean>(true)
@@ -33,23 +24,7 @@ const DonatorScheduleDropoffPage = (): JSX.Element => {
                             </div>
                     </div>
                 </div>
-                {isDropoff ? (
-                    <div>
-                        <h2 className="donDropoffPickupHeader">ReStore Drop Off Hours</h2>
-                        <table>
-                            <tbody>
-                                {weeklyHours.map((element, index) => {
-                                    const day: string = element.day;
-                                    const hours: string = element.hours;
-                                    return (
-                                        <tr key={index}>
-                                            <td className="donDropoffRow" key={index + 7}>{day}</td>
-                                            <td className="donDropoffRow donDropoffHours" key={index + 14}>{hours}</td>
-                                        </tr>
-                                );})}
-                            </tbody>
-                        </table>
-                    </div>) : 
+                {isDropoff ? <DonatorScheduleDropoff /> : 
                     // TODO: Implement pick up option
                     null}
                 <div id="donDropoffButtons">
