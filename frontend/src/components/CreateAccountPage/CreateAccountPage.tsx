@@ -1,4 +1,10 @@
 import React, { useState } from "react";
+import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
+import InputAdornment from '@mui/material/InputAdornment';
+import Input from '@mui/material/Input';
+import IconButton from '@mui/material/IconButton';
+
 require("./CreateAccountPage.css");
 
 const CreateAccountPage = (): JSX.Element => {
@@ -7,7 +13,9 @@ const CreateAccountPage = (): JSX.Element => {
     const [lastName, setLastName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const [password, setPassword] = React.useState({
+                                                    password: "",
+                                                    showPassword: false});
     let processedPhoneNumber : number; //Phone number converted from string
     
 
@@ -32,7 +40,7 @@ const CreateAccountPage = (): JSX.Element => {
             "lastName": lastName,
             "email": email,
             "phoneNumber": processedPhoneNumber, //number(int) in form: 8057562501
-            "password": password
+            "password": password.password
         };
         return JSON.stringify(accountData);
     }
@@ -121,12 +129,12 @@ const CreateAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         const MIN_PASSWORD_LENGTH = 6;  
-        if (password === "")
+        if (password.password === "")
         {
             alert("Please add password");
             return false;
         }
-        else if (password.length < MIN_PASSWORD_LENGTH)
+        else if (password.password.length < MIN_PASSWORD_LENGTH)
         {
             alert(`Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`);
             return false;
@@ -142,7 +150,12 @@ const CreateAccountPage = (): JSX.Element => {
        try 
        {
             const processedString = phoneNumber.replace(/[^0-9]/g, "");
+            if (processedString === ""){
+                alert("Please enter your phone number in the form XXX-XXX-XXXX")
+                return false;
+            }
             processedPhoneNumber  = parseInt(processedString);
+            
        } 
        catch (error) 
        {
@@ -220,9 +233,22 @@ const CreateAccountPage = (): JSX.Element => {
 
                 <div className="labelInputBox">
                     <p className="formLabel">Password</p>
-                    <input className="inputBox"
-                            type="text"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                    <Input className="inputBox"
+                            id="passwordBox"
+                            value={password.password}
+                            type={password.showPassword ? "text" : "password"}
+                            disableUnderline={true}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword({...password, ["password"]: e.target.value})}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={() => setPassword({...password, showPassword: !password.showPassword, })}
+                                        onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}
+                                        edge="end">
+                                        {password.showPassword ? <VisibilityIcon className="passwordIcon" /> : <VisibilityOffIcon className="passwordIcon"/>}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
                     />
                 </div>
 
