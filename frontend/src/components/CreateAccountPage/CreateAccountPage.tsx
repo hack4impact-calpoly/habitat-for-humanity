@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -242,10 +243,10 @@ const CreateAccountPage = (): JSX.Element => {
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
-                                        onClick={() => setPassword({...password, showPassword: !password.showPassword, })}
+                                        onClick={() => setPassword({...password, showPassword: !password.showPassword})}
                                         onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}
                                         edge="end">
-                                        {password.showPassword ? <VisibilityIcon className="passwordIcon" /> : <VisibilityOffIcon className="passwordIcon"/>}
+                                        {password.showPassword ? <VisibilityIcon className="passwordIcon"/> : <VisibilityOffIcon className="passwordIcon"/>}
                                     </IconButton>
                                 </InputAdornment>
                             }
