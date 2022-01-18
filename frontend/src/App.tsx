@@ -8,13 +8,15 @@ import LoginPage from "./components/LoginPage/LoginPage";
 import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
 import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
+import ForgotPasswordPage from './components/ForgotPasswordPage/ForgotPasswordPage';
 
 function App(): JSX.Element {
   return (
     //<LoginPage />
     //<DonatorHomePage />
     //<CreateAccountPage />
-    <DonatorProfileEditPage />
+    //<DonatorProfileEditPage />
+    <ForgotPasswordPage />
   );
 }
 
