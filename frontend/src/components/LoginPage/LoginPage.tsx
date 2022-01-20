@@ -19,7 +19,7 @@ const LoginPage = (): JSX.Element => {
         if (email === "") {
             alert("Email is blank. Please try again.")
         } else if (password.value === "") {
-            alert("Passowrd is blank. Please try again.")
+            alert("Password is blank. Please try again.")
         } // check other invalid errors
         // if no errors/valid login -> redirect to logged in page
     }
