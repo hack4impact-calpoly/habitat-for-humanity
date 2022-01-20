@@ -144,6 +144,17 @@
     cursor: pointer
 }
 
+#passwordBox {
+    font-family: Rubik;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.passwordIcon {
+    color: var(--primary);
+    margin-right: 6px;
+}
+
 @media only screen and (max-height: 800px) {
     #createAccountBox {
         width: 405px;
@@ -199,6 +210,10 @@
         font-size: 9px;
     }
     
+    #passwordBox {
+        font-size: 9px;
+    }
+
     #signUpButton {
         font-size: 12px;
         line-height: 14px;
@@ -216,6 +231,7 @@
     #logInLink {
         margin: 0px 0px 0px 3px;
     }
+
 }
 
 @media only screen and (max-width: 700px) {
@@ -270,6 +286,10 @@
         height: 30px;
         width: 100%;
         padding: 6px;
+        font-size: 9px;
+    }
+
+    #passwordBox {
         font-size: 9px;
     }
     
