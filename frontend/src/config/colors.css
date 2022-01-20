@@ -3,10 +3,13 @@
 :root {
     --primary: #314D89;
     --secondary: #6DB340;
+    --tertiary: #04B2D9;
     --white: #FFFFFF;
     --black: #000000;
     --white-gray: #FEFEFE;
     --gray-light: #DFDFDF;
     --box-shadow: #314D8926;
+    --box-border: #ACACAC;
     --input-box: #314D8999;
+    --orange: #F23E16;
 }

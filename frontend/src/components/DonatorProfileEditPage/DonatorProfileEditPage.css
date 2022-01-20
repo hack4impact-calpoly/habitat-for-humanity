@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+@import "../../config/colors.css";
+
+
+#editProfileBox {
+    width: 410px;
+    height: 600px;
+    margin: auto;
+
+    margin-top: 50vh;
+    transform: translateY(-50%);
+    justify-content: center;
+}
+#editProfileText{
+    font-family: Rubik;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 35px;
+    margin: 0px 0px 5px 0px;
+
+    color: var(--primary);
+}
+
+#nameBox {
+    display: flex;
+    align-items: center;
+    margin: 0px 0px 0px 0px;
+}
+
+#firstNameBox {
+    width: 200px;
+    margin: 0px 30px 0px 0px;
+}
+#lastNameBox {
+    width: 200px;
+    margin: 0x 0px 0px 30px;
+}
+
+.labelInputBox {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.formLabel {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: bolder;
+    font-size: 14px;
+    line-height: 19px;
+    
+    color: var(--black);
+
+    margin: 18px 0px 5px 0px;
+}
+
+.inputBox {
+    border: 1px solid var(--input-box);
+    font-family: Rubik;
+    box-sizing: border-box;
+    height: 40px;
+    width: 100%;
+    padding: 9px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+#buttonBox {
+    margin: 33px 0px 0px 0px;
+    height: 40px
+}
+
+.buttons{
+    height: 100%;
+    width: 150px;
+    font-family: Rubik;
+    font-weight: 600;
+}
+
+.buttons:hover{
+    cursor:pointer;
+}
+
+#backButton {
+    margin-right: 20px;
+    background: var(--white);
+    color: var(--tertiary);
+    border: 2px solid var(--tertiary);
+}
+
+#saveChangesButton {
+    background: var(--tertiary);
+    border: 0px solid var(--tertiary);
+    color: var(--white);
+}
+
+@media only screen and (max-width: 525px) {
+    /* 85% original size */
+    #editProfileBox {
+        width: 349px;
+        height: 510px;
+    
+        margin-top: 50vh;
+        transform: translateY(-50%);
+    }
+    #editProfileText{
+        font-size: 26px;
+        line-height: 30px;
+        margin: 0px 0px 4px 0px;
+    }
+    
+    #firstNameBox {
+        width: 170px;
+        margin: 0px 25px 0px 0px;
+    }
+    #lastNameBox {
+        width: 170px;
+        margin: 0x 0px 0px 25px;
+    }
+    
+    .formLabel {
+        font-size: 12px;
+        line-height: 16px;
+
+        margin: 15px 0px 4px 0px;
+    }
+    
+    .inputBox {
+        height: 34px;
+        width: 100%;
+        padding: 7px;
+        font-size: 12px;
+    }
+    
+    #buttonBox {
+        margin: 38px 0px 0px 0px;
+        height: 34px
+    }
+    
+    .buttons{
+        height: 100%;
+        width: 127px;
+    }
+    
+    #backButton {
+        margin-right: 17px;
+    }
+}
