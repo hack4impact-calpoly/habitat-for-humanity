@@ -1,24 +1,15 @@
 import React from "react";
 import logo from "./../../images/logo.png";
-
-import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
-import InputAdornment from '@mui/material/InputAdornment';
-import Input from '@mui/material/Input';
-import IconButton from '@mui/material/IconButton';
-
 require("./LoginPage.css");
 
 const LoginPage = (): JSX.Element => {
     const [email, setEmail] = React.useState<string>("");
-    const [password, setPassword] = React.useState({
-                                                    value: "",
-                                                    showPassword: false});
+    const [password, setPassword] = React.useState<string>("");
 
     const checkCredentials = () => {
         if (email === "") {
             alert("Email is blank. Please try again.")
-        } else if (password.value === "") {
+        } else if (password === "") {
             alert("Passowrd is blank. Please try again.")
         } // check other invalid errors
         // if no errors/valid login -> redirect to logged in page
@@ -39,23 +30,10 @@ const LoginPage = (): JSX.Element => {
                         <p className="loginLabel">Password</p>
                         <p id="loginForgotPassword">Forgot Password?</p>
                     </div>
-                    <Input
+                    <input
                         className="loginInput"
-                        id="passwordBox"
-                        value={password.value}
-                        type={password.showPassword ? "text" : "password"}
-                        disableUnderline={true}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword({...password, ["value"]: event?.target?.value})}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    onClick={() => setPassword({...password, showPassword: !password.showPassword})}
-                                    onMouseDown={(event: React.MouseEvent<HTMLButtonElement>) => event?.preventDefault()}
-                                    edge="end">
-                                        {password.showPassword ? <VisibilityIcon className="passwordIcon"/> : <VisibilityOffIcon className="passwordIcon" />}
-                                    </IconButton>
-                            </InputAdornment>
-                        }
+                        type="text"
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword(event?.target?.value)}
                     />
                     <button id="loginSubmit" onClick={checkCredentials}>Log In</button>
                 </form>

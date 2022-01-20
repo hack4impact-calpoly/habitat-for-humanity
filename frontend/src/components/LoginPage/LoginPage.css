@@ -24,22 +24,11 @@
 }
 
 .loginInput {
-    box-sizing: border-box;
-    height: 48px;
+    height: 30px;
     font-size: 15px;
-    width: 100%;
+    width: 95%;
     border: 1.5px solid var(--input-box);
     padding: 2%;
-    
-}
-
-#passwordBox {
-    font-family: inherit;
-}
-
-.passwordIcon {
-    color: var(--primary);
-    margin-right: 6px;
 }
 
 .loginLabel {
@@ -129,11 +118,7 @@
     }
 
     .loginInput {
-        height: 35px;
-        font-size: 13px;
-    }
-
-    #passwordBox {
+        height: 20px;
         font-size: 13px;
     }
 
