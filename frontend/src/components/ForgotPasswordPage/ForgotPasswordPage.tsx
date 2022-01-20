@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 require("./ForgotPasswordPage.css");
 
 const ForgotPasswordPage = (): JSX.Element => {
-    const [email, setEmail] = React.useState("");
+    const [email, setEmail] = React.useState<string>("");
     
 
     function submitData() {
@@ -50,7 +50,7 @@ const ForgotPasswordPage = (): JSX.Element => {
                 <p className="emailInput">Email</p>
                 <input className="inputBox"
                     type="text"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e?.target?.value)}
                 />
             <button id="sendButton" onClick={submitData}>Send</button>
 
