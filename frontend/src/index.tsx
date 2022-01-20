@@ -11,11 +11,14 @@ import App from "./App";
 // Component imports for navigation
 import CreateAccount from "./components/CreateAccountPage/CreateAccountPage";
 import DonatorHome from "./components/DonatorHomePage/DonatorHomePage";
+
+//import DonatorItemInfo
 import DonatorLocation from "./components/DonatorLocationPage/DonatorLocationPage";
-import DonatorNextSteps from "./components/DonatorNextStepsPage/DonatorNextStepsPage";
-//import DonatorProfile from "./components/DonatorProfile/DonatorProfilePage";
-import DonatorProfileEdit from "./components/DonatorProfileEditPage/DonatorProfileEditPage";
 import DonatorScheduleDropoffPickup from "./components/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage";
+import DonatorNextSteps from "./components/DonatorNextStepsPage/DonatorNextStepsPage";
+
+//import DonatorProfile
+import DonatorProfileEdit from "./components/DonatorProfileEditPage/DonatorProfileEditPage";
 
 
 
@@ -23,17 +26,27 @@ const rootElement = document.getElementById("root");
 render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<App />} />
+      <Route path="/" element={<App />} /> {/* Login page */}
       <Route path="/CreateAccount" element={<CreateAccount />} />
 
       <Route path="/Donator">
           <Route path="Home" element={<DonatorHome />} />
-          <Route path="Location" element={<DonatorLocation />} />
-          <Route path="NextSteps" element={<DonatorNextSteps />} />
+          <Route path="MakeADonation"> {/*Cleaner Hierarchy and Easy for Navbar Underline */}
+              <Route path="Location" element={<DonatorLocation />} />
+              <Route path="NextSteps" element={<DonatorNextSteps />} />
+              <Route path="ScheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
+
+              <Route path="*" element={<p>ERROR 404: Make A Donation Page Not Found</p>} />
+          </Route>
           <Route path="ProfileEdit" element={<DonatorProfileEdit />} />
-          <Route path="ScheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
+          {/* Replace Profile Edit when done
+          <Route path="Profile" element={<DonatorProfile />}>
+              <Route path="Edit" element={<DonatorProfileEdit />} />
+              <Route path="*" element={<p>ERROR 404: Profile Page Not Found</p>}>
+          </Route> 
+          */}
           
-          <Route path="*" element={<DonatorHome />} /> {/* Donator Catch all case -> Donator Home*/}
+          <Route path="*" element={<p>ERROR 404: Donator Page Not Found</p>} /> {/* Donator Catch all case -> Donator Home*/}
       </Route>
 
       <Route path="*" element={<App />} /> {/*Catch all case sends back to login*/}
