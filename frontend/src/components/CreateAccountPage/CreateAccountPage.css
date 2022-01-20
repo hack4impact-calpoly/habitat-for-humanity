@@ -144,6 +144,15 @@
     cursor: pointer
 }
 
+#passwordBox {
+    font-family: Rubik;
+    font-size: 13px;
+    font-weight: 500;
+}
+.passwordIcon {
+    color: var(--primary);
+}
+
 @media only screen and (max-height: 800px) {
     #createAccountBox {
         width: 405px;
