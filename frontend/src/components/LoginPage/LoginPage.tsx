@@ -45,7 +45,7 @@ const LoginPage = (): JSX.Element => {
                         value={password.value}
                         type={password.showPassword ? "text" : "password"}
                         disableUnderline={true}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword({...password, ["value"]: event?.target?.value})}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword({...password, "value": event?.target?.value})}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
