@@ -5,11 +5,11 @@ import React from 'react'
 // import ComponentName from './components/ComponentName/ComponentName';
 // import LoginPage from "./components/LoginPage/LoginPage";
 // import DonatorNavbar from './components/DonatorNavbar/DonatorNavbar';
-// import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
+import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
 // import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
-import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
+// import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
 
 function App(): JSX.Element {
   return (
@@ -18,7 +18,7 @@ function App(): JSX.Element {
     //<CreateAccountPage />
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
-    <DonatorNextStepsPage />
+    <DonatorHomePage />
   );
 }
 
