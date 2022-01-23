@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
+
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -256,7 +258,7 @@ const CreateAccountPage = (): JSX.Element => {
             <button id="signUpButton" onClick={submitData}>Sign Up</button>
             <div className="logInBox">
                 <p className="createAccountLogin">Already have an account?</p>
-                <p className="createAccountLogin" id="logInLink">Log In</p>
+                <Link to={"/"} className="createAccountLogin" id="logInLink">Log In</Link>
             </div>
         </div>
     </body>);
