@@ -10,6 +10,7 @@ import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
 // import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
+// import DonatorScheduleDropoffPickupPage from './components/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage';
 
 function App(): JSX.Element {
   return (
