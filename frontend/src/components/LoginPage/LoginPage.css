@@ -97,64 +97,69 @@
     cursor: pointer;
 }
 
-@media only screen and (max-width: 512px) {
+@media only screen and (max-width: 640px) {
     #loginBox {
-        height: 400px;
-        width: 250px;
-        padding: 20px 50px;
+        box-shadow: none;
+        padding: 0px;
+        height: fit-content;
+        width: 75%;
     }
 
     #loginLogo {
-        height: 80px;
+        height: auto;
+        width: 80%;
     }
+}
 
-    #loginForm {
-        margin-top: 10%;
+@media only screen and (max-width: 400px) {
+    #loginLogo {
+        width: 85%;
     }
 
     .loginLabel {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     #loginForgotPassword, .loginCreateAccount {
-        font-size: 11.5px;
+        font-size: 11px;
     }
 }
 
-@media only screen and (max-width: 352px) {
+@media only screen and (max-height: 530px) {
     #loginBox {
-        height: 400px;
-        width: 250px;
-        padding: 10px 20px;
-    }
-
-    .loginInput {
-        height: 35px;
-        font-size: 13px;
-    }
-
-    #passwordBox {
-        font-size: 13px;
-    }
-
-    #loginSubmit {
-        margin-top: 20px;
-        padding: 10px;
-        border: none;
-    }
-}
-
-@media only screen and (max-width: 292px) {
-    #loginBox {
-        height: 350px;
-        width: 200px;
+        margin-top: 60vh;
+        box-shadow: none;
+        padding: 0px;
+        height: fit-content;
+        width: 75%;
     }
 
     #loginLogo {
-        height: 60px;
+        height: auto;
+        width: 80%;
     }
+}
 
-    #loginForgotPassword, .loginCreateAccount {
-        font-size: 10px;
+@media only screen and (max-height: 445px) {
+    #loginBox {
+        margin-top: 70vh;
+    }
+}
+
+@media only screen and (max-height: 380px) {
+    #loginBox {
+        margin-top: 80vh;
+    }
+}
+
+@media only screen and (max-height: 330px) {
+    #loginBox {
+        margin-top: 90vh;
+    }
+}
+
+@media only screen and (max-height: 290px) {
+    #loginBox {
+        margin-top: 100vh;
     }
 }
