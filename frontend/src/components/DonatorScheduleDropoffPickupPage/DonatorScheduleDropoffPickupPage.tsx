@@ -16,7 +16,7 @@ const DonatorScheduleDropoffPage = (): JSX.Element => {
                     <div id="donPDOptions">
                             <div>
                                 <input type="radio" className="radioOptionLabel" onChange={() => setIsDropoff(!isDropoff)} checked={isDropoff} />
-                                <p id="radioDropoff" className="radioOptionLabel radioLabel"> I can drop off at the ReStore</p>
+                                <p id="radioDropoff" className="radioOptionLabel radioLabel">I can drop off at the ReStore</p>
                             </div>
                             <div id="radioPickUp">
                                 <input type="radio" className="radioOptionLabel" onChange={() => setIsDropoff(!isDropoff)} checked={!isDropoff} />
