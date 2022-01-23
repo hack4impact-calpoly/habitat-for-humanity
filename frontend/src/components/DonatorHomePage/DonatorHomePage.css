@@ -98,6 +98,14 @@
     }
 }
 
+
+@media only screen and (max-height: 420px) {
+    #giftBox {
+        margin-top: 55vh;
+    }
+}
+
+
 @media only screen and (max-height: 320px) {
     #giftBox {
         margin-top: 60vh;
