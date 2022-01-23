@@ -77,6 +77,16 @@
     }
 }
 
+@media only screen and (max-width: 640px) {
+    #donPDOptions {
+        display: block;
+    }
+
+    #radioPickUp {
+        margin-top: 20px;
+    }
+}
+
 @media only screen and (max-width: 630px) {
     #donDropoffPage {
         padding: 0 5%;
@@ -104,14 +114,6 @@
 @media only screen and (max-width: 540px) {
     #donDropoffPage {
         padding: 0 5%;
-    }
-
-    #donPDOptions {
-        display: block;
-    }
-
-    #radioPickUp {
-        margin-top: 20px;
     }
 }
 
