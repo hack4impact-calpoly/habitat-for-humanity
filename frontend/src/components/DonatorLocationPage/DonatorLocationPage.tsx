@@ -16,7 +16,6 @@ const DonatorLocationPage = (): JSX.Element => {
         else if(!(zip >= 1000 && zip <= 99999)) {
             alert("Please enter a valid 5 digit zip code.");
         }
-        // TODO: Implement redirection to next page
         // else {
         //     redirect to next page
         // }
