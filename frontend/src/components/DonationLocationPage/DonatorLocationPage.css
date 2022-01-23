@@ -127,21 +127,16 @@
     }
 }
 
-
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 640px) {
     #donLocPage {
-        width: 400px;
+        width: 530px;
     }
-
+    
     .donLocInput {
         width: 100%;
         height: 35px;
         font-size: 18px;
         margin: 0px 0px 15px 0px;
-    }
-
-    .backButton, .nextButton {
-        padding: 10px 45px;
     }
 
     #donLocTopInputs {
@@ -153,9 +148,15 @@
         margin-top: 0px;
         border-radius: 0;
     }
-    
-    #docLocBottomInputs::after{
-        border-radius: 0;
+}
+
+@media only screen and (max-width: 550px) {
+    #donLocPage {
+        width: 400px;
+    }
+
+    .backButton, .nextButton {
+        padding: 10px 45px;
     }
 }
 
@@ -171,16 +172,6 @@
 
     .backButton, .nextButton {
         padding: 10px 35px;
-    }
-
-    #donLocTopInputs {
-        display: contents;
-        justify-content: space-between;
-    }
-
-    #docLocBottomInputs {
-        margin-top: 0px;
-        border-radius: 0;
     }
 }
 
