@@ -3,6 +3,7 @@ import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 import styled from 'styled-components';
 import ProgressBar from './ProgressBar';
 import Dropzone from './Dropzone';
+import ProgressBarImage from './ProgressBar.png'
 
 const ContentContainer = styled.div`
    margin-left: 20%;
@@ -64,7 +65,6 @@ const StyledButton = styled.button`
 `;
 
 
-
 const Donation = (): JSX.Element => {
    const [itemDescription, setItemDescription] = useState("")
    const [itemDimensions, setItemDimensions] = useState("")
@@ -73,7 +73,7 @@ const Donation = (): JSX.Element => {
          <DonatorNavbar />
          <ContentContainer>
             <DonationHeader>Make a donation</DonationHeader>
-            <ProgressBar />
+            <img src={ProgressBarImage} width="100%"/>
             <ItemHeader>Item Information</ItemHeader>
             <InputSectionContainer>
                <InputContainer>
