@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 require("./DonatorLocationPage.css");
 
@@ -6,6 +7,18 @@ const DonatorLocationPage = (): JSX.Element => {
     const [address, setAddress] = React.useState<string>("");
     const [city, setCity] = React.useState<string>("")
     const [zip, setZip] = React.useState<number>(0);
+
+    let navigate = useNavigate();
+
+    const backButton = () : void => {
+        const backPath : string = "/donator"; // Change once page is added
+        navigate(backPath);
+    }
+    
+    const nextButton = () : void => {
+        const nextPath : string = "/donator/donate/scheduleDropoffPickup";
+        navigate(nextPath);
+    }
 
     const nextOnClickDonatorLocation = () => {
         console.log(address, city, zip);
@@ -16,9 +29,9 @@ const DonatorLocationPage = (): JSX.Element => {
         else if(!(zip >= 1000 && zip <= 99999)) {
             alert("Please enter a valid 5 digit zip code.");
         }
-        // else {
-        //     redirect to next page
-        // }
+        else {
+            nextButton();
+        }
     }
 
     return (
@@ -41,7 +54,7 @@ const DonatorLocationPage = (): JSX.Element => {
                     <input className="donLocInput" type="number" onChange={(event) => setZip(Number(event?.target?.value))} />
                 </div>
                 <div id="docLocButtons">
-                    <button className="backButton">Back</button>
+                    <button className="backButton" onClick={backButton}>Back</button>
                     <button className="nextButton"onClick={() => nextOnClickDonatorLocation()}>Next</button>
                 </div>
             </div>
