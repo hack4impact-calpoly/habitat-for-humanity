@@ -20,7 +20,7 @@ const LoginPage = (): JSX.Element => {
     const login = () => {
         let valid = checkCredentials();
         if (valid /*&& donator*/){
-            navigate("/Donator/Home");
+            navigate("/donator/home");
         }
         /*
         else if (valid && admin){
@@ -61,7 +61,7 @@ const LoginPage = (): JSX.Element => {
                     />
                     <div id="loginPassword">
                         <p className="loginLabel">Password</p>
-                        <p id="loginForgotPassword">Forgot Password?</p>
+                        <Link to={"/forgotpassword"} id="loginForgotPassword">Forgot Password?</Link>
                     </div>
                     <Input
                         className="loginInput"
@@ -85,7 +85,7 @@ const LoginPage = (): JSX.Element => {
                 </form>
                 <div style={{ textAlign: "right", marginTop: "10px" }}>
                     <p className="loginCreateAccount">Don't have an account? </p>
-                    <Link to={"/CreateAccount"} className="loginCreateAccount" id="createAccountLink">Create Account</Link>
+                    <Link to={"/createaccount"} className="loginCreateAccount" id="createAccountLink">Create Account</Link>
                 </div>
             </div>
         </body>
