@@ -1,0 +1,108 @@
+@import "./../../config/colors.css";
+
+#donNextStepsPage {
+    padding: 0 18%;
+}
+
+#donNextStepsHeader {
+    color: var(--orange);
+}
+
+#donNextStepsDesc, #donNextStepsQuestions, #donNextStepsPhone {
+    font-weight: 400;
+}
+
+#donNextStepsDesc {
+    padding-right: 35%;
+}
+
+#donNextStepsQuestions {
+    display: inline;
+}
+
+#donNextStepsPhone {
+    display: inline;
+    color: var(--tertiary);
+}
+
+#donNextStepsPhone:hover {
+    text-decoration: underline;
+}
+
+.backButton, .nextButton {
+    padding: 10px 45px;
+
+}
+
+.backButton {
+    color: var(--tertiary);
+    font-weight: bold;
+    background-color: var(--white);
+    border: 2px solid var(--tertiary);
+}
+
+.nextButton {
+    background-color: var(--tertiary);
+    font-weight: bold;
+    color: var(--white);
+    border: 2px solid var(--tertiary);
+}
+
+.backButton:focus, .nextButton:focus {
+    outline: none;
+    border: 1px solid var(--box-border);
+}
+
+.backButton:hover, .nextButton:hover {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 1050px) {
+    #donNextStepsDesc {
+        padding-right: 15%;
+    }
+}
+
+@media only screen and (max-width: 1400px) {
+    #donNextStepsPage {
+        padding: 0 15%;
+    }
+}
+
+@media only screen and (max-width: 840px) {
+    #donNextStepsDesc {
+        padding-right: 0;
+    }
+
+    #donNextStepsPage {
+        padding: 0 12%;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    #donNextStepsPage {
+        padding: 0 8%;
+    }
+}
+
+@media only screen and (max-width: 630px) {
+    #donNextStepsPage {
+        padding: 0 10%;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .backButton, .nextButton {
+        padding: 10px 45px;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    #donNextStepsHeader {
+        font-size: 20px;
+    }
+
+    #donNextStepsDesc, #donNextStepsQuestions, #donNextStepsPhone {
+        font-size: 92%;
+    }
+}
