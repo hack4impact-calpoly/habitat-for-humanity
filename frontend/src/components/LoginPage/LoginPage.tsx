@@ -1,17 +1,50 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
+import InputAdornment from '@mui/material/InputAdornment';
+import Input from '@mui/material/Input';
+import IconButton from '@mui/material/IconButton';
+
 import logo from "./../../images/logo.png";
 require("./LoginPage.css");
 
 const LoginPage = (): JSX.Element => {
     const [email, setEmail] = React.useState<string>("");
-    const [password, setPassword] = React.useState<string>("");
+    const [password, setPassword] = React.useState({
+                                                    value: "",
+                                                    showPassword: false});
+    let navigate = useNavigate();
 
-    const checkCredentials = () => {
+    const login = () => {
+        let valid = checkCredentials();
+        if (valid /*&& donator*/){
+            navigate("/Donator/Home");
+        }
+        /*
+        else if (valid && admin){
+            navigate("/Admin/Home");
+        }
+        else if (valid && volunteer){
+            navigate("/Donator/Home");
+        }
+        else{
+            alert("Sorry an unexpected error occured while logging you in");
+        }
+        */
+    }
+    const checkCredentials = () : boolean => {
         if (email === "") {
             alert("Email is blank. Please try again.")
-        } else if (password === "") {
-            alert("Passowrd is blank. Please try again.")
+            return false;
+        } else if (password.value === "") {
+            alert("Password is blank. Please try again.");
+            return false;
         } // check other invalid errors
+        else{
+            return true;
+        }
         // if no errors/valid login -> redirect to logged in page
     }
 
@@ -30,16 +63,29 @@ const LoginPage = (): JSX.Element => {
                         <p className="loginLabel">Password</p>
                         <p id="loginForgotPassword">Forgot Password?</p>
                     </div>
-                    <input
+                    <Input
                         className="loginInput"
-                        type="text"
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword(event?.target?.value)}
+                        id="passwordBox"
+                        value={password.value}
+                        type={password.showPassword ? "text" : "password"}
+                        disableUnderline={true}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword({...password, "value": event?.target?.value})}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    onClick={() => setPassword({...password, showPassword: !password.showPassword})}
+                                    onMouseDown={(event: React.MouseEvent<HTMLButtonElement>) => event?.preventDefault()}
+                                    edge="end">
+                                        {password.showPassword ? <VisibilityIcon className="passwordIcon"/> : <VisibilityOffIcon className="passwordIcon" />}
+                                    </IconButton>
+                            </InputAdornment>
+                        }
                     />
-                    <button id="loginSubmit" onClick={checkCredentials}>Log In</button>
+                    <button id="loginSubmit" onClick={login}>Log In</button>
                 </form>
                 <div style={{ textAlign: "right", marginTop: "10px" }}>
                     <p className="loginCreateAccount">Don't have an account? </p>
-                    <p className="loginCreateAccount" id="createAccountLink">Create Account</p>
+                    <Link to={"/CreateAccount"} className="loginCreateAccount" id="createAccountLink">Create Account</Link>
                 </div>
             </div>
         </body>
