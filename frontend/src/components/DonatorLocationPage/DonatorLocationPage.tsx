@@ -10,14 +10,18 @@ const DonatorLocationPage = (): JSX.Element => {
 
     let navigate = useNavigate();
 
-    const backButton = () : void => {
-        const backPath : string = "/donator"; // Change once page is added
-        navigate(backPath);
-    }
-    
-    const nextButton = () : void => {
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const backPath : string = "/donator"; //Change once page is added
         const nextPath : string = "/donator/donate/scheduleDropoffPickup";
-        navigate(nextPath);
+        
+        if(e.currentTarget.value === "backButton"){
+            navigate(backPath);
+        }
+        else if(e.currentTarget.value === "nextButton"){
+            if(nextOnClickDonatorLocation()){
+                navigate(nextPath);
+            }
+        }
     }
 
     const nextOnClickDonatorLocation = () => {
@@ -25,13 +29,13 @@ const DonatorLocationPage = (): JSX.Element => {
 
         if (address.length === 0 || city.length === 0) {
             alert("One or more of the inputs are incomplete. Please try again.");
+            return false;
         }
         else if(!(zip >= 1000 && zip <= 99999)) {
             alert("Please enter a valid 5 digit zip code.");
+            return false;
         }
-        else {
-            nextButton();
-        }
+        return true;
     }
 
     return (
@@ -54,8 +58,8 @@ const DonatorLocationPage = (): JSX.Element => {
                     <input className="donLocInput" type="number" onChange={(event) => setZip(Number(event?.target?.value))} />
                 </div>
                 <div id="docLocButtons">
-                    <button className="backButton" onClick={backButton}>Back</button>
-                    <button className="nextButton"onClick={() => nextOnClickDonatorLocation()}>Next</button>
+                    <button value="backButton" className="backButton" onClick={buttonNavigation}>Back</button>
+                    <button value="nextButton" className="nextButton"onClick={buttonNavigation}>Next</button>
                 </div>
             </div>
         </body>

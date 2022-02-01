@@ -1,8 +1,23 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import DonatorNavbar from '../DonatorNavbar/DonatorNavbar';
 require("./DonatorNextStepsPage.css");
 
 const DonatorNextStepsPage = (): JSX.Element => {
+    let navigate = useNavigate();
+
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const backPath : string = ""; //TBD
+        const nextPath : string = "/donator";
+        
+        if(e.currentTarget.value === "backButton"){
+            navigate(backPath);
+        }
+        else if(e.currentTarget.value === "nextButton"){
+            navigate(nextPath);
+        }
+    }
+
     return (
         <body>
             <DonatorNavbar />
