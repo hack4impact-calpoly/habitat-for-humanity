@@ -17,10 +17,10 @@ const LoginPage = (): JSX.Element => {
                                                     showPassword: false});
     let navigate = useNavigate();
 
-    const login = () => {
+    const login = () : void => {
         let valid = checkCredentials();
         if (valid /*&& donator*/){
-            navigate("/donator/home");
+            navigate("/donator");
         }
         /*
         else if (valid && admin){
