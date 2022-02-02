@@ -37,8 +37,8 @@ const DonatorNavbar = (): JSX.Element => {
             return profile_path;
         }
         else{
-            //Sign Out to be implemented, just route to home for now
-            return "/donator";
+            //Sign Out to be implemented, just route to main page for now (login)
+            return "/";
         }
     }
 
