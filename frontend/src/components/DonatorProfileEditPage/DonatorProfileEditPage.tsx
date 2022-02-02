@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 require("./DonatorProfileEditPage.css");
 
@@ -9,28 +10,44 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
     const [phoneNumber, setPhoneNumber] = React.useState("");
     let processedPhoneNumber : number; //Phone number converted from string
 
+    let navigate = useNavigate();
 
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const backPath : string = "/donator/profile"; //Change once page is added
+        const saveChangesPath : string = "/donator";
+        
+        if(e.currentTarget.value === "backButton"){
+            navigate(backPath);
+        }
+        else if(e.currentTarget.value === "saveChangesButton"){
+            if(submitData()){
+                navigate(saveChangesPath);
+            }
+        }
+    }
 
     /*---------------Form Data Handling---------------------------*/
-    function getProfileData() {
+    const getProfileData = () => {
         //backend code to get profile data
     }
     
-    function displayProfileData(profileData: Object) {
+    const displayProfileData = (profileData: Object) => {
         //set state variables with profile data, asynchronous
     }
 
-    function submitData() {
+    const submitData = () => {
         const validData = validateForm();
         if (validData)
         {
             const JSONstring = getFormData();
             console.log(JSONstring);
             //PUT request(modify only, not create new) to backend code
+            return true;
         }
+        return false;
     }
 
-    function getFormData() : string {
+    const getFormData = () : string => {
         /*
         Desc: Gets all form data and coverts it into JSON
         Return: JSON string
@@ -167,10 +184,10 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
                     </div>
                 </form>
                 <div id="buttonBox">
-                    <button className="buttons" id="backButton">
+                    <button value="backButton" className="buttons" id="backButton" onClick={buttonNavigation}>
                         Back
                     </button>
-                    <button className="buttons" id="saveChangesButton" onClick={submitData}>
+                    <button value="saveChangesButton" className="buttons" id="saveChangesButton" onClick={buttonNavigation}>
                         Save Changes
                     </button>
                 </div>
