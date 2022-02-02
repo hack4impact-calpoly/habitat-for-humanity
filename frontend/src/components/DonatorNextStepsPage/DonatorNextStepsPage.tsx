@@ -12,10 +12,8 @@ const DonatorNextStepsPage = (): JSX.Element => {
                 <p id="donNextStepsQuestions">If you have any questions or concerns, please contact us at </p>
                 <a style={{ textDecoration: "none" }} href="tel: +8055468699"><p id="donNextStepsPhone">(805) 546-8699</p></a>
                 {// TODO: Add links to next and back page
-                }<div id="docLocButtons">
-                    <button className="backButton">Back</button>
-                    <button className="nextButton">Next</button>
-                </div>
+                }
+                <button className='doneButton'>Done</button>
             </div>
         </body>
     )
