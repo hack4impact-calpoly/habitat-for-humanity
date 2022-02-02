@@ -29,31 +29,17 @@
     text-decoration: underline;
 }
 
-.backButton, .nextButton {
-    padding: 10px 45px;
-
-}
-
-.backButton {
-    color: var(--tertiary);
-    font-weight: bold;
-    background-color: var(--white);
-    border: 2px solid var(--tertiary);
-}
-
-.nextButton {
+.doneButton {
     background-color: var(--tertiary);
     font-weight: bold;
     color: var(--white);
     border: 2px solid var(--tertiary);
+    padding: 10px 45px;
+    display: block;
+    margin-top: 5%;
 }
 
-.backButton:focus, .nextButton:focus {
-    outline: none;
-    border: 1px solid var(--box-border);
-}
-
-.backButton:hover, .nextButton:hover {
+.doneButton:hover {
     cursor: pointer;
 }
 
@@ -92,8 +78,8 @@
 }
 
 @media only screen and (max-width: 550px) {
-    .backButton, .nextButton {
-        padding: 10px 45px;
+    .doneButton {
+        padding: 6px 40px;
     }
 }
 
