@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
@@ -20,18 +20,31 @@ const CreateAccountPage = (): JSX.Element => {
                                                     showPassword: false});
     let processedPhoneNumber : number; //Phone number converted from string
     
+    let navigate = useNavigate();
 
-    function submitData() {
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const mainScreenPath : string = "/"; // Main screen (login)
+        
+        if(e.currentTarget.value === "signUpButton"){
+            if(submitData()){
+                navigate(mainScreenPath);
+            }
+        }
+    }
+
+    const submitData = () : boolean => {
         const validData = validateForm();
         if (validData)
         {
             const JSONstring = getFormData();
             console.log(JSONstring);
             //connect to backend code
+            return true;
         }
+        return false;
     }
 
-    function getFormData() : string {
+    const getFormData = () : string => {
         /*
         Desc: Gets all form data and coverts it into JSON
         Return: JSON string
@@ -255,7 +268,7 @@ const CreateAccountPage = (): JSX.Element => {
                 </div>
 
             </form>
-            <button id="signUpButton" onClick={submitData}>Sign Up</button>
+            <button value="signUpButton" id="signUpButton" onClick={buttonNavigation}>Sign Up</button>
             <div className="logInBox">
                 <p className="createAccountLogin">Already have an account?</p>
                 <Link to={"/"} className="createAccountLogin" id="logInLink">Log In</Link>
