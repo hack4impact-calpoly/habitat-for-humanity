@@ -5,7 +5,7 @@ import React from 'react'
 // import ComponentName from './components/ComponentName/ComponentName';
 // import LoginPage from "./components/LoginPage/LoginPage";
 // import DonatorNavbar from './components/DonatorNavbar/DonatorNavbar';
-import DonatorProfilePage from './components/DonatorProfile/DonatorProfile';
+// import DonatorProfilePage from './components/DonatorProfile/DonatorProfile';
 // import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
