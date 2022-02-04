@@ -31,30 +31,30 @@ render(
     <Routes>
       {/* Universal Routes */}
       <Route path="/" element={<App />} /> {/* Login page */}
-      <Route path="/createaccount"  element={<CreateAccount />} />
-      <Route path="/forgotpassword" element={<ForgotPassword />} />
+      <Route path="/createAccount"  element={<CreateAccount />} />
+      <Route path="/forgotPassword" element={<ForgotPassword />} />
 
-      {/* Donator Specific Routes */}
-      <Route path="/donator">
-          {/* Donator Home */}
+      {/* Donor Specific Routes */}
+      <Route path="/donor">
+          {/* Donor Home */}
           <Route path="" element={<DonatorHome />} />
-          {/* Donator Profile Pages */}
+          {/* Donor Profile Pages */}
           <Route path="profile">
               <Route path=""      element={<DonatorProfile />} />
               <Route path="edit"  element={<DonatorProfileEdit />} />
               <Route path="*"     element={<p>ERROR 404: Profile Page Not Found</p>} />
           </Route>
-          {/* Donator Make a Donation Pages */}
+          {/* Donor Make a Donation Pages */}
           <Route path="donate"> 
               <Route path="location" element={<DonatorLocation />} />
               {/* <Route path="iteminfo" element={}} */}
               <Route path="scheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
-              <Route path="nextsteps" element={<DonatorNextSteps />} />
+              <Route path="nextSteps" element={<DonatorNextSteps />} />
 
               <Route path="*" element={<p>ERROR 404: Make A Donation Page Not Found</p>} />
           </Route>
-          {/* Donator Catch all case -> Donator Error*/}
-          <Route path="*" element={<p>ERROR 404: Donator Page Not Found</p>} /> 
+          {/* Donor Catch all case -> Donor Error*/}
+          <Route path="*" element={<p>ERROR 404: Donor Page Not Found</p>} /> 
       </Route>
 
       {/* Universal Catch all -> back to log in*/}

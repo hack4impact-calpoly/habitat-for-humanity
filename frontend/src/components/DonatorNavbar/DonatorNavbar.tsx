@@ -11,8 +11,8 @@ const navBarHeaders: string[] = [
 
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
-const donate_path: string = "/donator";
-const profile_path: string = "/donator/profile"
+const donate_path: string = "/donor";
+const profile_path: string = "/donor/profile"
 
 const DonatorNavbar = (): JSX.Element => {
     const page_path = window.location.pathname;
@@ -20,7 +20,7 @@ const DonatorNavbar = (): JSX.Element => {
     const underline = (header: string): boolean => {
         if (header === navBarHeaders[0] && 
             (page_path.includes(donate_path + "/donate") 
-            || (page_path === "/donator"))) { // For different donation pages
+            || (page_path === "/donor"))) { // For different donation pages
             return true;
         } 
         else if (header === navBarHeaders[1] && page_path.includes(profile_path)) { //For different profile pages

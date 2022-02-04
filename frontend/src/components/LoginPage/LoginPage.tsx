@@ -20,7 +20,7 @@ const LoginPage = (): JSX.Element => {
     const login = () : void => {
         let valid = checkCredentials();
         if (valid /*&& donator*/){
-            navigate("/donator");
+            navigate("/donor");
         }
         /*
         else if (valid && admin){
