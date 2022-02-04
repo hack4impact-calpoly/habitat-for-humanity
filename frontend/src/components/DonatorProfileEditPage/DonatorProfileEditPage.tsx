@@ -13,8 +13,8 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
     let navigate = useNavigate();
 
     const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
-        const backPath : string = "/donor/profile"; //Change once page is added
-        const saveChangesPath : string = "/donor/profile";
+        const backPath : string = "/Donor/Profile"; //Change once page is added
+        const saveChangesPath : string = "/Donor/Profile";
         
         if(e.currentTarget.value === "backButton"){
             navigate(backPath);

@@ -5,7 +5,7 @@ import pencil from "./../../images/pencil.png";
 require("./DonatorProfile.css");
 
 const DonatorProfilePage = (): JSX.Element => {
-    const donatorProfileEditPath = "/donor/profile/edit";
+    const donatorProfileEditPath = "/Donor/Profile/Edit";
 
     return (
         <body>

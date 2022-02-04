@@ -31,25 +31,25 @@ render(
     <Routes>
       {/* Universal Routes */}
       <Route path="/" element={<App />} /> {/* Login page */}
-      <Route path="/createAccount"  element={<CreateAccount />} />
-      <Route path="/forgotPassword" element={<ForgotPassword />} />
+      <Route path="/CreateAccount"  element={<CreateAccount />} />
+      <Route path="/ForgotPassword" element={<ForgotPassword />} />
 
       {/* Donor Specific Routes */}
-      <Route path="/donor">
+      <Route path="/Donor">
           {/* Donor Home */}
           <Route path="" element={<DonatorHome />} />
           {/* Donor Profile Pages */}
-          <Route path="profile">
+          <Route path="Profile">
               <Route path=""      element={<DonatorProfile />} />
-              <Route path="edit"  element={<DonatorProfileEdit />} />
+              <Route path="Edit"  element={<DonatorProfileEdit />} />
               <Route path="*"     element={<p>ERROR 404: Profile Page Not Found</p>} />
           </Route>
           {/* Donor Make a Donation Pages */}
-          <Route path="donate"> 
-              <Route path="location" element={<DonatorLocation />} />
+          <Route path="Donate"> 
+              <Route path="Location" element={<DonatorLocation />} />
               {/* <Route path="iteminfo" element={}} */}
-              <Route path="scheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
-              <Route path="nextSteps" element={<DonatorNextSteps />} />
+              <Route path="ScheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
+              <Route path="NextSteps" element={<DonatorNextSteps />} />
 
               <Route path="*" element={<p>ERROR 404: Make A Donation Page Not Found</p>} />
           </Route>

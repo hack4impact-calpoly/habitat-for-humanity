@@ -11,8 +11,8 @@ const DonatorLocationPage = (): JSX.Element => {
     let navigate = useNavigate();
 
     const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
-        const backPath : string = "/donor"; //Change once page is added
-        const nextPath : string = "/donor/donate/scheduleDropoffPickup";
+        const backPath : string = "/Donor"; //Change once page is added
+        const nextPath : string = "/Donor/Donate/ScheduleDropoffPickup";
         
         if(e.currentTarget.value === "backButton"){
             navigate(backPath);
