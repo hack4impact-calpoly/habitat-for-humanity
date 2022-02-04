@@ -81,7 +81,7 @@ const CreateAccountPage = (): JSX.Element => {
 
     const validateUserType = (): boolean => {
         /*
-        Desc: Validates userTypes (donator, volunteer, administrator)
+        Desc: Validates userTypes (donor, volunteer, administrator)
         Return: boolean (true if valid, false if not)
         */
         if (userType === "")
@@ -194,9 +194,9 @@ const CreateAccountPage = (): JSX.Element => {
                     <div className="accountLabel">
                         <input type="radio"
                                 className="userTypeButton" 
-                                value="donator" //Specifies the value for the useState
+                                value="donor" //Specifies the value for the useState
                                 name="userType" //connects all options under group "userType" -> only one can be selected at a time
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>donator
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>donor
 
                         <input type="radio"
                                 className="userTypeButton" 
