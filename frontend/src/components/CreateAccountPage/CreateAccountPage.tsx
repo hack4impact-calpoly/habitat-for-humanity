@@ -21,9 +21,9 @@ const CreateAccountPage = (): JSX.Element => {
     let processedPhoneNumber : number; //Phone number converted from string
     
     let navigate = useNavigate();
+    const mainScreenPath : string = "/"; // Main screen (login)
 
     const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
-        const mainScreenPath : string = "/"; // Main screen (login)
         
         if(e.currentTarget.value === "signUpButton"){
             if(submitData()){
@@ -271,7 +271,7 @@ const CreateAccountPage = (): JSX.Element => {
             <button value="signUpButton" id="signUpButton" onClick={buttonNavigation}>Sign Up</button>
             <div className="logInBox">
                 <p className="createAccountLogin">Already have an account?</p>
-                <Link to={"/"} className="createAccountLogin" id="logInLink">Log In</Link>
+                <Link to={mainScreenPath} className="createAccountLogin" id="logInLink">Log In</Link>
             </div>
         </div>
     </body>);

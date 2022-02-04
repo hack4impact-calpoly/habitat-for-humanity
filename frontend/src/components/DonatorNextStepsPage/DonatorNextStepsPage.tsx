@@ -7,7 +7,7 @@ const DonatorNextStepsPage = (): JSX.Element => {
     let navigate = useNavigate();
 
     const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
-        const donePath : string = "/donor";
+        const donePath : string = "/Donor";
         
         if(e.currentTarget.value === "doneButton"){
             navigate(donePath);
