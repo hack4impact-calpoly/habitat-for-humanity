@@ -1,12 +1,39 @@
+@import "./../../config/colors.css";
+
 #donatorPickupPage {
-    padding: 4%;
+    padding: 2% 4%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: wrap;
     overflow-x: hidden;
 }
 
 #calendarView, #calendarEdit {
-    flex: 0 0 50%;
+    flex: 0 0 42%;
     padding: 0 2%;
+}
+
+#donatorPickupHeader {
+    color: var(--primary)
+}
+
+.donatorPickUpTime {
+    border: 1px solid var(--box-border);
+    padding: 2%;
+    margin-bottom: 2%;
+    font-weight: 500;
+}
+
+.donatorPickupCheckbox {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#donatorPickupDesc {
+    font-style: italic;
+    color: var(--dark-gray);
+}
+
+#donatorPickupEvents {
+    padding-right: 70px;
 }
