@@ -1,10 +1,25 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 import DonatorScheduleDropoff from "./DonatorScheduleDropoff";
 require("./DonatorScheduleDropoffPickupPage.css");
 
 const DonatorScheduleDropoffPage = (): JSX.Element => {
     const [isDropoff, setIsDropoff] = React.useState<boolean>(true)
+
+    let navigate = useNavigate();
+
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const backPath : string = "/Donor/Donate/Location";
+        const nextPath : string = "/Donor/Donate/NextSteps";
+        
+        if(e.currentTarget.value === "backButton"){
+            navigate(backPath);
+        }
+        else if(e.currentTarget.value === "nextButton"){
+            navigate(nextPath);
+        }
+    }
 
     return (
         <body>
@@ -29,8 +44,8 @@ const DonatorScheduleDropoffPage = (): JSX.Element => {
                     null}
                 <div id="donDropoffButtons">
                     {// TODO: Add links to back and next buttons }
-}                    <button className="backButton">Back</button>
-                    <button className="nextButton">Next</button>
+}                   <button value="backButton" className="backButton" onClick={buttonNavigation}>Back</button>
+                    <button value="nextButton" className="nextButton" onClick={buttonNavigation}>Next</button>
                 </div>
             </div>
         </body>

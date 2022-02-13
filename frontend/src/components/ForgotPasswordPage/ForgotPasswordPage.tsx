@@ -1,20 +1,34 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 require("./ForgotPasswordPage.css");
 
 const ForgotPasswordPage = (): JSX.Element => {
     const [email, setEmail] = React.useState<string>("");
     
+    let navigate = useNavigate();
 
-    function submitData() {
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const mainScreenPath : string = "/"; // Main screen (login)
+        
+        if(e.currentTarget.value === "sendButton"){
+            if(submitData()){
+                navigate(mainScreenPath);
+            }
+        }
+    }
+
+    const submitData = () : boolean => {
         if (validateEmail())
         {
             const JSONstring = getFormData();
             console.log(JSONstring);
             //connect to backend code
+            return true;
         }
+        return false;
     }
 
-    function getFormData() : string {
+    const getFormData = () : string => {
         const forgotEmail = {
             "email": email
         };
@@ -52,7 +66,7 @@ const ForgotPasswordPage = (): JSX.Element => {
                     type="text"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e?.target?.value)}
                 />
-            <button id="sendButton" onClick={submitData}>Send</button>
+            <button value="sendButton" id="sendButton" onClick={buttonNavigation}>Send</button>
 
         </div>
     </body>);
