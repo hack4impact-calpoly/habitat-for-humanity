@@ -1,0 +1,172 @@
+@import "./../../config/colors.css";
+
+#donDropoffPage {
+    padding: 0 18%;
+}
+
+.donDropoffPickupHeader {
+    padding-top: 25px;
+    color: var(--orange)
+}
+
+#donPDOptions {
+    display: flex;
+}
+
+#donPDHeader {
+    color: var(--orange);
+}
+
+.radioOptionLabel {
+    display: inline;
+}
+
+.radioLabel {
+    margin-left: 5px;
+}
+
+#radioDropoff {
+    margin-right: 20px;
+}
+
+.donDropoffRow {
+    padding-bottom: 15px;
+}
+
+.donDropoffHours {
+    padding-left: 35px;
+}
+
+#donDropoffButtons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.backButton, .nextButton {
+    padding: 10px 45px;
+}
+
+.backButton {
+    color: var(--tertiary);
+    font-weight: bold;
+    background-color: var(--white);
+    border: 2px solid var(--tertiary);
+}
+
+.nextButton {
+    background-color: var(--tertiary);
+    font-weight: bold;
+    color: var(--white);
+    border: 2px solid var(--tertiary);
+}
+
+.backButton:hover, .nextButton:hover {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 915px) {
+    #donDropoffPage {
+        padding: 0 10%;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    #donDropoffPage {
+        padding: 0 9%;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    #donPDOptions {
+        display: block;
+    }
+
+    #radioPickUp {
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 630px) {
+    #donDropoffPage {
+        padding: 0 5%;
+    }
+
+    #radioDropoff {
+        margin-right: 10px;
+    }
+}
+
+@media only screen and (max-width: 560px) {
+    #donDropoffPage {
+        padding: 0 5%;
+    }
+
+    .radioLabel {
+        margin-left: 2px;
+    }
+
+    #radioDropoff {
+        margin-right: 5px;
+    }
+}
+
+@media only screen and (max-width: 540px) {
+    #donDropoffPage {
+        padding: 0 5%;
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    .backButton, .nextButton {
+        padding: 8px 40px;
+    }
+}
+
+@media only screen and (max-width: 360px) {
+    .backButton, .nextButton {
+        padding: 7px 38px;
+    }
+
+    .donDropoffRow {
+        padding-bottom: 10px;
+    }
+    
+    .donDropoffHours {
+        padding-left: 30px;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    .backButton, .nextButton {
+        padding: 7px 30px;
+    }
+
+    .donDropoffRow {
+        padding-bottom: 9px;
+    }
+    
+    .donDropoffHours {
+        padding-left: 25px;
+    }
+}
+
+@media only screen and (max-width: 290px) {
+    #radioPickUp {
+        margin-top: 10px;
+    }
+
+    .backButton, .nextButton {
+        padding: 7px 30px;
+    }
+
+    .donDropoffRow {
+        padding-bottom: 5px;
+        font-size: 15px;
+    }
+    
+    .donDropoffHours {
+        padding-left: 15px;
+        font-size: 15px;
+    }
+}
