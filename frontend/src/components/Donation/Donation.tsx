@@ -95,7 +95,7 @@ const Donation = (): JSX.Element => {
                   type="text"
                   value={itemDimensions}
                   onChange={event => {
-                     setItemDescription(event.target.value)
+                     setItemDimensions(event.target.value)
                   }}
                   
                      />
