@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import DonatorNavbar from '../DonatorNavbar/DonatorNavbar';
 import pencil from "./../../images/pencil.png";
 require("./DonatorProfile.css");
 
 const DonatorProfilePage = (): JSX.Element => {
+    const donatorProfileEditPath = "/Donor/Profile/Edit";
+
     return (
         <body>
             <DonatorNavbar />
@@ -15,7 +18,7 @@ const DonatorProfilePage = (): JSX.Element => {
                     <div id="editBox">
                         <img id="pencil" src={pencil} />
                         {/* Need to Implement Link to DonatorProfileEditPage */}
-                        <p id="edit">edit</p>
+                        <Link to={donatorProfileEditPath} id="edit">edit</Link>
                     </div>
                 </div>
                 <div id="nameBox">

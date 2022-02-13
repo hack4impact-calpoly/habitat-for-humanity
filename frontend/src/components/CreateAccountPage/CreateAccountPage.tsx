@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
@@ -20,18 +20,31 @@ const CreateAccountPage = (): JSX.Element => {
                                                     showPassword: false});
     let processedPhoneNumber : number; //Phone number converted from string
     
+    let navigate = useNavigate();
+    const mainScreenPath : string = "/"; // Main screen (login)
 
-    function submitData() {
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        
+        if(e.currentTarget.value === "signUpButton"){
+            if(submitData()){
+                navigate(mainScreenPath);
+            }
+        }
+    }
+
+    const submitData = () : boolean => {
         const validData = validateForm();
         if (validData)
         {
             const JSONstring = getFormData();
             console.log(JSONstring);
             //connect to backend code
+            return true;
         }
+        return false;
     }
 
-    function getFormData() : string {
+    const getFormData = () : string => {
         /*
         Desc: Gets all form data and coverts it into JSON
         Return: JSON string
@@ -68,7 +81,7 @@ const CreateAccountPage = (): JSX.Element => {
 
     const validateUserType = (): boolean => {
         /*
-        Desc: Validates userTypes (donator, volunteer, administrator)
+        Desc: Validates userTypes (donor, volunteer, administrator)
         Return: boolean (true if valid, false if not)
         */
         if (userType === "")
@@ -181,9 +194,9 @@ const CreateAccountPage = (): JSX.Element => {
                     <div className="accountLabel">
                         <input type="radio"
                                 className="userTypeButton" 
-                                value="donator" //Specifies the value for the useState
+                                value="donor" //Specifies the value for the useState
                                 name="userType" //connects all options under group "userType" -> only one can be selected at a time
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>donator
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>donor
 
                         <input type="radio"
                                 className="userTypeButton" 
@@ -255,10 +268,10 @@ const CreateAccountPage = (): JSX.Element => {
                 </div>
 
             </form>
-            <button id="signUpButton" onClick={submitData}>Sign Up</button>
+            <button value="signUpButton" id="signUpButton" onClick={buttonNavigation}>Sign Up</button>
             <div className="logInBox">
                 <p className="createAccountLogin">Already have an account?</p>
-                <Link to={"/"} className="createAccountLogin" id="logInLink">Log In</Link>
+                <Link to={mainScreenPath} className="createAccountLogin" id="logInLink">Log In</Link>
             </div>
         </div>
     </body>);
