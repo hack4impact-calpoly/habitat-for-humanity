@@ -34,9 +34,17 @@
     cursor: pointer;
 }
 
+.donatorNavbarLink {
+    text-decoration: none;
+    color: inherit;
+    margin: 38px 0px 0px 35px;
+    font-size: 17px;
+}
+
 #donatorNavbarUnderline {
     margin-top: 0;
-    border: 1px solid var(--primary);
+    padding-bottom: 5px;
+    border-bottom: 3px solid var(--primary);
 }
 
 @media only screen and (max-width: 1483px) {

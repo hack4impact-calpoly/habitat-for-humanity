@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 import DonatorScheduleDropoff from "./DonatorScheduleDropoff";
 import DonatorSchedulePickUp from "./DonatorSchedulePickUp";
@@ -6,6 +7,20 @@ require("./DonatorScheduleDropoffPickupPage.css");
 
 const DonatorScheduleDropoffPage = (): JSX.Element => {
     const [isDropoff, setIsDropoff] = React.useState<boolean>(true)
+
+    let navigate = useNavigate();
+
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const backPath : string = "/Donor/Donate/Location";
+        const nextPath : string = "/Donor/Donate/NextSteps";
+        
+        if(e.currentTarget.value === "backButton"){
+            navigate(backPath);
+        }
+        else if(e.currentTarget.value === "nextButton"){
+            navigate(nextPath);
+        }
+    }
 
     return (
         <body>
