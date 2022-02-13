@@ -1,5 +1,6 @@
 import './App.css';
 import React from 'react'
+import DonatorScheduleDropoffPickupPage from './components/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage';
 
 /* Screens */
 // import ComponentName from './components/ComponentName/ComponentName';
@@ -11,7 +12,7 @@ import React from 'react'
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
 // import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
-import DonatorSchedulePickUp from './components/DonatorScheduleDropoffPickupPage/DonatorSchedulePickUp';
+// import DonatorSchedulePickUp from './components/DonatorScheduleDropoffPickupPage/DonatorSchedulePickUp';
 
 
 function App(): JSX.Element {
@@ -23,7 +24,7 @@ function App(): JSX.Element {
     // <DonatorLocationPage />
     // <LoginPage />
     // <DonatorNextStepsPage />
-    <DonatorSchedulePickUp />
+    <DonatorScheduleDropoffPickupPage />
   );
 }
 

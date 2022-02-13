@@ -1,16 +1,15 @@
 @import "./../../config/colors.css";
 
 #donatorPickupPage {
-    padding: 2% 4%;
     display: flex;
+    justify-content: space-between;
     flex-direction: row;
     flex-wrap: wrap;
     overflow-x: hidden;
 }
 
 #calendarView, #calendarEdit {
-    flex: 0 0 42%;
-    padding: 0 2%;
+    flex-basis: 45%;
 }
 
 #donatorPickupHeader {
@@ -34,6 +33,64 @@
     color: var(--dark-gray);
 }
 
-#donatorPickupEvents {
-    padding-right: 70px;
+#donPickupButtons {
+    margin: 50px 0;
+}
+
+.donPickupButton {
+    margin-right: 20px;
+}
+
+.fc h2 {
+    font-size: 20px;
+ }
+
+@media only screen and (max-width: 1324px) {
+    #calendarView {
+        flex-basis: 50%;
+    }
+
+    #calendarEdit {
+        flex-basis: 45%
+    }
+}
+
+@media only screen and (max-width: 1164px) {
+    #calendarView {
+        flex-basis: 52%;
+    }
+
+    #calendarEdit {
+        flex-basis: 40%
+    }
+
+    #donatorPickupHeader {
+        font-size: 25px;
+    }
+}
+
+@media only screen and (max-width: 1082px) {
+    #donatorPickupPage {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 412px) {
+    .fc .fc-toolbar-title {
+        font-size: 20px;
+    }
+
+    .fc .fc-button {
+        font-size: 12px;
+    }
+}
+
+@media only screen and (max-width: 412px) {
+    .fc .fc-toolbar-title {
+        font-size: 15px;
+    }
+
+    .fc .fc-button {
+        font-size: 10px;
+    }
 }
