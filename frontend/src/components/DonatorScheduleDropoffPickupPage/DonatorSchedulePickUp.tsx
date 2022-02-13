@@ -149,7 +149,7 @@ const DonatorSchedulePickUp = (): JSX.Element => {
                 </div>
             </div>
             <div id="donPickupButtons">
-                {// TODO: Add links to back and next buttons }
+                {// TODO: Add links to back and next buttons and input error checking}
 }               <button className="donPickupButton backButton">Back</button>
                 <button className="donPickupButton nextButton" onClick={pushToDatabase}>Next</button>
             </div>
