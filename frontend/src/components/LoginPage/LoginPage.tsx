@@ -8,6 +8,7 @@ import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
 
 import logo from "./../../images/logo.png";
+import ForgotPasswordPage from "../ForgotPasswordPage/ForgotPasswordPage";
 require("./LoginPage.css");
 
 const LoginPage = (): JSX.Element => {
@@ -17,10 +18,13 @@ const LoginPage = (): JSX.Element => {
                                                     showPassword: false});
     let navigate = useNavigate();
 
-    const login = () => {
+    const forgotPasswordPath = "/ForgotPassword";
+    const createAccountPath = "/CreateAccount";
+
+    const login = () : void => {
         let valid = checkCredentials();
         if (valid /*&& donator*/){
-            navigate("/Donator/Home");
+            navigate("/Donor");
         }
         /*
         else if (valid && admin){
@@ -61,7 +65,7 @@ const LoginPage = (): JSX.Element => {
                     />
                     <div id="loginPassword">
                         <p className="loginLabel">Password</p>
-                        <p id="loginForgotPassword">Forgot Password?</p>
+                        <Link to={forgotPasswordPath} id="loginForgotPassword">Forgot Password?</Link>
                     </div>
                     <Input
                         className="loginInput"
@@ -85,7 +89,7 @@ const LoginPage = (): JSX.Element => {
                 </form>
                 <div style={{ textAlign: "right", marginTop: "10px" }}>
                     <p className="loginCreateAccount">Don't have an account? </p>
-                    <Link to={"/CreateAccount"} className="loginCreateAccount" id="createAccountLink">Create Account</Link>
+                    <Link to={createAccountPath} className="loginCreateAccount" id="createAccountLink">Create Account</Link>
                 </div>
             </div>
         </body>
