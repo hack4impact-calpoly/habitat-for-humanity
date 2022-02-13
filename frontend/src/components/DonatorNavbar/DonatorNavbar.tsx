@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import logo from "./../../images/logo.png";
 require('./DonatorNavbar.css')
 
@@ -10,19 +11,35 @@ const navBarHeaders: string[] = [
 
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
-const donate_path: string = "/donate";
-const profile_path: string = "/profile"
+const donate_path: string = "/Donor";
+const profile_path: string = "/Donor/Profile"
 
 const DonatorNavbar = (): JSX.Element => {
     const page_path = window.location.pathname;
 
     const underline = (header: string): boolean => {
-        if (header === navBarHeaders[0] && page_path === donate_path) {
+        if (header === navBarHeaders[0] && 
+            (page_path.includes(donate_path + "/donate") 
+            || (page_path === "/Donor"))) { // For different donation pages
             return true;
-        } else if (header === navBarHeaders[1] && page_path === profile_path) {
+        } 
+        else if (header === navBarHeaders[1] && page_path.includes(profile_path)) { //For different profile pages
             return true;
         }
         return false;
+    }
+
+    const navlinkHandler = (header : string) : string => {
+        if(header === navBarHeaders[0]){
+            return donate_path;
+        }
+        else if(header === navBarHeaders[1]){
+            return profile_path;
+        }
+        else{
+            //Sign Out to be implemented, just route to main page for now (login)
+            return "/";
+        }
     }
 
     return (
@@ -34,10 +51,9 @@ const DonatorNavbar = (): JSX.Element => {
                 {navBarHeaders.map((header: string): JSX.Element => {
                     return underline(header) ? (
                         <div className="donatorNavbarHeader">
-                            <p>{header}</p>
-                            <hr id="donatorNavbarUnderline" />
+                            <Link id="donatorNavbarUnderline" className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
                         </div> ) : ( 
-                            <p className="donatorNavbarHeader">{header}</p>
+                            <Link className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
                         )
                 })}
             </div>
