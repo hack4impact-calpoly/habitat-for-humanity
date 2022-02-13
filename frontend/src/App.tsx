@@ -8,7 +8,7 @@ Amplify.configure(awsconfig);
 
 /* Screens */
 // import ComponentName from './components/ComponentName/ComponentName';
-// import LoginPage from "./components/LoginPage/LoginPage";
+import LoginPage from "./components/LoginPage/LoginPage";
 // import DonatorNavbar from './components/DonatorNavbar/DonatorNavbar';
 // import DonatorProfilePage from './components/DonatorProfile/DonatorProfile';
 // import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
@@ -16,23 +16,19 @@ Amplify.configure(awsconfig);
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
 // import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
-import DonatorSchedulePickUp from './components/DonatorScheduleDropoffPickupPage/DonatorSchedulePickUp';
+// import Donation from './components/Donation/Donation';
 
 
 
 function App(): JSX.Element {
   return (
-    //<LoginPage />
+    <LoginPage />
     //<DonatorHomePage />
     //<CreateAccountPage />
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
     // <LoginPage />
-    // <DonatorNextStepsPage />
-    <div>
-      <DonatorSchedulePickUp />
-    </div>
-
+    //<DonatorNextStepsPage />
   );
 }
 
