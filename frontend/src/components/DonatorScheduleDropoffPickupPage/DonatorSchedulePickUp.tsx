@@ -1,5 +1,4 @@
 import React from "react";
-import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -104,15 +103,14 @@ const DonatorSchedulePickUp = (): JSX.Element => {
     }
 
     return (
-        <body>
-            <DonatorNavbar />
+        <div>
+            <h2 className="donDropoffPickupHeader">Time Availability</h2>
             <div id="donatorPickupPage">
                 <div id="calendarView">
                     <FullCalendar
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         events={events}
-                        contentHeight={450}
                         slotMinTime={"10:00:00"}
                         slotMaxTime={"18:00:00"}
                         selectable={true}
@@ -127,36 +125,35 @@ const DonatorSchedulePickUp = (): JSX.Element => {
                                 end: endDate,
                             };
                         }}
-                        handleWindowResize={true}
-                        aspectRatio={1}
+                        windowResizeDelay={0}
                     />
-                    <div id="donDropoffButtons">
-                    {// TODO: Add links to back and next buttons }
-}                       <button className="backButton">Back</button>
-                        <button className="nextButton" onClick={pushToDatabase}>Next</button>
-                    </div>
                 </div>
                 <div id="calendarEdit">
                     <h1 id="donatorPickupHeader">{header}</h1>
                     <p id="donatorPickupDesc">Please select multiple dates and times you are available, and our staff will choose from your availability.</p>
                     <div id="donatorPickupEvents">
-                    {availEvents.map(availEvent => {
-                        const startTime = moment.utc(availEvent.start).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
-                        const endTime = moment.utc(availEvent.end).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
-                        return (
-                            <div className="donatorPickUpTime">
-                                <Checkbox
-                                    icon={<RadioButtonUncheckedIcon />}
-                                    checkedIcon={<CheckCircleIcon />}
-                                />
-                                {`${startTime} to ${endTime}`}
-                            </div>
-                        )
-                    })}
+                        {availEvents.map(availEvent => {
+                            const startTime = moment.utc(availEvent.start).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
+                            const endTime = moment.utc(availEvent.end).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
+                            return (
+                                <div className="donatorPickUpTime">
+                                    <Checkbox
+                                        icon={<RadioButtonUncheckedIcon />}
+                                        checkedIcon={<CheckCircleIcon />}
+                                    />
+                                    {`${startTime} to ${endTime}`}
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             </div>
-        </body>
+            <div id="donPickupButtons">
+                {// TODO: Add links to back and next buttons }
+}               <button className="donPickupButton backButton">Back</button>
+                <button className="donPickupButton nextButton" onClick={pushToDatabase}>Next</button>
+            </div>
+        </div>
     );
 };
 

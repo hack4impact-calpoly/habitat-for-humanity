@@ -1,6 +1,7 @@
 import React from "react";
 import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 import DonatorScheduleDropoff from "./DonatorScheduleDropoff";
+import DonatorSchedulePickUp from "./DonatorSchedulePickUp";
 require("./DonatorScheduleDropoffPickupPage.css");
 
 const DonatorScheduleDropoffPage = (): JSX.Element => {
@@ -25,13 +26,7 @@ const DonatorScheduleDropoffPage = (): JSX.Element => {
                     </div>
                 </div>
                 {isDropoff ? <DonatorScheduleDropoff /> : 
-                    // TODO: Implement pick up option
-                    null}
-                <div id="donDropoffButtons">
-                    {// TODO: Add links to back and next buttons }
-}                    <button className="backButton">Back</button>
-                    <button className="nextButton">Next</button>
-                </div>
+                    <DonatorSchedulePickUp />}
             </div>
         </body>
     );
