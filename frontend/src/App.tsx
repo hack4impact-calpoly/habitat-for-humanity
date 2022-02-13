@@ -11,6 +11,7 @@ import LoginPage from "./components/LoginPage/LoginPage";
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
 // import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
+// import Donation from './components/Donation/Donation';
 
 
 function App(): JSX.Element {
