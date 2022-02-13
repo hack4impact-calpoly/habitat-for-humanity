@@ -1,5 +1,10 @@
 import './App.css';
 import React from 'react'
+import Amplify from '@aws-amplify/core';
+import { Auth } from '@aws-amplify/auth';
+import awsconfig from './aws-exports';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+Amplify.configure(awsconfig);
 
 /* Screens */
 // import ComponentName from './components/ComponentName/ComponentName';
@@ -14,6 +19,7 @@ import LoginPage from "./components/LoginPage/LoginPage";
 // import Donation from './components/Donation/Donation';
 
 
+
 function App(): JSX.Element {
   return (
     <LoginPage />
@@ -26,4 +32,4 @@ function App(): JSX.Element {
   );
 }
 
-export default App;
+export default withAuthenticator(App);
