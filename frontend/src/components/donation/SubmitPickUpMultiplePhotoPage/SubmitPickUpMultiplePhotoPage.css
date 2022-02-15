@@ -1,0 +1,171 @@
+@import "./../../../config/colors.css";
+@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+
+
+#SubmitPickUpPage {
+    padding: 0 18%;
+    padding-bottom: 70px;
+}
+
+p {
+    font-family: Rubik;
+}
+
+#donDOButtons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.backButton, .nextButton {
+    padding: 10px 45px;
+}
+
+.backButton {
+    color: var(--tertiary);
+    font-weight: bold;
+    background-color: var(--white);
+    border: 2px solid var(--tertiary);
+}
+
+.nextButton {
+    background-color: var(--tertiary);
+    font-weight: bold;
+    color: var(--white);
+    border: 2px solid var(--tertiary);
+}
+
+.backButton:hover, .nextButton:hover {
+    cursor: pointer;
+}
+
+
+#DayHours {
+    max-width: 1000px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+#EachDayHours {
+    border: 2px solid #ACACAC;
+    box-sizing: border-box;
+    width: 212px;
+    height: 49px;
+    display: flex;
+    padding-top: 13px;
+    justify-content: center;
+}
+
+#TimeHours h2{
+    color: var(--orange);
+}
+
+@media only screen and (max-width: 915px) {
+    #SubmitPickUpPage {
+        padding: 0 10%;
+        padding-bottom: 50px;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    #SubmitPickUpPage {
+        padding: 0 9%;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    #donPDOptions {
+        display: block;
+    }
+
+    #radioPickUp {
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 630px) {
+    #SubmitPickUpPage {
+        padding: 0 5%;
+    }
+
+    #radioDropoff {
+        margin-right: 10px;
+    }
+}
+
+@media only screen and (max-width: 560px) {
+    #SubmitPickUpPage {
+        padding: 0 5%;
+    }
+
+    .radioLabel {
+        margin-left: 2px;
+    }
+
+    #radioDropoff {
+        margin-right: 5px;
+    }
+}
+
+@media only screen and (max-width: 540px) {
+    #SubmitPickUpPage {
+        padding: 0 5%;
+        padding-bottom: 20px;
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    .backButton, .nextButton {
+        padding: 8px 40px;
+    }
+}
+
+@media only screen and (max-width: 360px) {
+    .backButton, .nextButton {
+        padding: 7px 38px;
+    }
+
+    .donDropoffRow {
+        padding-bottom: 10px;
+    }
+    
+    .donDropoffHours {
+        padding-left: 30px;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    .backButton, .nextButton {
+        padding: 7px 30px;
+    }
+
+    .donDropoffRow {
+        padding-bottom: 9px;
+    }
+    
+    .donDropoffHours {
+        padding-left: 25px;
+    }
+}
+
+@media only screen and (max-width: 290px) {
+
+    #radioPickUp {
+        margin-top: 10px;
+    }
+
+    .backButton, .nextButton {
+        padding: 7px 30px;
+    }
+
+    .donDropoffRow {
+        padding-bottom: 5px;
+        font-size: 15px;
+    }
+    
+    .donDropoffHours {
+        padding-left: 15px;
+        font-size: 15px;
+    }
+}
