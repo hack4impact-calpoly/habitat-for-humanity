@@ -8,6 +8,8 @@ interface item {
     location: string;
     donor_id: string;
     notes: string;
+    time_submitted: string;
+    time_accepted: string;
 }
   
 const itemSchema = new Schema<item>(
@@ -17,7 +19,9 @@ const itemSchema = new Schema<item>(
     size: { type: String, required: true },
     location: { type: String, required: true },
     donor_id: { type: String, required: true },
-    notes: { type: String, required: false }
+    notes: { type: String, required: false },
+    time_submitted: { type: String, required: false },
+    time_accepted: { type: String, required: false }
   },
   { collection: "Items" }
 );
