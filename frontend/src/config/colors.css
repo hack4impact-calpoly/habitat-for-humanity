@@ -1,15 +1,22 @@
 /* Global App Colors Config */
 
 :root {
-    --primary: #314D89;
-    --secondary: #6DB340;
-    --tertiary: #04B2D9;
-    --white: #FFFFFF;
-    --black: #000000;
-    --white-gray: #FEFEFE;
-    --gray-light: #DFDFDF;
-    --box-shadow: #314D8926;
-    --box-border: #ACACAC;
-    --input-box: #314D8999;
-    --orange: #F23E16;
+  --primary: #314d89;
+  --secondary: #6db340;
+  --tertiary: #04b2d9;
+  --white: #ffffff;
+  --black: #000000;
+  --white-gray: #fefefe;
+  --gray-light: #dfdfdf;
+  --dark-gray: #747474;
+  --box-shadow: #314d8926;
+  --box-border: #acacac;
+  --input-box: #314d8999;
+  --orange: #f23e16;
+  --white: #ffffff;
+  --black: #000000;
+  --red: #f23e16;
+  --dashed-box: #8f8f8f;
+  --background: #fcfdff;
+  --orange: #f23e16;
 }
