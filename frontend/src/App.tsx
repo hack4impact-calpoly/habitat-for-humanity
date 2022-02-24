@@ -13,6 +13,12 @@ import LoginPage from "./components/LoginPage/LoginPage";
 // import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import DonatorProfileEditPage from './components/DonatorProfileEditPage/DonatorProfileEditPage';
+import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
+//import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
+
+import SubmitDropOffPage from './components/donation/SubmitDropOffPage/SubmitDropOffPage';
+import SubmitPickUpPage from './components/donation/SubmitPickUpPage/SubmitPickUpPage';
+import SubmitPickUpMultiplePhotoPage from './components/donation/SubmitPickUpMultiplePhotoPage/SubmitPickUpMultiplePhotoPage';
 // import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/Donation/Donation';
@@ -25,8 +31,13 @@ function App(): JSX.Element {
     //<DonatorHomePage />
     //<CreateAccountPage />
     // <DonatorProfileEditPage />
-    // <DonatorLocationPage />
+    //<DonatorLocationPage />
     // <LoginPage />
+    //<DonatorNextStepsPage />]
+
+    //<SubmitDropOffPage />
+    //<SubmitPickUpPage />
+    //<SubmitPickUpMultiplePhotoPage />
     //<DonatorNextStepsPage />
   );
 }
