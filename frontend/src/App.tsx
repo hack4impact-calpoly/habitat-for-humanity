@@ -8,7 +8,7 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 /* Authentication Screens */
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 import LoginPage from "./components/authentication/LoginPage/LoginPage";
-// import SuccessPage from './components/SuccessPage/SuccessPage';
+// import SuccessPage from './components/authentication/SuccessPage/SuccessPage';
 
 
 /* Donator Screens */
