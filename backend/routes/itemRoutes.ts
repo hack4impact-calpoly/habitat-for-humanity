@@ -23,4 +23,34 @@ router.get("/:itemId", async (req: Request, res: Response) => {
   }
 })
 
+//get all items with name
+router.get("/:name", async (req: Request, res: Response) => {
+  try {
+    const items = await Item.find({ name: req.params.name})
+    res.send(items)
+  } catch (error) {
+    res.status(400).send(error);
+  }
+})
+
+//get all items with location
+router.get("/:location", async (req: Request, res: Response) => {
+  try {
+    const items = await Item.find({ location: req.params.location})
+    res.send(items)
+  } catch (error) {
+    res.status(400).send(error);
+  }
+})
+
+//get all items with donorId
+router.get("/:donorId", async (req: Request, res: Response) => {
+  try {
+    const items = await Item.find({ donor_id: req.params.donorId})
+    res.send(items)
+  } catch (error) {
+    res.status(400).send(error);
+  }
+})
+
 module.exports = router
