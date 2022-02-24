@@ -4,10 +4,10 @@ import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 require("./DonatorProfileEditPage.css");
 
 const DonatorProfileEditPage = () : JSX.Element =>  {
-    const [firstName, setFirstName] = React.useState("");
-    const [lastName, setLastName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [phoneNumber, setPhoneNumber] = React.useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     let processedPhoneNumber : number; //Phone number converted from string
 
     let navigate = useNavigate();
@@ -27,13 +27,13 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
     }
 
     /*---------------Form Data Handling---------------------------*/
-    const getProfileData = () => {
-        //backend code to get profile data
-    }
+    // const getProfileData = () => {
+    //     //backend code to get profile data
+    // }
     
-    const displayProfileData = (profileData: Object) => {
-        //set state variables with profile data, asynchronous
-    }
+    // const displayProfileData = (profileData: Object) => {
+    //     //set state variables with profile data, asynchronous
+    // }
 
     const submitData = () => {
         const validData = validateForm();
