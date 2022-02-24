@@ -1,0 +1,96 @@
+@import "./../../config/colors.css";
+
+#donatorPickupPage {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+}
+
+#calendarView, #calendarEdit {
+    flex-basis: 45%;
+}
+
+#donatorPickupHeader {
+    color: var(--primary)
+}
+
+.donatorPickUpTime {
+    border: 1px solid var(--box-border);
+    padding: 2%;
+    margin-bottom: 2%;
+    font-weight: 500;
+}
+
+.donatorPickupCheckbox {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#donatorPickupDesc {
+    font-style: italic;
+    color: var(--dark-gray);
+}
+
+#donPickupButtons {
+    margin: 50px 0;
+}
+
+.donPickupButton {
+    margin-right: 20px;
+}
+
+.fc h2 {
+    font-size: 20px;
+ }
+
+@media only screen and (max-width: 1324px) {
+    #calendarView {
+        flex-basis: 50%;
+    }
+
+    #calendarEdit {
+        flex-basis: 45%
+    }
+}
+
+@media only screen and (max-width: 1164px) {
+    #calendarView {
+        flex-basis: 52%;
+    }
+
+    #calendarEdit {
+        flex-basis: 40%
+    }
+
+    #donatorPickupHeader {
+        font-size: 25px;
+    }
+}
+
+@media only screen and (max-width: 1082px) {
+    #donatorPickupPage {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 412px) {
+    .fc .fc-toolbar-title {
+        font-size: 20px;
+    }
+
+    .fc .fc-button {
+        font-size: 12px;
+    }
+}
+
+@media only screen and (max-width: 412px) {
+    .fc .fc-toolbar-title {
+        font-size: 15px;
+    }
+
+    .fc .fc-button {
+        font-size: 10px;
+    }
+}

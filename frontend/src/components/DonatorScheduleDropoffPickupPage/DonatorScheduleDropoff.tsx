@@ -28,6 +28,11 @@ const DonatorScheduleDropoff = (): JSX.Element => {
                     })}
                 </tbody>
             </table>
+            <div id="donDropoffButtons">
+                {// TODO: Add links to back and next buttons }
+                }                    <button className="backButton">Back</button>
+                <button className="nextButton">Next</button>
+            </div>
         </div>
     );
 }
