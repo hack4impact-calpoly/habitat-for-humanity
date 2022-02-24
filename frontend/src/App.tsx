@@ -4,11 +4,10 @@ import Amplify from '@aws-amplify/core';
 import { Auth } from '@aws-amplify/auth';
 // import awsconfig from './aws-exports';
 import { withAuthenticator } from '@aws-amplify/ui-react';
-
+import LoginPage from "./components/LoginPage/LoginPage";
 
 /* Screens */
 // import ComponentName from './components/ComponentName/ComponentName';
-import LoginPage from "./components/LoginPage/LoginPage";
 // import DonatorNavbar from './components/DonatorNavbar/DonatorNavbar';
 // import DonatorProfilePage from './components/DonatorProfile/DonatorProfile';
 // import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
