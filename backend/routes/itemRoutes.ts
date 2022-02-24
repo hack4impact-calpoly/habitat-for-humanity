@@ -23,24 +23,4 @@ router.get("/:itemId", async (req: Request, res: Response) => {
   }
 })
 
-//get item by itemId
-router.get("/:itemId", async (req: Request, res: Response) => {
-  try {
-    const item = await Item.findOne({ _id: req.params.itemId})
-    res.send(item)
-  } catch (error) {
-    res.status(400).send(error);
-  }
-})
-
-//get item by itemId
-router.get("/:itemId", async (req: Request, res: Response) => {
-  try {
-    const item = await Item.findOne({ _id: req.params.itemId})
-    res.send(item)
-  } catch (error) {
-    res.status(400).send(error);
-  }
-})
-
 module.exports = router
