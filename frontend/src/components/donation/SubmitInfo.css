@@ -1,0 +1,30 @@
+@import "./../../config/colors.css";
+
+#SubmitInfoPage h2 {
+    color: var(--orange);
+}
+
+p {
+    font-family: Rubik;
+}
+
+#ProductImages {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#SingleImages {
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+#Address {
+    white-space: pre-line;
+}
+
+input[type=radio] {
+    border: 0px;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+}
