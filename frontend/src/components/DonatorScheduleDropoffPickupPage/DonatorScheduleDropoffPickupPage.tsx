@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 import DonatorScheduleDropoff from "./DonatorScheduleDropoff";
+import DonatorSchedulePickUp from "./DonatorSchedulePickUp";
 require("./DonatorScheduleDropoffPickupPage.css");
 
 const DonatorScheduleDropoffPage = (): JSX.Element => {
@@ -40,13 +41,7 @@ const DonatorScheduleDropoffPage = (): JSX.Element => {
                     </div>
                 </div>
                 {isDropoff ? <DonatorScheduleDropoff /> : 
-                    // TODO: Implement pick up option
-                    null}
-                <div id="donDropoffButtons">
-                    {// TODO: Add links to back and next buttons }
-}                   <button value="backButton" className="backButton" onClick={buttonNavigation}>Back</button>
-                    <button value="nextButton" className="nextButton" onClick={buttonNavigation}>Next</button>
-                </div>
+                    <DonatorSchedulePickUp />}
             </div>
         </body>
     );
