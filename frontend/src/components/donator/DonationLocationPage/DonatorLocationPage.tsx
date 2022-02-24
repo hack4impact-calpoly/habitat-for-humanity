@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 require("./DonatorLocationPage.css");
 
 const DonatorLocationPage = (): JSX.Element => {
-    const [address, setAddress] = React.useState<string>("");
-    const [city, setCity] = React.useState<string>("")
-    const [zip, setZip] = React.useState<number>(0);
+    const [address, setAddress] = useState<string>("");
+    const [city, setCity] = useState<string>("")
+    const [zip, setZip] = useState<number>(0);
 
     const nextOnClickDonatorLocation = () => {
         console.log(address, city, zip);

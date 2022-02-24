@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import DonatorNavbar from '../DonatorNavbar/DonatorNavbar';
 import pencil from "images/pencil.png";
@@ -16,7 +16,7 @@ const DonatorProfilePage = (): JSX.Element => {
                         <p id="profile">Profile</p>
                     </div>
                     <div id="editBox">
-                        <img id="pencil" src={pencil} />
+                        <img alt="pencil" id="pencil" src={pencil} />
                         {/* Need to Implement Link to DonatorProfileEditPage */}
                         <Link to={donatorProfileEditPath} id="edit">edit</Link>
                     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
@@ -10,12 +10,12 @@ import IconButton from '@mui/material/IconButton';
 require("./CreateAccountPage.css");
 
 const CreateAccountPage = (): JSX.Element => {
-    const [userType, setUserType] = React.useState<string>("");
-    const [firstName, setFirstName] = React.useState<string>("");
-    const [lastName, setLastName] = React.useState<string>("");
-    const [email, setEmail] = React.useState<string>("");
-    const [phoneNumber, setPhoneNumber] = React.useState<string>("");
-    const [password, setPassword] = React.useState({
+    const [userType, setUserType] = useState<string>("");
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [phoneNumber, setPhoneNumber] = useState<string>("");
+    const [password, setPassword] = useState({
                                                     value: "",
                                                     showPassword: false});
     let processedPhoneNumber : number; //Phone number converted from string
@@ -255,7 +255,7 @@ const CreateAccountPage = (): JSX.Element => {
                             value={password.value}
                             type={password.showPassword ? "text" : "password"}
                             disableUnderline={true}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword({...password, ["value"]: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword({...password, "value": e.target.value})}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton

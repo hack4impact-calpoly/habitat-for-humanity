@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -90,7 +90,7 @@ const events = [
 const DonatorSchedulePickUp = (): JSX.Element => {
     const today = new Date();
 
-    const [header, setHeader] = React.useState<string>(`${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(today.getDate())}`);
+    const [header, setHeader] = useState<string>(`${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(today.getDate())}`);
 
     const onClickCalendar = (info: DateSelectArg): void => {
         const start_date = info?.start;

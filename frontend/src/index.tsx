@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
@@ -16,7 +16,7 @@ import ForgotPassword from "./components/authentication/ForgotPasswordPage/Forgo
 import DonatorHome from "./components/donator/DonatorHomePage/DonatorHomePage";
 // Donator Make A Donation Imports
 import DonatorLocation from "./components/donator/DonatorLocationPage/DonatorLocationPage";
-import DonatorScheduleDropoff from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoff";
+// import DonatorScheduleDropoff from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoff";
 import DonatorScheduleDropoffPickup from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage";
 import DonatorNextSteps from "./components/donator/DonatorNextStepsPage/DonatorNextStepsPage";
 // Donator Profile Imports
