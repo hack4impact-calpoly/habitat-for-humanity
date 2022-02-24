@@ -9,19 +9,19 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 
 // Component imports for navigation
-import CreateAccount from "./components/CreateAccountPage/CreateAccountPage";
-import ForgotPassword from "./components/ForgotPasswordPage/ForgotPasswordPage";
+import CreateAccount from "./components/authentication/CreateAccountPage/CreateAccountPage";
+import ForgotPassword from "./components/authentication/ForgotPasswordPage/ForgotPasswordPage";
 
 //-----------Donator Imports------------//
-import DonatorHome from "./components/DonatorHomePage/DonatorHomePage";
+import DonatorHome from "./components/donator/DonatorHomePage/DonatorHomePage";
 // Donator Make A Donation Imports
-import DonatorLocation from "./components/DonatorLocationPage/DonatorLocationPage";
-import DonatorScheduleDropoff from "./components/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoff";
-import DonatorScheduleDropoffPickup from "./components/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage";
-import DonatorNextSteps from "./components/DonatorNextStepsPage/DonatorNextStepsPage";
+import DonatorLocation from "./components/donator/DonatorLocationPage/DonatorLocationPage";
+import DonatorScheduleDropoff from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoff";
+import DonatorScheduleDropoffPickup from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage";
+import DonatorNextSteps from "./components/donator/DonatorNextStepsPage/DonatorNextStepsPage";
 // Donator Profile Imports
-import DonatorProfile from "./components/DonatorProfile/DonatorProfile";
-import DonatorProfileEdit from "./components/DonatorProfileEditPage/DonatorProfileEditPage";
+import DonatorProfile from "./components/donator/DonatorProfile/DonatorProfile";
+import DonatorProfileEdit from "./components/donator/DonatorProfileEditPage/DonatorProfileEditPage";
 
 
 const rootElement = document.getElementById("root");
