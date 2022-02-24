@@ -2,10 +2,9 @@ import './App.css';
 import React from 'react'
 import Amplify from '@aws-amplify/core';
 import { Auth } from '@aws-amplify/auth';
-import awsconfig from './aws-exports';
+// import awsconfig from './aws-exports';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import LoginPage from "./components/LoginPage/LoginPage";
-Amplify.configure(awsconfig);
 
 /* Screens */
 // import ComponentName from './components/ComponentName/ComponentName';
@@ -17,7 +16,7 @@ Amplify.configure(awsconfig);
 // import DonatorLocationPage from './components/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/Donation/Donation';
-
+// Amplify.configure(awsconfig);
 
 
 function App(): JSX.Element {
@@ -32,4 +31,5 @@ function App(): JSX.Element {
   );
 }
 
-export default withAuthenticator(App);
+// export default withAuthenticator(App);
+export default App;
