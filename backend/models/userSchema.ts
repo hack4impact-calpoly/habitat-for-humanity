@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+const mongoose = require('mongoose')
 import { userConnection } from "../connection";
 
 interface user {
@@ -25,4 +26,5 @@ const userSchema = new Schema<user>(
 );
   
 const User = userConnection.model("Users", userSchema);
+
 export default User;
