@@ -1,13 +1,15 @@
 import './App.css';
 import React from 'react'
-import Amplify from '@aws-amplify/core';
-import { Auth } from '@aws-amplify/auth';
+// import Amplify from '@aws-amplify/core';
+// import { Auth } from '@aws-amplify/auth';
 // import awsconfig from './aws-exports';
-import { withAuthenticator } from '@aws-amplify/ui-react';
-import LoginPage from "./components/LoginPage/LoginPage";
+// import { withAuthenticator } from '@aws-amplify/ui-react';
+
 
 /* Screens */
 // import ComponentName from './components/ComponentName/ComponentName';
+// import LoginPage from "./components/LoginPage/LoginPage";
+import SuccessPage from './components/SuccessPage/SuccessPage';
 // import DonatorNavbar from './components/DonatorNavbar/DonatorNavbar';
 // import DonatorProfilePage from './components/DonatorProfile/DonatorProfile';
 // import DonatorHomePage from './components/DonatorHomePage/DonatorHomePage';
@@ -27,7 +29,8 @@ import SubmitPickUpMultiplePhotoPage from './components/donation/SubmitPickUpMul
 
 function App(): JSX.Element {
   return (
-    <LoginPage />
+    <SuccessPage />
+    // <LoginPage />
     //<DonatorHomePage />
     //<CreateAccountPage />
     // <DonatorProfileEditPage />

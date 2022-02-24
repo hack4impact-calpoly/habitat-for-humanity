@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from 'react-router-dom';
 
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
@@ -30,6 +30,8 @@ const CreateAccountPage = (): JSX.Element => {
                 navigate(mainScreenPath);
             }
         }
+
+        // TODO: navigate to success page when credentials are valid
     }
 
     const submitData = () : boolean => {
