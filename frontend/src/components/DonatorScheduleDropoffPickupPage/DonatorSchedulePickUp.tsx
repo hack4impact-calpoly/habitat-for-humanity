@@ -1,91 +1,160 @@
 import React from "react";
-import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
 import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-require("./DonatorSchedulePickUp.css")
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import moment from "moment";
+import Checkbox from "@mui/material/Checkbox";
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+require("./DonatorSchedulePickUp.css");
+
+const weekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+];
+
+const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+];
+
+// Get available events for specific date from database
+const availEvents = [
+    {
+        title: "Donator Pickup",
+        start: "2022-02-25T18:00:39Z",
+        end: "2022-02-25T19:00:39Z",
+    },
+    {
+        title: "Donator Pickup",
+        start: "2022-02-25T19:00:39Z",
+        end: "2022-02-25T20:00:39Z",
+    },
+    {
+        title: "Donator Pickup",
+        start: "2022-02-25T20:00:39Z",
+        end: "2022-02-25T21:00:39Z",
+    },
+    {
+        title: "Donator Pickup",
+        start: "2022-02-25T21:00:39Z",
+        end: "2022-02-25T22:00:39Z",
+    },
+    {
+        title: "Donator Pickup",
+        start: "2022-02-25T22:00:39Z",
+        end: "2022-02-25T23:00:39Z",
+    },
+    {
+        title: "Donator Pickup",
+        start: "2022-02-25T23:00:39Z",
+        end: "2022-02-25T00:00:39Z",
+    },
+    {
+        title: "Donator Pickup",
+        start: "2022-02-25T00:00:39Z",
+        end: "2022-02-25T01:00:39Z",
+    }
+];
+
+// Get existing events from database
+const events = [
+    {
+        title: "Donator Pickup",
+        start: "2022-02-19T18:00:39Z",
+        end: "2022-02-19T19:00:39Z",
+    },
+    {
+        title: "Donator Pickup",
+        start: "2022-02-20T00:00:39Z",
+        end: "2022-02-20T01:00:39Z",
+    },
+];
+
 
 const DonatorSchedulePickUp = (): JSX.Element => {
-    // Existing events
-    const [events, setEvents] = React.useState([
-            { title: 'event 1', start: '2022-02-05T00:00:39Z', end: '2022-02-05T01:00:39Z' },
-            { title: 'event 2', start: '2022-02-06T00:00:39Z', end: '2022-02-06T01:00:39Z' }
-    ])
+    const today = new Date();
 
-    const [calendarEvent, setCalendarEvent] = React.useState({
-        date: new Date(),
-        dateString: "",
-        start: "",
-        startTime: "",
-        end: "",
-        endTime: ""
-    });
-
-    const [item, setItem] = React.useState("");
-    const [address, setAddress] = React.useState("");
+    const [header, setHeader] = React.useState<string>(`${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(today.getDate())}`);
 
     const onClickCalendar = (info: DateSelectArg): void => {
         const start_date = info?.start;
-        const end_date = info?.end;
-        console.log(info)
-        setCalendarEvent({
-            date: start_date,
-            dateString: start_date.toISOString().split('T')[0],
-            start: start_date.toISOString(),
-            startTime: start_date.toTimeString().split(' ')[0],
-            end: end_date.toISOString(),
-            endTime: end_date.toTimeString().split(' ')[0]
-        })
-        
-    }
+        setHeader(`${monthNames[start_date.getMonth()]}, ${weekdays[start_date.getDay()]} ${String(start_date.getDate())}`);
+    };
 
-    const onClickAddEvent = (): void => {
-        if (item === "" || address === "") {
-            alert("Please complete the form");
-            return;
-        }
-        const title = "Donator Pickup: " + item + " at " + address;
-        setEvents([...events, { title: title, start: calendarEvent.start, end: calendarEvent.end }])
+    // TODO: Send donator availability to database
+    const pushToDatabase = () => {
+        return;
     }
 
     return (
-        <body>
-            <DonatorNavbar />
+        <div>
+            <h2 className="donDropoffPickupHeader">Time Availability</h2>
             <div id="donatorPickupPage">
                 <div id="calendarView">
                     <FullCalendar
-                        plugins={[timeGridPlugin, interactionPlugin]}
-                        initialView="timeGridWeek"
+                        plugins={[dayGridPlugin, interactionPlugin]}
+                        initialView="dayGridMonth"
                         events={events}
-                        height={600}
-                        slotMinTime={'9:00:00'}
-                        slotMaxTime={'18:00:00'}
+                        slotMinTime={"10:00:00"}
+                        slotMaxTime={"18:00:00"}
                         selectable={true}
                         unselectAuto={false}
                         longPressDelay={1}
                         select={onClickCalendar}
+                        validRange={(now) => {
+                            const copyNow = new Date();
+                            const endDate = new Date(copyNow.setMonth(now.getMonth() + 1));
+                            return {
+                                start: now,
+                                end: endDate,
+                            };
+                        }}
+                        windowResizeDelay={0}
                     />
                 </div>
                 <div id="calendarEdit">
-                    <h1>Create an Event</h1>
-                    <p>Click the calendar to select date and time. Press and drag to extend start and end time.</p>
-                    <p>Item</p>
-                    <input type="text" onChange={e => setItem(e?.target?.value)} />
-                    <p>Address</p>
-                    <input type="text" onChange={e => setAddress(e?.target?.value)}/>
-                    <p>Date</p>
-                    <input type="date" value={calendarEvent.dateString != null ? calendarEvent.dateString : ""} readOnly />
-                    <p>Start time</p>
-                    <input type="time" value={calendarEvent.startTime != null ? calendarEvent.startTime : ""} readOnly />
-                    <p>End time</p>
-                    <input type="time" value={calendarEvent?.endTime != null ? calendarEvent.endTime : ""} readOnly />
-                    <br />
-                    <br />
-                    <button onClick={onClickAddEvent}>Create event</button>
+                    <h1 id="donatorPickupHeader">{header}</h1>
+                    <p id="donatorPickupDesc">Please select multiple dates and times you are available, and our staff will choose from your availability.</p>
+                    <div id="donatorPickupEvents">
+                        {availEvents.map(availEvent => {
+                            const startTime = moment.utc(availEvent.start).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
+                            const endTime = moment.utc(availEvent.end).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
+                            return (
+                                <div className="donatorPickUpTime">
+                                    <Checkbox
+                                        icon={<RadioButtonUncheckedIcon />}
+                                        checkedIcon={<CheckCircleIcon />}
+                                    />
+                                    {`${startTime} to ${endTime}`}
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
-        </body>
-    )
-}
+            <div id="donPickupButtons">
+                {// TODO: Add links to back and next buttons and input error checking}
+}               <button className="donPickupButton backButton">Back</button>
+                <button className="donPickupButton nextButton" onClick={pushToDatabase}>Next</button>
+            </div>
+        </div>
+    );
+};
 
 export default DonatorSchedulePickUp;
