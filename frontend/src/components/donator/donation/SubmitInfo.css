@@ -13,6 +13,12 @@ p {
     flex-wrap: wrap;
 }
 
+img {
+    max-width:100%;
+    height:auto;
+    max-height:100%;
+ }
+
 #SingleImages {
     margin-right: 10px;
     margin-top: 5px;
@@ -27,4 +33,31 @@ input[type=radio] {
     width: 1.5em;
     height: 1.5em;
     vertical-align: middle;
+}
+
+@media only screen and (max-width: 915px) {
+    img {
+        max-width:95%;
+     }
+     #SingleImages {
+        margin-right: -20px;
+        margin-top: 5px;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    img {
+        max-width:85%;
+     }
+     #SingleImages {
+        margin-right: -40px;
+        margin-top: 5px;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+     #SingleImages {
+        margin-right: -155px;
+        margin-top: 5px;
+    }
 }

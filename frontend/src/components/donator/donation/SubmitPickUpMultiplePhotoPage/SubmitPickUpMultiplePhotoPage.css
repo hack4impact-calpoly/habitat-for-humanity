@@ -17,6 +17,8 @@ p {
     justify-content: space-between;
 }
 
+
+
 .backButton, .nextButton {
     padding: 10px 45px;
 }
@@ -72,6 +74,12 @@ p {
     #SubmitPickUpPage {
         padding: 0 9%;
     }
+
+    img {
+        max-width:50%;
+        height:auto;
+        max-height:100%;
+     }
 }
 
 @media only screen and (max-width: 640px) {
