@@ -117,3 +117,21 @@
     color: #011338;
 }
 
+
+@media only screen and (max-width: 915px) {
+    #donatorProfileBox{
+        margin: 0% 40% 0% 13%;
+        width: 75%;
+        margin-top: 8vh;
+        justify-content: center;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    #donatorProfileBox{
+        margin: 0% 40% 0% 13%;
+        width: 100%;
+        margin-top: 8vh;
+        justify-content: center;
+    }
+}
