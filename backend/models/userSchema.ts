@@ -1,6 +1,6 @@
-import { Schema } from 'mongoose';
-const mongoose = require('mongoose')
+import { ObjectId, Schema } from 'mongoose';
 import { userConnection } from "../connection";
+const mongoose = require("mongoose");
 
 interface user {
     userType: string;
@@ -9,7 +9,7 @@ interface user {
     lastName: string;
     email: string;
     phone: string;
-    picture: string;
+    picture: ObjectId;
 }
   
 const userSchema = new Schema<user>(
@@ -20,7 +20,7 @@ const userSchema = new Schema<user>(
     lastName: { type: String, requried: true },
     email: { type: String, required: true },
     phone: { type: String, required: true },
-    picture: { type: String, required: true }
+    picture: { type: mongoose.Schema.Types.ObjectId, required: true }
   },
   { collection: "Users" }
 );
