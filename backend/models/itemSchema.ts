@@ -2,6 +2,7 @@ import { Schema, Types } from 'mongoose';
 import { itemConnection } from "../connection";
 
 interface item {
+    name: string;
     images: Types.Array<Buffer>;
     size: string;
     location: string;
@@ -13,6 +14,7 @@ interface item {
   
 const itemSchema = new Schema<item>(
   {
+    name: {type: String, required: false },
     images: { type: [Buffer], required: false },
     size: { type: String, required: true },
     location: { type: String, required: true },
