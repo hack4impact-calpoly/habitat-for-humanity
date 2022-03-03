@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 // import User from './models/userSchema';
 const express = require("express") 
 const app = express() 
+app.use(express.json())
 
 const userEndpoints = require("./routes/userRoutes.ts")
 const itemEndpoints = require("./routes/itemRoutes.ts")
@@ -17,8 +18,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT');
     next();
 });
-
-app.use(express.json())
 
 
 //testing middleware
