@@ -10,8 +10,10 @@
   --box-shadow: #314d8926;
   --input-box: #314d8999;
   --red: #f23e16;
-  --dashed-box: #8F8F8F;
-  --background: #FCFDFF;
-  --tertiary: #04B2D9;
-  --orange: #F23E16;
+  --dashed-box: #8f8f8f;
+  --background: #fcfdff;
+  --tertiary: #04b2d9;
+  --orange: #f23e16;
+  --gray-dark: #c4c4c4;
+  --gray-text: #8f8f8f;
 }
