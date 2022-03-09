@@ -22,13 +22,15 @@ const CreateAccountPage = (): JSX.Element => {
     
     let navigate = useNavigate();
     const mainScreenPath : string = "/"; // Main screen (login)
+    const successPath : string = "/CreateAccount/Success"
 
     const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
         
         if(e.currentTarget.value === "signUpButton"){
             if(submitData()){
-                navigate(mainScreenPath);
+                navigate(successPath);
             }
+
         }
 
         // TODO: navigate to success page when credentials are valid
