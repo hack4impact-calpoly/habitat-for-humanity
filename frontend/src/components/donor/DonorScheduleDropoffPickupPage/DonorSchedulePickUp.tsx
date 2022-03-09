@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -99,7 +100,23 @@ const DonatorSchedulePickUp = (): JSX.Element => {
 
     // TODO: Send donator availability to database
     const pushToDatabase = () => {
+        console.log("Pushed");
         return;
+    }
+    
+    let navigate = useNavigate();
+
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const backPath : string = "/Donor/Donate/Location";
+        const nextPath : string = "/Donor/Donate/NextSteps";
+
+        if(e.currentTarget.value === "backButton"){
+            navigate(backPath);
+        }
+        else if(e.currentTarget.value === "nextButton"){
+            pushToDatabase();
+            navigate(nextPath);
+        }
     }
 
     return (
@@ -149,9 +166,8 @@ const DonatorSchedulePickUp = (): JSX.Element => {
                 </div>
             </div>
             <div id="donPickupButtons">
-                {// TODO: Add links to back and next buttons and input error checking}
-}               <button className="donPickupButton backButton">Back</button>
-                <button className="donPickupButton nextButton" onClick={pushToDatabase}>Next</button>
+                <button value="backButton" className="donPickupButton backButton" onClick={buttonNavigation}>Back</button>
+                <button value="nextButton" className="donPickupButton nextButton" onClick={buttonNavigation}>Next</button>
             </div>
         </div>
     );
