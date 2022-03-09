@@ -1,5 +1,5 @@
 import React from 'react';
-import checkCircle from '../../images/CheckCircle.png';
+import checkCircle from '../../../images/CheckCircle.png';
 require("./SuccessPage.css")
 
 const SuccessPage = (): JSX.Element => {
