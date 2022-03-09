@@ -11,6 +11,7 @@ import App from "./App";
 // Component imports for navigation
 import CreateAccount from "./components/authentication/CreateAccountPage/CreateAccountPage";
 import ForgotPassword from "./components/authentication/ForgotPasswordPage/ForgotPasswordPage";
+import SuccessPage from "./components/authentication/SuccessPage/SuccessPage";
 
 //-----------Donator Imports------------//
 import DonatorHome from "./components/donor/DonorHomePage/DonorHomePage";
@@ -32,6 +33,7 @@ render(
       {/* Universal Routes */}
       <Route path="/" element={<App />} /> {/* Login page */}
       <Route path="/CreateAccount"  element={<CreateAccount />} />
+      <Route path="/CreateAccount/Success" element={<SuccessPage />} />
       <Route path="/ForgotPassword" element={<ForgotPassword />} />
 
       {/* Donor Specific Routes */}
