@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const weeklyHours = [
     { day: "Monday", hours: "Closed" },
@@ -11,6 +12,20 @@ const weeklyHours = [
 ];
 
 const DonatorScheduleDropoff = (): JSX.Element => {
+    let navigate = useNavigate();
+
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const backPath : string = "/Donor/Donate/Location";
+        const nextPath : string = "/Donor/Donate/NextSteps";
+
+        if(e.currentTarget.value === "backButton"){
+            navigate(backPath);
+        }
+        else if(e.currentTarget.value === "nextButton"){
+            navigate(nextPath);
+        }
+    }
+
     return (
         <div>
             <h2 className="donDropoffPickupHeader">ReStore Drop Off Hours</h2>
@@ -28,10 +43,9 @@ const DonatorScheduleDropoff = (): JSX.Element => {
                     })}
                 </tbody>
             </table>
-            <div id="donDropoffButtons">
-                {// TODO: Add links to back and next buttons }
-                }                    <button className="backButton">Back</button>
-                <button className="nextButton">Next</button>
+            <div id="donDropoffButtons">           
+                <button value="backButton" className="backButton" onClick={buttonNavigation}>Back</button>
+                <button value="nextButton" className="nextButton" onClick={buttonNavigation}>Next</button>
             </div>
         </div>
     );
