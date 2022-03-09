@@ -1,5 +1,4 @@
 import React from "react";
-// import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
@@ -8,19 +7,18 @@ import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 
-// Component imports for navigation
+//----------- Authentication Imports------------//
 import CreateAccount from "./components/authentication/CreateAccountPage/CreateAccountPage";
 import ForgotPassword from "./components/authentication/ForgotPasswordPage/ForgotPasswordPage";
 import SuccessPage from "./components/authentication/SuccessPage/SuccessPage";
 
-//-----------Donator Imports------------//
+//----------- Donor Imports------------//
 import DonatorHome from "./components/donor/DonorHomePage/DonorHomePage";
-// Donator Make A Donation Imports
+// Donor "Make A Donation" Imports
 import DonatorLocation from "./components/donor/DonorLocationPage/DonorLocationPage";
-// import DonatorScheduleDropoff from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoff";
 import DonatorScheduleDropoffPickup from "./components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage";
 import DonatorNextSteps from "./components/donor/DonorNextStepsPage/DonorNextStepsPage";
-// Donator Profile Imports
+// Donor "Profile" Imports
 import DonatorProfile from "./components/donor/DonorProfile/DonorProfile";
 import DonatorProfileEdit from "./components/donor/DonorProfileEditPage/DonorProfileEditPage";
 
@@ -30,7 +28,7 @@ const rootElement = document.getElementById("root");
 render(
   <BrowserRouter>
     <Routes>
-      {/* Universal Routes */}
+      {/* Authentication Routes */}
       <Route path="/" element={<App />} /> {/* Login page */}
       <Route path="/CreateAccount"  element={<CreateAccount />} />
       <Route path="/CreateAccount/Success" element={<SuccessPage />} />
@@ -69,18 +67,14 @@ render(
 
 /* ----------- Notes for future reference: --------------
   Main Routes: Different system users
-    1. Donator
+    1. Donor
     2. Admin 
     3. Volunteer
-  Subroutes: Page Components (Ex: not navbars) for the user
+  Subroutes:
     1. Home
     2. Profile
     3. Profile/Edit
     2. etc.
-  Corresponding Example URLs:
-    domain/Donator/NextSteps
-    domain/Admin/Home
-    domain/Volunteer/Profile
 */
 
 // If you want to start measuring performance in your app, pass a function
