@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
+import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 import styled from 'styled-components';
 import ProgressBar from './ProgressBar';
 import Dropzone from './Dropzone';
