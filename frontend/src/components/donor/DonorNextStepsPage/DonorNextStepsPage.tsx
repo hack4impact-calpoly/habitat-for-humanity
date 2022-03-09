@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import DonatorNavbar from 'components/donator/DonatorNavbar/DonatorNavbar';
-require("./DonatorNextStepsPage.css");
+import DonatorNavbar from 'components/donor/DonorNavbar/DonorNavbar';
+require("./DonorNextStepsPage.css");
 
 const DonatorNextStepsPage = (): JSX.Element => {
     let navigate = useNavigate();

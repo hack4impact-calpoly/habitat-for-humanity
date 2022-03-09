@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
-import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
-import DonatorScheduleDropoff from "./DonatorScheduleDropoff";
-import DonatorSchedulePickUp from "./DonatorSchedulePickUp";
-require("./DonatorScheduleDropoffPickupPage.css");
+import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+import DonatorScheduleDropoff from "./DonorScheduleDropoff";
+import DonatorSchedulePickUp from "./DonorSchedulePickUp";
+require("./DonorScheduleDropoffPickupPage.css");
 
 const DonatorScheduleDropoffPage = (): JSX.Element => {
     const [isDropoff, setIsDropoff] = useState<boolean>(true)

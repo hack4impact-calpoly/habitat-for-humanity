@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import DonatorNavbar from '../DonatorNavbar/DonatorNavbar';
+import DonatorNavbar from '../DonorNavbar/DonorNavbar';
 import pencil from "images/pencil.png";
-require("./DonatorProfile.css");
+require("./DonorProfile.css");
 
 const DonatorProfilePage = (): JSX.Element => {
     const donatorProfileEditPath = "/Donor/Profile/Edit";

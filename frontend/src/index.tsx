@@ -13,15 +13,15 @@ import CreateAccount from "./components/authentication/CreateAccountPage/CreateA
 import ForgotPassword from "./components/authentication/ForgotPasswordPage/ForgotPasswordPage";
 
 //-----------Donator Imports------------//
-import DonatorHome from "./components/donator/DonatorHomePage/DonatorHomePage";
+import DonatorHome from "./components/donor/DonorHomePage/DonorHomePage";
 // Donator Make A Donation Imports
-import DonatorLocation from "./components/donator/DonatorLocationPage/DonatorLocationPage";
+import DonatorLocation from "./components/donor/DonorLocationPage/DonorLocationPage";
 // import DonatorScheduleDropoff from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoff";
-import DonatorScheduleDropoffPickup from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage";
-import DonatorNextSteps from "./components/donator/DonatorNextStepsPage/DonatorNextStepsPage";
+import DonatorScheduleDropoffPickup from "./components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage";
+import DonatorNextSteps from "./components/donor/DonorNextStepsPage/DonorNextStepsPage";
 // Donator Profile Imports
-import DonatorProfile from "./components/donator/DonatorProfile/DonatorProfile";
-import DonatorProfileEdit from "./components/donator/DonatorProfileEditPage/DonatorProfileEditPage";
+import DonatorProfile from "./components/donor/DonorProfile/DonorProfile";
+import DonatorProfileEdit from "./components/donor/DonorProfileEditPage/DonorProfileEditPage";
 
 
 const rootElement = document.getElementById("root");
