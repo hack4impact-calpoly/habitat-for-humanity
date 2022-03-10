@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
@@ -9,47 +9,57 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 
 // Component imports for navigation
-import CreateAccount from "./components/CreateAccountPage/CreateAccountPage";
-import DonatorHome from "./components/DonatorHomePage/DonatorHomePage";
+import CreateAccount from "./components/authentication/CreateAccountPage/CreateAccountPage";
+import ForgotPassword from "./components/authentication/ForgotPasswordPage/ForgotPasswordPage";
 
-//import DonatorItemInfo
-import DonatorLocation from "./components/DonatorLocationPage/DonatorLocationPage";
-import DonatorScheduleDropoffPickup from "./components/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage";
-import DonatorNextSteps from "./components/DonatorNextStepsPage/DonatorNextStepsPage";
-
-//import DonatorProfile
-import DonatorProfileEdit from "./components/DonatorProfileEditPage/DonatorProfileEditPage";
-
+//-----------Donator Imports------------//
+import DonatorHome from "./components/donator/DonatorHomePage/DonatorHomePage";
+// Donator Make A Donation Imports
+import DonatorLocation from "./components/donator/DonatorLocationPage/DonatorLocationPage";
+// import DonatorScheduleDropoff from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoff";
+import DonatorScheduleDropoffPickup from "./components/donator/DonatorScheduleDropoffPickupPage/DonatorScheduleDropoffPickupPage";
+import DonatorNextSteps from "./components/donator/DonatorNextStepsPage/DonatorNextStepsPage";
+// Donator Profile Imports
+import DonatorProfile from "./components/donator/DonatorProfile/DonatorProfile";
+import DonatorProfileEdit from "./components/donator/DonatorProfileEditPage/DonatorProfileEditPage";
 
 
 const rootElement = document.getElementById("root");
+
 render(
   <BrowserRouter>
     <Routes>
+      {/* Universal Routes */}
       <Route path="/" element={<App />} /> {/* Login page */}
-      <Route path="/CreateAccount" element={<CreateAccount />} />
+      <Route path="/CreateAccount"  element={<CreateAccount />} />
+      <Route path="/ForgotPassword" element={<ForgotPassword />} />
 
-      <Route path="/Donator">
-          <Route path="Home" element={<DonatorHome />} />
-          <Route path="MakeADonation"> {/*Cleaner Hierarchy and Easy for Navbar Underline */}
+      {/* Donor Specific Routes */}
+      <Route path="/Donor">
+          {/* Donor Home */}
+          <Route path="" element={<DonatorHome />} />
+          {/* Donor Profile Pages */}
+          <Route path="Profile">
+              <Route path=""      element={<DonatorProfile />} />
+              <Route path="Edit"  element={<DonatorProfileEdit />} />
+              <Route path="*"     element={<p>ERROR 404: Profile Page Not Found</p>} />
+          </Route>
+          {/* Donor Make a Donation Pages */}
+          <Route path="Donate"> 
               <Route path="Location" element={<DonatorLocation />} />
-              <Route path="NextSteps" element={<DonatorNextSteps />} />
+              {/* <Route path="iteminfo" element={}} */}
               <Route path="ScheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
+              <Route path="NextSteps" element={<DonatorNextSteps />} />
 
               <Route path="*" element={<p>ERROR 404: Make A Donation Page Not Found</p>} />
           </Route>
-          <Route path="ProfileEdit" element={<DonatorProfileEdit />} />
-          {/* Replace Profile Edit when done
-          <Route path="Profile" element={<DonatorProfile />}>
-              <Route path="Edit" element={<DonatorProfileEdit />} />
-              <Route path="*" element={<p>ERROR 404: Profile Page Not Found</p>}>
-          </Route> 
-          */}
-          
-          <Route path="*" element={<p>ERROR 404: Donator Page Not Found</p>} /> {/* Donator Catch all case -> Donator Home*/}
+          {/* Donor Catch all case -> Donor Error*/}
+          <Route path="*" element={<p>ERROR 404: Donor Page Not Found</p>} /> 
       </Route>
 
-      <Route path="*" element={<App />} /> {/*Catch all case sends back to login*/}
+      {/* Universal Catch all -> back to log in*/}
+      <Route path="*" element={<App />} /> 
+
     </Routes>
   </BrowserRouter>,
   rootElement
