@@ -4,6 +4,8 @@ import { itemConnection } from "../connection";
 
 interface item {
     name: string;
+    email: string;
+    phone: string;
     images: Types.Array<ObjectId>;
     size: string;
     address: string;
@@ -14,7 +16,7 @@ interface item {
     time_submitted: string;
     time_accepted: string;
 }
-  
+
 const itemSchema = new Schema<item>(
   {
     name: {type: String, required: false },
