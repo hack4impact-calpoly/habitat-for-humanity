@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 import styled from 'styled-components';
-import ProgressBar from './ProgressBar';
 import Dropzone from './Dropzone';
-import ProgressBarImage from './ProgressBar.png'
+import ProgressBar from './ProgressBar';
 
 const ContentContainer = styled.div`
    margin-left: 20%;
@@ -73,7 +72,7 @@ const Donation = (): JSX.Element => {
          <DonatorNavbar />
          <ContentContainer>
             <DonationHeader>Make a donation</DonationHeader>
-            <img src={ProgressBarImage} width="100%"/>
+            <ProgressBar activeStep={1} ></ProgressBar>
             <ItemHeader>Item Information</ItemHeader>
             <InputSectionContainer>
                <InputContainer>
