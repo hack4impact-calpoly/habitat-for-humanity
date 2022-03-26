@@ -3,6 +3,7 @@ import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 import styled from 'styled-components';
 import Dropzone from './Dropzone';
 import ProgressBar from './ProgressBar';
+import { useNavigate } from "react-router-dom";
 
 const ContentContainer = styled.div`
    margin-left: 20%;
@@ -65,8 +66,18 @@ const StyledButton = styled.button`
 
 
 const Donation = (): JSX.Element => {
-   const [itemDescription, setItemDescription] = useState("")
-   const [itemDimensions, setItemDimensions] = useState("")
+   const [itemDescription, setItemDescription] = useState("");
+   const [itemDimensions, setItemDimensions] = useState("");
+
+   let navigate = useNavigate();
+
+   const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+      const nextPath : string = "/Donor/Donate/ItemInfo"
+
+      if(e.currentTarget.value === "nextButton"){
+         navigate(nextPath);
+      }
+   }
    return (
       <>
          <DonatorNavbar />
@@ -104,7 +115,7 @@ const Donation = (): JSX.Element => {
                <SubHeader>Item Photos</SubHeader>
                <Dropzone/>
             </UploadContainer>
-            <StyledButton>Next</StyledButton>
+            <StyledButton value="nextButton" onClick={buttonNavigation}>Next</StyledButton>
          </ContentContainer>
       </>
    );

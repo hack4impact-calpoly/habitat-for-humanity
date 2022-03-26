@@ -9,6 +9,8 @@ interface DummyComponentProps {
     dropOff: boolean;
   }
 
+let test : DummyComponentProps = {"testName", "testDimensions", "src", "testLocation"}
+
 const SubmitInfo: React.FC<DummyComponentProps> = ({
     name,
     dimensions,
@@ -50,4 +52,4 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   };
 
 
-export default SubmitInfo;
+export default SubmitInfo({" "});
