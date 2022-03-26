@@ -15,8 +15,10 @@ import SuccessPage from "./components/authentication/SuccessPage/SuccessPage";
 //----------- Donor Imports------------//
 import DonatorHome from "./components/donor/DonorHomePage/DonorHomePage";
 // Donor "Make A Donation" Imports
+import DonatorItemInfo from "./components/donor/donation/Donation";
 import DonatorLocation from "./components/donor/DonorLocationPage/DonorLocationPage";
 import DonatorScheduleDropoffPickup from "./components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage";
+import DonatorReviewSubmit from "./components/donor/donation/SubmitInfo";
 import DonatorNextSteps from "./components/donor/DonorNextStepsPage/DonorNextStepsPage";
 // Donor "Profile" Imports
 import DonatorProfile from "./components/donor/DonorProfile/DonorProfile";
@@ -46,9 +48,11 @@ render(
           </Route>
           {/* Donor Make a Donation Pages */}
           <Route path="Donate"> 
+              <Route path="ItemInfo" element={<DonatorItemInfo />} />
               <Route path="Location" element={<DonatorLocation />} />
               {/* <Route path="iteminfo" element={}} */}
               <Route path="ScheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
+              <Route path="Confirmation" element={<DonatorReviewSubmit />} />
               <Route path="NextSteps" element={<DonatorNextSteps />} />
 
               <Route path="*" element={<p>ERROR 404: Make A Donation Page Not Found</p>} />
