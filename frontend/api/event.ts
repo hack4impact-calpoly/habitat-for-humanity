@@ -8,49 +8,79 @@ const eventURL : string = "" + "/"
 // Get ALL events
 const getEvents = () : void => {
     fetch(eventURL)
-    .then(res => res.json())
+    .then(res => {
+        if(!res.ok){ // check server response
+            throw new Error(res.status + "-" + res.statusText)
+        }
+        res.json()
+    })
     .then(events => console.log(events))
-    .catch(error => console.error(error))
+    .catch(error => console.error("Error: ", error)) // handle error
 }
 
 // Get AN event by its ID
 const getEventByID = (ID : string) : void => {
     fetch(eventURL + ID)
-    .then(res => res.json())
+    .then(res => {
+        if(!res.ok){ // check server response
+            throw new Error(res.status + "-" + res.statusText)
+        }
+        res.json()
+    })
     .then(event => console.log(event))
-    .catch(error=> console.error(error))
+    .catch(error => console.error("Error: ", error)) // handle error
 }
 
 // Get ALL events with matching "title"
 const getEventsByTitle = (title : string) : void => {
     fetch(eventURL + title)
-    .then(res => res.json())
+    .then(res => {
+        if(!res.ok){ // check server response
+            throw new Error(res.status + "-" + res.statusText)
+        }
+        res.json()
+    })
     .then(events => console.log(events))
-    .catch(error => console.error(error))
+    .catch(error => console.error("Error: ", error)) // handle error
 }
 
 // Get ALL events with matching "startDate"
 const getEventsByStartDate = (startDate : string) : void => {
     fetch(eventURL + startDate)
-    .then(res => res.json())
+    .then(res => {
+        if(!res.ok){ // check server response
+            throw new Error(res.status + "-" + res.statusText)
+        }
+        res.json()
+    })
     .then(events => console.log(events))
-    .catch(error => console.error(error))
+    .catch(error => console.error("Error: ", error)) // handle error
 }
 
 // Get ALL events with matching "endDate"
 const getEventsByEndDate = (endDate : string) : void => {
     fetch(eventURL + endDate)
-    .then(res => res.json())
+    .then(res => {
+        if(!res.ok){ // check server response
+            throw new Error(res.status + "-" + res.statusText)
+        }
+        res.json()
+    })
     .then(events => console.log(events))
-    .catch(error => console.error(error))
+    .catch(error => console.error("Error: ", error)) // handle error
 }
 
 // Get ALL events with matching "endDate"
 const getEventsByLocation = (location : string) : void => {
     fetch(eventURL + location)
-    .then(res => res.json())
+    .then(res => {
+        if(!res.ok){ // check server response
+            throw new Error(res.status + "-" + res.statusText)
+        }
+        res.json()
+    })
     .then(events => console.log(events))
-    .catch(error => console.error(error))
+    .catch(error => console.error("Error: ", error)) // handle error
 }
 
 
@@ -78,11 +108,10 @@ const addEvent = (event: Event) : void => {
             "location" : event.location
         })
     })
-    .then(res => res.json()) //response to json
-    .then(result => {
-        console.log('Success:', result)
+    .then(res => {
+        if(!res.ok){ // check server response for errors
+            throw new Error(res.status + "-" + res.statusText)
+        }
     })
-    .catch(error => {
-        console.error('Error:', error)
-    });
+    .catch(error => console.error("Error: ", error)) // handle error
 }
