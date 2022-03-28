@@ -1,7 +1,7 @@
-const itemURL : string = "" + "/"
+const itemURL : string = "http://localhost:3001/"
 
 
-/*------------------Get Requests-----------------*/
+/*------------------GET Requests-----------------*/
 
 // Get ALL items
 const getItems = () : void => {

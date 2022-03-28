@@ -1,5 +1,6 @@
-const userURL = "" + "/"
+const userURL = "http://localhost:3001/"
 
+/*------------------GET Requests-----------------*/
 
 // Get ALL users
 const getUsers = () : void => {

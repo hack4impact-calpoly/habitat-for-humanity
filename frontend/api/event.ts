@@ -1,9 +1,6 @@
-const eventURL : string = "" + "/"
+const eventURL : string = "http://localhost:3001/"
 
-/*
-1. How to return data?
-4. How to test (use local host and then change?)
-*/
+/*------------------GET Requests-----------------*/
 
 // Get ALL events
 const getEvents = () : void => {
