@@ -4,7 +4,12 @@ const eventURL : string = "http://localhost:3001/api/events/";
 
 // Get ALL events
 export const getEvents = () : void => {
-    fetch(eventURL)
+    fetch(eventURL, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
     .then(res => {
         if(!res.ok){ // check server response
             throw new Error(res.status + "-" + res.statusText)
@@ -16,8 +21,13 @@ export const getEvents = () : void => {
 }
 
 // Get AN event by its ID
-const getEventByID = (ID : string) : void => {
-    fetch(eventURL + ID)
+export const getEventByID = (ID : string) : void => {
+    fetch(eventURL + ID, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
     .then(res => {
         if(!res.ok){ // check server response
             throw new Error(res.status + "-" + res.statusText)
@@ -29,8 +39,13 @@ const getEventByID = (ID : string) : void => {
 }
 
 // Get ALL events with matching "title"
-const getEventsByTitle = (title : string) : void => {
-    fetch(eventURL + title)
+export const getEventsByTitle = (title : string) : void => {
+    fetch(eventURL + title, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
     .then(res => {
         if(!res.ok){ // check server response
             throw new Error(res.status + "-" + res.statusText)
@@ -42,7 +57,7 @@ const getEventsByTitle = (title : string) : void => {
 }
 
 // Get ALL events with matching "startDate"
-const getEventsByStartDate = (startDate : string) : void => {
+export const getEventsByStartDate = (startDate : string) : void => {
     fetch(eventURL + startDate)
     .then(res => {
         if(!res.ok){ // check server response
@@ -55,7 +70,7 @@ const getEventsByStartDate = (startDate : string) : void => {
 }
 
 // Get ALL events with matching "endDate"
-const getEventsByEndDate = (endDate : string) : void => {
+export const getEventsByEndDate = (endDate : string) : void => {
     fetch(eventURL + endDate)
     .then(res => {
         if(!res.ok){ // check server response
@@ -68,7 +83,7 @@ const getEventsByEndDate = (endDate : string) : void => {
 }
 
 // Get ALL events with matching "endDate"
-const getEventsByLocation = (location : string) : void => {
+export const getEventsByLocation = (location : string) : void => {
     fetch(eventURL + location)
     .then(res => {
         if(!res.ok){ // check server response
@@ -92,7 +107,7 @@ interface Event {
 }
 
 // Add a new Event to the Event DB
-const addEvent = (event: Event) : void => {
+export const addEvent = (event: Event) : void => {
     fetch(eventURL, {
         headers : {
             'Content-Type' : 'application/json'
