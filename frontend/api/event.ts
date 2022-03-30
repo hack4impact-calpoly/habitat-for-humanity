@@ -1,9 +1,9 @@
-const eventURL : string = "http://localhost:3001/"
+const eventURL : string = "http://localhost:3001/api/events/";
 
 /*------------------GET Requests-----------------*/
 
 // Get ALL events
-const getEvents = () : void => {
+export const getEvents = () : void => {
     fetch(eventURL)
     .then(res => {
         if(!res.ok){ // check server response

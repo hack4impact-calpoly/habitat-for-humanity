@@ -1,4 +1,4 @@
-const itemURL : string = "http://localhost:3001/"
+const itemURL : string = "http://localhost:3001/api/items/"
 
 
 /*------------------GET Requests-----------------*/
