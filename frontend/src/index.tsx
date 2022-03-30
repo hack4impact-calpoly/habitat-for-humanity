@@ -44,19 +44,23 @@ render(
           <Route path="Profile">
               <Route path=""      element={<DonatorProfile />} />
               <Route path="Edit"  element={<DonatorProfileEdit />} />
+
+              {/* Profile Page catch all case -> Profile Error*/}
               <Route path="*"     element={<p>ERROR 404: Profile Page Not Found</p>} />
           </Route>
+
           {/* Donor Make a Donation Pages */}
           <Route path="Donate"> 
               <Route path="ItemInfo" element={<DonatorItemInfo />} />
               <Route path="Location" element={<DonatorLocation />} />
-              {/* <Route path="iteminfo" element={}} */}
               <Route path="ScheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
-              <Route path="Confirmation" element={<DonatorReviewSubmit />} />
+              <Route path="Review" element={<DonatorReviewSubmit />} />
               <Route path="NextSteps" element={<DonatorNextSteps />} />
 
+              {/* Make A Donation Catch all case -> Make A Donation Error*/}
               <Route path="*" element={<p>ERROR 404: Make A Donation Page Not Found</p>} />
           </Route>
+          
           {/* Donor Catch all case -> Donor Error*/}
           <Route path="*" element={<p>ERROR 404: Donor Page Not Found</p>} /> 
       </Route>
@@ -68,18 +72,6 @@ render(
   </BrowserRouter>,
   rootElement
 );
-
-/* ----------- Notes for future reference: --------------
-  Main Routes: Different system users
-    1. Donor
-    2. Admin 
-    3. Volunteer
-  Subroutes:
-    1. Home
-    2. Profile
-    3. Profile/Edit
-    2. etc.
-*/
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
