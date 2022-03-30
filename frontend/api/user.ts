@@ -1,4 +1,4 @@
-const userURL = "http://localhost:3001/"
+const userURL = "http://localhost:3001/api/users/"
 
 /*------------------GET Requests-----------------*/
 

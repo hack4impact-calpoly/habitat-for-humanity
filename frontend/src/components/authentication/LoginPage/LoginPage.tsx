@@ -6,6 +6,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
+import { getEvents } from './../../../../api/event';
 
 import logo from "images/logo.png";
 import "./LoginPage.css";
@@ -19,6 +20,8 @@ const LoginPage = (): JSX.Element => {
 
     const forgotPasswordPath = "/ForgotPassword";
     const createAccountPath = "/CreateAccount";
+    
+    getEvents()
 
     const login = () : void => {
         let valid = checkCredentials();
