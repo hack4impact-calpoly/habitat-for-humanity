@@ -1,11 +1,11 @@
 import React, { useState }from "react";
 import { useNavigate } from "react-router-dom";
-import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
-require("./DonatorLocationPage.css");
+import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+require("./DonorLocationPage.css");
 
 const DonatorLocationPage = (): JSX.Element => {
     const [address, setAddress] = useState<string>("");
-    const [city, setCity] = useState<string>("")
+    const [city, setCity] = useState<string>("");
     const [zip, setZip] = useState<number>(0);
 
     let navigate = useNavigate();
