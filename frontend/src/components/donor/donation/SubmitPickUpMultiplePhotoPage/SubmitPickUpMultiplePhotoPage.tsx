@@ -1,5 +1,5 @@
 import React from "react";
-import DonatorNavbar from '../../DonatorNavbar/DonatorNavbar';
+import DonatorNavbar from '../../DonorNavbar/DonorNavbar';
 import SubmitInfo from "../SubmitInfo";
 import sofa1 from "./../images/sofa-01.png";
 import sofa2 from "./../images/sofa-02.png";

@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
+import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 import gift from "images/gift.png";
-require("./DonatorHomePage.css")
+require("./DonorHomePage.css")
 
 const DonatorHomePage = (): JSX.Element => {
     let navigate = useNavigate();

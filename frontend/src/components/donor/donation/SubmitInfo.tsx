@@ -1,12 +1,13 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 require("./SubmitInfo.css");
 
 interface DummyComponentProps {
-    name: string;
-    dimensions: string;
-    photos: {src: string}[];
-    location: string;
-    dropOff: boolean;
+    name?: string;
+    dimensions?: string;
+    photos?: {src: string}[];
+    location?: string;
+    dropOff?: boolean;
   }
 
 const SubmitInfo: React.FC<DummyComponentProps> = ({
@@ -15,7 +16,22 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     photos,
     location,
     dropOff,
-  }) => {
+  }) => 
+  {
+    let navigate = useNavigate();
+
+    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+        const backPath : string = "/Donor/Donate/Schedule";
+        const nextPath : string = "/Donor/Donate/NextSteps";
+
+        if(e.currentTarget.value === "backButton"){
+            navigate(backPath);
+        }
+        else if(e.currentTarget.value === "nextButton"){
+            navigate(nextPath);
+        }
+    }
+
     return (
         <body>
             <div id="SubmitInfoPage">
@@ -26,7 +42,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                     <p id="itemName"><b>Item Name:</b> {name}</p>
                     <p id="itemDimensions"><b>Item Dimensions: </b>{dimensions}</p>
                     <p id="itemPhotos"><b>Item Photos</b></p>
-                    <div id="ProductImages">{photos.map((imgSrc, index) => (<div id="SingleImages"><img src={imgSrc.src} key={index} alt="n"/></div>))}</div>
+                    <div id="ProductImages">{photos?.map((imgSrc, index) => (<div id="SingleImages"><img src={imgSrc.src} key={index} alt="n"/></div>))}</div>
                     <h2 id="Location">Location</h2>
                     <h4 id="Address">{location}</h4>
                 </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DonatorNavbar from "../DonatorNavbar/DonatorNavbar";
-require("./DonatorProfileEditPage.css");
+import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+require("./DonorProfileEditPage.css");
 
 const DonatorProfileEditPage = () : JSX.Element =>  {
     const [firstName, setFirstName] = useState("");
