@@ -1,0 +1,10 @@
+@import "config/colors.css";
+
+#SubmitInfoPage h2 {
+    color: var(--orange);
+}
+
+p {
+    font-family: Rubik;
+}
+
