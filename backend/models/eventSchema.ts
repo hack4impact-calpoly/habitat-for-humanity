@@ -1,19 +1,18 @@
 import { Schema, Types } from 'mongoose';
+const mongoose = require("mongoose");
 import { eventConnection } from "../connection";
 
 interface event {
     title: string;
-    start_date: string;
-    end_date: string;
+    pick_up_availability: Types.Array<Types.Array<String>>
     location: string;
 }
   
 const eventSchema = new Schema<event>(
   { 
     title: { type: String, required: true },
-    start_date: { type: String, required: true },
-    end_date: { type: String, required: true },
-    location: { type: String, required: false },
+    pick_up_availability: { type: [[String]], required: true },
+    location: { type: String, required: true }
   },
   { collection: "Events" }
 );
