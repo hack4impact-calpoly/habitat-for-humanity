@@ -36,7 +36,6 @@ function App(): JSX.Element {
     // <SuccessPage />
     <LoginPage />
     //<DonatorHomePage />
-    //<CreateAccountPage />
     // <DonatorProfileEditPage />
     //<DonatorLocationPage />
     // <LoginPage />

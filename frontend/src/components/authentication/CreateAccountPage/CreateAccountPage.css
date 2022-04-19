@@ -14,7 +14,7 @@
     margin-top: 50vh;
     transform: translateY(-50%);
     box-shadow: 0px 8px 21px var(--box-shadow);
-    padding: 62px 77px 68px 77px;
+    padding: 62px 70px 68px 70px;
 }
 
 #createAccountText {
@@ -30,15 +30,18 @@
 
 #accountTypeBox {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0px 0px 5px 0px;
+    flex-wrap: wrap;
+    margin: 0px 0px 0px 0px;
+}
+
+.accountLabel input[type="radio"] {
+    height: 0.9em;
 }
 
 #userTypeLabel {
     margin: 0px 0px 0px 0px;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .accountLabel {
@@ -155,13 +158,87 @@
 
 @media only screen and (max-height: 800px) {
     #createAccountBox {
-        width: 405px;
-        height: 456px;
+        width: 415px;
+        height: 546px;
 
         margin: auto;
         margin-top: 50vh;
         transform: translateY(-50%);
-        padding: 36px 54px 49px 54px;
+        padding: 36px 50px 49px 50px;
+    }
+
+    #createAccountText {
+        font-size: 25px;
+        line-height: 28px;
+        margin: 0px 0px 24px 0px;
+    }
+    
+    #accountTypeBox {
+        margin: 0px 0px 3px 0px;
+    }
+    
+    #userTypeLabel {
+        margin: 0px 0px 0px 0px;
+        font-size: 11px;
+    }
+    
+    .accountLabel {
+        font-size: 10px;
+    }
+    
+    .userTypeButton {
+        margin: 1px 6px 0px 18px; 
+    }
+    
+    #firstNameBox {
+        width: 138px;
+    }
+    #lastNameBox {
+        width: 138px;
+    }
+    
+    .formLabel {
+        font-size: 10px;
+        line-height: 13px;
+    
+        margin: 15px 0px 4px 0px;
+    }
+    
+    .inputBox {
+        height: 30px;
+        width: 100%;
+        padding: 6px;
+        font-size: 9px;
+    }
+    
+    #signUpButton {
+        font-size: 12px;
+        line-height: 14px;
+        margin: 18px 0px 9px 0px;
+        height: 36px;
+        width: 100%;
+    }
+    
+    .createAccountLogin {
+        font-size: 10px;
+        line-height: 11px;
+        margin: 0px 0px 0px 0px;
+    }
+    
+    #logInLink {
+        margin: 0px 0px 0px 3px;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    #createAccountBox {
+        width: 405px;
+        height: 546px;
+
+        margin: auto;
+        margin-top: 50vh;
+        transform: translateY(-50%);
+        padding: 36px 44px 49px 44px;
     }
 
     #createAccountText {
@@ -227,76 +304,14 @@
     }
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 500px) {
     #createAccountBox {
         width: 405px;
-        height: 456px;
+        height: 506px;
 
         margin: auto;
         margin-top: 50vh;
         transform: translateY(-50%);
-        padding: 36px 54px 49px 54px;
-    }
-
-    #createAccountText {
-        font-size: 25px;
-        line-height: 28px;
-        margin: 0px 0px 24px 0px;
-    }
-    
-    #accountTypeBox {
-        margin: 0px 0px 3px 0px;
-    }
-    
-    #userTypeLabel {
-        margin: 0px 0px 0px 0px;
-        font-size: 10px;
-    }
-    
-    .accountLabel {
-        font-size: 10px;
-    }
-    
-    .userTypeButton {
-        margin: 1px 6px 0px 18px; 
-    }
-    
-    #firstNameBox {
-        width: 138px;
-    }
-    #lastNameBox {
-        width: 138px;
-    }
-    
-    .formLabel {
-        font-size: 10px;
-        line-height: 13px;
-    
-        margin: 15px 0px 4px 0px;
-    }
-    
-    .inputBox {
-        height: 30px;
-        width: 100%;
-        padding: 6px;
-        font-size: 9px;
-    }
-    
-    #signUpButton {
-        font-size: 12px;
-        line-height: 14px;
-        margin: 18px 0px 9px 0px;
-        height: 36px;
-        width: 100%;
-    }
-    
-    .createAccountLogin {
-        font-size: 10px;
-        line-height: 11px;
-        margin: 0px 0px 0px 0px;
-    }
-    
-    #logInLink {
-        margin: 0px 0px 0px 3px;
+        padding: 36px 44px 49px 44px;
     }
 }
