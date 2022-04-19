@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 dotenv.config()
 
 function makeNewConnection(url : string) {
-    const connection = mongoose.createConnection(url)
+    const connection = mongoose.createConnection(url, { useNewUrlParser: true, useUnifiedTopology: true })
     const DBname = url.substring(url.lastIndexOf("net/") + 4, url.lastIndexOf("?"))
 
     connection.on('connected', function () {
@@ -26,6 +26,8 @@ function makeNewConnection(url : string) {
 const userConnection = makeNewConnection(process.env.userDB!)
 const itemConnection = makeNewConnection(process.env.itemDB!)
 const eventConnection = makeNewConnection(process.env.eventDB!)
+const imageConnection = makeNewConnection(process.env.imageDB!)
 
 
-export { userConnection, itemConnection, eventConnection };
+
+export { userConnection, itemConnection, eventConnection, imageConnection };
