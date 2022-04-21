@@ -24,6 +24,7 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonatorLocationPage from './components/donator/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/donator/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/donator/Donation/Donation';
+import DonationApproval from 'components/admin/DonationApproval/DonationApproval'
 
 
 // Amplify.configure(awsconfig);
@@ -32,7 +33,7 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 function App(): JSX.Element {
   return (
     // <SuccessPage />
-    <LoginPage />
+    // <LoginPage />
     //<DonatorHomePage />
     //<CreateAccountPage />
     // <DonatorProfileEditPage />
@@ -44,6 +45,7 @@ function App(): JSX.Element {
     //<SubmitPickUpPage />
     //<SubmitPickUpMultiplePhotoPage />
     //<DonatorNextStepsPage />
+    <DonationApproval />
   );
 }
 
