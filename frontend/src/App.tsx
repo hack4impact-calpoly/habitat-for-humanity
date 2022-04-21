@@ -10,6 +10,8 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import SuccessPage from './components/authentication/SuccessPage/SuccessPage';
 
+/* Admin Screens*/
+// import DonationInfoPage from './components/admin/DonationInfoPage/DonationInfoPage';
 
 /* Donator Screens */
 // import DonatorNavbar from './components/donator/DonatorNavbar/DonatorNavbar';
@@ -34,7 +36,6 @@ function App(): JSX.Element {
     // <SuccessPage />
     <LoginPage />
     //<DonatorHomePage />
-    //<CreateAccountPage />
     // <DonatorProfileEditPage />
     //<DonatorLocationPage />
     // <LoginPage />
@@ -44,6 +45,7 @@ function App(): JSX.Element {
     //<SubmitPickUpPage />
     //<SubmitPickUpMultiplePhotoPage />
     //<DonatorNextStepsPage />
+    // <DonationInfoPage/>
   );
 }
 
