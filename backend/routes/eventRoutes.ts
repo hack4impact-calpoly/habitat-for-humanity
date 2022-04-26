@@ -16,18 +16,19 @@ router.get("/", async (req: Request, res: Response) => {
 })
 
 //get event by eventId
-router.get("/:eventId/eventId", async (req: Request, res: Response) => {
+router.get("/eventId/:eventId", async (req: Request, res: Response) => {
   try {
     const event = await Event.findOne({ _id: req.params.eventId})
-    res.send(event)
+    res.status(200).send(event)
     console.log('Got event with id %s', req.params.eventId)
+    console.log(event)
   } catch (error) {
     res.status(400).send(error);
   }
 })
 
 //get all events by title
-router.get("/:title/title", async (req: Request, res: Response) => {
+router.get("/title/:title", async (req: Request, res: Response) => {
   try {
     const events = await Event.find({title: req.params.title})
     res.send(events)
@@ -38,7 +39,7 @@ router.get("/:title/title", async (req: Request, res: Response) => {
 })
 
 //get all events by location
-router.get("/:location/location", async (req: Request, res: Response) => {
+router.get("/location/:location", async (req: Request, res: Response) => {
   try {
     const events = await Event.find({location: req.params.location})
     res.send(events)
