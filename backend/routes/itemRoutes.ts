@@ -37,11 +37,11 @@ router.get("/name/:name", async (req: Request, res: Response) => {
 })
 
 //get all items with location
-router.get("/location/:location", async (req: Request, res: Response) => {
+router.get("/location/:city/:address", async (req: Request, res: Response) => {
   try {
-    const items = await Item.find({ location: req.params.location})
+    const items = await Item.find({ city: req.params.city, address: req.params.address})
     res.send(items)
-    console.log('Got all items with location %s', req.params.location)
+    console.log('Got all items with at address %s in %s', req.params.address, req.params.city)
   } catch (error) {
     res.status(400).send(error);
   }
