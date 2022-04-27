@@ -7,9 +7,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
 
-import { getItemsByLocation } from '../../../api/item';
-import { User, addUser, updateUserFirstName, updateUserLastName, updateUserEmail, updateUserPhone} from '../../../api/user';
-
 import logo from "images/logo.png";
 import "./LoginPage.css";
 
@@ -26,21 +23,8 @@ const LoginPage = (): JSX.Element => {
     const login = () : void => {
         let valid = checkCredentials();
 
-        console.log(getItemsByLocation("1 Grand Av", "San Luis Obispo"))
-        const testUser : User = {
-            userType : "Donor",
-            firstName : "Sebastien",
-            lastName : "Callait",
-            email : "scallait@calpoly.edu",
-            phone : "0123456789"
-        }
-        //console.log(addUser(testUser));
-        //console.log(updateUserFirstName("6268f27a7d69a87e528b0740", "Josh"));
-        //console.log(updateUserLastName("6268f27a7d69a87e528b0740", "Wong"));
-        //console.log(updateUserEmail("6268f27a7d69a87e528b0740", "hack4impact@calpoly.edu"));
-        //console.log(updateUserPhone("6268f27a7d69a87e528b0740", "9324342434"));
         if (valid /*&& donator*/){
-            //navigate("/Donor");
+            navigate("/Donor");
         }
         /*
         else if (valid && admin){
