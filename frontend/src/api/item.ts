@@ -61,8 +61,8 @@ export const getItemsByName = async (name : string) => {
 }
 
 // Get ALL items with matching "location"
-export const getItemsByLocation = async (location : string) => {
-    return await fetch(itemURL + "location/" + location, {
+export const getItemsByLocation = async (address : string, city : string) => {
+    return await fetch(itemURL + "location/" + city + "/" + address, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
