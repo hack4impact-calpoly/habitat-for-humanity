@@ -15,7 +15,7 @@ export const getUsers = async () => {
         if(!res.ok){ // check server response
             throw new Error(res.status + "-" + res.statusText);
         }
-        console.log(user)
+        //console.log(user)
         return user
     })
     .catch(error => console.error("Error: ", error)) // handle error
@@ -34,7 +34,7 @@ export const getUserByID = async (userID : string) => {
         if(!res.ok){ // check server response
             throw new Error(res.status + "-" + res.statusText)
         }
-        console.log(user)
+        //console.log(user)
         return user
     })
     .catch(error => console.error("Error: ", error)) // handle error
@@ -53,7 +53,7 @@ export const getVolunteers = async () => {
         if(!res.ok){ // check server response
             throw new Error(res.status + "-" + res.statusText)
         }
-        console.log(users)
+        // console.log(users)
         return users
     })
     .catch(error => console.error("Error: ", error)) // handle error
@@ -72,7 +72,7 @@ export const getDonors = async () => {
         if(!res.ok){ // check server response
             throw new Error(res.status + "-" + res.statusText)
         }
-        console.log(users)
+        // console.log(users)
         return users
     })
     .catch(error => console.error("Error: ", error)) // handle error
@@ -91,7 +91,7 @@ export const getAdmins = async () => {
         if(!res.ok){ // check server response
             throw new Error(res.status + "-" + res.statusText)
         }
-        console.log(users)
+        // console.log(users)
         return users
     })
     .catch(error => console.error("Error: ", error)) // handle error
