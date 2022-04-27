@@ -14,7 +14,7 @@ router.get("/", async (req: Request, res: Response) => {
 })
 
 //get user by userId
-router.get("/:userId", async (req: Request, res: Response) => {
+router.get("/id/:userId", async (req: Request, res: Response) => {
     try {
       const user = await User.findOne({ _id: req.params.userId})
       res.send(user)
@@ -26,7 +26,7 @@ router.get("/:userId", async (req: Request, res: Response) => {
 //get all volunteers
 router.get("/volunteers", async (req: Request, res: Response) => {
   try {
-    const volunteers = await User.find({userType: "Volunteer"})
+    const volunteers = await User.find({ userType: "Volunteer"}).exec();
     res.send(volunteers)
   } catch (error) {
     res.status(400).send(error);
@@ -36,7 +36,7 @@ router.get("/volunteers", async (req: Request, res: Response) => {
 //get all donors
 router.get("/donors", async (req: Request, res: Response) => {
   try {  
-    const donor = await User.find({userType: "Donor"})
+    const donor = await User.find({ userType: "Donor"})
     res.send(donor)
   } catch (error) {
     res.status(400).send(error);
@@ -86,7 +86,7 @@ router.post("/", async (req: Request, res: Response) => {
 })
 
 //update user firstName
-router.put("/:userId/firstName", async (req: Request, res: Response) => {
+router.put("/firstName/:userId", async (req: Request, res: Response) => {
   try {
     let user = await User.findOne({ _id: req.params.userId })
     user.firstName = req.body.firstName;
@@ -110,7 +110,7 @@ router.put("/:userId/firstName", async (req: Request, res: Response) => {
 })
 
 //update user lastName
-router.put("/:userId/lastName", async (req: Request, res: Response) => {
+router.put("/lastName/:userId", async (req: Request, res: Response) => {
   try {
     let user = await User.findOne({ _id: req.params.userId })
     user.lastName = req.body.lastName;
@@ -134,7 +134,7 @@ router.put("/:userId/lastName", async (req: Request, res: Response) => {
 })
 
 //update user email
-router.put("/:userId/email", async (req: Request, res: Response) => {
+router.put("/email/:userId", async (req: Request, res: Response) => {
   try {
     let user = await User.findOne({ _id: req.params.userId })
     user.email = req.body.email;
@@ -158,7 +158,7 @@ router.put("/:userId/email", async (req: Request, res: Response) => {
 })
 
 //update user phone
-router.put("/:userId/phone", async (req: Request, res: Response) => {
+router.put("/phone/:userId", async (req: Request, res: Response) => {
   try {
     let user = await User.findOne({ _id: req.params.userId })
     user.phone = req.body.phone;
