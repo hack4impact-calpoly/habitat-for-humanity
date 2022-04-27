@@ -6,7 +6,9 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
-import { getEvents } from './../../../../api/event';
+
+import { getItemsByLocation } from '../../../api/item';
+import { User, addUser, updateUserFirstName, updateUserLastName, updateUserEmail, updateUserPhone} from '../../../api/user';
 
 import logo from "images/logo.png";
 import "./LoginPage.css";
@@ -20,13 +22,25 @@ const LoginPage = (): JSX.Element => {
 
     const forgotPasswordPath = "/ForgotPassword";
     const createAccountPath = "/CreateAccount";
-    
-    getEvents()
 
     const login = () : void => {
         let valid = checkCredentials();
+
+        console.log(getItemsByLocation("1 Grand Av", "San Luis Obispo"))
+        const testUser : User = {
+            userType : "Donor",
+            firstName : "Sebastien",
+            lastName : "Callait",
+            email : "scallait@calpoly.edu",
+            phone : "0123456789"
+        }
+        //console.log(addUser(testUser));
+        //console.log(updateUserFirstName("6268f27a7d69a87e528b0740", "Josh"));
+        //console.log(updateUserLastName("6268f27a7d69a87e528b0740", "Wong"));
+        //console.log(updateUserEmail("6268f27a7d69a87e528b0740", "hack4impact@calpoly.edu"));
+        //console.log(updateUserPhone("6268f27a7d69a87e528b0740", "9324342434"));
         if (valid /*&& donator*/){
-            navigate("/Donor");
+            //navigate("/Donor");
         }
         /*
         else if (valid && admin){
@@ -86,7 +100,7 @@ const LoginPage = (): JSX.Element => {
                         </InputAdornment>
                     }
                 />
-                <button id="loginSubmit" onClick={login}>Log In</button>
+                <button type="button" id="loginSubmit" onClick={login}>Log In</button>
             </form>
             <div style={{ textAlign: "right", marginTop: "10px" }}>
                 <p className="loginCreateAccount">Don't have an account? </p>
