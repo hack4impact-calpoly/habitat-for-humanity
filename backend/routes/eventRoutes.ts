@@ -51,17 +51,17 @@ router.use(express.json());
 
 //posts a new Event to EventsDB
 router.post('/', async (req: Request, res: Response) => {
-  const { title, pick_up_availability, location } = req.body;
+  const { title, pickupAvailability, location } = req.body;
   let event = new Event({
     title,
-    pick_up_availability,
+    pickupAvailability,
     location
   });
 
   try {
     event = await event.save();
-    console.log(event);
     res.json(event);
+    console.log('POSTed %s to EventDB', event.title)
   } catch (error) {
     res.status(400).send(error);
   }
