@@ -11,10 +11,11 @@ interface item {
     address: string;
     city: string;
     zipCode: string;
-    donor_id: ObjectId;
+    donorId: ObjectId;
     notes: string;
-    time_submitted: string;
-    time_accepted: string;
+    timeSubmitted: Date;
+    timeAccepted: Date;
+    status: string;
 }
 
 const itemSchema = new Schema<item>(
@@ -22,13 +23,14 @@ const itemSchema = new Schema<item>(
     name: {type: String, required: false },
     images: { type: [mongoose.Schema.Types.ObjectId], required: false },
     size: { type: String, required: true },
-    address: {type: String, required: false },
-    city: { type: String, required: false },
+    address: {type: String, required: true },
+    city: { type: String, required: true },
     zipCode: { type: String, required: true },
-    donor_id: { type: mongoose.Schema.Types.ObjectId, required: true },
+    donorId: { type: mongoose.Schema.Types.ObjectId, required: true },
     notes: { type: String, required: false },
-    time_submitted: { type: String, required: false },
-    time_accepted: { type: String, required: false }
+    timeSubmitted: { type: Date, required: true },
+    timeAccepted: { type: Date, required: false },
+    status: { type: String, required: true }
   },
   { collection: "Items" }
 );
