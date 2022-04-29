@@ -8,8 +8,11 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 /* Authentication Screens */
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 import LoginPage from "./components/authentication/LoginPage/LoginPage";
+import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
 // import SuccessPage from './components/authentication/SuccessPage/SuccessPage';
 
+/* Admin Screens*/
+// import DonationInfoPage from './components/admin/DonationInfoPage/DonationInfoPage';
 
 /* Donator Screens */
 // import DonatorNavbar from './components/donator/DonatorNavbar/DonatorNavbar';
@@ -32,9 +35,8 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 function App(): JSX.Element {
   return (
     // <SuccessPage />
-    <LoginPage />
+    // <LoginPage />
     //<DonatorHomePage />
-    //<CreateAccountPage />
     // <DonatorProfileEditPage />
     //<DonatorLocationPage />
     // <LoginPage />
@@ -44,6 +46,8 @@ function App(): JSX.Element {
     //<SubmitPickUpPage />
     //<SubmitPickUpMultiplePhotoPage />
     //<DonatorNextStepsPage />
+    // <DonationInfoPage/>
+    <DonorScheduleDropoffPickupPage />
   );
 }
 
