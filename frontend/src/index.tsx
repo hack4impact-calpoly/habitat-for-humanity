@@ -11,6 +11,8 @@ import App from "./App";
 import CreateAccount from "./components/authentication/CreateAccountPage/CreateAccountPage";
 import ForgotPassword from "./components/authentication/ForgotPasswordPage/ForgotPasswordPage";
 import SuccessPage from "./components/authentication/SuccessPage/SuccessPage";
+import NewPasswordPage from "./components/authentication/NewPasswordPage/NewPasswordPage";
+
 
 //----------- Donor Imports------------//
 import DonatorHome from "./components/donor/DonorHomePage/DonorHomePage";
@@ -35,6 +37,8 @@ render(
       <Route path="/CreateAccount"  element={<CreateAccount />} />
       <Route path="/CreateAccount/Success" element={<SuccessPage />} />
       <Route path="/ForgotPassword" element={<ForgotPassword />} />
+      <Route path="/NewPassword" element={<NewPasswordPage />} />
+
 
       {/* Donor Specific Routes */}
       <Route path="/Donor">
