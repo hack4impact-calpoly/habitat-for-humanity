@@ -15,7 +15,7 @@ app.use("/api/users", userEndpoints)
 app.use("/api/items", itemEndpoints)
 app.use("/api/events", eventEndpoints)
 
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT');
@@ -24,7 +24,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 
 //testing middleware
-function loggerMiddleware(request: Request, response: Response, next: NextFunction) {
+function loggerMiddleware(request, response, next) {
     console.log(`${request.method} ${request.path}`);
     next();
 }
@@ -33,7 +33,7 @@ function loggerMiddleware(request: Request, response: Response, next: NextFuncti
 app.use(loggerMiddleware)
 
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (req, res) => {
     res.status(200)
     res.send('Habitat For Humanity Root')
 })
