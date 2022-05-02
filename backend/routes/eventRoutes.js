@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 const express = require("express");
 const router = express.Router()
-import Event from '../models/eventSchema.ts';
+import Event from '../models/eventSchema.js';
 
 
 //get all events
