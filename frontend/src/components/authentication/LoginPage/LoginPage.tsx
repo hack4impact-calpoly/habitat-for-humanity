@@ -22,6 +22,7 @@ const LoginPage = (): JSX.Element => {
 
     const login = () : void => {
         let valid = checkCredentials();
+
         if (valid /*&& donator*/){
             navigate("/Donor");
         }
@@ -83,7 +84,7 @@ const LoginPage = (): JSX.Element => {
                         </InputAdornment>
                     }
                 />
-                <button id="loginSubmit" onClick={login}>Log In</button>
+                <button type="button" id="loginSubmit" onClick={login}>Log In</button>
             </form>
             <div style={{ textAlign: "right", marginTop: "10px" }}>
                 <p className="loginCreateAccount">Don't have an account? </p>
