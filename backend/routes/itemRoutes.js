@@ -4,7 +4,7 @@ const router = express.Router()
 import Item from '../models/itemSchema';
 
 //get all items
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req, res) => {
   try {
     const items = await Item.find({})
     res.send(items)
@@ -15,7 +15,7 @@ router.get("/", async (req: Request, res: Response) => {
 })
 
 //get item by itemId
-router.get("/itemId/:itemId", async (req: Request, res: Response) => {
+router.get("/itemId/:itemId", async (req, res) => {
   try {
     const item = await Item.findOne({ _id: req.params.itemId})
     res.send(item)
@@ -26,7 +26,7 @@ router.get("/itemId/:itemId", async (req: Request, res: Response) => {
 })
 
 //get all items with name
-router.get("/name/:name", async (req: Request, res: Response) => {
+router.get("/name/:name", async (req, res) => {
   try {
     const items = await Item.find({ name: req.params.name})
     res.send(items)
@@ -37,7 +37,7 @@ router.get("/name/:name", async (req: Request, res: Response) => {
 })
 
 //get all items with location
-router.get("/location/:city/:address", async (req: Request, res: Response) => {
+router.get("/location/:city/:address", async (req, res) => {
   try {
     const items = await Item.find({ city: req.params.city, address: req.params.address})
     res.send(items)
@@ -48,7 +48,7 @@ router.get("/location/:city/:address", async (req: Request, res: Response) => {
 })
 
 //get all items with donorId
-router.get("/donorId/:donorId", async (req: Request, res: Response) => {
+router.get("/donorId/:donorId", async (req, res) => {
   try {
     const items = await Item.find({ donor_id: req.params.donorId})
     res.send(items)

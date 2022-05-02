@@ -4,7 +4,7 @@ const router = express.Router()
 import User from '../models/userSchema';
 
 //get all users
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req, res) => {
   try {
     const users = await User.find({})
     res.send(users)
@@ -14,7 +14,7 @@ router.get("/", async (req: Request, res: Response) => {
 })
 
 //get user by userId
-router.get("/id/:userId", async (req: Request, res: Response) => {
+router.get("/id/:userId", async (req, res) => {
     try {
       const user = await User.findOne({ _id: req.params.userId})
       res.send(user)
@@ -24,7 +24,7 @@ router.get("/id/:userId", async (req: Request, res: Response) => {
 })
 
 //get all volunteers
-router.get("/volunteers", async (req: Request, res: Response) => {
+router.get("/volunteers", async (req, res) => {
   try {
     const volunteers = await User.find({ userType: "Volunteer"}).exec();
     res.send(volunteers)
@@ -34,7 +34,7 @@ router.get("/volunteers", async (req: Request, res: Response) => {
 })
 
 //get all donors
-router.get("/donors", async (req: Request, res: Response) => {
+router.get("/donors", async (req, res) => {
   try {  
     const donor = await User.find({ userType: "Donor"})
     res.send(donor)
@@ -44,7 +44,7 @@ router.get("/donors", async (req: Request, res: Response) => {
 })
 
 //get all admins
-router.get("/admins", async (req: Request, res: Response) => {
+router.get("/admins", async (req, res) => {
   try {  
     const admins = await User.find({userType: "Admin"})
     res.send(admins)
@@ -54,7 +54,7 @@ router.get("/admins", async (req: Request, res: Response) => {
 })
 
 //add new User to UsersDB
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", async (req, res) => {
   try {  
     const { 
       userType,
@@ -86,7 +86,7 @@ router.post("/", async (req: Request, res: Response) => {
 })
 
 //update user firstName
-router.put("/firstName/:userId", async (req: Request, res: Response) => {
+router.put("/firstName/:userId", async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.params.userId })
     user.firstName = req.body.firstName;
@@ -110,7 +110,7 @@ router.put("/firstName/:userId", async (req: Request, res: Response) => {
 })
 
 //update user lastName
-router.put("/lastName/:userId", async (req: Request, res: Response) => {
+router.put("/lastName/:userId", async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.params.userId })
     user.lastName = req.body.lastName;
@@ -134,7 +134,7 @@ router.put("/lastName/:userId", async (req: Request, res: Response) => {
 })
 
 //update user email
-router.put("/email/:userId", async (req: Request, res: Response) => {
+router.put("/email/:userId", async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.params.userId })
     user.email = req.body.email;
@@ -158,7 +158,7 @@ router.put("/email/:userId", async (req: Request, res: Response) => {
 })
 
 //update user phone
-router.put("/phone/:userId", async (req: Request, res: Response) => {
+router.put("/phone/:userId", async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.params.userId })
     user.phone = req.body.phone;
