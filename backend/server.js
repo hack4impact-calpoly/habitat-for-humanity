@@ -7,9 +7,9 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-const userEndpoints = require("./routes/userRoutes.ts")
-const itemEndpoints = require("./routes/itemRoutes.ts")
-const eventEndpoints = require("./routes/eventRoutes.ts")
+const userEndpoints = require("./routes/userRoutes.js")
+const itemEndpoints = require("./routes/itemRoutes.js")
+const eventEndpoints = require("./routes/eventRoutes.js")
 
 app.use("/api/users", userEndpoints)
 app.use("/api/items", itemEndpoints)
