@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 const express = require("express");
 const router = express.Router()
-import Item from '../models/itemSchema';
+import Item from '../models/itemSchema.ts';
 
 //get all items
 router.get("/", async (req, res) => {
