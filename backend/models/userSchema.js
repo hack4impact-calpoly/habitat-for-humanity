@@ -1,5 +1,9 @@
-import { ObjectId, Schema } from 'mongoose';
-import { userConnection } from "../connection";
+// import { ObjectId, Schema } from 'mongoose';
+// const mongoose = require('mongoose');
+
+// import { userConnection } from "../connection";
+const { userConnection } = require('../connection');
+
 const mongoose = require("mongoose");
 
 // interface user {
@@ -10,7 +14,7 @@ const mongoose = require("mongoose");
 //     phone: string;
 // }
   
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
     userType: { type: String, required: true },
     firstName: { type: String, required: true },
@@ -23,4 +27,5 @@ const userSchema = new Schema(
   
 const User = userConnection.model("Users", userSchema);
 
-export default User;
+// export default User;
+module.exports = User
