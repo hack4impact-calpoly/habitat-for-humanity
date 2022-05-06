@@ -85,46 +85,6 @@ router.post('/', upload.single('productImage'), async (req: Request, res: Respon
     })
 })
 
-// // uploads a file to s3
-// function uploadFile(file: Express.Multer.File) {
-//   const fileStream = fs.createReadStream(file.path))
-
-//   const uploadParams = {
-//     Bucket: String(process.env.AWS_BUCKET_NAME),
-//     Body: fileStream,
-//     Key: file.filename + String(Date.now())
-//   }
-
-//   return s3.upload(uploadParams).promise()
-// }
-
-
-// router.post('/', upload.single('productImage'), async (req: Request, res: Response) => { 
-//   if ( !req.file ) {
-//     res.status(400).send("File not included");
-//   } else {
-//     const file = req.file
-//     console.log(file)
-//     const result = await uploadFile(file)
-//     console.log(result)
-
-//     let newImage = new Image({
-//       _id: mongoose.Types.ObjectId(),
-//       key: result.Key,
-//       name: req.body.name,
-//       link: result.Location
-//     });
-
-//     try {
-//       await newImage.save()
-//       res.send(newImage)
-//     } catch (error) {
-//       res.status(400).send(error);
-//     }
-
-//   }
-// })
-
 // downloads a file from s3
 function getFileStream(fileKey: string) {
   const downloadParams = {
