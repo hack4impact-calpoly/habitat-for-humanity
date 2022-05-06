@@ -2,6 +2,7 @@
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.0",
+    "@types/multer": "^1.4.7",
     "@types/node": "^17.0.12",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
@@ -10,10 +11,15 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "@types/multer-s3": "^2.7.12",
     "body-parser": "^1.19.1",
     "dotenv": "^15.0.0",
     "express": "^4.17.2",
-    "mongoose": "^6.1.10"
+    "fs": "^0.0.1-security",
+    "mongoose": "^6.1.10",
+    "multer": "^1.4.4",
+    "multer-s3": "^2.10.0",
+    "path": "^0.12.7"
   },
   "scripts": {
     "dev": "nodemon server.ts"
