@@ -2,22 +2,22 @@ import { ObjectId, Schema, Types } from 'mongoose';
 const mongoose = require("mongoose");
 import { itemConnection } from "../connection";
 
-interface item {
-    name: string;
-    email: string;
-    phone: string;
-    images: Types.Array<ObjectId>;
-    size: string;
-    address: string;
-    city: string;
-    zipCode: string;
-    donor_id: ObjectId;
-    notes: string;
-    time_submitted: string;
-    time_accepted: string;
-}
+// interface item {
+//     name: string;
+//     email: string;
+//     phone: string;
+//     images: Types.Array<ObjectId>;
+//     size: string;
+//     address: string;
+//     city: string;
+//     zipCode: string;
+//     donor_id: ObjectId;
+//     notes: string;
+//     time_submitted: string;
+//     time_accepted: string;
+// }
 
-const itemSchema = new Schema<item>(
+const itemSchema = new Schema(
   {
     name: {type: String, required: false },
     images: { type: [mongoose.Schema.Types.ObjectId], required: false },
