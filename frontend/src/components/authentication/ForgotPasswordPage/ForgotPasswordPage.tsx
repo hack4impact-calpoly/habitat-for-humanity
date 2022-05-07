@@ -60,7 +60,7 @@ const ForgotPasswordPage = (): JSX.Element => {
     <body>
         <div id="forgotPasswordBox">
             <p id="forgotPasswordText">Forgot Password</p>
-            <p className="forgotPasswordMessage">Please enter the email associated with your account to receieve a reset link.</p>
+            <p className="forgotPasswordMessage">Please enter the email associated with your account to receive a confirmation code.</p>
                 <p className="emailInput">Email</p>
                 <input className="inputBox"
                     type="text"

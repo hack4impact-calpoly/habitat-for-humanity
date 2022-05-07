@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 const express = require("express");
 const router = express.Router()
-import Event from '../models/eventSchema';
+import Event from '../models/eventSchema.ts';
+
 
 //get all events
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req, res) => {
   try {
     const events = await Event.find({})
     res.send(events)
@@ -15,18 +16,19 @@ router.get("/", async (req: Request, res: Response) => {
 })
 
 //get event by eventId
-router.get("/:eventId/eventId", async (req: Request, res: Response) => {
+router.get("/eventId/:eventId", async (req, res) => {
   try {
     const event = await Event.findOne({ _id: req.params.eventId})
-    res.send(event)
+    res.status(200).send(event)
     console.log('Got event with id %s', req.params.eventId)
+    console.log(event)
   } catch (error) {
     res.status(400).send(error);
   }
 })
 
 //get all events by title
-router.get("/:title/title", async (req: Request, res: Response) => {
+router.get("/title/:title", async (req, res) => {
   try {
     const events = await Event.find({title: req.params.title})
     res.send(events)
@@ -37,7 +39,7 @@ router.get("/:title/title", async (req: Request, res: Response) => {
 })
 
 //get all events by location
-router.get("/:location/location", async (req: Request, res: Response) => {
+router.get("/location/:location", async (req, res) => {
   try {
     const events = await Event.find({location: req.params.location})
     res.send(events)
@@ -50,7 +52,7 @@ router.get("/:location/location", async (req: Request, res: Response) => {
 router.use(express.json());
 
 //posts a new Event to EventsDB
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', async (req, res) => {
   const { title, pick_up_availability, location } = req.body;
   let event = new Event({
     title,
