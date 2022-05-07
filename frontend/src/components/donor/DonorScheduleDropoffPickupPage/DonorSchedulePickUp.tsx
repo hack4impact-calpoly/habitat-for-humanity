@@ -35,7 +35,7 @@ const monthNames = [
 ];
 
 // Get available events for specific date from database
-const availEvents = [
+const times = [
     {
         title: "Donator Pickup",
         start: "2022-02-25T18:00:39Z",
@@ -77,25 +77,33 @@ const availEvents = [
 const events = [
     {
         title: "Donator Pickup",
-        start: "2022-02-19T18:00:39Z",
-        end: "2022-02-19T19:00:39Z",
+        start: "2022-02-19T18:00:00Z",
+        end: "2022-02-19T19:00:00Z",
     },
     {
         title: "Donator Pickup",
-        start: "2022-02-20T00:00:39Z",
-        end: "2022-02-20T01:00:39Z",
+        start: "2022-02-20T00:00:00Z",
+        end: "2022-02-20T01:00:00Z",
     },
 ];
 
 
-const DonatorSchedulePickUp = (): JSX.Element => {
+const DonatorSchedulePickUp = (): JSX.Element => {    
+    const formatDate = (date: Date): string => {
+        return date.toISOString().split('T')[0];
+    }
+
     const today = new Date();
-
     const [header, setHeader] = useState<string>(`${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(today.getDate())}`);
+    const [selectedDate, setSelectedDate] = useState<string>(formatDate(today));
+    const [selectedDateTimes, setSelectedDateTimes] = useState<Map<string, any[]>>(new Map<string, any[]>());
 
+    console.log(selectedDate);
+    
     const onClickCalendar = (info: DateSelectArg): void => {
         const start_date = info?.start;
         setHeader(`${monthNames[start_date.getMonth()]}, ${weekdays[start_date.getDay()]} ${String(start_date.getDate())}`);
+        setSelectedDate(formatDate(start_date));
     };
 
     // TODO: Send donator availability to database
@@ -117,6 +125,16 @@ const DonatorSchedulePickUp = (): JSX.Element => {
             pushToDatabase();
             navigate(nextPath);
         }
+    }
+
+    const isChecked = () => {
+
+    }
+
+    const onClickDateTime = (startTime: string, endTime: string) => {
+        const start = selectedDate + startTime.split('T')[1];
+        const end = selectedDate + endTime.split('T')[1];
+        
     }
 
     return (
@@ -149,7 +167,7 @@ const DonatorSchedulePickUp = (): JSX.Element => {
                     <h1 id="donatorPickupHeader">{header}</h1>
                     <p id="donatorPickupDesc">Please select multiple dates and times you are available, and our staff will choose from your availability.</p>
                     <div id="donatorPickupEvents">
-                        {availEvents.map(availEvent => {
+                        {times.map(availEvent => {
                             const startTime = moment.utc(availEvent.start).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
                             const endTime = moment.utc(availEvent.end).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
                             return (
@@ -157,6 +175,7 @@ const DonatorSchedulePickUp = (): JSX.Element => {
                                     <Checkbox
                                         icon={<RadioButtonUncheckedIcon />}
                                         checkedIcon={<CheckCircleIcon />}
+                                        onClick={() => onClickDateTime(availEvent.start, availEvent.end)}
                                     />
                                     {`${startTime} to ${endTime}`}
                                 </div>
