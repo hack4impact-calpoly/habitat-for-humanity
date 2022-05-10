@@ -23,7 +23,7 @@ function makeNewConnection(url) {
     return connection;
 }
 
-console.log(process.env.userDB)
+// console.log(process.env.userDB)
 const userConnection = makeNewConnection(process.env.userDB)
 const itemConnection = makeNewConnection(process.env.itemDB)
 const eventConnection = makeNewConnection(process.env.eventDB)
