@@ -32,6 +32,12 @@ const LoginPage = (): JSX.Element => {
                     case 'NotAuthorizedException':
                         alert("Please enter valid credentials");
                         return false;
+                    case 'UserNotFoundException':
+                        alert("User does not exist");
+                        return false;
+                    default:
+                        alert(error);
+                        return false;
                 }
             }
         );
