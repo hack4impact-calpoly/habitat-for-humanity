@@ -140,7 +140,7 @@ const NewPasswordPage = (): JSX.Element => {
 
     //HTML Body
     return (
-        <body>
+        <div>
             <div id="newPasswordBox">
                 <p id="newPasswordText">New Password</p>
                 <form id="createAccountForm">
@@ -186,7 +186,7 @@ const NewPasswordPage = (): JSX.Element => {
                 </form>
                 <button value="submitButton" id="submitButton" onClick={buttonNavigation}>Submit</button>
             </div>
-        </body>);
+        </div>);
 }
 
 export default NewPasswordPage;

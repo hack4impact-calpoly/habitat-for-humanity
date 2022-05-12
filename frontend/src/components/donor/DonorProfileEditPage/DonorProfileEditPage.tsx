@@ -143,7 +143,7 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
     }
 
     return (
-        <body id="donatorProfileEditPage">
+        <div id="donatorProfileEditPage">
             <DonatorNavbar />
             <div id="editProfileBox">
                 <p id="editProfileText">Edit Profile</p>
@@ -192,7 +192,7 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
                     </button>
                 </div>
             </div>
-        </body>
+        </div>
     )
 }
 

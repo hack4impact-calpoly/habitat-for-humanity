@@ -34,7 +34,7 @@ const address = "1 Grand Avenue \nSan Luis Obispo, CA 93407";
 const SubmitPickUpMultiplePhotoPage = (): JSX.Element => {
 
     return (
-        <body>
+        <div>
             <DonatorNavbar />
             <div id="SubmitPickUpPage">
                 <SubmitInfo name="Sofa" dimensions='83" x 32" x 38"' photos={imagesPool} location={address} dropOff={true}/>
@@ -60,7 +60,7 @@ const SubmitPickUpMultiplePhotoPage = (): JSX.Element => {
                         <button className="nextButton">Next</button>
                 </div>
             </div>
-        </body>
+        </div>
     );
 };
 

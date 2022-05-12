@@ -9,7 +9,7 @@ const DonatorScheduleDropoffPage = (): JSX.Element => {
     const [isDropoff, setIsDropoff] = useState<boolean>(true)
 
     return (
-        <body>
+        <div>
             <DonatorNavbar />
             <div id="donDropoffPage">
                 <div>
@@ -29,7 +29,7 @@ const DonatorScheduleDropoffPage = (): JSX.Element => {
                 {isDropoff ? <DonatorScheduleDropoff /> : 
                     <DonatorSchedulePickUp />}
             </div>
-        </body>
+        </div>
     );
 };
 

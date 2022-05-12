@@ -8,7 +8,7 @@ const DonatorProfilePage = (): JSX.Element => {
     const donatorProfileEditPath = "/Donor/Profile/Edit";
 
     return (
-        <body>
+        <div>
             <DonatorNavbar />
             <div id="donatorProfileBox">
                 <div id="headerBox">
@@ -50,7 +50,7 @@ const DonatorProfilePage = (): JSX.Element => {
                 </div>
 
             </div>
-        </body >
+        </div>
     )
 }
 
