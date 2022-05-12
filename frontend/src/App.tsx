@@ -53,7 +53,7 @@ function App(): JSX.Element {
     //<SubmitPickUpMultiplePhotoPage />
     //<DonatorNextStepsPage />
     // <DonationInfoPage/>
-    <DonorScheduleDropoffPickupPage />
+    // <DonorScheduleDropoffPickupPage />
   );
 }
 
