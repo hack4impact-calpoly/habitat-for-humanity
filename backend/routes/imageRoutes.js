@@ -1,14 +1,11 @@
-import { Callback, Error } from "mongoose"
-import { Request, Response } from "express";
 const mongoose = require('mongoose')
 const express = require('express')
 const fs = require('fs')
 const router = express.Router()               
 const multer = require('multer')              // multer will be used to handle the form data.
-import Aws from 'aws-sdk';                // aws-sdk library will used to upload image to s3 bucket.
+const Aws = require('aws-sdk');                // aws-sdk library will used to upload image to s3 bucket.
 Aws.config.update({region: 'us-west-1'});
-// const Image = require('../models/imageSchema.ts')  // our product model.
-import Image from '../models/imageSchema';
+const Image = require('../models/imageSchema.js')  // our product model.
 
 // const fileSchema = require('../models/fileSchema.ts')  // our product model.
 require("dotenv/config")                      // for using the environment variables that stores the confedential information.
@@ -17,14 +14,14 @@ require("dotenv/config")                      // for using the environment varia
 // if nothing is provided in the callback it will get uploaded in main directory
 
 const storage = multer.memoryStorage({
-  destination: function (req: Request, file: Express.Multer.File, cb: Function) {
+  destination: function (req, file, cb) {
       cb(null, '')
   }
 })
 
 // below variable is define to check the type of file which is uploaded
 
-const filefilter = (req: Request, file: Express.Multer.File, cb: Function) => {
+const filefilter = (req, file, cb) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png') {
       cb(null, true)
   } else {
@@ -44,7 +41,7 @@ const s3 = new Aws.S3({
 console.log('Connected to S3 bucket \'habitat-photo-bucket\'')
 
 // now how to handle the post request and to upload photo (upload photo using the key defined below in upload.single ie: productimage )
-router.post('/', upload.single('productImage'), async (req: Request, res: Response) => {
+router.post('/', upload.single('productImage'), async (req, res) => {
     console.log('This is the file %s', req.file)  // to check the data in the console that is being uploaded
 
     const params = {
@@ -55,12 +52,7 @@ router.post('/', upload.single('productImage'), async (req: Request, res: Respon
     };
 
     // uploading the photo using s3 instance and saving the key in the database.
-    s3.upload(params, async (error: Error, data: /*Aws.S3.ManagedUpload.SendData*/
-                                      { Location: string; 
-                                        ETag: string;
-                                        Bucket: string;
-                                        Key: string;
-                                      }) => {
+    s3.upload(params, async (error, data) => {
       if(error) {
           res.status(500).send({"err":error})  // if we get any error while uploading error message will be returned.
       }
@@ -86,7 +78,7 @@ router.post('/', upload.single('productImage'), async (req: Request, res: Respon
 })
 
 // downloads a file from s3
-function getFileStream(fileKey: string) {
+function getFileStream(fileKey) {
   const downloadParams = {
     Key: fileKey,
     Bucket: String(process.env.AWS_BUCKET_NAME)
@@ -96,7 +88,7 @@ function getFileStream(fileKey: string) {
 }
 
 // Get all the product data from db 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async (req, res) => {
   try {
       console.log("Processing GET request")
       const bucketParams = {
@@ -118,7 +110,7 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 //get image by key
-router.get("/:imageId", async (req: Request, res: Response) => {
+router.get("/:imageId", async (req, res) => {
   try {
 
     const image = await Image.findOne({ _id: req.params.imageId})

@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
 const express = require("express");
 const router = express.Router()
-import Item from '../models/itemSchema';
+const Item = require('../models/itemSchema.js');
 
 //get all items
 router.get("/", async (req, res) => {
@@ -59,7 +58,7 @@ router.get("/donorId/:donorId", async (req, res) => {
 })
 
 //add new Item to ItemDB
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", async (req, res) => {
   try {  
     const { 
       name,
