@@ -24,14 +24,14 @@ const imagesPool = [
 const SubmitDropOffPage = (): JSX.Element => {
 
     return (
-        <body>
+        <div>
             <DonatorNavbar />
             <div id="SubmitDropOffPage">
                 <SubmitInfo name="Sofa" dimensions='83" x 32" x 38"' photos={imagesPool} location={address} dropOff={true}/>
                 <div id="StoreHours">
                     <h2 id="DropOffHours">ReStore Drop Off Hours</h2>
                     <table>
-                        <tbody>
+                        <div>
                             {weeklyHours.map((element, index) => {
                                 const day: string = element.day;
                                 const hours: string = element.hours;
@@ -42,7 +42,7 @@ const SubmitDropOffPage = (): JSX.Element => {
                                     </tr>
                                 );
                             })}
-                        </tbody>
+                        </div>
                     </table>
                 </div>
                 <div id="donDOButtons">
@@ -50,7 +50,7 @@ const SubmitDropOffPage = (): JSX.Element => {
                         <button className="nextButton">Next</button>
                 </div>
             </div>
-        </body>
+        </div>
     );
 };
 

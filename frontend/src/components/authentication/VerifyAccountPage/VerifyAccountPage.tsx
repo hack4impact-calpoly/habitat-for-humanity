@@ -19,7 +19,7 @@ const VerifyAccountPage = (): JSX.Element => {
     const successPath: string = "/CreateAccount/Success"
 
     // function for submitting new password
-    let awsNewPasswordSubmit = async (): Promise<void> => {
+    let awsConfirmSignup = async (): Promise<void> => {
         let response = await Auth.confirmSignUp(email, verificationCode).catch(
             error => {
                 const code = error.code;
@@ -66,12 +66,11 @@ const VerifyAccountPage = (): JSX.Element => {
     }
 
     const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
-        awsNewPasswordSubmit();
-        if (e.currentTarget.value === "signUpButton") {
+        awsConfirmSignup();
+        if (e.currentTarget.value === "submitButton") {
             if (submitData()) {
                 navigate(successPath);
             }
-
         }
 
         // TODO: navigate to success page when credentials are valid

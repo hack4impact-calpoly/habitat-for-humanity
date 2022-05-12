@@ -19,18 +19,19 @@ const ForgotPasswordPage = (): JSX.Element => {
                         alert("Please enter a valid email");
                         return false;
                     case 'LimitExceededException':
-                        alert("Too many tries, pleast wait");
+                        alert("Too many tries, please wait and try again in a couple minutes");
                         return false;
                 }
             }
         );
         return true;
     }
-    const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
+    const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
         const mainScreenPath: string = "/"; // Main screen (login)
         const successPath: string = "/NewPasswordPage"
         let checkAWS = await awsForgotPassword();
-        if (e.currentTarget.value === "sendButton") {
+        const target = e.target as HTMLTextAreaElement;
+        if (target.value === "sendButton") {
             if (submitData() && checkAWS) {
                 navigate(successPath);
             }
@@ -74,7 +75,7 @@ const ForgotPasswordPage = (): JSX.Element => {
 
     //HTML Body
     return (
-        <body>
+        <div>
             <div id="forgotPasswordBox">
                 <p id="forgotPasswordText">Forgot Password</p>
                 <p className="forgotPasswordMessage">Please enter the email associated with your account to receive a confirmation code.</p>
@@ -86,7 +87,7 @@ const ForgotPasswordPage = (): JSX.Element => {
                 <button value="sendButton" id="sendButton" onClick={buttonNavigation}>Send</button>
 
             </div>
-        </body>);
+        </div>);
 }
 
 export default ForgotPasswordPage;

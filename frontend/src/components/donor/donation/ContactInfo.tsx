@@ -14,7 +14,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   }) => 
   {
     return (
-        <body>
+        <div>
             <div id="SubmitInfoPage">
                 <div id = "information">
                     {/* <h2 id="Review">Review</h2>
@@ -25,7 +25,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                     <p id="Phone"><b>Phone: </b>{phone}</p>
                 </div>
             </div>
-        </body>
+        </div>
     );
   };
 

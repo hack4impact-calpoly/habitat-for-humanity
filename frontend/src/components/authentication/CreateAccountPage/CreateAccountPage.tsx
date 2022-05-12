@@ -199,7 +199,7 @@ const CreateAccountPage = (): JSX.Element => {
 
     //HTML Body
     return (
-        <body>
+        <div>
             <div id="createAccountBox">
                 <p id="createAccountText">Create an Account</p>
                 <form id="createAccountForm">
@@ -290,7 +290,7 @@ const CreateAccountPage = (): JSX.Element => {
                     <Link to={mainScreenPath} className="createAccountLogin" id="logInLink">Log In</Link>
                 </div>
             </div>
-        </body>);
+        </div>);
 }
 
 export default CreateAccountPage;

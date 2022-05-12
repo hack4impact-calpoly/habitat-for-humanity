@@ -15,7 +15,7 @@ const DonatorNextStepsPage = (): JSX.Element => {
     }
 
     return (
-        <body>
+        <div>
             <DonatorNavbar />
             <div id="donNextStepsPage">
                 <h2 id="donNextStepsHeader">Confirmation and Next Steps</h2>
@@ -24,7 +24,7 @@ const DonatorNextStepsPage = (): JSX.Element => {
                 <a style={{ textDecoration: "none" }} href="tel: +8055468699"><p id="donNextStepsPhone">(805) 546-8699</p></a>
                 <button value="doneButton" className='doneButton' onClick={buttonNavigation}>Done</button>
             </div>
-        </body>
+        </div>
     )
 }
 

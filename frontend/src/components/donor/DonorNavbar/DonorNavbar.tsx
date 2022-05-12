@@ -30,7 +30,7 @@ const DonatorNavbar = (): JSX.Element => {
     }
 
     const navlinkHandler = (header : string) : string => {
-        if(header === navBarHeaders[0]){
+        if (header === navBarHeaders[0]){
             return donate_path;
         }
         else if(header === navBarHeaders[1]){
@@ -48,12 +48,12 @@ const DonatorNavbar = (): JSX.Element => {
             <div id="donatorNavbarHeaders">
                 {// need to add links to pages
 }
-                {navBarHeaders.map((header: string): JSX.Element => {
+                {navBarHeaders?.map((header: string, index: number): JSX.Element => {
                     return underline(header) ? (
-                        <div className="donatorNavbarHeader">
+                        <div className="donatorNavbarHeader" key={index}>
                             <Link id="donatorNavbarUnderline" className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
                         </div> ) : ( 
-                            <Link className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
+                            <Link key={index} className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
                         )
                 })}
             </div>
