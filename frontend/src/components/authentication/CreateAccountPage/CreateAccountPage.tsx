@@ -8,6 +8,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
 
+/* Backend */
+import { addUser, User } from 'api/user';
+
+
 require("./CreateAccountPage.css");
 
 const CreateAccountPage = (): JSX.Element => {
@@ -29,17 +33,17 @@ const CreateAccountPage = (): JSX.Element => {
     const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
         e.preventDefault();
         let checkAWS = false;
-        let valid = submitData();
+        let valid = validateForm();
+
         if (valid) {
             checkAWS = await awsSignUp();
             console.log(checkAWS);
+            if (checkAWS) {
+                const user = await getFormData();
+                addUser(user);
+                navigate(successPath);
+            }
         }
-        if (checkAWS) {
-            navigate(successPath);
-        }
-
-
-        // TODO: navigate to success page when credentials are valid
     }
 
 
@@ -58,31 +62,25 @@ const CreateAccountPage = (): JSX.Element => {
         );
         return response;
     }
-    const submitData = (): boolean => {
-        const validData = validateForm();
-        if (validData) {
-            const JSONstring = getFormData();
-            console.log(JSONstring);
-            //connect to backend code
-            return true;
-        }
-        return false;
-    }
 
-    const getFormData = (): string => {
+    async function getFormData() {
         /*
         Desc: Gets all form data and coverts it into JSON
         Return: JSON string
         */
+        let userAuth = await Auth.currentUserInfo();
+        console.log(userAuth);
+
         const accountData = {
-            "accountType": userType,
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email,
-            "phoneNumber": processedPhoneNumber, //number(int) in form: 8057562501
-            "password": password.value
+            userType: userType,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            phone: phoneNumber, //number(int) in form: 8057562501
+            id: userAuth.username,
+            // password: password.value
         };
-        return JSON.stringify(accountData);
+        return accountData as User;
     }
 
 
@@ -186,7 +184,8 @@ const CreateAccountPage = (): JSX.Element => {
                 alert("Please enter your phone number in the form XXX-XXX-XXXX")
                 return false;
             }
-            processedPhoneNumber = parseInt(processedString);
+            // processedPhoneNumber = parseInt(processedString);
+            setPhoneNumber(processedString);
 
         }
         catch (error) {

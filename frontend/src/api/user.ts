@@ -105,7 +105,8 @@ export interface User {
     firstName : string,
     lastName : string,
     email : string,
-    phone : string
+    phone : string,
+    id: string,
 }
 
 // Add a new User to User DB
@@ -120,7 +121,8 @@ export const addUser = async (user: User) => {
             "firstName" : user.firstName,
             "lastName" : user.lastName,
             "email" : user.email,
-            "phone" : user.phone
+            "phone" : user.phone,
+            "id": user.id
         })
     })
     .then(async (res) => {

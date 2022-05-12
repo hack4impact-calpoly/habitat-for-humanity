@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+import { Auth } from "aws-amplify";
+import { getUserByID } from 'api/user';
 require("./DonorProfileEditPage.css");
 
 const DonatorProfileEditPage = () : JSX.Element =>  {
@@ -9,6 +11,21 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     let processedPhoneNumber : number; //Phone number converted from string
+
+    const [user, setUser] = useState<any>([]);
+
+    useEffect(() => {
+        async function getUser() {
+            let userAuth = await Auth.currentUserInfo();
+            let user = await getUserByID(userAuth.username);
+            setUser(user);
+            setFirstName(user.firstName);
+            setLastName(user.lastName);
+            setEmail(user.email);
+            setPhoneNumber(user.phone);
+        }
+        getUser();
+    }, [])
 
     let navigate = useNavigate();
 
@@ -153,6 +170,7 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
                         <div className="labelInputBox" id="firstNameBox">
                             <p className="formLabel">First Name</p>
                             <input className="inputBox"
+                                value={firstName}
                                 type="text"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}>
                             </input>
@@ -160,6 +178,7 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
                         <div className="labelInputBox" id="lastNameBox">
                             <p className="formLabel">Last Name</p>
                             <input className="inputBox"
+                                value={lastName}
                                 type="text"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}>
 
@@ -169,6 +188,7 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
                     <div className="labelInputBox">
                         <p className="formLabel">Email</p>
                         <input className="inputBox"
+                            value={email}
                             type="text"
                             onChange={(e:React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}>
 
@@ -177,6 +197,7 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
                     <div className="labelInputBox">
                         <p className="formLabel">Phone Number</p>
                         <input className="inputBox"
+                            value={phoneNumber}
                             type="text"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}>
 
@@ -187,6 +208,7 @@ const DonatorProfileEditPage = () : JSX.Element =>  {
                     <button value="backButton" className="buttons" id="backButton" onClick={buttonNavigation}>
                         Back
                     </button>
+                    <div id="spacing" className="buttons"/>
                     <button value="saveChangesButton" className="buttons" id="saveChangesButton" onClick={buttonNavigation}>
                         Save Changes
                     </button>
