@@ -80,7 +80,6 @@ const VerifyAccountPage = (): JSX.Element => {
         const validData = validateForm();
         if (validData) {
             const JSONstring = getFormData();
-            console.log(JSONstring);
             //connect to backend code
             return true;
         }
