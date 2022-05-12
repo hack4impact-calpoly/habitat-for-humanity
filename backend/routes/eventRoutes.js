@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
 const express = require("express");
 const router = express.Router()
-import Event from '../models/eventSchema.ts';
+const Event = require('../models/eventSchema.js');
 
 
 //get all events
@@ -56,14 +55,14 @@ router.post('/', async (req, res) => {
   const { title, pick_up_availability, location } = req.body;
   let event = new Event({
     title,
-    pick_up_availability,
+    pickupAvailability,
     location
   });
 
   try {
     event = await event.save();
-    console.log(event);
     res.json(event);
+    console.log('POSTed %s to EventDB', event.title)
   } catch (error) {
     res.status(400).send(error);
   }
