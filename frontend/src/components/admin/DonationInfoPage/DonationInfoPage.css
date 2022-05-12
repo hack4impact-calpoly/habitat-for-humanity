@@ -91,6 +91,11 @@
     justify-content: center;
 }
 
+.TimeAvailability {
+    margin-top: 3rem;
+    color: var(--orange);
+}
+
 @media only screen and (max-width: 915px) {
     #SubmitPickUpPage {
         padding: 0 10%;

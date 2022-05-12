@@ -8,6 +8,7 @@ import SubmitInfo from "../../donor/donation/SubmitInfo";
 import ContactInfo from "../../donor/donation/ContactInfo";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
+import ReceiptPage from './ReceiptPage/ReceiptPage';
 require("./DonationInfoPage.css");
 
 function a11yProps(index: number) {
@@ -82,7 +83,7 @@ const DonationInfoPage = (): JSX.Element => {
                         <div id="DonInfo">
                         <div id="DonationInfoPage">
                             <ContactInfo name="John Smith" email="johndoe@gmail.com" phone="123-456-7890"/>
-                            <SubmitInfo name="Sofa" dimensions='83" x 32" x 38"' photos={imagesPool} location={address} dropOff={false}/>
+                            <SubmitInfo name="Sofa" dimensions='83" x 32" x 38"' photos={imagesPool} location={address} dropOff={false} component={true}/>
                             <div id="TimeHours">
                                 <h2 className="TimeAvailability">Time Availability</h2>
                                 <div id="TimeTable">
@@ -107,7 +108,7 @@ const DonationInfoPage = (): JSX.Element => {
                         Scheduling Page goes here
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        Receipt Page goes here
+                        <ReceiptPage/>
                     </TabPanel>
                 </div>
                 <div id="DonInfoButtons">
