@@ -7,14 +7,16 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
-
+import { v4 as uuidv4 } from 'uuid';
 /* Backend */
 import { addUser, User } from 'api/user';
+
 
 
 require("./CreateAccountPage.css");
 
 const CreateAccountPage = (): JSX.Element => {
+    // const { uuid } = require('uuidv4');
     const [userType, setUserType] = useState<string>("");
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
@@ -24,6 +26,7 @@ const CreateAccountPage = (): JSX.Element => {
         value: "",
         showPassword: false
     });
+    const [id, setID] = useState<string>(uuidv4());
     let processedPhoneNumber: number; //Phone number converted from string
 
     let navigate = useNavigate();
@@ -49,7 +52,29 @@ const CreateAccountPage = (): JSX.Element => {
 
     // awsSignUp to create an account for authentication, called in buttonNavigation
     let awsSignUp = async (): Promise<any> => {
-        let response = await Auth.signUp(email, password.value).catch(
+        const username = email;
+        let p = password.value;
+        // let userID = ;
+        // setID(userID);
+        // console.log(userID)
+        console.log(id);
+        let response = await Auth.signUp({username, password: p,
+            attributes: {
+                'custom:id': id,
+            }
+        // const id = uuid.v4();
+        // let response = await Auth.signUp(email, password.value, id): Observable<any> {
+        //     const signUpParams: any = {
+        //         email,
+        //         password,
+        //         attributes: {
+        //             'custom:id': id,
+        //         }
+        //     };
+        // return fromPromise(Auth.signUp(
+        //     signUpParams
+        // )
+        }).catch(
             error => {
                 const code = error.code;
                 console.log(error);
@@ -68,8 +93,11 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Gets all form data and coverts it into JSON
         Return: JSON string
         */
-        let userAuth = await Auth.currentUserInfo();
-        console.log(userAuth);
+        // let userAuth = await Auth.currentUserInfo();
+        // console.log(userAuth);
+        let userAuth2 = await Auth.currentAuthenticatedUser();
+        console.log(userAuth2.username);
+        console.log(id);
 
         const accountData = {
             userType: userType,
@@ -77,7 +105,7 @@ const CreateAccountPage = (): JSX.Element => {
             lastName: lastName,
             email: email,
             phone: phoneNumber, //number(int) in form: 8057562501
-            id: userAuth.username,
+            id: id,
             // password: password.value
         };
         return accountData as User;
