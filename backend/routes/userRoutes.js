@@ -1,7 +1,7 @@
 // import { Request, Response } from 'express';
 const express = require("express");
 const router = express.Router()
-const User = require('../models/userSchema');
+const User = require('../models/userSchema.js');
 
 //get all users
 router.get("/", async (req, res) => {

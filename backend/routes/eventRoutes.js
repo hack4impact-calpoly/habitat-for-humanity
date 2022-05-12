@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router()
-const Event = require('../models/eventSchema');
-const Item = require('../models/itemSchema');
-const User = require('../models/userSchema');
+const Event = require('../models/eventSchema.js');
+const Item = require('../models/itemSchema.js');
+const User = require('../models/userSchema.js');
 
 
 //get all events
