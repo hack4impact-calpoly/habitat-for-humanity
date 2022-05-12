@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import SubmitInfo from "../../donor/donation/SubmitInfo";
 import ContactInfo from "../../donor/donation/ContactInfo";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
+import AdminNavbar from "../AdminNavbar/AdminNavbar";
 require("./DonationInfoPage.css");
 
 function a11yProps(index: number) {
@@ -63,7 +64,8 @@ const DonationInfoPage = (): JSX.Element => {
         setValue(newValue);
     };
     return (
-        <>
+        <div>
+            <AdminNavbar />
             <div id="DonInfoPage">
                 <div id="ActiveDonHeader"><h1>Donation Approval</h1></div>
                 <div id="DonInfoBox">
@@ -91,7 +93,7 @@ const DonationInfoPage = (): JSX.Element => {
                                             <tr key={index}>
                                                 <h4 className="donDropoffRow" key={index}>{day}</h4 >
                                                 <div id="DayHours">
-                                                    {hours.map((element1, index1) => {return(<div id="EachDayHours">{element1}</div>)})}
+                                                    {hours.map((element1, index1) => {return(<div id="EachDayHours" key={index1}>{element1}</div>)})}
                                                 </div>
                                             </tr>
                                         );
@@ -116,7 +118,7 @@ const DonationInfoPage = (): JSX.Element => {
                         </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
