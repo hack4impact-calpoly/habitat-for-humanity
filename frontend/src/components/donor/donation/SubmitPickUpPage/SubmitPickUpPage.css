@@ -1,6 +1,9 @@
 @import "config/colors.css";
 @import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
 
+h2 {
+    color: var(--orange);
+}
 
 #SubmitPickUpPage {
     font-family: Rubik;
