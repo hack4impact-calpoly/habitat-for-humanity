@@ -1,7 +1,7 @@
 @import "config/colors.css";
 @import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
 
-#StoreHours h2 {
+ h2 {
     color: var(--orange);
 }
 
