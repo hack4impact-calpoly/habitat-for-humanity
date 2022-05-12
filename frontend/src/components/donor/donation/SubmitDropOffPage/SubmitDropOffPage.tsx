@@ -27,6 +27,8 @@ const SubmitDropOffPage = (): JSX.Element => {
         <body>
             <DonatorNavbar />
             <div id="SubmitDropOffPage">
+                <h2 id="Review">Review</h2>
+                <p>Please review your donation information before you submit.</p>
                 <SubmitInfo name="Sofa" dimensions='83" x 32" x 38"' photos={imagesPool} location={address} dropOff={true}/>
                 <div id="StoreHours">
                     <h2 id="DropOffHours">ReStore Drop Off Hours</h2>
