@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 require("./SubmitInfo.css");
 
@@ -18,6 +18,10 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     dropOff,
   }) => 
   {
+    const [dropOffOption, setDropOffOption] = useState(false);
+    if(dropOff){
+        setDropOffOption(dropOff);
+    }
     let navigate = useNavigate();
 
     const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
@@ -42,7 +46,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                     <p id="itemName"><b>Item Name:</b> {name}</p>
                     <p id="itemDimensions"><b>Item Dimensions: </b>{dimensions}</p>
                     <p id="itemPhotos"><b>Item Photos</b></p>
-                    <div id="ProductImages">{photos?.map((imgSrc, index) => (<div id="SingleImages"><img src={imgSrc.src} key={index} alt="n"/></div>))}</div>
+                    <div id="ProductImages">{photos?.map((imgSrc, index) => (<div key={index} id="SingleImages"><img src={imgSrc.src} alt="n"/></div>))}</div>
                     <h2 id="Location">Location</h2>
                     <h4 id="Address">{location}</h4>
                 </div>
@@ -52,11 +56,11 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                 </div>
                 <div id="donPDOptions">
                     <div>
-                        <input type="radio" className="radioOptionLabelCircle" checked= {dropOff} />
+                        <input type="radio" className="radioOptionLabelCircle" checked={dropOff} onChange={() => setDropOffOption(true)}/>
                         <p id="radioDropoff" className="radioOptionLabel radioLabel">I can drop off at the ReStore</p>
                     </div>
                     <div id="radioPickUp">
-                        <input type="radio" className="radioOptionLabelCircle" checked={!dropOff} />
+                        <input type="radio" className="radioOptionLabelCircle" checked={!dropOff} onChange={() => setDropOffOption(false)}/>
                         <p className="radioOptionLabel radioLabel">I need the item to be picked up</p>
                     </div>
                 </div>
