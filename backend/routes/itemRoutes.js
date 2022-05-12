@@ -145,4 +145,49 @@ router.put("/itemId/:itemId", async (req, res) => {
   }
 })
 
+//add new Item to ItemDB
+router.post("/", async (req, res) => {
+  try {  
+    const { 
+      name,
+      email,
+      phone,
+      images,
+      size,
+      address,
+      city,
+      zipCode,
+      donorId,
+      notes,
+      timeSubmitted,
+      status
+    } = req.body;
+    const newItem = new Item({
+      name,
+      email,
+      phone,
+      images,
+      size,
+      address,
+      city,
+      zipCode,
+      donorId,
+      notes,
+      timeSubmitted,
+      status
+    });
+    await newItem.save();
+    res.send(`${name} added to the ItemDB`);
+  } catch (error) {
+    let errorMessage;
+    if (error instanceof Error) { 
+      errorMessage = error.message; 
+    } else { 
+      errorMessage = String(errorMessage); 
+    }
+    res.status(400).send(errorMessage);
+    console.log(`Error: ${errorMessage}`);
+  }
+})
+
 module.exports = router

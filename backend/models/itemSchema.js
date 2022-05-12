@@ -1,8 +1,6 @@
 // import { ObjectId, Schema, Types } from 'mongoose';
-// const mongoose = require("mongoose");
-const { itemConnection } = require("../connection");
 const mongoose = require("mongoose");
-
+const { itemConnection } = require("../connection");
 
 // interface item {
 //     name: string;
@@ -13,10 +11,11 @@ const mongoose = require("mongoose");
 //     address: string;
 //     city: string;
 //     zipCode: string;
-//     donor_id: ObjectId;
+//     donorId: ObjectId;
 //     notes: string;
-//     time_submitted: string;
-//     time_accepted: string;
+//     timeSubmitted: Date;
+//     timeAccepted: Date;
+//     status: string;
 // }
 
 const itemSchema = new mongoose.Schema(
@@ -34,9 +33,11 @@ const itemSchema = new mongoose.Schema(
     timeApproved: { type: Date, required: false },
     status: { type: String, required: true },
     notes: { type: String, required: false },
+    timeAccepted: { type: Date, required: false },
   },
   { collection: "Items" }
 );
   
 const Item = itemConnection.model("Items", itemSchema);
+// export default Item;
 module.exports = Item;
