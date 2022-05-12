@@ -1,21 +1,22 @@
-import { Schema, Types } from 'mongoose';
+// import { Schema, Types } from 'mongoose';
 const mongoose = require("mongoose");
-import { eventConnection } from "../connection";
+const { eventConnection } = require("../connection");
 
 // interface event {
 //     title: string;
-//     pick_up_availability: Types.Array<Types.Array<String>>
+//     pickupAvailability: Types.Array<Types.Array<String>>
 //     location: string;
 // }
   
-const eventSchema = new Schema(
+const eventSchema = new mongoose.Schema(
   { 
     title: { type: String, required: true },
-    pick_up_availability: { type: [[String]], required: true },
+    pickupAvailability: { type: [[String]], required: true },
     location: { type: String, required: true }
   },
   { collection: "Events" }
 );
   
 const Event = eventConnection.model("Events", eventSchema);
-export default Event;
+// export default Event;
+module.exports = Event;
