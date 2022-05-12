@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "images/logo.png";
 require('./DonorNavbar.css')
 
@@ -15,6 +15,8 @@ const donate_path: string = "/Donor";
 const profile_path: string = "/Donor/Profile"
 
 const DonatorNavbar = (): JSX.Element => {
+    let navigate = useNavigate();
+
     const page_path = window.location.pathname;
 
     const underline = (header: string): boolean => {
@@ -44,7 +46,7 @@ const DonatorNavbar = (): JSX.Element => {
 
     return (
         <div id="donatorNavbar">
-            <img src={logo} alt="logo" id="donatorNavbarLogo" />
+            <img src={logo} alt="logo" id="donatorNavbarLogo" onClick={() => navigate("/Donor")}/>
             <div id="donatorNavbarHeaders">
                 {// need to add links to pages
 }

@@ -18,6 +18,10 @@
     height: 100% ;
 }
 
+#donatorNavbarLogo:hover {
+    cursor: pointer;
+}
+
 #donatorNavbarHeaders {
     display: flex;
     flex-direction: row;
