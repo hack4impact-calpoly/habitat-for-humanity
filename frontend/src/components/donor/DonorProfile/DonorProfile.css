@@ -1,0 +1,137 @@
+@import "config/colors.css";
+
+#donatorProfileBox{
+    margin: 0% 40% 0% 27%;
+    width: 33%;
+    margin-top: 8vh;
+    justify-content: center;
+}
+
+#headerBox{
+    display: flex;
+    margin-bottom: 2.5%;
+    height: 25%;
+}
+
+#profileBox{
+    width: 50%;
+}
+
+#editBox{
+    width: 50%;
+    display:flex;
+    justify-content: right;
+}
+
+#profile{
+    color: var(--primary);
+    font-style: normal;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 30px;
+    line-height: 35px; 
+    margin: 0%;
+}
+
+#pencil{
+    width: 24px;
+    height: 24px;
+    margin-top: 1%;
+}
+
+#edit{  
+    color: var(--orange);
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 30px;
+    margin: 0%;
+    text-decoration: none;
+}
+
+#edit:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.infoHeader{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    color: #011338;
+    
+}
+
+#nameBox{
+    display: flex;
+    margin: 0%;
+    height: 25%;
+    border-bottom: 1px solid rgba(143, 143, 143, 0.6);
+}
+
+#emailBox{
+    display: flex;
+    margin: 0%;
+    height: 25%;
+    border-bottom: 1px solid rgba(143, 143, 143, 0.6);
+}
+
+#phoneBox{
+    display: flex;
+    margin: 0%;
+    height: 25%;
+}
+
+.infoBox{
+    width: 80%;
+    justify-content: left;
+}
+
+.headerBox{
+    justify-content: left;
+    width: 25%;
+}
+
+#name{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    color: #011338;
+}
+
+#email{   
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    color: #011338;
+}
+
+#phone{  
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    color: #011338;
+}
+
+
+@media only screen and (max-width: 915px) {
+    #donatorProfileBox{
+        margin: 0% 40% 0% 13%;
+        width: 75%;
+        margin-top: 8vh;
+        justify-content: center;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    #donatorProfileBox{
+        margin: 0% 40% 0% 13%;
+        width: 100%;
+        margin-top: 8vh;
+        justify-content: center;
+    }
+}
