@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
 @import "config/colors.css";
 
-#createAccountBox {
-    width: 577px;
-    height: 650px;
+#newPasswordBox {
+    width: 50vw;
+    max-width: 577px;
     margin: auto;
 
     box-sizing: border-box;
@@ -17,21 +17,15 @@
     padding: 62px 70px 68px 70px;
 }
 
-#createAccountText {
+#newPasswordText {
     font-family: Rubik;
-    font-weight: 600 ;
+    font-weight: 600;
     font-size: 36px;
     line-height: 40px;
     margin: 0px 0px 34px 0px;
     text-align: left;
 
     color: var(--black);
-}
-
-#accountTypeBox {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0px 0px 0px 0px;
 }
 
 .accountLabel input[type="radio"] {
@@ -52,7 +46,7 @@
 
 .userTypeButton {
     filter: grayscale();
-    margin: 2px 9px 0px 26px; 
+    margin: 2px 9px 0px 26px;
 }
 
 .userTypeButton:hover {
@@ -63,17 +57,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: none;
 }
 
 #firstNameBox {
     width: 197px;
 }
+
 #lastNameBox {
     width: 197px;
 }
 
-.labelInputBox{
+.labelInputBox {
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -85,10 +79,16 @@
     font-weight: bolder;
     font-size: 13px;
     line-height: 18px;
-    
+
     color: var(--black);
 
     margin: 21px 0px 5px 0px;
+}
+
+.clickable:hover {
+    cursor: pointer;
+    color: var(--tertiary);
+    text-decoration: underline;
 }
 
 .inputBox {
@@ -102,13 +102,13 @@
     font-weight: 500;
 }
 
-#signUpButton {
+#submitButton {
     background: var(--primary);
     border: none;
 
     font-family: Rubik;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 800;
     font-size: 17px;
     line-height: 21px;
     margin: 26px 0px 12px 0px;
@@ -117,8 +117,8 @@
     color: var(--white);
 }
 
-#signUpButton:hover{
-    cursor :pointer;
+#submitButton:hover {
+    cursor: pointer;
     border: 3px solid rgba(2, 5, 12, 0.15)
 }
 
@@ -153,8 +153,14 @@
     font-size: 13px;
     font-weight: 500;
 }
+
 .passwordIcon {
     color: var(--primary);
+}
+
+#codeLine {
+    display: flex;
+    justify-content: space-between;
 }
 
 @media only screen and (max-height: 800px) {
@@ -173,45 +179,48 @@
         line-height: 28px;
         margin: 0px 0px 24px 0px;
     }
-    
+
     #accountTypeBox {
         margin: 0px 0px 3px 0px;
     }
-    
+
     #userTypeLabel {
         margin: 0px 0px 0px 0px;
         font-size: 11px;
     }
-    
+
     .accountLabel {
         font-size: 10px;
     }
-    
+
     .userTypeButton {
-        margin: 1px 6px 0px 18px; 
+        margin: 1px 6px 0px 18px;
     }
-    
+
     #firstNameBox {
         width: 138px;
     }
+
     #lastNameBox {
         width: 138px;
     }
-    
-    .formLabel {
+
+    /* .formLabel {
         font-size: 10px;
         line-height: 13px;
-    
+
         margin: 15px 0px 4px 0px;
-    }
-    
+    } */
+
+
+
     .inputBox {
         height: 30px;
         width: 100%;
         padding: 6px;
         font-size: 9px;
     }
-    
+
     #signUpButton {
         font-size: 12px;
         line-height: 14px;
@@ -219,13 +228,13 @@
         height: 36px;
         width: 100%;
     }
-    
+
     .createAccountLogin {
         font-size: 10px;
         line-height: 11px;
         margin: 0px 0px 0px 0px;
     }
-    
+
     #logInLink {
         margin: 0px 0px 0px 3px;
     }
@@ -247,45 +256,46 @@
         line-height: 28px;
         margin: 0px 0px 24px 0px;
     }
-    
+
     #accountTypeBox {
         margin: 0px 0px 3px 0px;
     }
-    
+
     #userTypeLabel {
         margin: 0px 0px 0px 0px;
         font-size: 10px;
     }
-    
+
     .accountLabel {
         font-size: 10px;
     }
-    
+
     .userTypeButton {
-        margin: 1px 6px 0px 18px; 
+        margin: 1px 6px 0px 18px;
     }
-    
+
     #firstNameBox {
         width: 138px;
     }
+
     #lastNameBox {
         width: 138px;
     }
-    
-    .formLabel {
+
+    /* .formLabel {
         font-size: 10px;
         line-height: 13px;
-    
+
         margin: 15px 0px 4px 0px;
-    }
-    
+    } */
+
     .inputBox {
         height: 30px;
         width: 100%;
         padding: 6px;
         font-size: 9px;
     }
-    
+
     #signUpButton {
         font-size: 12px;
         line-height: 14px;
@@ -293,13 +303,13 @@
         height: 36px;
         width: 100%;
     }
-    
+
     .createAccountLogin {
         font-size: 10px;
         line-height: 11px;
         margin: 0px 0px 0px 0px;
     }
-    
+
     #logInLink {
         margin: 0px 0px 0px 3px;
     }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "images/logo.png";
 require('./DonorNavbar.css')
 
@@ -15,6 +15,8 @@ const donate_path: string = "/Donor";
 const profile_path: string = "/Donor/Profile"
 
 const DonatorNavbar = (): JSX.Element => {
+    let navigate = useNavigate();
+
     const page_path = window.location.pathname;
 
     const underline = (header: string): boolean => {
@@ -30,7 +32,7 @@ const DonatorNavbar = (): JSX.Element => {
     }
 
     const navlinkHandler = (header : string) : string => {
-        if(header === navBarHeaders[0]){
+        if (header === navBarHeaders[0]){
             return donate_path;
         }
         else if(header === navBarHeaders[1]){
@@ -44,16 +46,16 @@ const DonatorNavbar = (): JSX.Element => {
 
     return (
         <div id="donatorNavbar">
-            <img src={logo} alt="logo" id="donatorNavbarLogo" />
+            <img src={logo} alt="logo" id="donatorNavbarLogo" onClick={() => navigate("/Donor")}/>
             <div id="donatorNavbarHeaders">
                 {// need to add links to pages
 }
-                {navBarHeaders.map((header: string): JSX.Element => {
+                {navBarHeaders?.map((header: string, index: number): JSX.Element => {
                     return underline(header) ? (
-                        <div className="donatorNavbarHeader">
+                        <div className="donatorNavbarHeader" key={index}>
                             <Link id="donatorNavbarUnderline" className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
                         </div> ) : ( 
-                            <Link className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
+                            <Link key={index} className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
                         )
                 })}
             </div>

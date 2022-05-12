@@ -7,10 +7,13 @@ app.use(express.json())
 const userEndpoints = require("./routes/userRoutes.ts")
 const itemEndpoints = require("./routes/itemRoutes.ts")
 const eventEndpoints = require("./routes/eventRoutes.ts")
+const imageEndpoints = require("./routes/imageRoutes.ts")
+
 
 app.use("/api/users", userEndpoints)
 app.use("/api/items", itemEndpoints)
 app.use("/api/events", eventEndpoints)
+app.use("/api/images", imageEndpoints)
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -35,9 +38,4 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Habitat For Humanity Root')
 })
 
-const PORT = process.env.PORT || 3001;
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-module.exports = app;
+app.listen(3001) 

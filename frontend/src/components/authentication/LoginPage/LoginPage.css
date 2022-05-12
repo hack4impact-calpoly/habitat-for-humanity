@@ -2,8 +2,8 @@
 
 
 #loginBox {
-    height: 450px;
-    width: 350px;
+    height: auto;
+    width: fit-content;
     background: var(--white-gray);
     border: none;
     margin: auto;
@@ -26,11 +26,10 @@
 .loginInput {
     box-sizing: border-box;
     height: 48px;
-    font-size: 15px;
+    font-size: 13.5px;
     width: 100%;
     border: 1.5px solid var(--input-box);
     padding: 2%;
-    
 }
 
 #passwordBox {

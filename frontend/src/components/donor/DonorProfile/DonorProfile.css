@@ -67,13 +67,13 @@
     display: flex;
     margin: 0%;
     height: 25%;
-    border-bottom: 1px solid rgba(143, 143, 143, 0.6);
 }
 
 #emailBox{
     display: flex;
     margin: 0%;
     height: 25%;
+    border-top: 1px solid rgba(143, 143, 143, 0.6);
     border-bottom: 1px solid rgba(143, 143, 143, 0.6);
 }
 
