@@ -11,6 +11,7 @@ interface DummyComponentProps {
     photos?: {src: string}[];
     location?: string;
     dropOff?: boolean;
+    component?: boolean;
   }
 
 const SubmitInfo: React.FC<DummyComponentProps> = ({
@@ -19,6 +20,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     photos,
     location,
     dropOff,
+    component,
   }) => 
   {
     const [dropOffOption, setDropOffOption] = useState(false);
@@ -41,13 +43,13 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
 
     return (
         <div>
-            <DonatorNavbar />
+            {!component && <DonatorNavbar />}
 
-            <div id="MainContainer">
+            <div id={!component ? "MainContainer" : ""}>
 
                 <div id="SubmitInfoPage">
                     <div id="information">
-                    <ProgressBar activeStep={4}/>
+                        {!component && <ProgressBar activeStep={4}/>}
                         {/* <h2 id="Review">Review</h2>
                         <p>Please review your donation information before you submit.</p> */}
                         <h2 id="ItemInfo">Item Information</h2>
@@ -72,11 +74,11 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                             <p className="radioOptionLabel radioLabel">I need the item to be picked up</p>
                         </div>
                     </div>
-                    <div id="donPickupButtons" style={{ display: 'flex', flexDirection: 'row' }}>
+                    {!component && <div id="donPickupButtons" style={{ display: 'flex', flexDirection: 'row' }}>
                         <button value="backButton" className="donPickupButton backButton" onClick={buttonNavigation}>Back</button>
                         <div style={{ flexGrow: 1 }} />
                         <button value="nextButton" className="donPickupButton nextButton" onClick={buttonNavigation}>Next</button>
-                    </div>
+                    </div>}
                 </div>
             </div>
         </div>
