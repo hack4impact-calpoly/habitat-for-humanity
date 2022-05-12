@@ -19,7 +19,7 @@ const avaiTimes = [
 const SubmitPickUpPage = (): JSX.Element => {
 
     return (
-        <body>
+        <div>
             <DonatorNavbar />
             <div id="SubmitPickUpPage">
             <h2 id="Review">Review</h2>
@@ -47,7 +47,7 @@ const SubmitPickUpPage = (): JSX.Element => {
                         <button className="nextButton">Next</button>
                 </div>
             </div>
-        </body>
+        </div>
     );
 };
 

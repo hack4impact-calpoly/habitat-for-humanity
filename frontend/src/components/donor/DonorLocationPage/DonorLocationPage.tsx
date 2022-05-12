@@ -39,7 +39,7 @@ const DonatorLocationPage = (): JSX.Element => {
     }
 
     return (
-        <body>
+        <div>
             <DonatorNavbar />
             <div id="donLocPage">
                 <h1 id="donLocHeader">Location</h1>
@@ -62,7 +62,7 @@ const DonatorLocationPage = (): JSX.Element => {
                     <button value="nextButton" className="nextButton"onClick={buttonNavigation}>Next</button>
                 </div>
             </div>
-        </body>
+        </div>
     )
 }
 

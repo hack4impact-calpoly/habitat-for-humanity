@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { Auth } from "aws-amplify";
 
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
+
+/* Backend */
+import { addUser, User } from 'api/user';
+
 
 require("./CreateAccountPage.css");
 
@@ -16,52 +21,66 @@ const CreateAccountPage = (): JSX.Element => {
     const [email, setEmail] = useState<string>("");
     const [phoneNumber, setPhoneNumber] = useState<string>("");
     const [password, setPassword] = useState({
-                                                    value: "",
-                                                    showPassword: false});
-    let processedPhoneNumber : number; //Phone number converted from string
-    
-    let navigate = useNavigate();
-    const mainScreenPath : string = "/"; // Main screen (login)
-    const successPath : string = "/CreateAccount/Success"
+        value: "",
+        showPassword: false
+    });
+    let processedPhoneNumber: number; //Phone number converted from string
 
-    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
-        
-        if(e.currentTarget.value === "signUpButton"){
-            if(submitData()){
+    let navigate = useNavigate();
+    const mainScreenPath: string = "/"; // Main screen (login)
+    const successPath: string = "/VerifyAccountPage"
+
+    const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
+        e.preventDefault();
+        let checkAWS = false;
+        let valid = validateForm();
+
+        if (valid) {
+            checkAWS = await awsSignUp();
+            console.log(checkAWS);
+            if (checkAWS) {
+                const user = await getFormData();
+                addUser(user);
                 navigate(successPath);
             }
-
         }
-
-        // TODO: navigate to success page when credentials are valid
     }
 
-    const submitData = () : boolean => {
-        const validData = validateForm();
-        if (validData)
-        {
-            const JSONstring = getFormData();
-            console.log(JSONstring);
-            //connect to backend code
-            return true;
-        }
-        return false;
+
+    // awsSignUp to create an account for authentication, called in buttonNavigation
+    let awsSignUp = async (): Promise<any> => {
+        let response = await Auth.signUp(email, password.value).catch(
+            error => {
+                const code = error.code;
+                console.log(error);
+                switch (code) {
+                    case 'UsernameExistsException':
+                        alert("Account already exists");
+                        return false;
+                }
+            }
+        );
+        return response;
     }
 
-    const getFormData = () : string => {
+    async function getFormData() {
         /*
         Desc: Gets all form data and coverts it into JSON
         Return: JSON string
         */
+        let userAuth = await Auth.currentUserInfo();
+        console.log(userAuth);
+
         const accountData = {
-            "accountType": userType,
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email,
-            "phoneNumber": processedPhoneNumber, //number(int) in form: 8057562501
-            "password": password.value
+            userType: userType,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            phone: phoneNumber, //number(int) in form: 8057562501
+            id: userAuth.username,
+            // password: password.value
         };
-        return JSON.stringify(accountData);
+        return accountData as User;
     }
 
 
@@ -71,15 +90,15 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Validates all the form fields
         Return: boolean (true if all are valid, false if one is not)
         */
-        const valid: boolean = 
-        (
-            validateUserType() &&
-            validateName() &&
-            validateEmail() &&
-            validatePhoneNumber() &&
-            processPhoneNumber() &&
-            validatePassword() 
-        )
+        const valid: boolean =
+            (
+                validateUserType() &&
+                validateName() &&
+                validateEmail() &&
+                validatePhoneNumber() &&
+                processPhoneNumber() &&
+                validatePassword()
+            )
         return valid;
     }
 
@@ -88,34 +107,31 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Validates userTypes (donor, volunteer, administrator)
         Return: boolean (true if valid, false if not)
         */
-        if (userType === "")
-        {
+        if (userType === "") {
             alert("Please select an account type");
             return false;
         }
         return true;
     }
 
-    const validateName = (): boolean =>{
+    const validateName = (): boolean => {
         /*
         Desc: Validates firstName and lastName
         Return: boolean (true if valid, false if not)
         */
-        if (firstName === "" || lastName === "")
-        {
+        if (firstName === "" || lastName === "") {
             alert("Please add your first and last name");
             return false;
         }
         return true;
     }
-    
+
     const validatePhoneNumber = (): boolean => {
         /*
         Desc: Validates phone number
         Return: boolean (true if valid, false if not)
         */
-        if (phoneNumber === "")
-        {
+        if (phoneNumber === "") {
             alert("Please add a phone number");
             return false;
         }
@@ -127,19 +143,17 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Validates email
         Return: boolean (true if valid, false if not)
         */
-        if (email === "")
-        {
+        if (email === "") {
             alert("Please add email");
             return false;
         }
-        else if (!email.includes("@"))
-        {
+        else if (!email.includes("@")) {
             alert("Please enter a valid email address");
             return false;
         }
         //else if (check if email already exists)
-            //alert("Account with this email already exists") 
-        return true;    
+        //alert("Account with this email already exists") 
+        return true;
     }
 
     const validatePassword = (): boolean => {
@@ -147,138 +161,135 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Validates password
         Return: boolean (true if valid, false if not)
         */
-        const MIN_PASSWORD_LENGTH = 6;  
-        if (password.value === "")
-        {
+        const MIN_PASSWORD_LENGTH = 6;
+        if (password.value === "") {
             alert("Please add password");
             return false;
         }
-        else if (password.value.length < MIN_PASSWORD_LENGTH)
-        {
+        else if (password.value.length < MIN_PASSWORD_LENGTH) {
             alert(`Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`);
             return false;
         }
         return true;
     }
 
-    function processPhoneNumber() : boolean {
+    function processPhoneNumber(): boolean {
         /*
         Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
         Return: boolean (true if number successfuly processed, false if not)
         */
-       try 
-       {
+        try {
             const processedString = phoneNumber.replace(/[^0-9]/g, "");
-            if (processedString === ""){
+            if (processedString === "") {
                 alert("Please enter your phone number in the form XXX-XXX-XXXX")
                 return false;
             }
-            processedPhoneNumber  = parseInt(processedString);
-            
-       } 
-       catch (error) 
-       {
-           console.error(error);
-           alert("Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX");
-           return false;
-       }
-       return true;
+            // processedPhoneNumber = parseInt(processedString);
+            setPhoneNumber(processedString);
+
+        }
+        catch (error) {
+            console.error(error);
+            alert("Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX");
+            return false;
+        }
+        return true;
     }
-    
+
     //HTML Body
-    return(
-    <body>
-        <div id="createAccountBox">
-            <p id="createAccountText">Create an Account</p>
-            <form id="createAccountForm">
-                
-                {/*Div for the user type section*/}
-                <div id="accountTypeBox">
-                    <p id="userTypeLabel"> I am a </p>
-                    <div className="accountLabel">
-                        <input type="radio"
-                                className="userTypeButton" 
+    return (
+        <div>
+            <div id="createAccountBox">
+                <p id="createAccountText">Create an Account</p>
+                <form id="createAccountForm">
+
+                    {/*Div for the user type section*/}
+                    <div id="accountTypeBox">
+                        <p id="userTypeLabel"> I am a </p>
+                        <div className="accountLabel">
+                            <input type="radio"
+                                className="userTypeButton"
                                 value="donor" //Specifies the value for the useState
                                 name="userType" //connects all options under group "userType" -> only one can be selected at a time
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>donor
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)} />donor
 
-                        <input type="radio"
-                                className="userTypeButton" 
-                                value="volunteer" 
-                                name="userType" 
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>volunteer
+                            <input type="radio"
+                                className="userTypeButton"
+                                value="volunteer"
+                                name="userType"
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)} />volunteer
 
-                        <input type="radio"
-                                className="userTypeButton"  
-                                value="administrator" 
-                                name="userType"    
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)}/>administrator
+                            <input type="radio"
+                                className="userTypeButton"
+                                value="administrator"
+                                name="userType"
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)} />administrator
+                        </div>
                     </div>
-                </div>
 
-                
-                <div id="nameBox">
-                    <div className="labelInputBox" id="firstNameBox">
-                        <p className="formLabel">First Name</p>
-                        <input className="inputBox"
+
+                    <div id="nameBox">
+                        <div className="labelInputBox" id="firstNameBox">
+                            <p className="formLabel">First Name</p>
+                            <input className="inputBox"
                                 type="text"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
-                        />
-                    </div>
-                    <div className="labelInputBox" id="lastNameBox">
-                        <p className="formLabel">Last Name</p>
-                        <input className="inputBox"
+                            />
+                        </div>
+                        <div className="labelInputBox" id="lastNameBox">
+                            <p className="formLabel">Last Name</p>
+                            <input className="inputBox"
                                 type="text"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
-                        />
+                            />
+                        </div>
                     </div>
-                </div>
 
-                <div className="labelInputBox">
-                    <p className="formLabel">Email</p>
-                    <input className="inputBox"
+                    <div className="labelInputBox">
+                        <p className="formLabel">Email</p>
+                        <input className="inputBox"
                             type="text"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                    />
-                </div>
-                
-                <div className="labelInputBox">
-                    <p className="formLabel">Phone Number</p>
-                    <input className="inputBox"
+                        />
+                    </div>
+
+                    <div className="labelInputBox">
+                        <p className="formLabel">Phone Number</p>
+                        <input className="inputBox"
                             type="text"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
-                    />
-                </div>
+                        />
+                    </div>
 
-                <div className="labelInputBox">
-                    <p className="formLabel">Password</p>
-                    <Input className="inputBox"
+                    <div className="labelInputBox">
+                        <p className="formLabel">Password</p>
+                        <Input className="inputBox"
                             id="passwordBox"
                             value={password.value}
                             type={password.showPassword ? "text" : "password"}
                             disableUnderline={true}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword({...password, "value": e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword({ ...password, "value": e.target.value })}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
-                                        onClick={() => setPassword({...password, showPassword: !password.showPassword, })}
+                                        onClick={() => setPassword({ ...password, showPassword: !password.showPassword, })}
                                         onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}
                                         edge="end">
-                                        {password.showPassword ? <VisibilityIcon className="passwordIcon" /> : <VisibilityOffIcon className="passwordIcon"/>}
+                                        {password.showPassword ? <VisibilityIcon className="passwordIcon" /> : <VisibilityOffIcon className="passwordIcon" />}
                                     </IconButton>
                                 </InputAdornment>
                             }
-                    />
-                </div>
+                        />
+                    </div>
 
-            </form>
-            <button value="signUpButton" id="signUpButton" onClick={buttonNavigation}>Sign Up</button>
-            <div className="logInBox">
-                <p className="createAccountLogin">Already have an account?</p>
-                <Link to={mainScreenPath} className="createAccountLogin" id="logInLink">Log In</Link>
+                </form>
+                <button value="signUpButton" id="signUpButton" onClick={buttonNavigation}>Sign Up</button>
+                <div className="logInBox">
+                    <p className="createAccountLogin">Already have an account?</p>
+                    <Link to={mainScreenPath} className="createAccountLogin" id="logInLink">Log In</Link>
+                </div>
             </div>
-        </div>
-    </body>);
+        </div>);
 }
 
 export default CreateAccountPage;
