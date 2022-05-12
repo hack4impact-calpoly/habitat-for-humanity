@@ -7,45 +7,71 @@ import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
 import { Auth } from "aws-amplify";
 
+require("./VerifyAccountPage.css");
 
-require("./NewPasswordPage.css");
 
-
-const NewPasswordPage = (): JSX.Element => {
+const VerifyAccountPage = (): JSX.Element => {
     const [email, setEmail] = useState<string>("");
     const [verificationCode, setVerificationCode] = useState<string>("");
-    const [password, setPassword] = useState({
-        value: "",
-        showPassword: false
-    });
 
     let navigate = useNavigate();
     const mainScreenPath: string = "/"; // Main screen (login)
     const successPath: string = "/CreateAccount/Success"
 
     // function for submitting new password
-    let awsNewPasswordSubmit = async (): Promise<Boolean> => {
-        let response = await Auth.forgotPasswordSubmit(email, verificationCode, password.value).catch(
+    let awsNewPasswordSubmit = async (): Promise<void> => {
+        let response = await Auth.confirmSignUp(email, verificationCode).catch(
             error => {
                 const code = error.code;
                 console.log(error);
                 switch (code) {
+                    case 'UserNotFoundException':
+                        alert('Please enter a valid email');
+                        break;
+                    case 'NotAuthorizedException':
+                        alert('User is already confirmed');
+                        break;
                     case 'CodeMismatchException':
-                        alert("Please enter a valid code");
-                        return false;
+                        alert('Please enter a valid code');
+                        break;
+                    case 'InvalidParameterException':
+                        alert('User is already confirmed');
+                        break;
                 }
             }
         );
-        return true;
+        console.log(response);
     }
 
-    const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
-        let checkAWS = await awsNewPasswordSubmit();
+    let awsSendNewCode = async (): Promise<void> => {
+        let response = await Auth.resendSignUp(email).catch(
+            error => {
+                const code = error.code;
+                console.log(error);
+                switch (code) {
+                    case 'AuthError':
+                        alert('Please enter a valid email');
+                        break;
+                    case 'LimitExceededException':
+                        alert("Too many tries, please try again later");
+                        break;
+                }
+            }
+        );
+        console.log(response);
+    }
 
-        if (e.currentTarget.value === "submitButton") {
-            if (submitData() && checkAWS) {
+    const sendNewCode = () => {
+        awsSendNewCode();
+    }
+
+    const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
+        awsNewPasswordSubmit();
+        if (e.currentTarget.value === "signUpButton") {
+            if (submitData()) {
                 navigate(successPath);
             }
+
         }
 
         // TODO: navigate to success page when credentials are valid
@@ -70,7 +96,6 @@ const NewPasswordPage = (): JSX.Element => {
         const accountData = {
             "email": email,
             "verificationCode": verificationCode,
-            "password": password.value
         };
         return JSON.stringify(accountData);
     }
@@ -85,8 +110,7 @@ const NewPasswordPage = (): JSX.Element => {
         const valid: boolean =
             (
                 validateEmail() &&
-                validateCode() &&
-                validatePassword()
+                validateCode()
             )
         return valid;
     }
@@ -121,28 +145,12 @@ const NewPasswordPage = (): JSX.Element => {
         return true;
     }
 
-    const validatePassword = (): boolean => {
-        /*
-        Desc: Validates password
-        Return: boolean (true if valid, false if not)
-        */
-        const MIN_PASSWORD_LENGTH = 6;
-        if (password.value === "") {
-            alert("Please add password");
-            return false;
-        }
-        else if (password.value.length < MIN_PASSWORD_LENGTH) {
-            alert(`Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`);
-            return false;
-        }
-        return true;
-    }
 
     //HTML Body
     return (
-        <body>
+        <div>
             <div id="newPasswordBox">
-                <p id="newPasswordText">New Password</p>
+                <p id="newPasswordText">Verify Account</p>
                 <form id="createAccountForm">
                     <p className="forgotPasswordMessage">Please check your email for a verification code, and fill out the fields accordingly.</p>
 
@@ -155,38 +163,20 @@ const NewPasswordPage = (): JSX.Element => {
                     </div>
 
                     <div className="labelInputBox">
-                        <p className="formLabel">Verification Code</p>
+                        <div id="codeLine">
+                            <p className="formLabel">Verification Code</p>
+                            <p className="formLabel clickable" onClick={sendNewCode}>Get new code</p>
+                        </div>
                         <input className="inputBox"
                             type="text"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVerificationCode(e.target.value)}
                         />
                     </div>
 
-                    <div className="labelInputBox">
-                        <p className="formLabel">New Password</p>
-                        <Input className="inputBox"
-                            id="passwordBox"
-                            value={password.value}
-                            type={password.showPassword ? "text" : "password"}
-                            disableUnderline={true}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword({ ...password, "value": e.target.value })}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={() => setPassword({ ...password, showPassword: !password.showPassword, })}
-                                        onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}
-                                        edge="end">
-                                        {password.showPassword ? <VisibilityIcon className="passwordIcon" /> : <VisibilityOffIcon className="passwordIcon" />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                        />
-                    </div>
-
                 </form>
                 <button value="submitButton" id="submitButton" onClick={buttonNavigation}>Submit</button>
             </div>
-        </body>);
+        </div>);
 }
 
-export default NewPasswordPage;
+export default VerifyAccountPage;
