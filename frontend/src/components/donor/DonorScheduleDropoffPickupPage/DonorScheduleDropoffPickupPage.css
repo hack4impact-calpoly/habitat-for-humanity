@@ -1,7 +1,9 @@
 @import "config/colors.css";
 
 #donDropoffPage {
-    padding: 0 18%;
+    margin-top: 100px;
+    width: 800px;
+    transform: translateX(40%);
 }
 
 .donDropoffPickupHeader {

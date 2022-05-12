@@ -2,6 +2,7 @@ import React from "react";
 import DonatorNavbar from '../../DonorNavbar/DonorNavbar';
 import SubmitInfo from "../SubmitInfo";
 import sofa1 from "./../images/sofa-01.png";
+import ProgressBar from 'components/donor/donation/ProgressBar';
 require("./SubmitDropOffPage.css");
 
 const weeklyHours = [

@@ -18,6 +18,10 @@
     color: var(--orange);
 }
 
+#information {
+    padding-top: 40px;
+}
+
 p {
     font-family: Rubik;
 }
