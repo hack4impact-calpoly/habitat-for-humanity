@@ -1,6 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import DonatorNavbar from 'components/donor/DonorNavbar/DonorNavbar';
+import ProgressBar from 'components/donor/donation/ProgressBar';
+
 require("./DonorNextStepsPage.css");
 
 const DonatorNextStepsPage = (): JSX.Element => {
@@ -18,6 +20,7 @@ const DonatorNextStepsPage = (): JSX.Element => {
         <div>
             <DonatorNavbar />
             <div id="donNextStepsPage">
+                <ProgressBar activeStep={5}/>
                 <h2 id="donNextStepsHeader">Confirmation and Next Steps</h2>
                 <p id="donNextStepsDesc">You have successfully submitted your donation form! Our staff will review your donation in the next few days. Please expect an email from us with updates regarding your donation pick up or drop off.</p>
                 <p id="donNextStepsQuestions">If you have any questions or concerns, please contact us at </p>

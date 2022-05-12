@@ -3,15 +3,17 @@ import React, { useState } from "react";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 import DonatorScheduleDropoff from "./DonorScheduleDropoff";
 import DonatorSchedulePickUp from "./DonorSchedulePickUp";
+import ProgressBar from 'components/donor/donation/ProgressBar';
 require("./DonorScheduleDropoffPickupPage.css");
 
 const DonatorScheduleDropoffPage = (): JSX.Element => {
     const [isDropoff, setIsDropoff] = useState<boolean>(true)
 
     return (
-        <div>
+        <div style={{ paddingBottom: '4rem' }}>
             <DonatorNavbar />
             <div id="donDropoffPage">
+                <ProgressBar activeStep={3}/>
                 <div>
                     <h2 id="donPDHeader">Scheduling</h2>
                     <h4>Does the donation need to be picked up or can you drop it off at our ReStore?</h4>

@@ -8,7 +8,7 @@ const DonatorHomePage = (): JSX.Element => {
     let navigate = useNavigate();
 
     const routeChange = () : void => {
-        let donateLocationPath = 'Donate/Location';
+        let donateLocationPath = '/Donor/Donate/ItemInfo';
         navigate(donateLocationPath);
     }
 
