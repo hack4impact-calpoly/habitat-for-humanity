@@ -7,6 +7,7 @@ import moment from "moment";
 import Checkbox from "@mui/material/Checkbox";
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { RadioButtonChecked } from "@mui/icons-material";
 require("./DonorSchedulePickUp.css");
 
 const weekdays = [
@@ -34,89 +35,96 @@ const monthNames = [
     "December",
 ];
 
-// Get available events for specific date from database
-const availEvents = [
+// Dummy times
+const listTimes: Event[] = [
     {
-        title: "Donator Pickup",
-        start: "2022-02-25T18:00:39Z",
-        end: "2022-02-25T19:00:39Z",
+        start: "2022-02-25T18:00:00Z",
+        end: "2022-02-25T19:00:00Z"
     },
     {
-        title: "Donator Pickup",
-        start: "2022-02-25T19:00:39Z",
-        end: "2022-02-25T20:00:39Z",
+        start: "2022-02-25T19:00:00Z",
+        end: "2022-02-25T20:00:00Z"
     },
     {
-        title: "Donator Pickup",
-        start: "2022-02-25T20:00:39Z",
-        end: "2022-02-25T21:00:39Z",
+        start: "2022-02-25T20:00:00Z",
+        end: "2022-02-25T21:00:00Z"
     },
     {
-        title: "Donator Pickup",
-        start: "2022-02-25T21:00:39Z",
-        end: "2022-02-25T22:00:39Z",
+        start: "2022-02-25T21:00:00Z",
+        end: "2022-02-25T22:00:00Z"
     },
     {
-        title: "Donator Pickup",
-        start: "2022-02-25T22:00:39Z",
-        end: "2022-02-25T23:00:39Z",
+        start: "2022-02-25T22:00:00Z",
+        end: "2022-02-25T23:00:00Z"
     },
     {
-        title: "Donator Pickup",
-        start: "2022-02-25T23:00:39Z",
-        end: "2022-02-25T00:00:39Z",
+        start: "2022-02-25T23:00:00Z",
+        end: "2022-02-25T00:00:00Z"
     },
     {
-        title: "Donator Pickup",
-        start: "2022-02-25T00:00:39Z",
-        end: "2022-02-25T01:00:39Z",
+        start: "2022-02-25T00:00:00Z",
+        end: "2022-02-25T01:00:00Z"
     }
 ];
 
-// Get existing events from database
-const events = [
-    {
-        title: "Donator Pickup",
-        start: "2022-02-19T18:00:39Z",
-        end: "2022-02-19T19:00:39Z",
-    },
-    {
-        title: "Donator Pickup",
-        start: "2022-02-20T00:00:39Z",
-        end: "2022-02-20T01:00:39Z",
-    },
-];
+interface Event {
+    start: string,
+    end: string
+}
+
+interface AvailEvent {
+    start: string,
+    end: string,
+    avail: boolean
+}
 
 
 const DonatorSchedulePickUp = (): JSX.Element => {
     const today = new Date();
-
     const [header, setHeader] = useState<string>(`${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(today.getDate())}`);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [events, setEvents] = useState<Event[]>([]);
+    const [times, setTimes] = useState<Event[]>(listTimes);
 
     const onClickCalendar = (info: DateSelectArg): void => {
         const start_date = info?.start;
+        setSelectedDate(start_date);
         setHeader(`${monthNames[start_date.getMonth()]}, ${weekdays[start_date.getDay()]} ${String(start_date.getDate())}`);
+        // Re render checked boxes
+        setTimes([]);
+        setTimes(listTimes);
     };
 
-    // TODO: Send donator availability to database
+    // TODO: Send donator availability to databases
     const pushToDatabase = () => {
         console.log("Pushed");
         return;
     }
-    
+
     let navigate = useNavigate();
 
-    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
-        const backPath : string = "/Donor/Donate/Location";
-        const nextPath : string = "/Donor/Donate/Review";
+    const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
+        const backPath: string = "/Donor/Donate/Location";
+        const nextPath: string = "/Donor/Donate/Review";
 
-        if(e.currentTarget.value === "backButton"){
+        if (e.currentTarget.value === "backButton") {
             navigate(backPath);
         }
-        else if(e.currentTarget.value === "nextButton"){
+        else if (e.currentTarget.value === "nextButton") {
             pushToDatabase();
             navigate(nextPath);
         }
+    }
+
+    const addEvent = (start: string, end: string) => {
+        var date: string = selectedDate.toISOString().split("T")[0];
+        var startTime: string = date + "T" + start.split("T")[1];
+        var endTime: string = date + "T" + end.split("T")[1];
+
+        setEvents([...events, {
+            start: startTime,
+            end: endTime
+        }])
     }
 
     return (
@@ -149,20 +157,20 @@ const DonatorSchedulePickUp = (): JSX.Element => {
                     <h1 id="donatorPickupHeader">{header}</h1>
                     <p id="donatorPickupDesc">Please select multiple dates and times you are available, and our staff will choose from your availability.</p>
                     <div id="donatorPickupEvents">
-                        {availEvents.map(availEvent => {
+                        {times.map(availEvent => {
                             const startTime = moment.utc(availEvent.start).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
                             const endTime = moment.utc(availEvent.end).local().format("hh:mm A").replace(/^(?:00:)?0?/, '');
                             return (
-                                <div className="donatorPickUpTime">
-                                    <Checkbox
-                                        icon={<RadioButtonUncheckedIcon />}
-                                        checkedIcon={<CheckCircleIcon />}
-                                    />
-                                    {`${startTime} to ${endTime}`}
-                                </div>
-                            )
-                        })}
-                    </div>
+                                    <div className="donatorPickUpTime">
+                                        <Checkbox
+                                            icon={<RadioButtonUncheckedIcon />}
+                                            checkedIcon={<CheckCircleIcon />}
+                                            onClick={() => addEvent(availEvent.start, availEvent.end)}
+                                        />
+                                        {`${startTime} to ${endTime}`}
+                                    </div>
+                            )})}
+                        </div>
                 </div>
             </div>
             <div id="donPickupButtons">
