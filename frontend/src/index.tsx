@@ -21,11 +21,15 @@ import DonatorItemInfo from "./components/donor/donation/Donation";
 import DonatorLocation from "./components/donor/DonorLocationPage/DonorLocationPage";
 import DonatorScheduleDropoffPickup from "./components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage";
 import DonatorReviewSubmit from "./components/donor/donation/SubmitInfo";
-import DonatorNextSteps from "./components/donor/DonorNextStepsPage/DonorNextStepsPage";
+import DonatorNextSteps from "./components/donor/donation/DonorNextStepsPage/DonorNextStepsPage";
 // Donor "Profile" Imports
 import DonatorProfile from "./components/donor/DonorProfile/DonorProfile";
 import DonatorProfileEdit from "./components/donor/DonorProfileEditPage/DonorProfileEditPage";
 import VerifyAccountPage from "components/authentication/VerifyAccountPage/VerifyAccountPage";
+
+//------------ Admin Imports-----------//
+import ActiveDonations from "./components/admin/ActiveDonationsPage/ActiveDonationsPage";
+import DonationInfo from "./components/admin/DonationInfoPage/DonationInfoPage";
 
 
 const rootElement = document.getElementById("root");
@@ -41,6 +45,16 @@ render(
       <Route path="/NewPassword" element={<NewPasswordPage />} />
       <Route path="/VerifyAccountPage" element={<VerifyAccountPage />} />
 
+      {/* Admin Specific Routes */}
+      <Route path="/Admin">
+
+        {/* Admin Home */}
+        <Route path="" element={<ActiveDonations />} />
+
+        {/* Admin Other Routes */}
+        <Route path="ActiveDonations" element={<ActiveDonations />} />
+        <Route path="DonationInfo" element={<DonationInfo />} />
+      </Route>
 
       {/* Donor Specific Routes */}
       <Route path="/Donor">
