@@ -277,6 +277,7 @@ const CreateAccountPage = (): JSX.Element => {
                         <p className="formLabel">Email</p>
                         <input className="inputBox"
                             type="text"
+                            autoComplete="email"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                         />
                     </div>
@@ -285,6 +286,7 @@ const CreateAccountPage = (): JSX.Element => {
                         <p className="formLabel">Phone Number</p>
                         <input className="inputBox"
                             type="text"
+                            autoComplete="phone"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
                         />
                     </div>

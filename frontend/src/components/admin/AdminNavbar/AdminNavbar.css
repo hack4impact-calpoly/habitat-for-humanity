@@ -1,0 +1,135 @@
+@import "config/colors.css";
+
+
+#adminNavbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1.2% 4%;
+    background: var(--white-gray);
+    border: 2px solid var(--gray-light);
+    box-sizing: border-box;
+    box-shadow: 0px 4px 25px rgba(49, 77, 137, 0.05);
+    border-top: none;
+    height: 110px;
+}
+
+#adminNavbarLogo {
+    height: 100% ;
+}
+
+#adminNavbarHeaders {
+    display: flex;
+    flex-direction: row;
+    color: var(--primary);
+    font-weight: 500;
+    line-height: 0;
+}
+
+.adminNavbarHeader {
+    padding: 25px 20px 0 20px;
+    margin-bottom: 0;
+}
+.adminNavbarHeader:hover {
+    cursor: pointer;
+}
+
+.adminNavbarLink {
+    text-decoration: none;
+    color: inherit;
+    margin: 38px 0px 0px 35px;
+    font-size: 17px;
+}
+
+#adminNavbarUnderline {
+    margin-top: 0;
+    padding-bottom: 5px;
+    border-bottom: 3px solid var(--primary);
+}
+
+@media only screen and (max-width: 1483px) {
+    .adminNavbarHeader {
+        padding: 35px 10px 0 10px;
+    }
+}
+
+@media only screen and (max-width: 688px) {
+    #adminNavbar {
+        padding: 3% 4%;
+    }
+
+    .adminNavbarHeader {
+        padding: 25px 10px 0 10px;
+    }
+}
+
+@media only screen and (max-width: 566px) {
+    #adminNavbar {
+        padding: 4% 4%;
+        height: 95px;
+    }
+
+    .adminNavbarHeader {
+        padding: 15px 7px 0 7px;
+    }
+}
+
+@media only screen and (max-width: 505px) {
+    #adminNavbar {
+        height: 85px;
+    }
+
+    #adminNavbarLogo {
+        height: 100% ;
+    }
+
+    .adminNavbarHeader {
+        padding: 13px 7px 0 7px;
+        font-size: 13px;
+    }
+}
+
+@media only screen and (max-width: 419px) {
+    #adminNavbar {
+        height: 75px;
+    }
+
+    .adminNavbarHeader {
+        padding: 13px 5px 0 5px;
+        font-size: 12px;
+    }
+}
+
+@media only screen and (max-width: 374px) {
+    #adminNavbar {
+        height: 65px;
+    }
+
+    .adminNavbarHeader {
+        padding: 10px 5px 0 5px;
+        font-size: 12px;
+    }
+}
+
+@media only screen and (max-width: 345px) {
+    #adminNavbar {
+        height: 60px;
+    }
+
+    .adminNavbarHeader {
+        padding: 9px 5px 0 5px;
+        font-size: 10px;
+    }
+}
+
+@media only screen and (max-width: 305px) {
+    #adminNavbar {
+        height: 50px;
+    }
+
+    .adminNavbarHeader {
+        padding: 5px 5px 0 5px;
+        font-size: 9px;
+    }
+}
+
