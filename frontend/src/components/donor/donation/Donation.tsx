@@ -87,7 +87,6 @@ const Donation = (): JSX.Element => {
             <ItemHeader>Item Information</ItemHeader>
             <InputSectionContainer>
                <InputContainer>
-               
                   <SubHeader>Item Description/Name</SubHeader>
                <StyledInput
                   type="text"

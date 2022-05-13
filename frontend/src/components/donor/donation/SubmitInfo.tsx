@@ -23,6 +23,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     component,
   }) => 
   {
+    name = 'Sofa';
+    dimensions = '6x2x2';
+    location = '1 Grand Ave, San Luis Obispo';
     const [dropOffOption, setDropOffOption] = useState(false);
     if(dropOff){
         setDropOffOption(dropOff);
