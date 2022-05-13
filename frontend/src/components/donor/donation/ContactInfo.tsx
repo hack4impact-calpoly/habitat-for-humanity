@@ -13,6 +13,8 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     phone,
   }) => 
   {
+    name = 'Josh Wong';
+    email = 'joshwong74@gmail.com'
     return (
         <div>
             <div id="SubmitInfoPage">

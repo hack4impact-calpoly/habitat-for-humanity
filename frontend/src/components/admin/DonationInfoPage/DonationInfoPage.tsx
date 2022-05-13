@@ -9,6 +9,8 @@ import ContactInfo from "../../donor/donation/ContactInfo";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import ReceiptPage from './ReceiptPage/ReceiptPage';
+import temp from './temp.png';
+
 require("./DonationInfoPage.css");
 
 function a11yProps(index: number) {
@@ -105,7 +107,10 @@ const DonationInfoPage = (): JSX.Element => {
                         </div>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        Scheduling Page goes here
+                        {/* Scheduling Page goes here
+                          Replace image with actual scheduling component
+                        */}
+                        <img src={temp} alt='Schedule' style={{ paddingTop: '4rem' }}/>
                     </TabPanel>
                     <TabPanel value={value} index={2}>
                         <ReceiptPage/>

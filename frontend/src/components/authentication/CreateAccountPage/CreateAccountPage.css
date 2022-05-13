@@ -2,8 +2,7 @@
 @import "config/colors.css";
 
 #createAccountBox {
-    width: 577px;
-    height: 650px;
+    height: auto !important;
     margin: auto;
 
     box-sizing: border-box;
@@ -63,14 +62,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: none;
 }
 
 #firstNameBox {
     width: 197px;
+    padding-right: .5rem;
 }
 #lastNameBox {
     width: 197px;
+    padding-left: .5rem;
 }
 
 .labelInputBox{
