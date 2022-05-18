@@ -10,11 +10,11 @@ import React from 'react'
 //import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 import LoginPage from "./components/authentication/LoginPage/LoginPage";
-import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
+// import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
 // import SuccessPage from './components/authentication/SuccessPage/SuccessPage';
 
 /* Admin Screens*/
-import DonationInfoPage from './components/admin/DonationInfoPage/DonationInfoPage';
+// import DonationInfoPage from './components/admin/DonationInfoPage/DonationInfoPage';
 
 /* Donator Screens */
 // import DonatorNavbar from './components/donator/DonatorNavbar/DonatorNavbar';
@@ -25,7 +25,7 @@ import DonationInfoPage from './components/admin/DonationInfoPage/DonationInfoPa
 //import DonatorNextStepsPage from './components/donator/DonatorNextStepsPage/DonatorNextStepsPage';
 //import SubmitDropOffPage from './components/donor/donation/SubmitDropOffPage/SubmitDropOffPage';
 // import SubmitPickUpPage from './components/donor/donation/SubmitPickUpPage/SubmitPickUpPage';
-import SubmitPickUpMultiplePhotoPage from './components/donor/donation/SubmitPickUpMultiplePhotoPage/SubmitPickUpMultiplePhotoPage';
+// import SubmitPickUpMultiplePhotoPage from './components/donor/donation/SubmitPickUpMultiplePhotoPage/SubmitPickUpMultiplePhotoPage';
 // import DonatorLocationPage from './components/donator/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/donator/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/donator/Donation/Donation';
@@ -37,7 +37,7 @@ import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from './aws-exports';
-import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
+// import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
 
 Amplify.configure(awsExports);
 
