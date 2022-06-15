@@ -2,6 +2,11 @@
 @import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
 
 
+h2 {
+    color: var(--orange);
+}
+
+
 #SubmitPickUpPage {
     padding: 0 18%;
     padding-bottom: 70px;

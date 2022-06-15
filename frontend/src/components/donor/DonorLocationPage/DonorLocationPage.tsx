@@ -1,6 +1,7 @@
 import React, { useState }from "react";
 import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+import ProgressBar from 'components/donor/donation/ProgressBar';
 require("./DonorLocationPage.css");
 
 const DonatorLocationPage = (): JSX.Element => {
@@ -11,7 +12,7 @@ const DonatorLocationPage = (): JSX.Element => {
     let navigate = useNavigate();
 
     const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
-        const backPath : string = "/Donor"; //Change once page is added
+        const backPath : string = "/Donor/Donate/ItemInfo";
         const nextPath : string = "/Donor/Donate/ScheduleDropoffPickup";
         
         if(e.currentTarget.value === "backButton"){
@@ -39,9 +40,10 @@ const DonatorLocationPage = (): JSX.Element => {
     }
 
     return (
-        <body>
+        <div>
             <DonatorNavbar />
             <div id="donLocPage">
+                <ProgressBar activeStep={2}/>
                 <h1 id="donLocHeader">Location</h1>
                 <div id="donLocTopInputs">
                     <div>
@@ -62,7 +64,7 @@ const DonatorLocationPage = (): JSX.Element => {
                     <button value="nextButton" className="nextButton"onClick={buttonNavigation}>Next</button>
                 </div>
             </div>
-        </body>
+        </div>
     )
 }
 

@@ -72,7 +72,7 @@ const Donation = (): JSX.Element => {
    let navigate = useNavigate();
 
    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
-      const nextPath : string = "/Donor/Donate/ItemInfo"
+      const nextPath : string = "/Donor/Donate/Location"
 
       if(e.currentTarget.value === "nextButton"){
          navigate(nextPath);
@@ -87,7 +87,6 @@ const Donation = (): JSX.Element => {
             <ItemHeader>Item Information</ItemHeader>
             <InputSectionContainer>
                <InputContainer>
-               
                   <SubHeader>Item Description/Name</SubHeader>
                <StyledInput
                   type="text"
@@ -115,7 +114,9 @@ const Donation = (): JSX.Element => {
                <SubHeader>Item Photos</SubHeader>
                <Dropzone/>
             </UploadContainer>
-            <StyledButton value="nextButton" onClick={buttonNavigation}>Next</StyledButton>
+            <div id="donPickupButtons">
+               <button value="nextButton" className="donPickupButton nextButton" onClick={buttonNavigation}>Next</button>
+            </div>
          </ContentContainer>
       </>
    );

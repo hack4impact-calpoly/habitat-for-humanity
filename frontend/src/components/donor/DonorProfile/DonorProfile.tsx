@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import DonatorNavbar from '../DonorNavbar/DonorNavbar';
 import pencil from "images/pencil.png";
+import { Auth } from "aws-amplify";
+import { getUserByID } from 'api/user';
+
+
+
 require("./DonorProfile.css");
 
 const DonatorProfilePage = (): JSX.Element => {
+    const [user, setUser] = useState<any>([]);
+
+    useEffect(() => {
+        async function getUser() {
+            let userAuth = await Auth.currentUserInfo();
+            console.log(userAuth);
+            console.log('next');
+            console.log(await Auth.currentAuthenticatedUser())
+            let user = await getUserByID(userAuth.username);
+            console.log(user);
+            setUser(user);
+        }
+        getUser();
+    }, [])
+    
     const donatorProfileEditPath = "/Donor/Profile/Edit";
 
     return (
-        <body>
+        <div>
             <DonatorNavbar />
             <div id="donatorProfileBox">
                 <div id="headerBox">
@@ -27,7 +47,7 @@ const DonatorProfilePage = (): JSX.Element => {
                     </div>
                     <div className="infoBox">
                         {/* Need to implement displaying user data from backend */}
-                        <p id="name">John Doe</p>
+                        <p id="name">{user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : ''}</p>
                     </div>
                 </div>
                 <div id="emailBox">
@@ -36,7 +56,7 @@ const DonatorProfilePage = (): JSX.Element => {
                     </div>
                     <div className="infoBox">
                         {/* Need to implement displaying user data from backend */}
-                        <p id="email">johndoe@gmail.com</p>
+                        <p id="email">{user.email}</p>
                     </div>
                 </div>
                 <div id="phoneBox">
@@ -45,12 +65,12 @@ const DonatorProfilePage = (): JSX.Element => {
                     </div>
                     <div className="infoBox">
                         {/* Need to implement displaying user data from backend */}
-                        <p id="phone">(123)-456-789</p>
+                        <p id="phone">{user.phone}</p>
                     </div>
                 </div>
 
             </div>
-        </body >
+        </div>
     )
 }
 

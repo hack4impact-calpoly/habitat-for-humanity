@@ -25,14 +25,14 @@
     display: flex;
     align-items: center;
     margin: 0px 0px 0px 0px;
+    border: none;
 }
 
 #firstNameBox {
-    width: 200px;
-    margin: 0px 30px 0px 0px;
+    width: auto !important;
 }
 #lastNameBox {
-    width: 200px;
+    width: auto !important;
     margin: 0x 0px 0px 30px;
 }
 
@@ -54,11 +54,11 @@
     margin: 18px 0px 5px 0px;
 }
 
-.inputBox {
+.labelInputBox .inputBox {
     border: 1px solid var(--input-box);
     font-family: Rubik;
     box-sizing: border-box;
-    height: 40px;
+    height: 48px;
     width: 100%;
     padding: 9px;
     font-size: 14px;
@@ -67,7 +67,9 @@
 
 #buttonBox {
     margin: 33px 0px 0px 0px;
-    height: 40px
+    height: 40px;
+    display: flex;
+    flex-direction: row;
 }
 
 .buttons{
@@ -82,11 +84,16 @@
 }
 
 #backButton {
-    margin-right: 20px;
     background: var(--white);
     color: var(--tertiary);
     border: 2px solid var(--tertiary);
 }
+
+#spacing {
+    flex-grow: 1;
+}
+
+
 
 #saveChangesButton {
     background: var(--tertiary);
@@ -110,11 +117,10 @@
     }
     
     #firstNameBox {
-        width: 170px;
-        margin: 0px 25px 0px 0px;
+        width: auto !important;
     }
     #lastNameBox {
-        width: 170px;
+        width: auto !important;
         margin: 0x 0px 0px 25px;
     }
     
@@ -125,24 +131,15 @@
         margin: 15px 0px 4px 0px;
     }
     
-    .inputBox {
-        height: 34px;
-        width: 100%;
-        padding: 7px;
-        font-size: 12px;
-    }
-    
     #buttonBox {
         margin: 38px 0px 0px 0px;
-        height: 34px
+        height: 34px;
+        display: flex;
+        flex-direction: row;
     }
     
     .buttons{
         height: 100%;
         width: 127px;
-    }
-    
-    #backButton {
-        margin-right: 17px;
     }
 }

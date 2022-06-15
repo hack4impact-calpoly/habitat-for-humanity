@@ -6,6 +6,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
+import AdminNavbar from "../AdminNavbar/AdminNavbar";
+
 require("./ActiveDonationsPage.css");
 
 const header = ["Donor", "Type", "Date/Time Received", "Date/Time Approved", "Status"];
@@ -98,16 +100,17 @@ const ActiveDonationPage = (): JSX.Element => {
     };
 
     return (
-        <>
+        <div>
+            <AdminNavbar />
             <div id="activeDonPage">
                 <h1 id="activeDonHeader">Active Donations</h1>
                 <TableContainer>
                     <Table>
                         <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableRow>
-                                {header.map(h => {
+                                {header.map((h, index : number) => {
                                     return (
-                                        <TableCell>
+                                        <TableCell key={index}>
                                             <p className="tableCell">{h}</p>
                                         </TableCell>
                                     )
@@ -115,10 +118,10 @@ const ActiveDonationPage = (): JSX.Element => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {dummyData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(d => {
+                            {dummyData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((d, index) => {
                                 return (
                                     // TODO: wrap parent link to new page
-                                    <TableRow>
+                                    <TableRow key={index}>
                                         <TableCell component="th" scope="row">{d.Donor}</TableCell>
                                         <TableCell>{d.Type}</TableCell>
                                         <TableCell>{d.DateRecieved}</TableCell>
@@ -142,7 +145,7 @@ const ActiveDonationPage = (): JSX.Element => {
                     />
                 </TableContainer>
             </div>
-        </>
+        </div>
     )
 }
 
