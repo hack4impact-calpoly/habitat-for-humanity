@@ -129,10 +129,10 @@ const CreateAccountPage = (): JSX.Element => {
         */
         let currentErrors = {};
         currentErrors = validateUserType() ? {...currentErrors, ...validateUserType()} : currentErrors;
-        currentErrors = validateFirstName() ? {...currentErrors, ...validateFirstName()} : currentErrors;
-        currentErrors = validateLastName() ? {...currentErrors, ...validateLastName()} : currentErrors;
+        currentErrors = validateName() ? {...currentErrors, ...validateName()} : currentErrors;
         currentErrors = validateEmail() ? {...currentErrors, ...validateEmail()} : currentErrors;
         currentErrors = validatePhoneNumber() ? {...currentErrors, ...validatePhoneNumber()} : currentErrors;
+        currentErrors = processPhoneNumber() ? {...currentErrors, ...processPhoneNumber()} : currentErrors;
         currentErrors = validatePassword() ? {...currentErrors, ...validatePassword()} : currentErrors;
         setErrorMessages({...errorMessagesInitial, ...currentErrors});
         return Object.keys(currentErrors).length === 0;
@@ -149,33 +149,34 @@ const CreateAccountPage = (): JSX.Element => {
         return null;
     }
 
-    const validateFirstName = (): null | Object => {
+    const validateName = (): null | Object => {
         /*
-        Desc: Validates firstName
+        Desc: Validates firstName and lastName
         Return: boolean (true if valid, false if not)
         */
         //setErrorMessages({...errorMessagesInitial});
+        
         if (firstName === "" && lastName === "") {
             return{name: "Please enter your full name"};
         } else if (firstName === "") {
             return{name: "Please enter your first name"};
-        }
-        return{name: ""};
-    }
-    const validateLastName = (): null | Object => {
-        /*
-        Desc: Validates lastName
-        Return: boolean (true if valid, false if not)
-        */
-        //setErrorMessages({...errorMessagesInitial});
-        if (firstName === "" && lastName === "") {
-            return{name: "Please enter your full name"};
         } else if (lastName === "") {
             return{name: "Please enter your last name"};
         }
-        return{name: ""};
+        return null;
     }
 
+    const validatePhoneNumber = (): null | Object => {
+        /*
+        Desc: Validates phone number
+        Return: boolean (true if valid, false if not)
+        */
+        if (phoneNumber === "") {
+            setErrorMessages({...errorMessages, phoneNumber: "Please enter a phone number"});
+            return false;
+        }
+        return true;
+    }
 
     const validateEmail = (): null | Object => {
         /*
@@ -184,13 +185,14 @@ const CreateAccountPage = (): JSX.Element => {
         */
         if (email === "") {
             return {email: "Please enter your email"};
+
         }
         else if (!email.includes("@")) {
             return {email: "Please enter a valid email address"};
         }
         //else if (check if email already exists)
         //alert("Account with this email already exists") 
-        return{email: ""};
+        return null;
     }
 
     const validatePassword = (): null | Object => {
@@ -205,10 +207,10 @@ const CreateAccountPage = (): JSX.Element => {
         else if (password.value.length < MIN_PASSWORD_LENGTH) {
             return {password:  `Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`};
         }
-        return{password: ""};
+        return null;
     }
 
-    function validatePhoneNumber(): null | Object {
+    function processPhoneNumber(): null | Object {
         /*
         Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
         Return: boolean (true if number successfuly processed, false if not)
@@ -226,7 +228,7 @@ const CreateAccountPage = (): JSX.Element => {
             console.error(error);
             return {phoneNumber: "Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX"};
         }
-        return{phoneNumber: ""};
+        return false;
     }
 
     function checkError(type: string) {
@@ -270,20 +272,14 @@ const CreateAccountPage = (): JSX.Element => {
                             <p className="formLabel">First Name</p>
                             <input className="inputBox"
                                 type="text"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    setFirstName(e.target.value);
-                                    setErrorMessages({...errorMessages, ...validateFirstName()});
-                                }}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
                             />
                         </div>
                         <div className="labelInputBox" id="lastNameBox">
                             <p className="formLabel">Last Name</p>
                             <input className="inputBox"
                                 type="text"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    setLastName(e.target.value);
-                                    setErrorMessages({...errorMessages, ...validateLastName()});
-                                }}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
                             />
                         </div>
                     </div>
@@ -294,10 +290,7 @@ const CreateAccountPage = (): JSX.Element => {
                         <input className="inputBox"
                             type="text"
                             autoComplete="email"
-                            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                setEmail(e.target.value);
-                                setErrorMessages({...errorMessages, ...validateEmail()});
-                            }}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                         />
                         <div className="inputError">{errorMessages.email}</div>
                     </div>
@@ -307,10 +300,7 @@ const CreateAccountPage = (): JSX.Element => {
                         <input className="inputBox"
                             type="text"
                             autoComplete="phone"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                setPhoneNumber(e.target.value);
-                                setErrorMessages({...errorMessages, ...validatePhoneNumber()});
-                            }}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
                         />
                         <div className="inputError">{errorMessages.phoneNumber}</div>
                     </div>
@@ -322,10 +312,7 @@ const CreateAccountPage = (): JSX.Element => {
                             value={password.value}
                             type={password.showPassword ? "text" : "password"}
                             disableUnderline={true}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                setPassword({ ...password, "value": e.target.value });
-                                setErrorMessages({...errorMessages, ...validatePassword()});
-                            }}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword({ ...password, "value": e.target.value })}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
