@@ -102,6 +102,11 @@
     font-weight: 500;
 }
 
+.inputError {
+    text-align: left;
+    color: var(--red);
+}
+
 #signUpButton {
     background: var(--primary);
     border: none;
