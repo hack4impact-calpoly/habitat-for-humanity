@@ -32,6 +32,11 @@
     padding: 2%;
 }
 
+.inputError {
+    text-align: left;
+    color: var(--red);
+}
+
 #passwordBox {
     font-family: inherit;
 }
