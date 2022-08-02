@@ -28,14 +28,13 @@ const CreateAccountPage = (): JSX.Element => {
         showPassword: false
     });
     const [id, setID] = useState<string>(uuidv4());
-    const errorMessagesInitial = {
-        userType: "",
-        name: "",
-        email: "",
-        phoneNumber: "",
-        password: ""
-    };
-    const [errorMessages, setErrorMessages] = useState(errorMessagesInitial);
+
+    //error messages
+    const [userTypeError, setUserTypeError] = useState<string>("");
+    const [nameError, setNameError] = useState<string>("");
+    const [emailError, setEmailError] = useState<string>("");
+    const [phoneNumberError, setPhoneNumberError] = useState<string>("");
+    const [passwordError, setPasswordError] = useState<string>("");
     let processedPhoneNumber: number; //Phone number converted from string
 
     let navigate = useNavigate();
@@ -127,90 +126,124 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Validates all the form fields
         Return: boolean (true if all are valid, false if one is not)
         */
-        let currentErrors = {};
-        currentErrors = validateUserType() ? {...currentErrors, ...validateUserType()} : currentErrors;
-        currentErrors = validateName() ? {...currentErrors, ...validateName()} : currentErrors;
-        currentErrors = validateEmail() ? {...currentErrors, ...validateEmail()} : currentErrors;
-        currentErrors = validatePhoneNumber() ? {...currentErrors, ...validatePhoneNumber()} : currentErrors;
-        currentErrors = processPhoneNumber() ? {...currentErrors, ...processPhoneNumber()} : currentErrors;
-        currentErrors = validatePassword() ? {...currentErrors, ...validatePassword()} : currentErrors;
-        setErrorMessages({...errorMessagesInitial, ...currentErrors});
-        return Object.keys(currentErrors).length === 0;
+        let valid: boolean = validateUserType(userType);
+        valid = validateName(firstName, lastName) && valid;
+        valid = validateEmail(email) && valid;
+        valid = validatePhoneNumber(phoneNumber) && valid;
+        valid = validatePassword(password) && valid;
+        return valid;
     }
 
-    const validateUserType = (): null | Object => {
+    const validateUserType = (userType: string): boolean => {
         /*
         Desc: Validates userTypes (donor, volunteer, administrator)
         Return: boolean (true if valid, false if not)
         */
         if (userType === "") {
-            return {userType: "Please select an account type"};
+            setUserTypeError("Please select an account type");
+            return false;
         }
-        return null;
+        setUserTypeError("");
+        return true;
     }
 
-    const validateName = (): null | Object => {
+    const validateName = (firstName: string, lastName: string): boolean => {
         /*
         Desc: Validates firstName and lastName
         Return: boolean (true if valid, false if not)
         */
         //setErrorMessages({...errorMessagesInitial});
-        
-        if (firstName === "" && lastName === "") {
-            return{name: "Please enter your full name"};
-        } else if (firstName === "") {
-            return{name: "Please enter your first name"};
-        } else if (lastName === "") {
-            return{name: "Please enter your last name"};
+        debugger;
+        if (validateFirstName(firstName) && validateLastName(lastName)) {
+            return true;
+        } else if (!validateFirstName(firstName) && !validateLastName(lastName)) {
+            setNameError("Please enter your full name");
         }
-        return null;
+        return false;
+    }
+    const validateFirstName = (firstName: string): boolean => {
+        /*
+        Desc: Validates firstName and lastName
+        Return: boolean (true if valid, false if not)
+        */
+        //setErrorMessages({...errorMessagesInitial});
+        if (firstName === "") {
+            setNameError("Please enter your first name");
+            return false;
+        } 
+        setNameError("");
+        return true;
     }
 
-    const validatePhoneNumber = (): null | Object => {
+    const validateLastName = (lastName: string): boolean => {
+        /*
+        Desc: Validates firstName and lastName
+        Return: boolean (true if valid, false if not)
+        */
+        //setErrorMessages({...errorMessagesInitial});
+        if (lastName === "") {
+            setNameError("Please enter your last name");
+            return false;
+        } 
+        setNameError("");
+        return true;
+    }
+
+    const validatePhoneNumber = (phoneNumber: string): boolean => {
         /*
         Desc: Validates phone number
         Return: boolean (true if valid, false if not)
         */
+        debugger;
         if (phoneNumber === "") {
-            setErrorMessages({...errorMessages, phoneNumber: "Please enter a phone number"});
+            setPhoneNumberError("Please enter a phone number");
             return false;
         }
+        if(!processPhoneNumber(phoneNumber)) {
+            return false;
+        }
+        setPhoneNumberError("");
         return true;
     }
 
-    const validateEmail = (): null | Object => {
+    const validateEmail = (email: string): boolean => {
         /*
         Desc: Validates email
         Return: boolean (true if valid, false if not)
         */
         if (email === "") {
-            return {email: "Please enter your email"};
-
+            setEmailError("Please enter your email");
+            return false;
         }
         else if (!email.includes("@")) {
-            return {email: "Please enter a valid email address"};
+            setEmailError("Please enter a valid email address");
+            return false;
         }
         //else if (check if email already exists)
         //alert("Account with this email already exists") 
-        return null;
+        setEmailError("");
+        return true;
     }
 
-    const validatePassword = (): null | Object => {
+    const validatePassword = (password: { value: string; }): boolean => {
         /*
         Desc: Validates password
         Return: boolean (true if valid, false if not)
         */
         const MIN_PASSWORD_LENGTH = 6;
         if (password.value === "") {
-            return {password: "Please enter a password"};
+            setPasswordError("Please enter a password");
+            return false;
         }
         else if (password.value.length < MIN_PASSWORD_LENGTH) {
-            return {password:  `Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`};
+            setPasswordError(`Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`);
+            return false;
         }
-        return null;
+        setPasswordError("");
+        return true;
     }
 
-    function processPhoneNumber(): null | Object {
+    function processPhoneNumber(phoneNumber: string): boolean {
         /*
         Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
         Return: boolean (true if number successfuly processed, false if not)
@@ -218,17 +251,18 @@ const CreateAccountPage = (): JSX.Element => {
         try {
             const processedString = phoneNumber.replace(/[^0-9]/g, "");
             if (processedString === "") {
-                return { phoneNumber: "Please enter your phone number in the form XXX-XXX-XXXX"};
+                setPhoneNumberError("Please enter your phone number in the form XXX-XXX-XXXX");
+                return false;
             }
             // processedPhoneNumber = parseInt(processedString);
             setPhoneNumber(processedString);
-
         }
         catch (error) {
             console.error(error);
-            return {phoneNumber: "Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX"};
+            setPhoneNumberError("Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX");
+            return false;
         }
-        return false;
+        return true;
     }
 
     function checkError(type: string) {
@@ -245,54 +279,72 @@ const CreateAccountPage = (): JSX.Element => {
                     {/*Div for the user type section*/}
                     <div id="accountTypeBox">
                         <p id="userTypeLabel"> I am a </p>
-                        <div className="accountLabel">
+                        <div className="accountLabel" >
                             <input type="radio"
                                 className="userTypeButton"
                                 value="donor" //Specifies the value for the useState
                                 name="userType" //connects all options under group "userType" -> only one can be selected at a time
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)} />donor
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setUserType(e.target.value);
+                                    validateUserType(e.target.value);
+                                }} />donor
 
                             <input type="radio"
                                 className="userTypeButton"
                                 value="volunteer"
                                 name="userType"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)} />volunteer
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setUserType(e.target.value);
+                                    validateUserType(e.target.value);
+                                }} />volunteer
 
                             <input type="radio"
                                 className="userTypeButton"
                                 value="administrator"
                                 name="userType"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)} />administrator
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setUserType(e.target.value);
+                                    validateUserType(e.target.value);
+                                }} />administrator
                         </div>
                     </div>
-                    <div className="inputError">{errorMessages.userType}</div>
+                    <div className="inputError">{userTypeError}</div>
 
                     <div id="nameBox">
                         <div className="labelInputBox" id="firstNameBox">
                             <p className="formLabel">First Name</p>
                             <input className="inputBox"
                                 type="text"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setFirstName(e.target.value);
+                                    validateFirstName(e.target.value);
+                                }}
                             />
                         </div>
                         <div className="labelInputBox" id="lastNameBox">
                             <p className="formLabel">Last Name</p>
                             <input className="inputBox"
                                 type="text"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setLastName(e.target.value);
+                                    validateLastName(e.target.value);
+                                }}
                             />
                         </div>
                     </div>
-                    <div className="inputError">{errorMessages.name}</div>
+                    <div className="inputError">{nameError}</div>
 
                     <div className="labelInputBox">
                         <p className="formLabel">Email</p>
                         <input className="inputBox"
                             type="text"
                             autoComplete="email"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                setEmail(e.target.value);
+                                validateEmail(e.target.value);
+                            }}
                         />
-                        <div className="inputError">{errorMessages.email}</div>
+                        <div className="inputError">{emailError}</div>
                     </div>
 
                     <div className="labelInputBox">
@@ -300,9 +352,12 @@ const CreateAccountPage = (): JSX.Element => {
                         <input className="inputBox"
                             type="text"
                             autoComplete="phone"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                setPhoneNumber(e.target.value);
+                                validatePhoneNumber(e.target.value);
+                            }}
                         />
-                        <div className="inputError">{errorMessages.phoneNumber}</div>
+                        <div className="inputError">{phoneNumberError}</div>
                     </div>
 
                     <div className="labelInputBox">
@@ -312,7 +367,10 @@ const CreateAccountPage = (): JSX.Element => {
                             value={password.value}
                             type={password.showPassword ? "text" : "password"}
                             disableUnderline={true}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword({ ...password, "value": e.target.value })}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                setPassword({ ...password, "value": e.target.value });
+                                validatePassword({ ...password, "value": e.target.value });
+                            }}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -324,7 +382,7 @@ const CreateAccountPage = (): JSX.Element => {
                                 </InputAdornment>
                             }
                         />
-                        <div className="inputError">{errorMessages.password}</div>
+                        <div className="inputError">{passwordError}</div>
                     </div>
 
                 </form>
