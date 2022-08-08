@@ -85,10 +85,12 @@ const CreateAccountPage = (): JSX.Element => {
         }).catch(
             error => {
                 const code = error.code;
+                debugger;
                 console.log(error);
+                setPasswordError(error.message);
                 switch (code) {
                     case 'UsernameExistsException':
-                        alert("Account already exists");
+                        //alert("Account already exists");
                         return false;
                 }
             }
