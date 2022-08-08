@@ -153,7 +153,6 @@ const CreateAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         //setErrorMessages({...errorMessagesInitial});
-        debugger;
         if (validateFirstName(firstName) && validateLastName(lastName)) {
             return true;
         } else if (!validateFirstName(firstName) && !validateLastName(lastName)) {
@@ -194,7 +193,6 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Validates phone number
         Return: boolean (true if valid, false if not)
         */
-        debugger;
         if (phoneNumber === "") {
             setPhoneNumberError("Please enter a phone number");
             return false;
