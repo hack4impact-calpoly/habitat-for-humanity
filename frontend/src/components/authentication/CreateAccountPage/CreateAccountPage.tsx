@@ -249,7 +249,7 @@ const CreateAccountPage = (): JSX.Element => {
         */
         try {
             const processedString = phoneNumber.replace(/[^0-9]/g, "");
-            if (!isMobilePhone(processedString)) {
+            if (!isMobilePhone(processedString, "en-US")) {
                 setPhoneNumberError("Please enter your phone number in the form XXX-XXX-XXXX");
                 return false;
             }
