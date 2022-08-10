@@ -168,7 +168,7 @@ const CreateAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         //setErrorMessages({...errorMessagesInitial});
-        if (firstName === "") {
+        if (firstName.match("\\s+")) {
             setNameError("Please enter your first name");
             return false;
         } 
@@ -182,7 +182,7 @@ const CreateAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         //setErrorMessages({...errorMessagesInitial});
-        if (lastName === "") {
+        if (lastName.match("\\s+")) {
             setNameError("Please enter your last name");
             return false;
         } 
