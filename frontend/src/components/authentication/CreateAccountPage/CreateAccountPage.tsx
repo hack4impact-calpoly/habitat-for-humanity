@@ -85,12 +85,9 @@ const CreateAccountPage = (): JSX.Element => {
         }).catch(
             error => {
                 const code = error.code;
-                debugger;
-                console.log(error);
                 setPasswordError(error.message);
                 switch (code) {
                     case 'UsernameExistsException':
-                        //alert("Account already exists");
                         return false;
                 }
             }
@@ -219,8 +216,6 @@ const CreateAccountPage = (): JSX.Element => {
             setEmailError("Please enter a valid email address");
             return false;
         }
-        //else if (check if email already exists)
-        //alert("Account with this email already exists") 
         setEmailError("");
         return true;
     }
