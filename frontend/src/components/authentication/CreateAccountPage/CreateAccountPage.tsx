@@ -152,11 +152,14 @@ const CreateAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         //setErrorMessages({...errorMessagesInitial});
+        debugger;
+        if (!validateFirstName(firstName) && !validateLastName(lastName)) {
+            setNameError("Please enter your full name");
+            return false;
+        }
         if (validateFirstName(firstName) && validateLastName(lastName)) {
             return true;
-        } else if (!validateFirstName(firstName) && !validateLastName(lastName)) {
-            setNameError("Please enter your full name");
-        }
+        } 
         return false;
     }
     const validateFirstName = (firstName: string): boolean => {
