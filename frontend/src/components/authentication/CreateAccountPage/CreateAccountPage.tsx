@@ -7,6 +7,8 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
+import isEmail from 'validator/lib/isEmail';
+import isMobilePhone from 'validator/lib/isMobilePhone';
 import { v4 as uuidv4 } from 'uuid';
 /* Backend */
 import { addUser, User } from 'api/user';
@@ -152,7 +154,6 @@ const CreateAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         //setErrorMessages({...errorMessagesInitial});
-        debugger;
         if (!validateFirstName(firstName) && !validateLastName(lastName)) {
             setNameError("Please enter your full name");
             return false;
@@ -215,7 +216,7 @@ const CreateAccountPage = (): JSX.Element => {
             setEmailError("Please enter your email");
             return false;
         }
-        else if (!email.includes("@")) {
+        else if (!isEmail(email)) {
             setEmailError("Please enter a valid email address");
             return false;
         }
@@ -228,7 +229,7 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Validates password
         Return: boolean (true if valid, false if not)
         */
-        const MIN_PASSWORD_LENGTH = 6;
+        const MIN_PASSWORD_LENGTH = 8;
         if (password.value === "") {
             setPasswordError("Please enter a password");
             return false;
@@ -248,7 +249,7 @@ const CreateAccountPage = (): JSX.Element => {
         */
         try {
             const processedString = phoneNumber.replace(/[^0-9]/g, "");
-            if (processedString === "") {
+            if (!isMobilePhone(processedString)) {
                 setPhoneNumberError("Please enter your phone number in the form XXX-XXX-XXXX");
                 return false;
             }
