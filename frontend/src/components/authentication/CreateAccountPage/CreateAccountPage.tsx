@@ -88,10 +88,7 @@ const CreateAccountPage = (): JSX.Element => {
             error => {
                 const code = error.code;
                 setPasswordError(error.message);
-                switch (code) {
-                    case 'UsernameExistsException':
-                        return false;
-                }
+                return false;
             }
         );
         return response;
@@ -104,9 +101,9 @@ const CreateAccountPage = (): JSX.Element => {
         */
         // let userAuth = await Auth.currentUserInfo();
         // console.log(userAuth);
-        let userAuth2 = await Auth.currentAuthenticatedUser();
-        console.log(userAuth2.username);
-        console.log(id);
+        // let userAuth2 = await Auth.currentAuthenticatedUser();
+        // console.log(userAuth2.username);
+        // console.log(id);
 
         const accountData = {
             userType: userType,
