@@ -32,26 +32,12 @@
     height: 0.9em;
 }
 
-#userTypeLabel {
-    margin: 0px 0px 0px 0px;
-    font-weight: bold;
-    font-size: 16px;
-}
-
 .accountLabel {
     color: var(--secondary);
     font-weight: bold;
     align-content: center;
 }
 
-.userTypeButton {
-    filter: grayscale();
-    margin: 2px 9px 0px 26px;
-}
-
-.userTypeButton:hover {
-    cursor: pointer;
-}
 
 #nameBox {
     display: flex;
@@ -164,25 +150,12 @@
 }
 
 @media only screen and (max-height: 800px) {
-    #createAccountBox {
-        width: 415px;
-        height: 546px;
-
-        margin: auto;
-        margin-top: 50vh;
-        transform: translateY(-50%);
-        padding: 36px 50px 49px 50px;
-    }
-
     #createAccountText {
         font-size: 25px;
         line-height: 28px;
         margin: 0px 0px 24px 0px;
     }
 
-    #accountTypeBox {
-        margin: 0px 0px 3px 0px;
-    }
 
     #userTypeLabel {
         margin: 0px 0px 0px 0px;
@@ -193,9 +166,6 @@
         font-size: 10px;
     }
 
-    .userTypeButton {
-        margin: 1px 6px 0px 18px;
-    }
 
     #firstNameBox {
         width: 138px;
@@ -241,15 +211,7 @@
 }
 
 @media only screen and (max-width: 700px) {
-    #createAccountBox {
-        width: 405px;
-        height: 546px;
 
-        margin: auto;
-        margin-top: 50vh;
-        transform: translateY(-50%);
-        padding: 36px 44px 49px 44px;
-    }
 
     #createAccountText {
         font-size: 25px;
@@ -270,9 +232,6 @@
         font-size: 10px;
     }
 
-    .userTypeButton {
-        margin: 1px 6px 0px 18px;
-    }
 
     #firstNameBox {
         width: 138px;
@@ -312,17 +271,5 @@
 
     #logInLink {
         margin: 0px 0px 0px 3px;
-    }
-}
-
-@media only screen and (max-width: 500px) {
-    #createAccountBox {
-        width: 405px;
-        height: 506px;
-
-        margin: auto;
-        margin-top: 50vh;
-        transform: translateY(-50%);
-        padding: 36px 44px 49px 44px;
     }
 }

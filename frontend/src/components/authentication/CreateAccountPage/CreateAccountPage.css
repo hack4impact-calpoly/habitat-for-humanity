@@ -179,18 +179,12 @@
         margin: 0px 0px 24px 0px;
     }
     
-    #accountTypeBox {
-        margin: 0px 0px 3px 0px;
-    }
     
     #userTypeLabel {
         margin: 0px 0px 0px 0px;
         font-size: 11px;
     }
     
-    .accountLabel {
-        font-size: 10px;
-    }
     
     .userTypeButton {
         margin: 1px 6px 0px 18px; 
@@ -209,7 +203,7 @@
     
         margin: 15px 0px 4px 0px;
     }
-    
+
     .inputBox {
         height: 30px;
         width: 100%;
@@ -236,7 +230,8 @@
     }
 }
 
-@media only screen and (max-width: 700px) {
+
+@media only screen and (min-width: 500px) {
     #createAccountBox {
         width: 405px;
         height: 546px;
@@ -255,19 +250,25 @@
     
     #accountTypeBox {
         margin: 0px 0px 3px 0px;
+        display: flex;
+        justify-content: space-between;
     }
-    
+    .accountLabel {
+        font-size: 10px;
+        display: flex;
+        justify-content: space-around;
+        width: 80%;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
     #userTypeLabel {
         margin: 0px 0px 0px 0px;
         font-size: 10px;
     }
     
-    .accountLabel {
-        font-size: 10px;
-    }
-    
     .userTypeButton {
-        margin: 1px 6px 0px 18px; 
+        margin: 0px 0px 0px 0px; 
     }
     
     #firstNameBox {
@@ -319,5 +320,13 @@
         margin-top: 50vh;
         transform: translateY(-50%);
         padding: 36px 44px 49px 44px;
+    }
+    #accountTypeBox {
+        margin: 0px 0px 0px 0px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .accountLabel {
+        align-items: center;
     }
 }
