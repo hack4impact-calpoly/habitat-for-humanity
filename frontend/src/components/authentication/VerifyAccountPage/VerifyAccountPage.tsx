@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -11,7 +11,12 @@ require("./VerifyAccountPage.css");
 
 
 const VerifyAccountPage = (): JSX.Element => {
-    const [email, setEmail] = useState<string>("");
+    interface Location {
+        state: { email: string }
+      }
+    let location = useLocation() as Location;
+
+    const [email, setEmail] = useState<string>(location.state === null ? "" : location.state.email);
     const [verificationCode, setVerificationCode] = useState<string>("");
 
     let navigate = useNavigate();
@@ -156,6 +161,7 @@ const VerifyAccountPage = (): JSX.Element => {
                         <p className="formLabel">Email</p>
                         <input className="inputBox"
                             type="text"
+                            defaultValue={email} 
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                         />
                     </div>
