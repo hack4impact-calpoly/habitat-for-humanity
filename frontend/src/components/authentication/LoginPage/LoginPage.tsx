@@ -24,6 +24,7 @@ const LoginPage = (): JSX.Element => {
 
     const forgotPasswordPath = "/ForgotPassword";
     const createAccountPath = "/CreateAccount";
+    const verifyAccountPath: string = "/VerifyAccountPage"
 
     //Function for logging into AWS account, called in login function
     let awsLogin = async (): Promise<CognitoUser | any> => {
@@ -37,6 +38,15 @@ const LoginPage = (): JSX.Element => {
                     case 'UserNotFoundException':
                         setPasswordError("User does not exist");
                         return false;
+                    case 'UserNotConfirmedException':
+                        // only checks email, i.e. wrong password w/correct (unconfirmed) email will still cause the exception
+                        awsSendNewCode();
+                        navigate(verifyAccountPath, {
+                            state: {
+                                email: email
+                            }
+                        });
+                        return false;
                     default:
                         setPasswordError(error);
                         return false;
@@ -44,6 +54,21 @@ const LoginPage = (): JSX.Element => {
             }
         );
         return response;
+    }
+
+    let awsSendNewCode = async (): Promise<void> => {
+        let response = await Auth.resendSignUp(email).catch(
+            error => {
+                const code = error.code;
+                console.log(error);
+                switch (code) {
+                    case 'LimitExceededException':
+                        alert("Too many tries, please try again later");
+                        break;
+                }
+            }
+        );
+        console.log(response);
     }
 
     const login = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
