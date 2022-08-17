@@ -87,6 +87,10 @@
     font-size: 13px;
     font-weight: 500;
 }
+#sendNewCodeLink {
+    color: var(--secondary);
+    text-decoration: underline;
+}
 
 #submitButton {
     background: var(--primary);

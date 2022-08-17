@@ -169,7 +169,7 @@ const VerifyAccountPage = (): JSX.Element => {
                     <div className="labelInputBox">
                         <div id="codeLine">
                             <p className="formLabel">Verification Code</p>
-                            <p className="formLabel clickable" onClick={sendNewCode}>Get new code</p>
+                            <p className="formLabel clickable" id="sendNewCodeLink" onClick={sendNewCode}>Get new code</p>
                         </div>
                         <input className="inputBox"
                             type="text"
