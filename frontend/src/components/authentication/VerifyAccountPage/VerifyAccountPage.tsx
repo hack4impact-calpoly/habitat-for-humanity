@@ -6,46 +6,53 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
 import { Auth } from "aws-amplify";
+import isEmail from 'validator/lib/isEmail';
 
 require("./VerifyAccountPage.css");
 
 
 const VerifyAccountPage = (): JSX.Element => {
     interface Location {
-        state: { email: string }
+        state: { email: string } // passed in from previous pages
       }
     let location = useLocation() as Location;
 
     const [email, setEmail] = useState<string>(location.state === null ? "" : location.state.email);
     const [verificationCode, setVerificationCode] = useState<string>("");
+    const [verificationError, setVerificationError] = useState<string>("");
 
     let navigate = useNavigate();
     const mainScreenPath: string = "/"; // Main screen (login)
     const successPath: string = "/CreateAccount/Success"
 
     // function for submitting new password
-    let awsConfirmSignup = async (): Promise<void> => {
+    let awsConfirmSignup = async (): Promise<boolean> => {
         let response = await Auth.confirmSignUp(email, verificationCode).catch(
             error => {
                 const code = error.code;
                 console.log(error);
+                debugger;
                 switch (code) {
                     case 'UserNotFoundException':
-                        alert('Please enter a valid email');
+                        setVerificationError('Please enter a valid email');
                         break;
                     case 'NotAuthorizedException':
-                        alert('User is already confirmed');
+                        setVerificationError('User is already confirmed');
                         break;
                     case 'CodeMismatchException':
-                        alert('Please enter a valid code');
+                        setVerificationError('Please enter a valid code');
                         break;
                     case 'InvalidParameterException':
-                        alert('User is already confirmed');
+                        setVerificationError('User is already confirmed');
+                        break;
+                    default:
+                        setVerificationError(error.message);
                         break;
                 }
+                return false;
             }
         );
-        console.log(response);
+        return true;
     }
 
     let awsSendNewCode = async (): Promise<void> => {
@@ -55,10 +62,10 @@ const VerifyAccountPage = (): JSX.Element => {
                 console.log(error);
                 switch (code) {
                     case 'AuthError':
-                        alert('Please enter a valid email');
+                        setVerificationError('Please enter a valid email');
                         break;
                     case 'LimitExceededException':
-                        alert("Too many tries, please try again later");
+                        setVerificationError("Too many tries, please try again later");
                         break;
                 }
             }
@@ -70,10 +77,10 @@ const VerifyAccountPage = (): JSX.Element => {
         awsSendNewCode();
     }
 
-    const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
-        awsConfirmSignup();
+    const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         if (e.currentTarget.value === "submitButton") {
             if (submitData()) {
+                awsConfirmSignup();
                 navigate(successPath);
             }
         }
@@ -120,11 +127,11 @@ const VerifyAccountPage = (): JSX.Element => {
 
     const validateCode = (): boolean => {
         /*
-        Desc: Validates phone number
+        Desc: Validates verification code
         Return: boolean (true if valid, false if not)
         */
         if (verificationCode === "") {
-            alert("Please add a phone number");
+            setVerificationError("Please enter a code");
             return false;
         }
         return true;
@@ -136,11 +143,11 @@ const VerifyAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         if (email === "") {
-            alert("Please add email");
+            setVerificationError("Please add email");
             return false;
         }
-        else if (!email.includes("@")) {
-            alert("Please enter a valid email address");
+        else if (!isEmail(email)) {
+            setVerificationError("Please enter a valid email address");
             return false;
         }
         //else if (check if email already exists)
@@ -175,6 +182,7 @@ const VerifyAccountPage = (): JSX.Element => {
                             type="text"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVerificationCode(e.target.value)}
                         />
+                        <div className="inputError">{verificationError}</div>
                     </div>
 
                 </form>
