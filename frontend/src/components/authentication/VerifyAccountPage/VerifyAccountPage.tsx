@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
@@ -23,6 +23,15 @@ const VerifyAccountPage = (): JSX.Element => {
     const [email, setEmail] = useState<string>(location.state === null ? "" : location.state.email);
     const [verificationCode, setVerificationCode] = useState<string>("");
     const [verificationError, setVerificationError] = useState<string>(location.state === null ? "" : location.state.verificationError);
+    
+    const [sendNewCodeText, setSendNewCodeText] = useState<string>("Get new code");
+    const [countdown, setCountdown] = useState<number>(-1);
+    const [newCodeDisabled, setNewCodeDisabled] = useState<boolean>(false);
+    useEffect(() => {
+        const timer = setTimeout(codeCountdown, 1000);
+        return () => clearTimeout(timer);
+    });
+      
 
     let navigate = useNavigate();
     const mainScreenPath: string = "/"; // Main screen (login)
@@ -43,7 +52,7 @@ const VerifyAccountPage = (): JSX.Element => {
                         setVerificationError('User is already confirmed');
                         break;
                     case 'CodeMismatchException':
-                        setVerificationError('Please enter a valid code');
+                        setVerificationError('Incorrect code. Please enter a valid code.');
                         break;
                     case 'InvalidParameterException':
                         setVerificationError('User is already confirmed');
@@ -58,7 +67,22 @@ const VerifyAccountPage = (): JSX.Element => {
         return success;
     }
 
-    let awsSendNewCode = async (): Promise<void> => {
+    const sendNewCode = async () => {
+        if (!newCodeDisabled) {
+            // prevent double clicks from calling sendNewCode twice
+            setNewCodeDisabled(true); 
+
+            let disableButton = await awsSendNewCode();
+            if (disableButton) {
+                disableCodeButton(10);
+            } else {
+                setNewCodeDisabled(false);
+            }
+        }
+    }
+
+    let awsSendNewCode = async (): Promise<boolean> => {
+        let disableButton = true; // do not disable button if code not sent and limit not exceeded
         let response = await Auth.resendSignUp(email).catch(
             error => {
                 const code = error.code;
@@ -66,24 +90,50 @@ const VerifyAccountPage = (): JSX.Element => {
                 switch (code) {
                     case 'AuthError':
                         setVerificationError('Please enter a valid email');
+                        disableButton = false;
                         break;
                     case 'LimitExceededException':
-                        setVerificationError("Too many tries, please try again later");
+                        setVerificationError("Too many tries, please try again in a couple minutes");
                         break;
                     case 'UserNotFoundException':
                         setVerificationError("Please enter a valid email")
+                        disableButton = false;
                         break;
                     default:
                         setVerificationError(error.message);
+                        disableButton = false;
                         break;
                 }
             }
         );
-        console.log(response);
+        return disableButton;
     }
 
-    const sendNewCode = () => {
-        awsSendNewCode();
+    // auto updates when countdown > 0, called in useEffect
+    const codeCountdown = () => {
+        if (countdown > 0) {
+            setCountdown(countdown - 1);
+            setSendNewCodeText("Wait to send again: " + countdown);
+        } else if (countdown === 0) {
+            setSendNewCodeText("Send again");
+            enableCodeButton();
+        }
+    }
+
+    const disableCodeButton = (secs: number) => {
+        let link = document.getElementById("sendNewCodeLink");
+        link?.classList.replace("clickable", "unclickable");
+
+        setCountdown(secs);
+        setSendNewCodeText("Wait to send again: " + secs);
+        setNewCodeDisabled(true);
+    }
+
+    const enableCodeButton = () => {
+        let link = document.getElementById("sendNewCodeLink");
+        link?.classList.replace("unclickable", "clickable");
+
+        setNewCodeDisabled(false);
     }
 
     const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
@@ -164,7 +214,7 @@ const VerifyAccountPage = (): JSX.Element => {
                     <div className="labelInputBox">
                         <div id="codeLine">
                             <p className="formLabel">Verification Code</p>
-                            <p className="formLabel clickable" id="sendNewCodeLink" onClick={sendNewCode}>Get new code</p>
+                            <p className="formLabel clickable" id="sendNewCodeLink" onClick={sendNewCode}>{sendNewCodeText}</p>
                         </div>
                         <input className="inputBox"
                             type="text"
