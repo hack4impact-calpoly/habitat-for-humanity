@@ -71,10 +71,15 @@
     margin: 21px 0px 5px 0px;
 }
 
-.clickable:hover {
+.clickable {
     cursor: pointer;
-    color: var(--tertiary);
+    color: var(--secondary);
     text-decoration: underline;
+}
+
+.unclickable {
+    cursor: not-allowed;
+    color: var(--dark-gray);
 }
 
 .inputBox {
@@ -86,10 +91,6 @@
     padding: 9px;
     font-size: 13px;
     font-weight: 500;
-}
-#sendNewCodeLink {
-    color: var(--secondary);
-    text-decoration: underline;
 }
 
 #submitButton {
