@@ -67,6 +67,12 @@ const VerifyAccountPage = (): JSX.Element => {
                     case 'LimitExceededException':
                         setVerificationError("Too many tries, please try again later");
                         break;
+                    case 'UserNotFoundException':
+                        setVerificationError("Please enter a valid email")
+                        break;
+                    default:
+                        setVerificationError(error.message);
+                        break;
                 }
             }
         );
@@ -79,7 +85,7 @@ const VerifyAccountPage = (): JSX.Element => {
 
     const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         if (e.currentTarget.value === "submitButton") {
-            let sucessfulSubmit = validateCode() && await awsConfirmSignup();
+            let sucessfulSubmit = validateForm() && await awsConfirmSignup();
             if(sucessfulSubmit) {
                 navigate(successPath);
             }
