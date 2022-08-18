@@ -13,13 +13,16 @@ require("./VerifyAccountPage.css");
 
 const VerifyAccountPage = (): JSX.Element => {
     interface Location {
-        state: { email: string } // passed in from previous pages
+        state: { 
+            email: string 
+            verificationError: string
+        } // passed in from previous pages
       }
     let location = useLocation() as Location;
 
     const [email, setEmail] = useState<string>(location.state === null ? "" : location.state.email);
     const [verificationCode, setVerificationCode] = useState<string>("");
-    const [verificationError, setVerificationError] = useState<string>("");
+    const [verificationError, setVerificationError] = useState<string>(location.state === null ? "" : location.state.verificationError);
 
     let navigate = useNavigate();
     const mainScreenPath: string = "/"; // Main screen (login)
