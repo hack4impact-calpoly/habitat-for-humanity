@@ -27,11 +27,11 @@ const VerifyAccountPage = (): JSX.Element => {
 
     // function for submitting new password
     let awsConfirmSignup = async (): Promise<boolean> => {
+        let success = true;
         let response = await Auth.confirmSignUp(email, verificationCode).catch(
             error => {
                 const code = error.code;
                 console.log(error);
-                debugger;
                 switch (code) {
                     case 'UserNotFoundException':
                         setVerificationError('Please enter a valid email');
@@ -49,10 +49,10 @@ const VerifyAccountPage = (): JSX.Element => {
                         setVerificationError(error.message);
                         break;
                 }
-                return false;
+                success = false;
             }
         );
-        return true;
+        return success;
     }
 
     let awsSendNewCode = async (): Promise<void> => {
@@ -79,8 +79,8 @@ const VerifyAccountPage = (): JSX.Element => {
 
     const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         if (e.currentTarget.value === "submitButton") {
-            if (submitData()) {
-                awsConfirmSignup();
+            let sucessfulSubmit = validateCode() && await awsConfirmSignup();
+            if(sucessfulSubmit) {
                 navigate(successPath);
             }
         }
@@ -88,27 +88,6 @@ const VerifyAccountPage = (): JSX.Element => {
         // TODO: navigate to success page when credentials are valid
     }
 
-    const submitData = (): boolean => {
-        const validData = validateForm();
-        if (validData) {
-            const JSONstring = getFormData();
-            //connect to backend code
-            return true;
-        }
-        return false;
-    }
-
-    const getFormData = (): string => {
-        /*
-        Desc: Gets all form data and coverts it into JSON
-        Return: JSON string
-        */
-        const accountData = {
-            "email": email,
-            "verificationCode": verificationCode,
-        };
-        return JSON.stringify(accountData);
-    }
 
 
     //Form Validation Functions
@@ -131,7 +110,7 @@ const VerifyAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         if (verificationCode === "") {
-            setVerificationError("Please enter a code");
+            setVerificationError("Code cannot be empty");
             return false;
         }
         return true;
@@ -143,7 +122,7 @@ const VerifyAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         if (email === "") {
-            setVerificationError("Please add email");
+            setVerificationError("Email cannot be empty");
             return false;
         }
         else if (!isEmail(email)) {
