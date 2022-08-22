@@ -18,6 +18,8 @@ const LoginPage = (): JSX.Element => {
         value: "",
         showPassword: false
     });
+    const [emailError, setEmailError] = useState<string>("");
+    const [passwordError, setPasswordError] = useState<string>("");
     let navigate = useNavigate();
 
     const forgotPasswordPath = "/ForgotPassword";
@@ -30,13 +32,13 @@ const LoginPage = (): JSX.Element => {
                 const code = error.code;
                 switch (code) {
                     case 'NotAuthorizedException':
-                        alert("Please enter valid credentials");
+                        setPasswordError("Please enter valid credentials");
                         return false;
                     case 'UserNotFoundException':
-                        alert("User does not exist");
+                        setPasswordError("User does not exist");
                         return false;
                     default:
-                        alert(error);
+                        setPasswordError(error);
                         return false;
                 }
             }
@@ -44,13 +46,14 @@ const LoginPage = (): JSX.Element => {
         return response;
     }
 
-
     const login = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
         e.preventDefault();
         let valid = checkCredentials();
-        let checkAWS = await awsLogin();
-        if (checkAWS && valid) {
-            navigate("/Donor");
+        if (valid) {
+            let checkAWS = await awsLogin();
+            if (checkAWS) {
+                navigate("/Donor");
+            }
         }
         /*
         else if (valid && admin){
@@ -65,16 +68,20 @@ const LoginPage = (): JSX.Element => {
         */
     }
     const checkCredentials = (): boolean => {
+        //reset error messages
+        setEmailError("");
+        setPasswordError("");
+        let noErrors = true;
+
         if (email === "") {
-            alert("Email is blank. Please try again.")
-            return false;
-        } else if (password.value === "") {
-            alert("Password is blank. Please try again.");
-            return false;
+            setEmailError("Please enter an email");
+            noErrors = false;
+        } 
+        if (password.value === "") {
+            setPasswordError("Please enter your password");
+            noErrors = false;
         } // check other invalid errors
-        else {
-            return true;
-        }
+        return noErrors;
         // if no errors/valid login -> redirect to logged in page
     }
 
@@ -88,6 +95,7 @@ const LoginPage = (): JSX.Element => {
                     type="text"
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => setEmail(event?.target?.value)}
                 />
+                <div className="inputError">{emailError}</div>
                 <div id="loginPassword">
                     <p className="loginLabel">Password</p>
                     <Link to={forgotPasswordPath} id="loginForgotPassword">Forgot Password?</Link>
@@ -110,7 +118,8 @@ const LoginPage = (): JSX.Element => {
                         </InputAdornment>
                     }
                 />
-                <button type="button" id="loginSubmit" onClick={login}>Log In</button>
+                <div className="inputError">{passwordError}</div>
+                <button type="button" id="loginSubmit" onClick={login} >Log In</button>
             </form>
             <div style={{ textAlign: "right", marginTop: "10px" }}>
                 <p className="loginCreateAccount">Don't have an account? </p>
