@@ -7,9 +7,12 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
+import isEmail from 'validator/lib/isEmail';
+import isMobilePhone from 'validator/lib/isMobilePhone';
 import { v4 as uuidv4 } from 'uuid';
 /* Backend */
 import { addUser, User } from 'api/user';
+import { debug } from "console";
 
 
 
@@ -27,6 +30,13 @@ const CreateAccountPage = (): JSX.Element => {
         showPassword: false
     });
     const [id, setID] = useState<string>(uuidv4());
+
+    //error messages
+    const [userTypeError, setUserTypeError] = useState<string>("");
+    const [nameError, setNameError] = useState<string>("");
+    const [emailError, setEmailError] = useState<string>("");
+    const [phoneNumberError, setPhoneNumberError] = useState<string>("");
+    const [passwordError, setPasswordError] = useState<string>("");
     let processedPhoneNumber: number; //Phone number converted from string
 
     let navigate = useNavigate();
@@ -77,12 +87,8 @@ const CreateAccountPage = (): JSX.Element => {
         }).catch(
             error => {
                 const code = error.code;
-                console.log(error);
-                switch (code) {
-                    case 'UsernameExistsException':
-                        alert("Account already exists");
-                        return false;
-                }
+                setPasswordError(error.message);
+                return false;
             }
         );
         return response;
@@ -95,9 +101,9 @@ const CreateAccountPage = (): JSX.Element => {
         */
         // let userAuth = await Auth.currentUserInfo();
         // console.log(userAuth);
-        let userAuth2 = await Auth.currentAuthenticatedUser();
-        console.log(userAuth2.username);
-        console.log(id);
+        // let userAuth2 = await Auth.currentAuthenticatedUser();
+        // console.log(userAuth2.username);
+        // console.log(id);
 
         const accountData = {
             userType: userType,
@@ -118,110 +124,145 @@ const CreateAccountPage = (): JSX.Element => {
         Desc: Validates all the form fields
         Return: boolean (true if all are valid, false if one is not)
         */
-        const valid: boolean =
-            (
-                validateUserType() &&
-                validateName() &&
-                validateEmail() &&
-                validatePhoneNumber() &&
-                processPhoneNumber() &&
-                validatePassword()
-            )
+        let valid: boolean = validateUserType(userType);
+        valid = validateName(firstName, lastName) && valid;
+        valid = validateEmail(email) && valid;
+        valid = validatePhoneNumber(phoneNumber) && valid;
+        valid = validatePassword(password) && valid;
         return valid;
     }
 
-    const validateUserType = (): boolean => {
+    const validateUserType = (userType: string): boolean => {
         /*
         Desc: Validates userTypes (donor, volunteer, administrator)
         Return: boolean (true if valid, false if not)
         */
         if (userType === "") {
-            alert("Please select an account type");
+            setUserTypeError("Please select an account type");
             return false;
         }
+        setUserTypeError("");
         return true;
     }
 
-    const validateName = (): boolean => {
+    const validateName = (firstName: string, lastName: string): boolean => {
         /*
         Desc: Validates firstName and lastName
         Return: boolean (true if valid, false if not)
         */
-        if (firstName === "" || lastName === "") {
-            alert("Please add your first and last name");
+        //setErrorMessages({...errorMessagesInitial});
+        if (!validateFirstName(firstName) && !validateLastName(lastName)) {
+            setNameError("Please enter your full name");
             return false;
         }
+        if (validateFirstName(firstName) && validateLastName(lastName)) {
+            return true;
+        } 
+        return false;
+    }
+    const validateFirstName = (firstName: string): boolean => {
+        /*
+        Desc: Validates firstName and lastName
+        Return: boolean (true if valid, false if not)
+        */
+        //setErrorMessages({...errorMessagesInitial});
+        if (firstName.match("\\s+")) {
+            setNameError("Please enter your first name");
+            return false;
+        } 
+        setNameError("");
         return true;
     }
 
-    const validatePhoneNumber = (): boolean => {
+    const validateLastName = (lastName: string): boolean => {
+        /*
+        Desc: Validates firstName and lastName
+        Return: boolean (true if valid, false if not)
+        */
+        //setErrorMessages({...errorMessagesInitial});
+        if (lastName.match("\\s+")) {
+            setNameError("Please enter your last name");
+            return false;
+        } 
+        setNameError("");
+        return true;
+    }
+
+    const validatePhoneNumber = (phoneNumber: string): boolean => {
         /*
         Desc: Validates phone number
         Return: boolean (true if valid, false if not)
         */
         if (phoneNumber === "") {
-            alert("Please add a phone number");
+            setPhoneNumberError("Please enter a phone number");
             return false;
         }
+        if(!processPhoneNumber(phoneNumber)) {
+            return false;
+        }
+        setPhoneNumberError("");
         return true;
     }
 
-    const validateEmail = (): boolean => {
+    const validateEmail = (email: string): boolean => {
         /*
         Desc: Validates email
         Return: boolean (true if valid, false if not)
         */
         if (email === "") {
-            alert("Please add email");
+            setEmailError("Please enter your email");
             return false;
         }
-        else if (!email.includes("@")) {
-            alert("Please enter a valid email address");
+        else if (!isEmail(email)) {
+            setEmailError("Please enter a valid email address");
             return false;
         }
-        //else if (check if email already exists)
-        //alert("Account with this email already exists") 
+        setEmailError("");
         return true;
     }
 
-    const validatePassword = (): boolean => {
+    const validatePassword = (password: { value: string; }): boolean => {
         /*
         Desc: Validates password
         Return: boolean (true if valid, false if not)
         */
-        const MIN_PASSWORD_LENGTH = 6;
+        const MIN_PASSWORD_LENGTH = 8;
         if (password.value === "") {
-            alert("Please add password");
+            setPasswordError("Please enter a password");
             return false;
         }
         else if (password.value.length < MIN_PASSWORD_LENGTH) {
-            alert(`Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`);
+            setPasswordError(`Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`);
             return false;
         }
+        setPasswordError("");
         return true;
     }
 
-    function processPhoneNumber(): boolean {
+    function processPhoneNumber(phoneNumber: string): boolean {
         /*
         Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
         Return: boolean (true if number successfuly processed, false if not)
         */
         try {
             const processedString = phoneNumber.replace(/[^0-9]/g, "");
-            if (processedString === "") {
-                alert("Please enter your phone number in the form XXX-XXX-XXXX")
+            if (!isMobilePhone(processedString, "en-US")) {
+                setPhoneNumberError("Please enter your phone number in the form XXX-XXX-XXXX");
                 return false;
             }
             // processedPhoneNumber = parseInt(processedString);
             setPhoneNumber(processedString);
-
         }
         catch (error) {
             console.error(error);
-            alert("Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX");
+            setPhoneNumberError("Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX");
             return false;
         }
         return true;
+    }
+
+    function checkError(type: string) {
+        validateForm();
     }
 
     //HTML Body
@@ -234,52 +275,72 @@ const CreateAccountPage = (): JSX.Element => {
                     {/*Div for the user type section*/}
                     <div id="accountTypeBox">
                         <p id="userTypeLabel"> I am a </p>
-                        <div className="accountLabel">
+                        <div className="accountLabel" >
                             <input type="radio"
                                 className="userTypeButton"
                                 value="donor" //Specifies the value for the useState
                                 name="userType" //connects all options under group "userType" -> only one can be selected at a time
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)} />donor
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setUserType(e.target.value);
+                                    validateUserType(e.target.value);
+                                }} />donor
 
                             <input type="radio"
                                 className="userTypeButton"
                                 value="volunteer"
                                 name="userType"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)} />volunteer
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setUserType(e.target.value);
+                                    validateUserType(e.target.value);
+                                }} />volunteer
 
                             <input type="radio"
                                 className="userTypeButton"
                                 value="administrator"
                                 name="userType"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserType(e.target.value)} />administrator
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setUserType(e.target.value);
+                                    validateUserType(e.target.value);
+                                }} />administrator
                         </div>
                     </div>
-
+                    <div className="inputError">{userTypeError}</div>
 
                     <div id="nameBox">
                         <div className="labelInputBox" id="firstNameBox">
                             <p className="formLabel">First Name</p>
                             <input className="inputBox"
                                 type="text"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setFirstName(e.target.value);
+                                    validateFirstName(e.target.value);
+                                }}
                             />
                         </div>
                         <div className="labelInputBox" id="lastNameBox">
                             <p className="formLabel">Last Name</p>
                             <input className="inputBox"
                                 type="text"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setLastName(e.target.value);
+                                    validateLastName(e.target.value);
+                                }}
                             />
                         </div>
                     </div>
+                    <div className="inputError">{nameError}</div>
 
                     <div className="labelInputBox">
                         <p className="formLabel">Email</p>
                         <input className="inputBox"
                             type="text"
                             autoComplete="email"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                setEmail(e.target.value);
+                                validateEmail(e.target.value);
+                            }}
                         />
+                        <div className="inputError">{emailError}</div>
                     </div>
 
                     <div className="labelInputBox">
@@ -287,8 +348,12 @@ const CreateAccountPage = (): JSX.Element => {
                         <input className="inputBox"
                             type="text"
                             autoComplete="phone"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                setPhoneNumber(e.target.value);
+                                validatePhoneNumber(e.target.value);
+                            }}
                         />
+                        <div className="inputError">{phoneNumberError}</div>
                     </div>
 
                     <div className="labelInputBox">
@@ -298,7 +363,10 @@ const CreateAccountPage = (): JSX.Element => {
                             value={password.value}
                             type={password.showPassword ? "text" : "password"}
                             disableUnderline={true}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword({ ...password, "value": e.target.value })}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                setPassword({ ...password, "value": e.target.value });
+                                validatePassword({ ...password, "value": e.target.value });
+                            }}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -310,6 +378,7 @@ const CreateAccountPage = (): JSX.Element => {
                                 </InputAdornment>
                             }
                         />
+                        <div className="inputError">{passwordError}</div>
                     </div>
 
                 </form>
