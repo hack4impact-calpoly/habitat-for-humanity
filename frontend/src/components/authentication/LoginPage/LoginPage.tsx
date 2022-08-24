@@ -8,6 +8,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
+import isEmail from 'validator/lib/isEmail';
 
 import logo from "images/logo.png";
 import "./LoginPage.css";
@@ -79,6 +80,7 @@ const LoginPage = (): JSX.Element => {
         e.preventDefault();
         let valid = checkCredentials();
         if (valid) {
+            debugger;
             let checkAWS = await awsLogin();
             if (checkAWS) {
                 navigate("/Donor");
@@ -105,7 +107,10 @@ const LoginPage = (): JSX.Element => {
         if (email === "") {
             setEmailError("Please enter an email");
             noErrors = false;
-        } 
+        } else if (!isEmail(email)) {
+            setEmailError("Please enter a valid email (no spaces)");
+            noErrors = false;
+        }
         if (password.value === "") {
             setPasswordError("Please enter your password");
             noErrors = false;
