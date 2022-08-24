@@ -55,7 +55,7 @@ const VerifyAccountPage = (): JSX.Element => {
                         setVerificationError('Incorrect code. Please enter a valid code.');
                         break;
                     case 'InvalidParameterException':
-                        setVerificationError('User is already confirmed');
+                        setVerificationError('Please make sure all inputs contain no spaces, tabs, etc.');
                         break;
                     default:
                         setVerificationError(error.message);
