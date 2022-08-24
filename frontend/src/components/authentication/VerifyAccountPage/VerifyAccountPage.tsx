@@ -68,7 +68,7 @@ const VerifyAccountPage = (): JSX.Element => {
     }
 
     const sendNewCode = async () => {
-        if (!newCodeDisabled) {
+        if (!newCodeDisabled && validateEmail()) {
             // prevent double clicks from calling sendNewCode twice
             setNewCodeDisabled(true); 
 
