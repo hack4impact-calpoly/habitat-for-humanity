@@ -15,10 +15,12 @@ const DonatorProfilePage = (): JSX.Element => {
     useEffect(() => {
         async function getUser() {
             let userAuth = await Auth.currentUserInfo();
-            console.log(userAuth);
+            console.log('userauth', userAuth);
             console.log('next');
             console.log(await Auth.currentAuthenticatedUser())
-            let user = await getUserByID(userAuth.username);
+            let uid = userAuth.attributes["custom:id"];
+            // userAuth.username
+            let user = await getUserByID(uid);
             console.log(user);
             setUser(user);
         }
@@ -56,7 +58,7 @@ const DonatorProfilePage = (): JSX.Element => {
                     </div>
                     <div className="infoBox">
                         {/* Need to implement displaying user data from backend */}
-                        <p id="email">{user.email}</p>
+                        <p id="email">{user?.email}</p>
                     </div>
                 </div>
                 <div id="phoneBox">
@@ -65,7 +67,7 @@ const DonatorProfilePage = (): JSX.Element => {
                     </div>
                     <div className="infoBox">
                         {/* Need to implement displaying user data from backend */}
-                        <p id="phone">{user.phone}</p>
+                        <p id="phone">{user?.phone}</p>
                     </div>
                 </div>
 
