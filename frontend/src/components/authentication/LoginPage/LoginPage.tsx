@@ -8,6 +8,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
+import isEmail from 'validator/lib/isEmail';
 
 import logo from "images/logo.png";
 import "./LoginPage.css";
@@ -24,11 +25,12 @@ const LoginPage = (): JSX.Element => {
 
     const forgotPasswordPath = "/ForgotPassword";
     const createAccountPath = "/CreateAccount";
+    const verifyAccountPath: string = "/VerifyAccountPage"
 
     //Function for logging into AWS account, called in login function
     let awsLogin = async (): Promise<CognitoUser | any> => {
         let response = await Auth.signIn(email, password.value).catch(
-            error => {
+            async error => {
                 const code = error.code;
                 switch (code) {
                     case 'NotAuthorizedException':
@@ -36,6 +38,16 @@ const LoginPage = (): JSX.Element => {
                         return false;
                     case 'UserNotFoundException':
                         setPasswordError("User does not exist");
+                        return false;
+                    case 'UserNotConfirmedException':
+                        // only checks email, i.e. wrong password w/correct (unconfirmed) email will still cause the exception
+                        let errorMessage = await awsSendNewCode();
+                        navigate(verifyAccountPath, {
+                            state: {
+                                email: email,
+                                verificationError: errorMessage
+                            }
+                        });
                         return false;
                     default:
                         setPasswordError(error);
@@ -46,10 +58,29 @@ const LoginPage = (): JSX.Element => {
         return response;
     }
 
+    let awsSendNewCode = async (): Promise<any> => {
+        let errorMessage = "";
+        let response = await Auth.resendSignUp(email).catch(
+            error => {
+                const code = error.code;
+                console.log(error);
+                switch (code) {
+                    case 'LimitExceededException':
+                        errorMessage = "Too many tries, please try again later";
+                        break;
+                    default:
+                        errorMessage = error.message;
+                }
+            }
+        );
+        return errorMessage;
+    }
+
     const login = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
         e.preventDefault();
         let valid = checkCredentials();
         if (valid) {
+            debugger;
             let checkAWS = await awsLogin();
             if (checkAWS) {
                 navigate("/Donor");
@@ -76,7 +107,10 @@ const LoginPage = (): JSX.Element => {
         if (email === "") {
             setEmailError("Please enter an email");
             noErrors = false;
-        } 
+        } else if (!isEmail(email)) {
+            setEmailError("Please enter a valid email (no spaces)");
+            noErrors = false;
+        }
         if (password.value === "") {
             setPasswordError("Please enter your password");
             noErrors = false;

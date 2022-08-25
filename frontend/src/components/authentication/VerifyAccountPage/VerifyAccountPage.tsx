@@ -1,74 +1,145 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
 import { Auth } from "aws-amplify";
+import isEmail from 'validator/lib/isEmail';
 
 require("./VerifyAccountPage.css");
 
 
 const VerifyAccountPage = (): JSX.Element => {
-    const [email, setEmail] = useState<string>("");
+    interface Location {
+        state: { 
+            email: string 
+            verificationError: string
+        } // passed in from previous pages
+      }
+    let location = useLocation() as Location;
+
+    const [email, setEmail] = useState<string>(location.state === null ? "" : location.state.email);
     const [verificationCode, setVerificationCode] = useState<string>("");
+    const [verificationError, setVerificationError] = useState<string>(location.state === null ? "" : location.state.verificationError);
+    
+    const [sendNewCodeText, setSendNewCodeText] = useState<string>("Get new code");
+    const [countdown, setCountdown] = useState<number>(-1);
+    const [newCodeDisabled, setNewCodeDisabled] = useState<boolean>(false);
+    useEffect(() => {
+        const timer = setTimeout(codeCountdown, 1000);
+        return () => clearTimeout(timer);
+    });
+      
 
     let navigate = useNavigate();
     const mainScreenPath: string = "/"; // Main screen (login)
     const successPath: string = "/CreateAccount/Success"
 
     // function for submitting new password
-    let awsConfirmSignup = async (): Promise<void> => {
+    let awsConfirmSignup = async (): Promise<boolean> => {
+        let success = true;
         let response = await Auth.confirmSignUp(email, verificationCode).catch(
             error => {
                 const code = error.code;
                 console.log(error);
                 switch (code) {
                     case 'UserNotFoundException':
-                        alert('Please enter a valid email');
+                        setVerificationError('Please enter a valid email');
                         break;
                     case 'NotAuthorizedException':
-                        alert('User is already confirmed');
+                        setVerificationError('User is already confirmed');
                         break;
                     case 'CodeMismatchException':
-                        alert('Please enter a valid code');
+                        setVerificationError('Incorrect code. Please enter a valid code.');
                         break;
                     case 'InvalidParameterException':
-                        alert('User is already confirmed');
+                        setVerificationError('Please make sure all inputs contain no spaces, tabs, etc.');
+                        break;
+                    default:
+                        setVerificationError(error.message);
                         break;
                 }
+                success = false;
             }
         );
-        console.log(response);
+        return success;
     }
 
-    let awsSendNewCode = async (): Promise<void> => {
+    const sendNewCode = async () => {
+        if (!newCodeDisabled && validateEmail()) {
+            // prevent double clicks from calling sendNewCode twice
+            setNewCodeDisabled(true); 
+
+            let disableButton = await awsSendNewCode();
+            if (disableButton) {
+                disableCodeButton(10);
+            } else {
+                setNewCodeDisabled(false);
+            }
+        }
+    }
+
+    let awsSendNewCode = async (): Promise<boolean> => {
+        let disableButton = true; // do not disable button if code not sent and limit not exceeded
         let response = await Auth.resendSignUp(email).catch(
             error => {
                 const code = error.code;
                 console.log(error);
                 switch (code) {
                     case 'AuthError':
-                        alert('Please enter a valid email');
+                        setVerificationError('Please enter a valid email');
+                        disableButton = false;
                         break;
                     case 'LimitExceededException':
-                        alert("Too many tries, please try again later");
+                        setVerificationError("Too many tries, please try again in a couple minutes");
+                        break;
+                    case 'UserNotFoundException':
+                        setVerificationError("Please enter a valid email")
+                        disableButton = false;
+                        break;
+                    default:
+                        setVerificationError(error.message);
+                        disableButton = false;
                         break;
                 }
             }
         );
-        console.log(response);
+        return disableButton;
     }
 
-    const sendNewCode = () => {
-        awsSendNewCode();
+    // auto updates when countdown > 0, called in useEffect
+    const codeCountdown = () => {
+        if (countdown > 0) {
+            setCountdown(countdown - 1);
+            setSendNewCodeText("Wait to send again: " + countdown);
+        } else if (countdown === 0) {
+            setSendNewCodeText("Send again");
+            enableCodeButton();
+        }
     }
 
-    const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
-        awsConfirmSignup();
+    const disableCodeButton = (secs: number) => {
+        let link = document.getElementById("sendNewCodeLink");
+        link?.classList.replace("clickable", "unclickable");
+
+        setCountdown(secs);
+        setSendNewCodeText("Wait to send again: " + secs);
+        setNewCodeDisabled(true);
+    }
+
+    const enableCodeButton = () => {
+        let link = document.getElementById("sendNewCodeLink");
+        link?.classList.replace("unclickable", "clickable");
+
+        setNewCodeDisabled(false);
+    }
+
+    const buttonNavigation = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         if (e.currentTarget.value === "submitButton") {
-            if (submitData()) {
+            let sucessfulSubmit = validateForm() && await awsConfirmSignup();
+            if(sucessfulSubmit) {
                 navigate(successPath);
             }
         }
@@ -76,27 +147,6 @@ const VerifyAccountPage = (): JSX.Element => {
         // TODO: navigate to success page when credentials are valid
     }
 
-    const submitData = (): boolean => {
-        const validData = validateForm();
-        if (validData) {
-            const JSONstring = getFormData();
-            //connect to backend code
-            return true;
-        }
-        return false;
-    }
-
-    const getFormData = (): string => {
-        /*
-        Desc: Gets all form data and coverts it into JSON
-        Return: JSON string
-        */
-        const accountData = {
-            "email": email,
-            "verificationCode": verificationCode,
-        };
-        return JSON.stringify(accountData);
-    }
 
 
     //Form Validation Functions
@@ -115,11 +165,11 @@ const VerifyAccountPage = (): JSX.Element => {
 
     const validateCode = (): boolean => {
         /*
-        Desc: Validates phone number
+        Desc: Validates verification code
         Return: boolean (true if valid, false if not)
         */
         if (verificationCode === "") {
-            alert("Please add a phone number");
+            setVerificationError("Code cannot be empty");
             return false;
         }
         return true;
@@ -131,11 +181,11 @@ const VerifyAccountPage = (): JSX.Element => {
         Return: boolean (true if valid, false if not)
         */
         if (email === "") {
-            alert("Please add email");
+            setVerificationError("Email cannot be empty");
             return false;
         }
-        else if (!email.includes("@")) {
-            alert("Please enter a valid email address");
+        else if (!isEmail(email)) {
+            setVerificationError("Please enter a valid email address");
             return false;
         }
         //else if (check if email already exists)
@@ -156,6 +206,7 @@ const VerifyAccountPage = (): JSX.Element => {
                         <p className="formLabel">Email</p>
                         <input className="inputBox"
                             type="text"
+                            defaultValue={email} 
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                         />
                     </div>
@@ -163,12 +214,13 @@ const VerifyAccountPage = (): JSX.Element => {
                     <div className="labelInputBox">
                         <div id="codeLine">
                             <p className="formLabel">Verification Code</p>
-                            <p className="formLabel clickable" onClick={sendNewCode}>Get new code</p>
+                            <p className="formLabel clickable" id="sendNewCodeLink" onClick={sendNewCode}>{sendNewCodeText}</p>
                         </div>
                         <input className="inputBox"
                             type="text"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVerificationCode(e.target.value)}
                         />
+                        <div className="inputError">{verificationError}</div>
                     </div>
 
                 </form>

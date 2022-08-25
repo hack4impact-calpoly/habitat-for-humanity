@@ -54,7 +54,11 @@ const CreateAccountPage = (): JSX.Element => {
             if (checkAWS) {
                 const user = await getFormData();
                 addUser(user);
-                navigate(successPath);
+                navigate(successPath, {
+                    state: {
+                        email: email
+                    }
+                });
             }
         }
     }
