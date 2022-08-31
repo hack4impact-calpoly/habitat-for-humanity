@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import Dropzone from './Dropzone';
 import ProgressBar from './ProgressBar';
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectItemName, setDimensions, setName } from "redux/donationSlice";
 
 const ContentContainer = styled.div`
    margin-left: 20%;
@@ -66,10 +68,12 @@ const StyledButton = styled.button`
 
 
 const Donation = (): JSX.Element => {
-   const [itemDescription, setItemDescription] = useState("");
+   const itemName = useSelector(selectItemName);
+   const [itemDescription, setItemDescription] = useState(itemName);
    const [itemDimensions, setItemDimensions] = useState("");
 
    let navigate = useNavigate();
+   const dispatch = useDispatch();
 
    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
       const nextPath : string = "/Donor/Donate/Location"
@@ -92,7 +96,8 @@ const Donation = (): JSX.Element => {
                   type="text"
                   value={itemDescription}
                   onChange={event => {
-                     setItemDescription(event.target.value)
+                     setItemDescription(event.target.value);
+                     dispatch(setName(event.target.value))
                   }}
                   
                      />
@@ -105,6 +110,7 @@ const Donation = (): JSX.Element => {
                   value={itemDimensions}
                   onChange={event => {
                      setItemDimensions(event.target.value)
+                     dispatch(setDimensions(event.target.value))
                   }}
                   
                      />

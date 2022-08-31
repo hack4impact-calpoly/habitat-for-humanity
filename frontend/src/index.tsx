@@ -31,68 +31,72 @@ import VerifyAccountPage from "components/authentication/VerifyAccountPage/Verif
 import ActiveDonations from "./components/admin/ActiveDonationsPage/ActiveDonationsPage";
 import DonationInfo from "./components/admin/DonationInfoPage/DonationInfoPage";
 
+import { store } from './redux/store'
+import { Provider } from 'react-redux'
 
 const rootElement = document.getElementById("root");
 
-render(
-  <BrowserRouter>
-    <Routes>
-      {/* Authentication Routes */}
-      <Route path="/" element={<App />} /> {/* Login page */}
-      <Route path="/CreateAccount" element={<CreateAccount />} />
-      <Route path="/CreateAccount/Success" element={<SuccessPage />} />
-      <Route path="/ForgotPassword" element={<ForgotPassword />} />
-      <Route path="/NewPassword" element={<NewPasswordPage />} />
-      <Route path="/VerifyAccountPage" element={<VerifyAccountPage />} />
+render( 
+  <Provider store={store}>
+    <BrowserRouter>
+      <Routes>
+        {/* Authentication Routes */}
+        <Route path="/" element={<App />} /> {/* Login page */}
+        <Route path="/CreateAccount" element={<CreateAccount />} />
+        <Route path="/CreateAccount/Success" element={<SuccessPage />} />
+        <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        <Route path="/NewPassword" element={<NewPasswordPage />} />
+        <Route path="/VerifyAccountPage" element={<VerifyAccountPage />} />
 
-      {/* Admin Specific Routes */}
-      <Route path="/Admin">
+        {/* Admin Specific Routes */}
+        <Route path="/Admin">
 
-        {/* Admin Home */}
-        <Route path="" element={<ActiveDonations />} />
+          {/* Admin Home */}
+          <Route path="" element={<ActiveDonations />} />
 
-        {/* Admin Other Routes */}
-        <Route path="ActiveDonations" element={<ActiveDonations />} />
-        <Route path="DonationInfo" element={<DonationInfo />} />
+          {/* Admin Other Routes */}
+          <Route path="ActiveDonations" element={<ActiveDonations />} />
+          <Route path="DonationInfo" element={<DonationInfo />} />
 
-        {/* Donor Catch all case -> Donor Error*/}
-        <Route path="*" element={<p>ERROR 404: Page Not Found</p>} />
-      </Route>
-
-      {/* Donor Specific Routes */}
-      <Route path="/Donor">
-        {/* Donor Home */}
-        <Route path="" element={<DonatorHome />} />
-        {/* Donor Profile Pages */}
-        <Route path="Profile">
-          <Route path="" element={<DonatorProfile />} />
-          <Route path="Edit" element={<DonatorProfileEdit />} />
-
-          {/* Profile Page catch all case -> Profile Error*/}
-          <Route path="*" element={<p>ERROR 404: Profile Page Not Found</p>} />
+          {/* Donor Catch all case -> Donor Error*/}
+          <Route path="*" element={<p>ERROR 404: Page Not Found</p>} />
         </Route>
 
-        {/* Donor Make a Donation Pages */}
-        <Route path="Donate">
-          <Route path="ItemInfo" element={<DonatorItemInfo />} />
-          <Route path="Location" element={<DonatorLocation />} />
-          <Route path="ScheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
-          <Route path="Review" element={<DonatorReviewSubmit />} />
-          <Route path="NextSteps" element={<DonatorNextSteps />} />
+        {/* Donor Specific Routes */}
+        <Route path="/Donor">
+          {/* Donor Home */}
+          <Route path="" element={<DonatorHome />} />
+          {/* Donor Profile Pages */}
+          <Route path="Profile">
+            <Route path="" element={<DonatorProfile />} />
+            <Route path="Edit" element={<DonatorProfileEdit />} />
 
-          {/* Make A Donation Catch all case -> Make A Donation Error*/}
-          <Route path="*" element={<p>ERROR 404: Make A Donation Page Not Found</p>} />
+            {/* Profile Page catch all case -> Profile Error*/}
+            <Route path="*" element={<p>ERROR 404: Profile Page Not Found</p>} />
+          </Route>
+
+          {/* Donor Make a Donation Pages */}
+          <Route path="Donate">
+            <Route path="ItemInfo" element={<DonatorItemInfo />} />
+            <Route path="Location" element={<DonatorLocation />} />
+            <Route path="ScheduleDropoffPickup" element={<DonatorScheduleDropoffPickup />} />
+            <Route path="Review" element={<DonatorReviewSubmit />} />
+            <Route path="NextSteps" element={<DonatorNextSteps />} />
+
+            {/* Make A Donation Catch all case -> Make A Donation Error*/}
+            <Route path="*" element={<p>ERROR 404: Make A Donation Page Not Found</p>} />
+          </Route>
+
+          {/* Donor Catch all case -> Donor Error*/}
+          <Route path="*" element={<p>ERROR 404: Donor Page Not Found</p>} />
         </Route>
 
-        {/* Donor Catch all case -> Donor Error*/}
-        <Route path="*" element={<p>ERROR 404: Donor Page Not Found</p>} />
-      </Route>
+        {/* Universal Catch all -> back to log in*/}
+        <Route path="*" element={<App />} />
 
-      {/* Universal Catch all -> back to log in*/}
-      <Route path="*" element={<App />} />
-
-    </Routes>
-  </BrowserRouter>,
+      </Routes>
+    </BrowserRouter>
+  </Provider>,
   rootElement
 );
 
