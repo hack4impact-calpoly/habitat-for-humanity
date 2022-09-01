@@ -75,9 +75,10 @@ const listTimes: Event[] = [
 
 const DonatorSchedulePickUp = (): JSX.Element => {
     const today = new Date();
+    const storedEvents = useSelector((state: RootState) => state.donation.pickupTimes);
     const [header, setHeader] = useState<string>(`${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(today.getDate())}`);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [events, setEvents] = useState<Event[]>([]);
+    const [events, setEvents] = useState<Event[]>(storedEvents);
     const [times, setTimes] = useState<Event[]>(listTimes);
     const [pickupError, setPickupError] = useState<string>("");
 
