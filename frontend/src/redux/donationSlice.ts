@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
 
 export interface DonationState {
@@ -51,10 +52,14 @@ export const donationSlice = createSlice({
     },
     updatePickupTimes: (state, action) => {
       state.pickupTimes = action.payload
-  },
+    },
+    clearAll: () => {
+      storage.removeItem('persist:donation');
+      return initialState;
+    },
   },
 })
 
-export const { updateName, updateDimensions, updateAddress, updateCity, updateZip, updateDropoff, updatePickupTimes} = donationSlice.actions
+export const { updateName, updateDimensions, updateAddress, updateCity, updateZip, updateDropoff, updatePickupTimes, clearAll} = donationSlice.actions
 
 export default donationSlice.reducer
