@@ -100,7 +100,7 @@ const DonatorSchedulePickUp = (): JSX.Element => {
     const validInput = () =>  {
         let valid = true;
         setPickupError("");
-        debugger;
+
         if (events.length === 0) {
             setPickupError("Please select at least one pickup time");
             valid = false;
