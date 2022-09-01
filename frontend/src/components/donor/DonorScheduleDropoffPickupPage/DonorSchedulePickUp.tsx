@@ -8,6 +8,10 @@ import Checkbox from "@mui/material/Checkbox";
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { RadioButtonChecked } from "@mui/icons-material";
+
+import { useDispatch, useSelector } from 'react-redux';
+import { updatePickupTimes, Event} from "redux/donationSlice";
+import { RootState } from '../../../redux/store'
 require("./DonorSchedulePickUp.css");
 
 const weekdays = [
@@ -67,16 +71,6 @@ const listTimes: Event[] = [
     }
 ];
 
-interface Event {
-    start: string,
-    end: string
-}
-
-interface AvailEvent {
-    start: string,
-    end: string,
-    avail: boolean
-}
 
 
 const DonatorSchedulePickUp = (): JSX.Element => {
@@ -85,6 +79,9 @@ const DonatorSchedulePickUp = (): JSX.Element => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [events, setEvents] = useState<Event[]>([]);
     const [times, setTimes] = useState<Event[]>(listTimes);
+    const [pickupError, setPickupError] = useState<string>("");
+
+    const dispatch = useDispatch();
 
     const onClickCalendar = (info: DateSelectArg): void => {
         const start_date = info?.start;
@@ -95,10 +92,19 @@ const DonatorSchedulePickUp = (): JSX.Element => {
         setTimes(listTimes);
     };
 
-    // TODO: Send donator availability to databases
-    const pushToDatabase = () => {
-        console.log("Pushed");
-        return;
+    const updateStore = () => {
+        dispatch(updatePickupTimes(events));
+     }
+
+    const validInput = () =>  {
+        let valid = true;
+        setPickupError("");
+        debugger;
+        if (events.length === 0) {
+            setPickupError("Please select at least one pickup time");
+            valid = false;
+        }
+        return valid;
     }
 
     let navigate = useNavigate();
@@ -111,8 +117,10 @@ const DonatorSchedulePickUp = (): JSX.Element => {
             navigate(backPath);
         }
         else if (e.currentTarget.value === "nextButton") {
-            pushToDatabase();
-            navigate(nextPath);
+            if (validInput()) {
+                updateStore();
+                navigate(nextPath);
+            }
         }
     }
 
@@ -152,6 +160,7 @@ const DonatorSchedulePickUp = (): JSX.Element => {
                         }}
                         windowResizeDelay={0}
                     />
+                    <div className="inputError">{pickupError}</div>
                 </div>
                 <div id="calendarEdit">
                     <h1 id="donatorPickupHeader">{header}</h1>

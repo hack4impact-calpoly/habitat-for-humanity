@@ -1,23 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { RootState } from './store'
 
 
 export interface DonationState {
     name: string;
-    dimesions: string;
+    dimensions: string;
     address: string;
     city: string;
-    zipCode: string;
-    pickup: string;
+    zipCode: number;
+    dropoff: boolean;
+    pickupTimes: Event[];
   }
+
+export interface Event {
+    start: string,
+    end: string
+}
   
 const initialState: DonationState = {
     name: "",
-    dimesions: "",
+    dimensions: "",
     address: "",
     city: "",
-    zipCode: "",
-    pickup: "",
+    zipCode: 0,
+    dropoff: true,
+    pickupTimes: []
 };
 
 // state.donation.name
@@ -25,32 +31,30 @@ export const donationSlice = createSlice({
   name: 'donation',
   initialState: initialState,
   reducers: {
-    setName: (state, action) => {
+    updateName: (state, action) => {
       state.name = action.payload
     },
-    setDimensions: (state, action) => {
-        state.dimesions = action.payload
+    updateDimensions: (state, action) => {
+        state.dimensions = action.payload
     },
-    setAdress: (state, action) => {
+    updateAddress: (state, action) => {
         state.address = action.payload
     },
-    setCity: (state, action) => {
+    updateCity: (state, action) => {
         state.city = action.payload
     },
-    setZip: (state, action) => {
+    updateZip: (state, action) => {
         state.zipCode = action.payload
     },
-    setPickup: (state, action) => {
-        state.pickup = action.payload
+    updateDropoff: (state, action) => {
+        state.dropoff = action.payload
     },
+    updatePickupTimes: (state, action) => {
+      state.pickupTimes = action.payload
+  },
   },
 })
 
-export const { setName, setDimensions, setAdress } = donationSlice.actions
-
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectItemName = (state: RootState) => state.donation.name;
+export const { updateName, updateDimensions, updateAddress, updateCity, updateZip, updateDropoff, updatePickupTimes} = donationSlice.actions
 
 export default donationSlice.reducer
