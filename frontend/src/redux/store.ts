@@ -1,11 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit';
 import donationReducer from './donationSlice';
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
-export const store = configureStore({
+const persistConfig = {
+  key: 'donation',
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, donationReducer)
+export const store =  configureStore({
   reducer: {
-    donation: donationReducer,
+    donation: persistedReducer,
   },
 });
+export const persistor = persistStore(store)
 
 // types for typescript use
 export type AppDispatch = typeof store.dispatch;
