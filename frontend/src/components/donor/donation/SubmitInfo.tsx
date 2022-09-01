@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import DonatorNavbar from 'components/donor/DonorNavbar/DonorNavbar';
 import ProgressBar from 'components/donor/donation/ProgressBar';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { updateAddress, updateCity, updateZip } from "redux/donationSlice";
+import { RootState } from '../../../redux/store'
 require("./SubmitInfo.css");
 
 interface DummyComponentProps {
@@ -23,13 +26,17 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     component,
   }) => 
   {
-    name = 'Sofa';
-    dimensions = '6x2x2';
-    location = '1 Grand Ave, San Luis Obispo';
-    const [dropOffOption, setDropOffOption] = useState(false);
-    if(dropOff){
-        setDropOffOption(dropOff);
-    }
+    const storedName = useSelector((state: RootState) => state.donation.name);
+    const storedDimensions = useSelector((state: RootState) => state.donation.dimensions);
+    const storedLocation = useSelector((state: RootState) => state.donation.address);
+    const storedDropOff = useSelector((state: RootState) => state.donation.dropoff);
+
+    name = storedName;
+    dimensions = storedDimensions;
+    location = storedLocation;
+    dropOff = storedDropOff;
+
+    const [dropOffOption, setDropOffOption] = useState(dropOff);
     let navigate = useNavigate();
 
     const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
