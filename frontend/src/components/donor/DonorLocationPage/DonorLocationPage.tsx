@@ -16,7 +16,6 @@ const DonatorLocationPage = (): JSX.Element => {
     const [address, setAddress] = useState<string>(storedAddr);
     const [city, setCity] = useState<string>(storedCity);
     const [zip, setZip] = useState<number>(storedZip);
-    debugger;
 
     const [addrError, setAddrError] = useState<string>('');
     const [cityError, setCityError] = useState<string>("");
