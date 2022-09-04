@@ -137,7 +137,7 @@ export const addItem = async (item: Item) => {
         })
     })
     .then(async (res) => {
-        const response = await res.text()
+        const response = await res.json()
         debugger;
         console.log(res.ok);
         if(!res.ok){ // check server response
