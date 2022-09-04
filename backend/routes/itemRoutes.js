@@ -99,7 +99,7 @@ router.post("/", async (req, res) => {
     }
     // console.log(newUser);
     await newItem.save();
-    res.send(`${newItem} added to the ItemDB`);
+    res.send({msg: `${newItem} added to the ItemDB`});
   } catch (error) {
     let errorMessage;
     if (error instanceof Error) { 
@@ -107,7 +107,7 @@ router.post("/", async (req, res) => {
     } else { 
       errorMessage = String(errorMessage); 
     }
-    res.status(400).send(errorMessage);
+    res.status(400).send({error: errorMessage});
     console.log(`Error: ${errorMessage}`);
   }
 });
