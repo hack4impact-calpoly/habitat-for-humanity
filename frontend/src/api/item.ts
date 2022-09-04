@@ -97,3 +97,57 @@ export const getItemsByDonorID = async (donorID : string) => {
     })
     .catch(error => console.error("Error: ", error)) // handle error
 }
+
+/*----------------------POST/PUT Requests---------------------------*/
+// Item data model
+export interface Item {
+    name: string
+    //images: [mongoose.Schema.ObjectId]
+    size: string,
+    address: string,
+    city: string,
+    zipCode: string,
+    scheduling: string, // Pickup or Dropoff
+    timeAvailability: [[Date, Date]]
+    // donorId: null,  type: mongoose.Schema.Types.ObjectId
+    timeSubmitted: Date,
+    //timeApproved: Date,
+    status: string //approved or needs approval
+    //notes: string
+    // timeAccepted: Date
+}
+
+// Add a new User to User DB
+export const addItem = async (item: Item) => {
+    return await fetch(itemURL, {
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            "name": item.name,
+            "size": item.size,
+            "address": item.address,
+            "city": item.city,
+            "zipCode": item.zipCode,
+            "scheduling": item.scheduling,
+            "timeAvailability": item.timeAvailability,
+            "timeSubmitted": item.timeSubmitted,
+            "status": item.status
+        })
+    })
+    .then(async (res) => {
+        const response = await res.text()
+        debugger;
+        console.log(res.ok);
+        if(!res.ok){ // check server response
+            return false;
+            //throw new Error(res.status + "-" + res.statusText)
+        }
+        return true;
+    })
+    .catch(error =>{
+        console.error("Error: ", error);
+        return false;
+    }); 
+}
