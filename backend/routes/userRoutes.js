@@ -74,7 +74,7 @@ router.post("/", async (req, res) => {
     });
     // console.log(newUser);
     await newUser.save();
-    res.send(`${firstName} ${lastName} added to the userDB`);
+    res.send({msg:`${firstName} ${lastName} added to the userDB`});
   } catch (error) {
     let errorMessage;
     if (error instanceof Error) { 
@@ -95,9 +95,9 @@ router.put("/firstName/:userId", async (req, res) => {
 
     await user.save();
 
-    res.send(
-      `Updated user "${req.params.userId}" with new firstName: "${req.body.firstName}"`
-    );
+    res.send({
+      msg: `Updated user "${req.params.userId}" with new firstName: "${req.body.firstName}"`
+    });
     
   } catch (error) {
     let errorMessage;
@@ -119,9 +119,9 @@ router.put("/lastName/:userId", async (req, res) => {
 
     await user.save();
 
-    res.send(
-      `Updated user "${req.params.userId}" with new lastName: "${req.body.lastName}"`
-    );
+    res.send({
+      msg: `Updated user "${req.params.userId}" with new lastName: "${req.body.lastName}"`
+    });
     
   } catch (error) {
     let errorMessage;
@@ -144,7 +144,7 @@ router.put("/email/:userId", async (req, res) => {
     await user.save();
 
     res.send(
-      `Updated user "${req.params.userId}" with new email: "${req.body.email}"`
+      {msg: `Updated user "${req.params.userId}" with new email: "${req.body.email}"`}
     );
     
   } catch (error) {
@@ -167,9 +167,9 @@ router.put("/phone/:userId", async (req, res) => {
 
     await user.save();
 
-    res.send(
-      `Updated user "${req.params.userId}" with new phone number: "${req.body.phone}"`
-    );
+    res.send({
+      msg: `Updated user "${req.params.userId}" with new phone number: "${req.body.phone}"`
+    });
     
   } catch (error) {
     let errorMessage;
