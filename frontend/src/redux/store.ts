@@ -1,6 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import donationReducer from './donationSlice';
-import { persistStore, persistReducer } from 'redux-persist'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
 const persistConfig = {
@@ -13,6 +22,14 @@ export const store =  configureStore({
   reducer: {
     donation: persistedReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // fixes "A non-serializable value was detected in an action" error
+        // https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 export const persistor = persistStore(store)
 
