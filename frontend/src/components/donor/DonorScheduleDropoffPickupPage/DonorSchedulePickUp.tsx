@@ -129,11 +129,21 @@ const DonatorSchedulePickUp = (): JSX.Element => {
         var date: string = selectedDate.toISOString().split("T")[0];
         var startTime: string = date + "T" + start.split("T")[1];
         var endTime: string = date + "T" + end.split("T")[1];
+        // only add if events doesn't already contain the time
+        if (events.filter(e => e.start === startTime && e.end === endTime).length === 0) {
+            setEvents([...events, {
+                start: startTime,
+                end: endTime
+            }])
+        }
+    }
 
-        setEvents([...events, {
-            start: startTime,
-            end: endTime
-        }])
+    //removes all events from events with given start and end
+    const removeEvent = (start: string, end: string) => {
+        var date: string = selectedDate.toISOString().split("T")[0];
+        var startTime: string = date + "T" + start.split("T")[1];
+        var endTime: string = date + "T" + end.split("T")[1];
+        setEvents(events.filter(e => e.start !== startTime && e.end !== endTime));
     }
 
     return (
@@ -175,7 +185,7 @@ const DonatorSchedulePickUp = (): JSX.Element => {
                                         <Checkbox
                                             icon={<RadioButtonUncheckedIcon />}
                                             checkedIcon={<CheckCircleIcon />}
-                                            onClick={() => addEvent(availEvent.start, availEvent.end)}
+                                            onChange={(e) =>e.target.checked ? addEvent(availEvent.start, availEvent.end) : removeEvent(availEvent.start, availEvent.end)}
                                         />
                                         {`${startTime} to ${endTime}`}
                                     </div>
