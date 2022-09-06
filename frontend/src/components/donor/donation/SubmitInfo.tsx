@@ -92,7 +92,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                         <p id="itemPhotos"><b>Item Photos</b></p>
                         <div id="ProductImages">{photos?.map((imgSrc, index) => (<div key={index} id="SingleImages"><img src={imgSrc.src} alt="n"/></div>))}</div>
                         <h2 id="Location">Location</h2>
-                        <h4 id="Address">{location}</h4>
+                        <h4 id="Address">{storedDonation.address}, {storedDonation.city} {storedDonation.zipCode}</h4>
                     </div>
                     <div id="SchedulingInfo">
                         <h2 id="Scheduling">Scheduling</h2>
