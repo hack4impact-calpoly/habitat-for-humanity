@@ -93,13 +93,13 @@ router.post("/", async (req, res) => {
     for (let i = 0; i < req.body.timeAvailability.length; i++) {
       if (req.body.timeAvailability[i].length !== 2) {
         res.status(400).send(
-          `Availability provided not in format [[startTime, endTime]]: "${req.body.availability}"`
+          {error: `Availability provided not in format [[startTime, endTime]]: "${req.body.availability}"`}
           );
       }
     }
     // console.log(newUser);
     await newItem.save();
-    res.send(`${newItem} added to the ItemDB`);
+    res.send({msg: `${newItem} added to the ItemDB`});
   } catch (error) {
     let errorMessage;
     if (error instanceof Error) { 
@@ -107,7 +107,7 @@ router.post("/", async (req, res) => {
     } else { 
       errorMessage = String(errorMessage); 
     }
-    res.status(400).send(errorMessage);
+    res.status(400).send({error: errorMessage});
     console.log(`Error: ${errorMessage}`);
   }
 });
@@ -132,7 +132,7 @@ router.put("/itemId/:itemId", async (req, res) => {
     if (req.body.status) {item.status = req.body.status;}
 
     await item.save();
-    res.send(`Updated item ${req.params.itemId} to: ${item}`);
+    res.send({msg: `Updated item ${req.params.itemId} to: ${item}`});
   } catch(error) {
     let errorMessage;
     if (error instanceof Error) { 
@@ -177,7 +177,7 @@ router.post("/", async (req, res) => {
       status
     });
     await newItem.save();
-    res.send(`${name} added to the ItemDB`);
+    res.send({msg: `${name} added to the ItemDB`});
   } catch (error) {
     let errorMessage;
     if (error instanceof Error) { 

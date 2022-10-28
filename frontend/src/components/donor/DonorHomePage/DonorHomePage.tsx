@@ -2,13 +2,18 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 import gift from "images/gift.png";
+import { useDispatch, useSelector } from 'react-redux';
+import { clearAll } from "redux/donationSlice";
+
 require("./DonorHomePage.css")
 
 const DonatorHomePage = (): JSX.Element => {
     let navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const routeChange = () : void => {
         let donateLocationPath = '/Donor/Donate/ItemInfo';
+        dispatch(clearAll());
         navigate(donateLocationPath);
     }
 

@@ -80,7 +80,6 @@ const LoginPage = (): JSX.Element => {
         e.preventDefault();
         let valid = checkCredentials();
         if (valid) {
-            debugger;
             let checkAWS = await awsLogin();
             if (checkAWS) {
                 navigate("/Donor");
