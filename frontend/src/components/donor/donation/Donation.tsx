@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import Dropzone from './Dropzone';
 import ProgressBar from './ProgressBar';
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { updateDimensions, updateName } from "redux/donationSlice";
+import { RootState } from '../../../redux/store'
 
 const ContentContainer = styled.div`
    margin-left: 20%;
@@ -66,18 +69,47 @@ const StyledButton = styled.button`
 
 
 const Donation = (): JSX.Element => {
-   const [itemDescription, setItemDescription] = useState("");
-   const [itemDimensions, setItemDimensions] = useState("");
+   const storedDesc = useSelector((state: RootState) => state.donation.name);
+   const storedDims = useSelector((state: RootState) => state.donation.dimensions);
+   const [itemDescription, setItemDescription] = useState(storedDesc);
+   const [itemDimensions, setItemDimensions] = useState(storedDims);
+   const [descError, setDescError] = useState("");
+   const [dimError, setDimError] = useState("");
 
    let navigate = useNavigate();
+   const dispatch = useDispatch();
 
    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
       const nextPath : string = "/Donor/Donate/Location"
 
       if(e.currentTarget.value === "nextButton"){
-         navigate(nextPath);
+         if (validInput()) {
+            updateStore();
+            navigate(nextPath);
+         }
       }
    }
+
+   const validInput = () =>  {
+      let valid = true;
+      setDescError("");
+      setDimError("");
+      if (!itemDescription?.match(/\S/)) {
+         setDescError("Please enter an item description");
+         valid = false;
+      }
+      if (!itemDimensions?.match(/\S/)) {
+         setDimError("Please enter item dimensions");
+         valid = false;
+      }
+      return valid;
+   }
+
+   const updateStore = () => {
+      dispatch(updateName(itemDescription))
+      dispatch(updateDimensions(itemDimensions))
+   }
+   
    return (
       <>
          <DonatorNavbar />
@@ -88,28 +120,28 @@ const Donation = (): JSX.Element => {
             <InputSectionContainer>
                <InputContainer>
                   <SubHeader>Item Description/Name</SubHeader>
-               <StyledInput
-                  type="text"
-                  value={itemDescription}
-                  onChange={event => {
-                     setItemDescription(event.target.value)
-                  }}
-                  
-                     />
-                  </InputContainer>
-            <InputContainer>
-               
+                     <StyledInput
+                        type="text"
+                        value={itemDescription}
+                        onChange={event => {
+                           setItemDescription(event.target.value);
+                        }}
+                           />
+                        <div className="inputError">{descError}</div>
+               </InputContainer>
+               <InputContainer>
                   <SubHeader>Item Dimensions</SubHeader>
-               <StyledInput
-                  type="text"
-                  value={itemDimensions}
-                  onChange={event => {
-                     setItemDimensions(event.target.value)
-                  }}
-                  
-                     />
-                  </InputContainer>
-            </InputSectionContainer>
+                  <StyledInput
+                     type="text"
+                     value={itemDimensions}
+                     onChange={event => {
+                        setItemDimensions(event.target.value)
+                     }}
+                     
+                        />
+                  <div className="inputError">{dimError}</div>
+               </InputContainer>
+               </InputSectionContainer>
             <UploadContainer>
                <SubHeader>Item Photos</SubHeader>
                <Dropzone/>

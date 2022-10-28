@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import DonatorNavbar from 'components/donor/DonorNavbar/DonorNavbar';
 import ProgressBar from 'components/donor/donation/ProgressBar';
+import { Item , addItem} from '../../../api/item';
 
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store'
 require("./SubmitInfo.css");
 
 interface DummyComponentProps {
@@ -13,7 +16,7 @@ interface DummyComponentProps {
     dropOff?: boolean;
     component?: boolean;
   }
-
+//TODO: eventually use DonorScheduleDropoff/Pickup pages instead of this component
 const SubmitInfo: React.FC<DummyComponentProps> = ({
     name,
     dimensions,
@@ -23,16 +26,23 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     component,
   }) => 
   {
-    name = 'Sofa';
-    dimensions = '6x2x2';
-    location = '1 Grand Ave, San Luis Obispo';
-    const [dropOffOption, setDropOffOption] = useState(false);
-    if(dropOff){
-        setDropOffOption(dropOff);
-    }
+    const storedDonation = useSelector((state: RootState) => state.donation);
+
+    const storedName = useSelector((state: RootState) => state.donation.name);
+    const storedDimensions = useSelector((state: RootState) => state.donation.dimensions);
+    const storedLocation = useSelector((state: RootState) => state.donation.address);
+    const storedDropOff = useSelector((state: RootState) => state.donation.dropoff);
+
+    name = storedName;
+    dimensions = storedDimensions;
+    location = storedLocation;
+    dropOff = storedDropOff;
+
+    const [dropOffOption, setDropOffOption] = useState(dropOff);
+    const [serverError, setServerError] = useState<string>("");
     let navigate = useNavigate();
 
-    const buttonNavigation = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+    const buttonNavigation = async (e : React.MouseEvent<HTMLButtonElement>) : Promise<void> => {
         const backPath : string = "/Donor/Donate/ScheduleDropoffPickup";
         const nextPath : string = "/Donor/Donate/NextSteps";
 
@@ -40,8 +50,29 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             navigate(backPath);
         }
         else if(e.currentTarget.value === "nextButton"){
-            navigate(nextPath);
+            if (await sendToDB()) {
+                navigate(nextPath);
+            }
         }
+    }
+
+    const sendToDB = async () => {
+        let donation: Item = {
+            name: storedDonation.name,
+            size: storedDonation.dimensions,
+            address: storedDonation.address,
+            city: storedDonation.city,
+            zipCode: storedDonation.zipCode.toString(),
+            scheduling: storedDonation.dropoff ? "Dropoff" : "Pickup",
+            timeAvailability: [[new Date(), new Date()]], //TODO
+            timeSubmitted: new Date(),
+            status: "Needs Approval",
+        }
+        const response = await addItem(donation);
+        if (!response) {
+            setServerError("There was an error sending your donation. Please try again later.")
+        }
+        return response;
     }
 
     return (
@@ -61,7 +92,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                         <p id="itemPhotos"><b>Item Photos</b></p>
                         <div id="ProductImages">{photos?.map((imgSrc, index) => (<div key={index} id="SingleImages"><img src={imgSrc.src} alt="n"/></div>))}</div>
                         <h2 id="Location">Location</h2>
-                        <h4 id="Address">{location}</h4>
+                        <h4 id="Address">{storedDonation.address}, {storedDonation.city} {storedDonation.zipCode}</h4>
                     </div>
                     <div id="SchedulingInfo">
                         <h2 id="Scheduling">Scheduling</h2>
@@ -77,6 +108,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                             <p className="radioOptionLabel radioLabel">I need the item to be picked up</p>
                         </div>
                     </div>
+                    <div className="inputError">{serverError}</div>
                     {!component && <div id="donPickupButtons" style={{ display: 'flex', flexDirection: 'row' }}>
                         <button value="backButton" className="donPickupButton backButton" onClick={buttonNavigation}>Back</button>
                         <div style={{ flexGrow: 1 }} />

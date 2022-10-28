@@ -83,7 +83,7 @@ router.post('/', async (req, res) => {
 
   try {
     newEvent.save();
-    res.send(`${newEvent} added to the EventDB`);
+    res.send({msg: `${newEvent} added to the EventDB`});
   } catch (error) {
     res.status(400).send(error);
   }
@@ -110,7 +110,7 @@ router.put("/eventId/:eventId", async (req, res) => {
     if (req.body.phone) {event.phone = req.body.phone;}
 
     await event.save();
-    res.send(`Updated event ${req.params.eventId} to: ${event}`);
+    res.send({msg: `Updated event ${req.params.eventId} to: ${event}`});
   } catch(error) {
     let errorMessage;
     if (error instanceof Error) { 
