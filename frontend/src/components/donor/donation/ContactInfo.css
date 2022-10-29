@@ -1,10 +1,9 @@
 @import "config/colors.css";
 
 #SubmitInfoPage h2 {
-    color: var(--orange);
+  color: var(--orange);
 }
 
 p {
-    font-family: Rubik;
+  font-family: Rubik;
 }
-
