@@ -1,139 +1,137 @@
 @import "config/colors.css";
 
-
 #donatorNavbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 1.2% 4%;
-    background: var(--white-gray);
-    border: 2px solid var(--gray-light);
-    box-sizing: border-box;
-    box-shadow: 0px 4px 25px rgba(49, 77, 137, 0.05);
-    border-top: none;
-    height: 110px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1.2% 4%;
+  background: var(--white-gray);
+  border: 2px solid var(--gray-light);
+  box-sizing: border-box;
+  box-shadow: 0px 4px 25px rgba(49, 77, 137, 0.05);
+  border-top: none;
+  height: 110px;
 }
 
 #donatorNavbarLogo {
-    height: 100% ;
+  height: 100%;
 }
 
 #donatorNavbarLogo:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #donatorNavbarHeaders {
-    display: flex;
-    flex-direction: row;
-    color: var(--primary);
-    font-weight: 500;
-    line-height: 0;
+  display: flex;
+  flex-direction: row;
+  color: var(--primary);
+  font-weight: 500;
+  line-height: 0;
 }
 
 .donatorNavbarHeader {
-    padding: 25px 20px 0 20px;
-    margin-bottom: 0;
+  padding: 25px 20px 0 20px;
+  margin-bottom: 0;
 }
 .donatorNavbarHeader:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .donatorNavbarLink {
-    text-decoration: none;
-    color: inherit;
-    margin: 38px 0px 0px 35px;
-    font-size: 17px;
+  text-decoration: none;
+  color: inherit;
+  margin: 38px 0px 0px 35px;
+  font-size: 17px;
 }
 
 #donatorNavbarUnderline {
-    margin-top: 0;
-    padding-bottom: 5px;
-    border-bottom: 3px solid var(--primary);
+  margin-top: 0;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--primary);
 }
 
 @media only screen and (max-width: 1483px) {
-    .donatorNavbarHeader {
-        padding: 35px 10px 0 10px;
-    }
+  .donatorNavbarHeader {
+    padding: 35px 10px 0 10px;
+  }
 }
 
 @media only screen and (max-width: 688px) {
-    #donatorNavbar {
-        padding: 3% 4%;
-    }
+  #donatorNavbar {
+    padding: 3% 4%;
+  }
 
-    .donatorNavbarHeader {
-        padding: 25px 10px 0 10px;
-    }
+  .donatorNavbarHeader {
+    padding: 25px 10px 0 10px;
+  }
 }
 
 @media only screen and (max-width: 566px) {
-    #donatorNavbar {
-        padding: 4% 4%;
-        height: 95px;
-    }
+  #donatorNavbar {
+    padding: 4% 4%;
+    height: 95px;
+  }
 
-    .donatorNavbarHeader {
-        padding: 15px 7px 0 7px;
-    }
+  .donatorNavbarHeader {
+    padding: 15px 7px 0 7px;
+  }
 }
 
 @media only screen and (max-width: 505px) {
-    #donatorNavbar {
-        height: 85px;
-    }
+  #donatorNavbar {
+    height: 85px;
+  }
 
-    #donatorNavbarLogo {
-        height: 100% ;
-    }
+  #donatorNavbarLogo {
+    height: 100%;
+  }
 
-    .donatorNavbarHeader {
-        padding: 13px 7px 0 7px;
-        font-size: 13px;
-    }
+  .donatorNavbarHeader {
+    padding: 13px 7px 0 7px;
+    font-size: 13px;
+  }
 }
 
 @media only screen and (max-width: 419px) {
-    #donatorNavbar {
-        height: 75px;
-    }
+  #donatorNavbar {
+    height: 75px;
+  }
 
-    .donatorNavbarHeader {
-        padding: 13px 5px 0 5px;
-        font-size: 12px;
-    }
+  .donatorNavbarHeader {
+    padding: 13px 5px 0 5px;
+    font-size: 12px;
+  }
 }
 
 @media only screen and (max-width: 374px) {
-    #donatorNavbar {
-        height: 65px;
-    }
+  #donatorNavbar {
+    height: 65px;
+  }
 
-    .donatorNavbarHeader {
-        padding: 10px 5px 0 5px;
-        font-size: 12px;
-    }
+  .donatorNavbarHeader {
+    padding: 10px 5px 0 5px;
+    font-size: 12px;
+  }
 }
 
 @media only screen and (max-width: 345px) {
-    #donatorNavbar {
-        height: 60px;
-    }
+  #donatorNavbar {
+    height: 60px;
+  }
 
-    .donatorNavbarHeader {
-        padding: 9px 5px 0 5px;
-        font-size: 10px;
-    }
+  .donatorNavbarHeader {
+    padding: 9px 5px 0 5px;
+    font-size: 10px;
+  }
 }
 
 @media only screen and (max-width: 305px) {
-    #donatorNavbar {
-        height: 50px;
-    }
+  #donatorNavbar {
+    height: 50px;
+  }
 
-    .donatorNavbarHeader {
-        padding: 5px 5px 0 5px;
-        font-size: 9px;
-    }
+  .donatorNavbarHeader {
+    padding: 5px 5px 0 5px;
+    font-size: 9px;
+  }
 }
-

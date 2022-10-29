@@ -16,8 +16,10 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "amazon-cognito-identity-js": "^5.2.12",
     "aws-amplify": "^4.3.21",
     "moment": "^2.29.1",
+    "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
@@ -28,6 +30,7 @@
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.3",
+    "uuid": "^9.0.0",
     "uuidv4": "^6.2.13",
     "validator": "^13.7.0",
     "web-vitals": "^2.1.2"
@@ -38,7 +41,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint-check": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore . && prettier --check .",
-    "lint-write": "npx lint-staged"
+    "lint-write": "npx lint-staged",
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx ."
   },
   "eslintConfig": {
     "extends": [

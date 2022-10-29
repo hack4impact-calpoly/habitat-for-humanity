@@ -37,5 +37,12 @@ module.exports = {
     "no-underscore-dangle": "off",
     "no-plusplus": "off",
     "no-console": "off",
+    "react/no-array-index-key": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "no-param-reassign": "off",
+    "@typescript-eslint/no-shadow": "off",
+    "react/require-default-props": "off",
+    "react/function-component-definition": "off",
   },
 };

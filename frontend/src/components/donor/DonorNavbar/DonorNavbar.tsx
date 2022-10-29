@@ -1,66 +1,81 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "images/logo.png";
-require('./DonorNavbar.css')
 
-const navBarHeaders: string[] = [
-    "Make a Donation",
-    "Profile",
-    "Sign Out"
-];
+require("./DonorNavbar.css");
+
+const navBarHeaders: string[] = ["Make a Donation", "Profile", "Sign Out"];
 
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
-const donate_path: string = "/Donor";
-const profile_path: string = "/Donor/Profile"
+const donatePath: string = "/Donor";
+const profilePath: string = "/Donor/Profile";
 
-const DonatorNavbar = (): JSX.Element => {
-    let navigate = useNavigate();
+function DonatorNavbar(): JSX.Element {
+  const navigate = useNavigate();
 
-    const page_path = window.location.pathname;
+  const pagePath = window.location.pathname;
 
-    const underline = (header: string): boolean => {
-        if (header === navBarHeaders[0] && 
-            (page_path.includes(donate_path + "/donate") 
-            || (page_path === "/Donor"))) { // For different donation pages
-            return true;
-        } 
-        else if (header === navBarHeaders[1] && page_path.includes(profile_path)) { //For different profile pages
-            return true;
-        }
-        return false;
+  const underline = (header: string): boolean => {
+    if (
+      header === navBarHeaders[0] &&
+      (pagePath.includes(`${donatePath}/donate`) || pagePath === "/Donor")
+    ) {
+      // For different donation pages
+      return true;
     }
-
-    const navlinkHandler = (header : string) : string => {
-        if (header === navBarHeaders[0]){
-            return donate_path;
-        }
-        else if(header === navBarHeaders[1]){
-            return profile_path;
-        }
-        else{
-            //Sign Out to be implemented, just route to main page for now (login)
-            return "/";
-        }
+    if (header === navBarHeaders[1] && pagePath.includes(profilePath)) {
+      // For different profile pages
+      return true;
     }
+    return false;
+  };
 
-    return (
-        <div id="donatorNavbar">
-            <img src={logo} alt="logo" id="donatorNavbarLogo" onClick={() => navigate("/Donor")}/>
-            <div id="donatorNavbarHeaders">
-                {// need to add links to pages
-}
-                {navBarHeaders?.map((header: string, index: number): JSX.Element => {
-                    return underline(header) ? (
-                        <div className="donatorNavbarHeader" key={index}>
-                            <Link id="donatorNavbarUnderline" className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
-                        </div> ) : ( 
-                            <Link key={index} className="donatorNavbarLink" to={navlinkHandler(header)}>{header}</Link>
-                        )
-                })}
-            </div>
-        </div>
-    )
+  const navlinkHandler = (header: string): string => {
+    if (header === navBarHeaders[0]) {
+      return donatePath;
+    }
+    if (header === navBarHeaders[1]) {
+      return profilePath;
+    }
+    // Sign Out to be implemented, just route to main page for now (login)
+    return "/";
+  };
+
+  return (
+    <div id="donatorNavbar">
+      <a href="/Donor">
+        <img src={logo} alt="logo" id="donatorNavbarLogo" />
+      </a>
+      <div id="donatorNavbarHeaders">
+        {
+          // need to add links to pages
+        }
+        {navBarHeaders?.map(
+          (header: string, index: number): JSX.Element =>
+            underline(header) ? (
+              <div className="donatorNavbarHeader" key={index}>
+                <Link
+                  id="donatorNavbarUnderline"
+                  className="donatorNavbarLink"
+                  to={navlinkHandler(header)}
+                >
+                  {header}
+                </Link>
+              </div>
+            ) : (
+              <Link
+                key={index}
+                className="donatorNavbarLink"
+                to={navlinkHandler(header)}
+              >
+                {header}
+              </Link>
+            )
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default DonatorNavbar;
