@@ -13,9 +13,21 @@
     "@types/node": "^17.0.12",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "eslint": "^8.27.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.3",
     "nodemon": "^2.0.16",
-    "prettier": "2.5.1",
-    "ts-node": "^10.7.0"
+    "prettier": "^2.5.1",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.9.3"
   },
   "dependencies": {
     "@types/multer-s3": "^2.7.12",
@@ -24,13 +36,15 @@
     "dotenv": "^15.0.0",
     "express": "^4.17.2",
     "fs": "^0.0.1-security",
+    "mongodb": "^4.5.0",
     "mongoose": "^6.1.10",
     "multer": "^1.4.4",
     "multer-s3": "^2.10.0",
-    "path": "^0.12.7",
-    "mongodb": "^4.5.0"
+    "path": "^0.12.7"
   },
   "scripts": {
-    "dev": "nodemon server.js dev"
+    "dev": "nodemon server.js dev",
+    "lint-check": "eslint --ext .js,.ts --ignore-path .gitignore . && prettier --check .",
+    "lint-write": "npx lint-staged"
   }
 }
