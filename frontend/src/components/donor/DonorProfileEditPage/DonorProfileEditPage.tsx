@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
-import { getUserByID } from "api/user";
+import {
+  getUserByID,
+  updateUserFirstName,
+  updateUserLastName,
+  updateUserEmail,
+  updateUserPhone,
+} from "api/user";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
 require("./DonorProfileEditPage.css");
@@ -18,12 +24,17 @@ function DonatorProfileEditPage(): JSX.Element {
   useEffect(() => {
     async function getUser() {
       const userAuth = await Auth.currentUserInfo();
-      const user = await getUserByID(userAuth.username);
-      setUser(user);
-      setFirstName(user.firstName);
-      setLastName(user.lastName);
-      setEmail(user.email);
-      setPhoneNumber(user.phone);
+      const uid = userAuth.attributes["custom:id"];
+      const user = await getUserByID(uid);
+      if (user) {
+        setUser(user);
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setEmail(user.email);
+        setPhoneNumber(user.phone);
+      } else {
+        alert("User not found in database.");
+      }
     }
     getUser();
   }, []);
@@ -33,7 +44,7 @@ function DonatorProfileEditPage(): JSX.Element {
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const backPath: string = "/Donor/Profile"; // Change once page is added
     const saveChangesPath: string = "/Donor/Profile";
-
+    console.log("event", e.currentTarget.value);
     if (e.currentTarget.value === "backButton") {
       navigate(backPath);
     } else if (e.currentTarget.value === "saveChangesButton") {
@@ -55,26 +66,16 @@ function DonatorProfileEditPage(): JSX.Element {
   const submitData = () => {
     const validData = validateForm();
     if (validData) {
-      const JSONstring = getFormData();
-      console.log(JSONstring);
       // PUT request(modify only, not create new) to backend code
+      console.log("uid", user.id);
+      updateUserFirstName(user.id, firstName);
+      updateUserLastName(user.id, lastName);
+      updateUserEmail(user.id, email);
+      // processPhoneNumber();
+      updateUserPhone(user.id, phoneNumber);
       return true;
     }
     return false;
-  };
-
-  const getFormData = (): string => {
-    /*
-        Desc: Gets all form data and coverts it into JSON
-        Return: JSON string
-        */
-    const accountData = {
-      firstName,
-      lastName,
-      email,
-      phoneNumber: processedPhoneNumber, // number(int) in form: 8057562501
-    };
-    return JSON.stringify(accountData);
   };
 
   /* -----------------------Form Validation-------------------------------*/
