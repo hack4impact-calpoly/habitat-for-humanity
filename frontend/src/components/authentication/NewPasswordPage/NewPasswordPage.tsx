@@ -34,9 +34,16 @@ function NewPasswordPage(): JSX.Element {
         case "CodeMismatchException":
           alert("Please enter a valid code");
           return false;
+        case "ExpiredCodeException":
+          alert("Code has expired");
+          return false;
+        case "LimitExceededException":
+          alert("Too many attempts, please try again later");
+          return false;
         default:
-          return true;
+          alert("Something went wrong: ".concat(code.toString()));
       }
+      return false;
     });
     return true;
   };
@@ -45,25 +52,8 @@ function NewPasswordPage(): JSX.Element {
     e: React.MouseEvent<HTMLButtonElement>
   ): Promise<any> => {
     const checkAWS = await awsNewPasswordSubmit();
-
-    if (e.currentTarget.value === "submitButton") {
-      if (submitData() && checkAWS) {
-        navigate(successPath);
-      }
-    }
-
-    // TODO: navigate to success page when credentials are valid
-  };
-
-  const submitData = (): boolean => {
-    const validData = validateForm();
-    if (validData) {
-      const JSONstring = getFormData();
-      console.log(JSONstring);
-      // connect to backend code
-      return true;
-    }
-    return false;
+    if (!checkAWS) return;
+    navigate(successPath);
   };
 
   const getFormData = (): string => {
@@ -166,9 +156,10 @@ function NewPasswordPage(): JSX.Element {
             <input
               className="inputBox"
               type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setVerificationCode(e.target.value)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                console.log(e.target.value);
+                setVerificationCode(e.target.value);
+              }}
             />
           </div>
 

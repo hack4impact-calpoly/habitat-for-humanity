@@ -13,11 +13,7 @@ function DonatorProfilePage(): JSX.Element {
   useEffect(() => {
     async function getUser() {
       const userAuth = await Auth.currentUserInfo();
-      console.log("userauth", userAuth);
-      console.log("next");
-      console.log(await Auth.currentAuthenticatedUser());
       const uid = userAuth.attributes["custom:id"];
-      // userAuth.username
       const user = await getUserByID(uid);
       console.log(user);
       setUser(user);
