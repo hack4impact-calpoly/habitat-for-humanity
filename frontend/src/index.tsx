@@ -34,10 +34,11 @@ import ActiveDonations from "./components/admin/ActiveDonationsPage/ActiveDonati
 import DonationInfo from "./components/admin/DonationInfoPage/DonationInfoPage";
 
 const rootElement = document.getElementById("root");
+const PGate = PersistGate as any;
 
 render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
+    <PGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <Routes>
           {/* Authentication Routes */}
@@ -100,7 +101,7 @@ render(
           <Route path="*" element={<App />} />
         </Routes>
       </BrowserRouter>
-    </PersistGate>
+    </PGate>
   </Provider>,
   rootElement
 );
