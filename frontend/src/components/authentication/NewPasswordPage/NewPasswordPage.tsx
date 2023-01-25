@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -22,7 +22,7 @@ function NewPasswordPage(): JSX.Element {
   const successPath: string = "/CreateAccount/Success";
 
   // function for submitting new password
-  const awsNewPasswordSubmit = async (): Promise<Boolean> => {
+  const awsNewPasswordSubmit = async (): Promise<string | boolean> => {
     const response = await Auth.forgotPasswordSubmit(
       email,
       verificationCode,
@@ -45,7 +45,7 @@ function NewPasswordPage(): JSX.Element {
       }
       return false;
     });
-    return true;
+    return response;
   };
 
   const buttonNavigation = async (
@@ -207,6 +207,16 @@ function NewPasswordPage(): JSX.Element {
         >
           Submit
         </button>
+        {/* <div className="logInBox">
+          <p className="createAccountLogin">Didn't receive a code?</p>
+          <Link
+            to={mainScreenPath}
+            className="createAccountLogin"
+            id="logInLink"
+          >
+            Resend Code
+          </Link>
+        </div> */}
       </div>
     </div>
   );
