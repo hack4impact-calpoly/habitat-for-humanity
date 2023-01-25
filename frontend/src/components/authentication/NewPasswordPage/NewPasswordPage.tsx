@@ -1,13 +1,18 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
 import Input from "@mui/material/Input";
 import IconButton from "@mui/material/IconButton";
 import { Auth } from "aws-amplify";
+import { current } from "@reduxjs/toolkit";
 
 require("./NewPasswordPage.css");
+
+// Timer for resend button in seconds
+const RESEND_TIME = 60;
+let resendTimerInterval: NodeJS.Timeout | undefined;
 
 function NewPasswordPage(): JSX.Element {
   const [email, setEmail] = useState<string>("");
@@ -16,6 +21,52 @@ function NewPasswordPage(): JSX.Element {
     value: "",
     showPassword: false,
   });
+  const [resendButtonTime, setResendButtonTime] = useState(RESEND_TIME);
+
+  const location = useLocation();
+  const state = location.state as { resetEmail: string };
+  const { resetEmail } = state;
+
+  const startResendTimer = () => {
+    if (resendTimerInterval) {
+      clearInterval(resendTimerInterval);
+    }
+    resendTimerInterval = setInterval(() => {
+      if (resendButtonTime <= 0) {
+        clearInterval(resendTimerInterval);
+      } else {
+        setResendButtonTime(resendButtonTime - 1);
+      }
+    }, 1000);
+  };
+
+  useEffect(() => {
+    startResendTimer();
+    return () => {
+      if (resendTimerInterval) {
+        clearInterval(resendTimerInterval);
+      }
+    };
+  }, [resendButtonTime]);
+
+  const onResendButtonPress = async () => {
+    // resend verification code to email
+    const response = await Auth.forgotPassword(email).catch((error) => {
+      const { code } = error;
+      switch (code) {
+        case "LimitExceededException":
+          alert(
+            "Too many tries, please wait and try again in a couple minutes"
+          );
+          return false;
+        default:
+          return true;
+      }
+    });
+
+    setResendButtonTime(RESEND_TIME);
+    startResendTimer();
+  };
 
   const navigate = useNavigate();
   const mainScreenPath: string = "/"; // Main screen (login)
@@ -207,16 +258,27 @@ function NewPasswordPage(): JSX.Element {
         >
           Submit
         </button>
-        {/* <div className="logInBox">
-          <p className="createAccountLogin">Didn't receive a code?</p>
-          <Link
-            to={mainScreenPath}
-            className="createAccountLogin"
-            id="logInLink"
+        {/* <div className="resendContainer">
+          <p>Time Remaining: 01:25</p>
+          <button type="button" value="resendButton" id="resendButton">
+            Resend Code
+          </button>
+        </div> */}
+        {resendButtonTime > 0 ? (
+          <div>Resend code in {resendButtonTime}</div>
+        ) : (
+          <button
+            type="button"
+            value="resendButton"
+            id="resendButton"
+            onClick={onResendButtonPress}
           >
             Resend Code
-          </Link>
-        </div> */}
+          </button>
+        )}
+        <div>
+          <Link to="/ForgotPassword">Use a different email</Link>
+        </div>
       </div>
     </div>
   );

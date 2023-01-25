@@ -38,7 +38,7 @@ function ForgotPasswordPage(): JSX.Element {
     const target = e.target as HTMLTextAreaElement;
     if (target.value === "sendButton") {
       if (submitData() && checkAWS) {
-        navigate(successPath);
+        navigate(successPath, { state: { resetEmail: email } });
       }
     }
   };
