@@ -27,7 +27,7 @@ function NewPasswordPage(): JSX.Element {
   const state = location.state as { resetEmail: string };
   const { resetEmail } = state;
 
-  // Timer and Resend algorithm is according to 
+  // Timer algorithm is based on the article below
   // https://tech.goibibo.com/building-otp-verification-component-in-react-native-with-auto-read-from-sms-2a9a400015b0
   const startResendTimer = () => {
     if (resendTimerInterval) {
@@ -260,26 +260,24 @@ function NewPasswordPage(): JSX.Element {
         >
           Submit
         </button>
-        {/* <div className="resendContainer">
-          <p>Time Remaining: 01:25</p>
-          <button type="button" value="resendButton" id="resendButton">
-            Resend Code
-          </button>
-        </div> */}
-        {resendButtonTime > 0 ? (
-          <div>Resend code in {resendButtonTime}</div>
-        ) : (
-          <button
-            type="button"
-            value="resendButton"
-            id="resendButton"
-            onClick={onResendButtonPress}
-          >
-            Resend Code
-          </button>
-        )}
-        <div>
-          <Link to="/ForgotPassword">Use a different email</Link>
+        <div className="resendContainer">
+          {resendButtonTime > 0 ? (
+            <div id="resendCountdownText">
+              Resend code in {resendButtonTime}
+            </div>
+          ) : (
+            <button
+              type="button"
+              value="resendButton"
+              id="resendButton"
+              onClick={onResendButtonPress}
+            >
+              Resend Code
+            </button>
+          )}
+          <Link id="useDifferentEmailLink" to="/ForgotPassword">
+            Use a different email
+          </Link>
         </div>
       </div>
     </div>
