@@ -101,18 +101,19 @@ export const getItemsByDonorID = async (donorID: string) =>
 // Item data model
 export interface Item {
   name: string;
-  // images: [mongoose.Schema.ObjectId]
+  //images: [mongoose.Schema.ObjectId]
   size: string;
   address: string;
   city: string;
+  state: string;
   zipCode: string;
   scheduling: string; // Pickup or Dropoff
   timeAvailability: [[Date, Date]];
   // donorId: null,  type: mongoose.Schema.Types.ObjectId
   timeSubmitted: Date;
-  // timeApproved: Date,
-  status: string; // approved or needs approval
-  // notes: string
+  //timeApproved: Date,
+  status: string; //approved or needs approval
+  //notes: string
   // timeAccepted: Date
 }
 

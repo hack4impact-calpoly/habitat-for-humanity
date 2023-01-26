@@ -52,6 +52,21 @@ input[type="radio"] {
   height: 1.5em;
   vertical-align: middle;
 }
+#ReStoreHoursTable {
+    width: 23rem;
+}
+.ReStoreHoursTableItem {
+    display: flex;
+}
+
+.ReStoreHoursTableItem > p {
+    margin: 0.5rem 0;
+    flex:1;
+}
+
+.ReStoreHoursTableItem > :last-child {
+    flex: 2;
+}
 
 @media only screen and (max-width: 915px) {
   img {
