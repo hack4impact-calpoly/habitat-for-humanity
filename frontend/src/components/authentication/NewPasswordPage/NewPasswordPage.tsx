@@ -15,7 +15,6 @@ const RESEND_TIME = 60;
 let resendTimerInterval: NodeJS.Timeout | undefined;
 
 function NewPasswordPage(): JSX.Element {
-  const [email, setEmail] = useState<string>("");
   const [verificationCode, setVerificationCode] = useState<string>("");
   const [password, setPassword] = useState({
     value: "",
@@ -26,6 +25,7 @@ function NewPasswordPage(): JSX.Element {
   const location = useLocation();
   const state = location.state as { resetEmail: string };
   const { resetEmail } = state;
+  const [email, setEmail] = useState<string>(resetEmail);
 
   // Timer algorithm is based on the article below
   // https://tech.goibibo.com/building-otp-verification-component-in-react-native-with-auto-read-from-sms-2a9a400015b0
@@ -202,6 +202,9 @@ function NewPasswordPage(): JSX.Element {
             <input
               className="inputBox"
               type="text"
+              placeholder={resetEmail}
+              defaultValue={resetEmail}
+              disabled
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(e.target.value)
               }
