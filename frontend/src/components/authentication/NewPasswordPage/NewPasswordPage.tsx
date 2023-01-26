@@ -27,6 +27,8 @@ function NewPasswordPage(): JSX.Element {
   const state = location.state as { resetEmail: string };
   const { resetEmail } = state;
 
+  // Timer and Resend algorithm is according to 
+  // https://tech.goibibo.com/building-otp-verification-component-in-react-native-with-auto-read-from-sms-2a9a400015b0
   const startResendTimer = () => {
     if (resendTimerInterval) {
       clearInterval(resendTimerInterval);
@@ -51,7 +53,7 @@ function NewPasswordPage(): JSX.Element {
 
   const onResendButtonPress = async () => {
     // resend verification code to email
-    const response = await Auth.forgotPassword(email).catch((error) => {
+    const response = await Auth.forgotPassword(resetEmail).catch((error) => {
       const { code } = error;
       switch (code) {
         case "LimitExceededException":
