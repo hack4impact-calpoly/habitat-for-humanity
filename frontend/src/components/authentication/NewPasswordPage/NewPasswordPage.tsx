@@ -76,6 +76,9 @@ function NewPasswordPage(): JSX.Element {
 
   // function for submitting new password
   const awsNewPasswordSubmit = async (): Promise<string | boolean> => {
+    const formValidation = validateForm();
+    if (!formValidation) return false;
+
     const response = await Auth.forgotPasswordSubmit(
       email,
       verificationCode,
@@ -92,6 +95,9 @@ function NewPasswordPage(): JSX.Element {
           return false;
         case "LimitExceededException":
           alert("Too many attempts, please try again later");
+          return false;
+        case "UserNotFoundException":
+          alert("Email address is not registered");
           return false;
         default:
           alert("Something went wrong: ".concat(code.toString()));
