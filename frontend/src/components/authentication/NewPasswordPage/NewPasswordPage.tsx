@@ -139,7 +139,7 @@ function NewPasswordPage(): JSX.Element {
         Return: boolean (true if valid, false if not)
         */
     if (verificationCode === "") {
-      alert("Please add a phone number");
+      alert("Please add a verification number");
       return false;
     }
     return true;
@@ -154,12 +154,10 @@ function NewPasswordPage(): JSX.Element {
       alert("Please add email");
       return false;
     }
-    if (!email.includes("@")) {
+    if (!email.includes("@") || !email.includes(".")) {
       alert("Please enter a valid email address");
       return false;
     }
-    // else if (check if email already exists)
-    // alert("Account with this email already exists")
     return true;
   };
 
