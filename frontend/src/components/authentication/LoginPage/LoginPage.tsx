@@ -178,7 +178,7 @@ function LoginPage(): JSX.Element {
           Log In
         </button>
       </form>
-      <div style={{ textAlign: "right", marginTop: "10px" }}>
+      <div style={styles.createAccountText}>
         <p className="loginCreateAccount">{`Don't have an account? `}</p>
         <Link
           to={createAccountPath}
@@ -191,5 +191,12 @@ function LoginPage(): JSX.Element {
     </div>
   );
 }
+
+const styles = {
+  createAccountText: {
+    textAlign: "right",
+    marginTop: "10px",
+  },
+} as const;
 
 export default LoginPage;
