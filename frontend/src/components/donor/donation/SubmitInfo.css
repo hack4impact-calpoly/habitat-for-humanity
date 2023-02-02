@@ -53,19 +53,19 @@ input[type="radio"] {
   vertical-align: middle;
 }
 #ReStoreHoursTable {
-    width: 23rem;
+  width: 23rem;
 }
 .ReStoreHoursTableItem {
-    display: flex;
+  display: flex;
 }
 
 .ReStoreHoursTableItem > p {
-    margin: 0.5rem 0;
-    flex:1;
+  margin: 0.5rem 0;
+  flex: 1;
 }
 
 .ReStoreHoursTableItem > :last-child {
-    flex: 2;
+  flex: 2;
 }
 
 @media only screen and (max-width: 915px) {
