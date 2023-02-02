@@ -1,28 +1,84 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
 import Input from "@mui/material/Input";
 import IconButton from "@mui/material/IconButton";
 import { Auth } from "aws-amplify";
+import { current } from "@reduxjs/toolkit";
 
 require("./NewPasswordPage.css");
 
+// Timer for resend button in seconds
+const RESEND_TIME = 60;
+let resendTimerInterval: NodeJS.Timeout | undefined;
+
 function NewPasswordPage(): JSX.Element {
-  const [email, setEmail] = useState<string>("");
   const [verificationCode, setVerificationCode] = useState<string>("");
   const [password, setPassword] = useState({
     value: "",
     showPassword: false,
   });
+  const [resendButtonTime, setResendButtonTime] = useState(RESEND_TIME);
+
+  const location = useLocation();
+  const state = location.state as { resetEmail: string };
+  const { resetEmail } = state;
+  const [email, setEmail] = useState<string>(resetEmail);
+
+  // Timer algorithm is based on the article below
+  // https://tech.goibibo.com/building-otp-verification-component-in-react-native-with-auto-read-from-sms-2a9a400015b0
+  const startResendTimer = () => {
+    if (resendTimerInterval) {
+      clearInterval(resendTimerInterval);
+    }
+    resendTimerInterval = setInterval(() => {
+      if (resendButtonTime <= 0) {
+        clearInterval(resendTimerInterval);
+      } else {
+        setResendButtonTime(resendButtonTime - 1);
+      }
+    }, 1000);
+  };
+
+  useEffect(() => {
+    startResendTimer();
+    return () => {
+      if (resendTimerInterval) {
+        clearInterval(resendTimerInterval);
+      }
+    };
+  }, [resendButtonTime]);
+
+  const onResendButtonPress = async () => {
+    // resend verification code to email
+    const response = await Auth.forgotPassword(resetEmail).catch((error) => {
+      const { code } = error;
+      switch (code) {
+        case "LimitExceededException":
+          alert(
+            "Too many tries, please wait and try again in a couple minutes"
+          );
+          return false;
+        default:
+          return true;
+      }
+    });
+
+    setResendButtonTime(RESEND_TIME);
+    startResendTimer();
+  };
 
   const navigate = useNavigate();
   const mainScreenPath: string = "/"; // Main screen (login)
   const successPath: string = "/CreateAccount/Success";
 
   // function for submitting new password
-  const awsNewPasswordSubmit = async (): Promise<Boolean> => {
+  const awsNewPasswordSubmit = async (): Promise<string | boolean> => {
+    const formValidation = validateForm();
+    if (!formValidation) return false;
+
     const response = await Auth.forgotPasswordSubmit(
       email,
       verificationCode,
@@ -40,12 +96,15 @@ function NewPasswordPage(): JSX.Element {
         case "LimitExceededException":
           alert("Too many attempts, please try again later");
           return false;
+        case "UserNotFoundException":
+          alert("Email address is not registered");
+          return false;
         default:
           alert("Something went wrong: ".concat(code.toString()));
       }
       return false;
     });
-    return true;
+    return response;
   };
 
   const buttonNavigation = async (
@@ -86,7 +145,7 @@ function NewPasswordPage(): JSX.Element {
         Return: boolean (true if valid, false if not)
         */
     if (verificationCode === "") {
-      alert("Please add a phone number");
+      alert("Please add a verification number");
       return false;
     }
     return true;
@@ -101,12 +160,10 @@ function NewPasswordPage(): JSX.Element {
       alert("Please add email");
       return false;
     }
-    if (!email.includes("@")) {
+    if (!email.includes("@") || !email.includes(".")) {
       alert("Please enter a valid email address");
       return false;
     }
-    // else if (check if email already exists)
-    // alert("Account with this email already exists")
     return true;
   };
 
@@ -145,6 +202,9 @@ function NewPasswordPage(): JSX.Element {
             <input
               className="inputBox"
               type="text"
+              placeholder={resetEmail}
+              defaultValue={resetEmail}
+              disabled
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(e.target.value)
               }
@@ -207,6 +267,25 @@ function NewPasswordPage(): JSX.Element {
         >
           Submit
         </button>
+        <div className="resendContainer">
+          {resendButtonTime > 0 ? (
+            <div id="resendCountdownText">
+              Resend code in {resendButtonTime}
+            </div>
+          ) : (
+            <button
+              type="button"
+              value="resendButton"
+              id="resendButton"
+              onClick={onResendButtonPress}
+            >
+              Resend Code
+            </button>
+          )}
+          <Link id="useDifferentEmailLink" to="/ForgotPassword">
+            Use a different email
+          </Link>
+        </div>
       </div>
     </div>
   );
