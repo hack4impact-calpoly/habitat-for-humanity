@@ -67,61 +67,74 @@
     cursor: pointer;
 }
 
+@media only screen and (max-width: 1100px) {
+    #donDropoffPage {
+        width: 90%;
+        transform: translateX(5%);
+    }
+}
 @media only screen and (max-width: 915px) {
     #donDropoffPage {
-        padding: 0 10%;
+        width: 90%;
+        transform: translateX(5%);
     }
 }
 
 @media only screen and (max-width: 750px) {
+    
     #donDropoffPage {
-        padding: 0 9%;
+        width: 90%;
+        transform: translateX(5%);
     }
 }
 
 @media only screen and (max-width: 640px) {
-    #donPDOptions {
-        display: block;
+    .backButton, .nextButton {
+        padding: 8px 40px;
     }
-
-    #radioPickUp {
-        margin-top: 20px;
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
     }
 }
 
 @media only screen and (max-width: 630px) {
-    #donDropoffPage {
-        padding: 0 5%;
+    .backButton, .nextButton {
+        padding: 8px 40px;
     }
-
-    #radioDropoff {
-        margin-right: 10px;
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
     }
 }
 
 @media only screen and (max-width: 560px) {
+    .backButton, .nextButton {
+        padding: 8px 40px;
+    }
     #donDropoffPage {
-        padding: 0 5%;
-    }
-
-    .radioLabel {
-        margin-left: 2px;
-    }
-
-    #radioDropoff {
-        margin-right: 5px;
+        width: 100%;
+        transform: translateX(5%);
     }
 }
 
 @media only screen and (max-width: 540px) {
+    .backButton, .nextButton {
+        padding: 8px 40px;
+    }
     #donDropoffPage {
-        padding: 0 5%;
+        width: 100%;
+        transform: translateX(5%);
     }
 }
 
 @media only screen and (max-width: 430px) {
     .backButton, .nextButton {
         padding: 8px 40px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
     }
 }
 
@@ -130,12 +143,9 @@
         padding: 7px 38px;
     }
 
-    .donDropoffRow {
-        padding-bottom: 10px;
-    }
-    
-    .donDropoffHours {
-        padding-left: 30px;
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
     }
 }
 
@@ -150,6 +160,10 @@
     
     .donDropoffHours {
         padding-left: 25px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
     }
 }
 
@@ -170,5 +184,9 @@
     .donDropoffHours {
         padding-left: 15px;
         font-size: 15px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
     }
 }

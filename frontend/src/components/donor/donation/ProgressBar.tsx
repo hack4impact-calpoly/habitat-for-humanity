@@ -70,7 +70,7 @@ const ProgressBar = ({ activeStep }: ProgressBarProps): JSX.Element => {
                {(3 < activeStep ? <PIcon size={12}/>: null)}
             </ProgressStep>
             <ProgressStep style={{backgroundColor: changeColor(4)}}>
-               <PText style={{ color: changeTextColor(4)}}>Review + Submit</PText>
+               <PText style={{ color: changeTextColor(4)}}>Review</PText>
                {(4 < activeStep ? <PIcon size={12}/>: null)}
             </ProgressStep>
          </PBContainer>
