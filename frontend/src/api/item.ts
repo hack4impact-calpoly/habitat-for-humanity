@@ -105,6 +105,7 @@ export interface Item {
   size: string;
   address: string;
   city: string;
+  state: string;
   zipCode: string;
   scheduling: string; // Pickup or Dropoff
   timeAvailability: [[Date, Date]];
