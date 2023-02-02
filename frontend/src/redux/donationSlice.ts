@@ -6,6 +6,7 @@ export interface DonationState {
   dimensions: string;
   address: string;
   city: string;
+  state: string;
   zipCode: number;
   dropoff: boolean;
   pickupTimes: Event[];
@@ -21,6 +22,7 @@ const initialState: DonationState = {
   dimensions: "",
   address: "",
   city: "",
+  state: "",
   zipCode: 0,
   dropoff: true,
   pickupTimes: [],
@@ -42,6 +44,9 @@ export const donationSlice = createSlice({
     },
     updateCity: (state, action) => {
       state.city = action.payload;
+    },
+    updateState: (state, action) => {
+      state.state = action.payload;
     },
     updateZip: (state, action) => {
       state.zipCode = action.payload;

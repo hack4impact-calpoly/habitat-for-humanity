@@ -48,27 +48,13 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const [serverError, setServerError] = useState<string>("");
   const navigate = useNavigate();
 
-  const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
-  ): Promise<void> => {
-    const backPath: string = "/Donor/Donate/ScheduleDropoffPickup";
-    const nextPath: string = "/Donor/Donate/NextSteps";
-
-    if (e.currentTarget.value === "backButton") {
-      navigate(backPath);
-    } else if (e.currentTarget.value === "nextButton") {
-      if (await sendToDB()) {
-        navigate(nextPath);
-      }
-    }
-  };
-
   const sendToDB = async () => {
     const donation: Item = {
       name: storedDonation.name,
       size: storedDonation.dimensions,
       address: storedDonation.address,
       city: storedDonation.city,
+      state: storedDonation.state,
       zipCode: storedDonation.zipCode.toString(),
       scheduling: storedDonation.dropoff ? "Dropoff" : "Pickup",
       timeAvailability: [[new Date(), new Date()]], // TODO
@@ -84,6 +70,21 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     return response;
   };
 
+  const buttonNavigation = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): Promise<void> => {
+    const backPath: string = "/Donor/Donate/ScheduleDropoffPickup";
+    const nextPath: string = "/Donor/Donate/NextSteps";
+
+    if (e.currentTarget.value === "backButton") {
+      navigate(backPath);
+    } else if (e.currentTarget.value === "nextButton") {
+      if (await sendToDB()) {
+        navigate(nextPath);
+      }
+    }
+  };
+
   return (
     <div>
       {!component && <DonatorNavbar />}
@@ -93,7 +94,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
           <div id="information">
             {!component && <ProgressBar activeStep={4} />}
             {/* <h2 id="Review">Review</h2>
-                        <p>Please review your donation information before you submit.</p> */}
+                    <p>Please review your donation information before you submit.</p> */}
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
               <b>Item Name:</b> {name}
@@ -114,8 +115,8 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             </div>
             <h2 id="Location">Location</h2>
             <h4 id="Address">
-              {storedDonation.address}, {storedDonation.city}{" "}
-              {storedDonation.zipCode}
+              {storedDonation.address} <br /> {storedDonation.city},{" "}
+              {storedDonation.state} {storedDonation.zipCode}
             </h4>
           </div>
           <div id="SchedulingInfo">
@@ -147,6 +148,39 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <p className="radioOptionLabel radioLabel">
                 I need the item to be picked up
               </p>
+            </div>
+          </div>
+          <div id="ReStoreHours">
+            <h2 id="ReStore">ReStore Drop Off Hours</h2>
+            <div id="ReStoreHoursTable">
+              <div className="ReStoreHoursTableItem">
+                <p>Monday</p>
+                <p>Closed</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Tuesday</p>
+                <p>10:00 AM to 5:00 PM</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Wednesday</p>
+                <p>10:00 AM to 5:00 PM</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Thursday</p>
+                <p>10:00 AM to 5:00 PM</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Friday</p>
+                <p>10:00 AM to 5:00 PM</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Saturday</p>
+                <p>10:00 AM to 5:00 PM</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Sunday</p>
+                <p>Closed</p>
+              </div>
             </div>
           </div>
           <div className="inputError">{serverError}</div>
