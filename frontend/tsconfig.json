@@ -121,5 +121,5 @@
     "baseUrl": "./src"
     
   },
-  "include": ["src"]
+  "include": ["src", "src/.aws-exports.js"]
 }

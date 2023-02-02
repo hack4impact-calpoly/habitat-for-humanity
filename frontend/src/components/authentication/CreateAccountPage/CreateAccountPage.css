@@ -330,3 +330,95 @@
         align-items: center;
     }
 }
+
+/* for mobile view */
+@media only screen and (max-width: 640px) {
+    #createAccountBox {
+        margin: center;
+        box-shadow: none;
+        padding: none;
+    } 
+    
+    #firstNameBox {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    #lastNameBox {
+        padding-left: 0;
+        padding-left: 0;
+    }
+
+    #nameBox {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: left;
+        flex-wrap: wrap;
+    }
+
+    #accountTypeBox {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-wrap: none;
+        margin: 0px 0px 0px 0px;
+    }
+
+    #userTypeLabel {
+        margin: 0px 275px 0px 0px;
+        font-weight: bold;
+        font-size: 13px;
+        justify-content: left;
+    }
+
+    .userTypeButton {
+        margin: left;
+    }
+
+    #signUpButton {
+        font-size: 14px;
+        line-height: 14px;
+        margin: 18px 0px 9px 0px;
+        height: 36px;
+        width: 100%;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+    
+    .createAccountLogin {
+        font-size: 12px;
+        line-height: 16px;
+        margin: 0px 0px 0px 10px;
+    }
+    
+    #logInLink {
+        margin: 0px 0px 0px 5px;
+        
+    } 
+
+    .formLabel {
+        font-style: normal;
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    #createAccountText {
+        font-size: 25px;
+        line-height: 28px;
+        margin: 0px 0px 24px 0px;
+    }
+
+    .accountLabel {
+        display: flex;
+        font-size: 13px;
+        /* text-align: left; */
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+}
+
+
+
+

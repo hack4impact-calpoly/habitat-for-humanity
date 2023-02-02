@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { Auth } from "aws-amplify";
 
@@ -262,11 +262,40 @@ const CreateAccountPage = (): JSX.Element => {
             setPhoneNumberError("Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX");
             return false;
         }
-        return true;
+        return true;       
     }
 
     function checkError(type: string) {
         validateForm();
+    } 
+
+
+// Mobile View
+    var nameBox:string = "nameBox";
+    var administrator:string = "administrator";  
+    var accountTypeBox:string = "accountTypeBox";
+    const [width, setWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        function handleResize() {
+            setWidth(window.innerWidth);
+        }
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [width]);
+
+    useEffect(() => {
+        width < 640 && handleSideNavToggle();
+    },[width]);
+
+    function handleSideNavToggle() {
+        console.log("Mobile View Success")
+    }
+
+    if (width <= 640){
+        nameBox = "";
+        administrator = "admin";
+        accountTypeBox= "";
     }
 
     //HTML Body
@@ -277,7 +306,7 @@ const CreateAccountPage = (): JSX.Element => {
                 <form id="createAccountForm">
 
                     {/*Div for the user type section*/}
-                    <div id="accountTypeBox">
+                    <div id={accountTypeBox}>
                         <p id="userTypeLabel"> I am a </p>
                         <div className="accountLabel" >
                             <input type="radio"
@@ -305,12 +334,12 @@ const CreateAccountPage = (): JSX.Element => {
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     setUserType(e.target.value);
                                     validateUserType(e.target.value);
-                                }} />administrator
+                                }} />{administrator}
                         </div>
                     </div>
                     <div className="inputError">{userTypeError}</div>
 
-                    <div id="nameBox">
+                    <div id= {nameBox}>
                         <div className="labelInputBox" id="firstNameBox">
                             <p className="formLabel">First Name</p>
                             <input className="inputBox"
@@ -392,7 +421,22 @@ const CreateAccountPage = (): JSX.Element => {
                     <Link to={mainScreenPath} className="createAccountLogin" id="logInLink">Log In</Link>
                 </div>
             </div>
-        </div>);
+        </div>
+    );
+
 }
+
+// const styles = { 
+
+//     @media only screen and (max-width: 640px) {
+//         nameBox: {
+//             display: "flex",
+//             flexDirection: "column",
+//             width: "100%",
+//             alignItems: "left",
+//             flexWrap: "wrap",
+//         },  
+//     },
+// } as const; 
 
 export default CreateAccountPage;
