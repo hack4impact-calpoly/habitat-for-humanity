@@ -28,10 +28,10 @@
 }
 
 #firstNameBox {
-  width: auto !important;
+  width: auto;
 }
 #lastNameBox {
-  width: auto !important;
+  width: auto;
   margin: 0x 0px 0px 30px;
 }
 
@@ -114,10 +114,10 @@
   }
 
   #firstNameBox {
-    width: auto !important;
+    width: auto;
   }
   #lastNameBox {
-    width: auto !important;
+    width: auto;
     margin: 0x 0px 0px 25px;
   }
 
