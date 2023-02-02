@@ -35,11 +35,10 @@
 
 #donPickupButtons {
     margin: 50px 0;
+    display: flex;
+    justify-content: flex-end;
 }
 
-.donPickupButton {
-    margin-right: 20px;
-}
 
 .fc h2 {
     font-size: 20px;

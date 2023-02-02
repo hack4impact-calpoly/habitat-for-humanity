@@ -4,6 +4,7 @@
     margin-top: 100px;
     width: 800px;
     transform: translateX(40%);
+    
 }
 
 .donDropoffPickupHeader {
@@ -70,12 +71,16 @@
 @media only screen and (max-width: 915px) {
     #donDropoffPage {
         padding: 0 10%;
+        color:yellow;
+
     }
 }
 
 @media only screen and (max-width: 750px) {
     #donDropoffPage {
         padding: 0 9%;
+    
+        
     }
 }
 
@@ -113,11 +118,7 @@
     }
 }
 
-@media only screen and (max-width: 540px) {
-    #donDropoffPage {
-        padding: 0 5%;
-    }
-}
+
 
 @media only screen and (max-width: 430px) {
     .backButton, .nextButton {
