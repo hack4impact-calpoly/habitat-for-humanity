@@ -16,7 +16,7 @@ function ForgotPasswordPage(): JSX.Element {
       console.log(error);
       switch (code) {
         case "UserNotFoundException":
-          alert("Please enter a valid email");
+          alert("Email does not exist in our system");
           return false;
         case "LimitExceededException":
           alert(
@@ -27,7 +27,7 @@ function ForgotPasswordPage(): JSX.Element {
           return true;
       }
     });
-    return true;
+    return response;
   };
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -38,7 +38,7 @@ function ForgotPasswordPage(): JSX.Element {
     const target = e.target as HTMLTextAreaElement;
     if (target.value === "sendButton") {
       if (submitData() && checkAWS) {
-        navigate(successPath);
+        navigate(successPath, { state: { resetEmail: email } });
       }
     }
   };
@@ -73,8 +73,6 @@ function ForgotPasswordPage(): JSX.Element {
       alert("Please enter a valid email address");
       return false;
     }
-    // else if (check if email does NOT exist)
-    // alert("There is no account associated with this email")
     return true;
   };
 
