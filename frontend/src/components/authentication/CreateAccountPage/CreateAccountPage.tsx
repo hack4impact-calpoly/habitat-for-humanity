@@ -274,48 +274,46 @@ function CreateAccountPage(): JSX.Element {
 
   // HTML Body
   return (
-    <div>
+    <div id="createAccountStyles">
       <div id="createAccountBox">
         <p id="createAccountText">Create an Account</p>
         <form id="createAccountForm">
           {/* Div for the user type section */}
           <div id="accountTypeBox">
             <p id="userTypeLabel"> I am a </p>
-            <div className="accountLabel">
-              <input
-                type="radio"
-                className="userTypeButton"
-                value="donor" // Specifies the value for the useState
-                name="userType" // connects all options under group "userType" -> only one can be selected at a time
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setUserType(e.target.value);
-                  validateUserType(e.target.value);
-                }}
-              />
-              donor
-              <input
-                type="radio"
-                className="userTypeButton"
-                value="volunteer"
-                name="userType"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setUserType(e.target.value);
-                  validateUserType(e.target.value);
-                }}
-              />
-              volunteer
-              <input
-                type="radio"
-                className="userTypeButton"
-                value="administrator"
-                name="userType"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setUserType(e.target.value);
-                  validateUserType(e.target.value);
-                }}
-              />
-              administrator
-            </div>
+            <input
+              type="radio"
+              className="userTypeButton"
+              value="donor" // Specifies the value for the useState
+              name="userType" // connects all options under group "userType" -> only one can be selected at a time
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setUserType(e.target.value);
+                validateUserType(e.target.value);
+              }}
+            />
+            <span className="accountLabel">donor</span>
+            <input
+              type="radio"
+              className="userTypeButton"
+              value="volunteer"
+              name="userType"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setUserType(e.target.value);
+                validateUserType(e.target.value);
+              }}
+            />
+            <span className="accountLabel">volunteer</span>
+            <input
+              type="radio"
+              className="userTypeButton"
+              value="administrator"
+              name="userType"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setUserType(e.target.value);
+                validateUserType(e.target.value);
+              }}
+            />
+            <span className="accountLabel">administrator</span>
           </div>
           <div className="inputError">{userTypeError}</div>
 
@@ -433,5 +431,7 @@ function CreateAccountPage(): JSX.Element {
     </div>
   );
 }
+
+const styles = {} as const;
 
 export default CreateAccountPage;
