@@ -52,7 +52,7 @@
   filter: grayscale();
   height: 1em;
   width: 1em;
-  margin: 0px 4px 0 30px;
+  margin: 0px 6px 0 30px;
 }
 
 #createAccountStyles .userTypeButton:hover {
@@ -145,7 +145,6 @@
     font-size: 12px;
   }
   #createAccountStyles input[type="radio"] {
-    margin: 0px 4px 0 30px;
     height: 1.5em;
     width: 1.5em;
   }
