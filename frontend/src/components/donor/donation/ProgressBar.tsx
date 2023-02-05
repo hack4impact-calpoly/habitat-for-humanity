@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { BsCheckLg } from "react-icons/bs";
+import { useScreenSize } from "../../../hooks";
 
 type ProgressBarProps = {
   activeStep: number;
@@ -47,6 +48,7 @@ const PIcon = styled(BsCheckLg)`
 `;
 
 function ProgressBar({ activeStep }: ProgressBarProps): JSX.Element {
+  const screenSize = useScreenSize();
   const changeColor = (currentStep: number) =>
     currentStep <= activeStep ? "var(--primary)" : "var(--gray-dark)";
   const changeTextColor = (currentStep: number) =>
@@ -67,7 +69,9 @@ function ProgressBar({ activeStep }: ProgressBarProps): JSX.Element {
         {activeStep > 3 ? <PIcon size={12} /> : null}
       </ProgressStep>
       <ProgressStep style={{ backgroundColor: changeColor(4) }}>
-        <PText style={{ color: changeTextColor(4) }}>Review + Submit</PText>
+        <PText style={{ color: changeTextColor(4) }}>{`Review${
+          !["xs"].includes(screenSize as string) ? ` + Submit` : ""
+        }`}</PText>
         {activeStep > 4 ? <PIcon size={12} /> : null}
       </ProgressStep>
     </PBContainer>
