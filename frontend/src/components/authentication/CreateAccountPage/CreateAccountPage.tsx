@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
@@ -16,7 +16,7 @@ import { addUser, User } from "api/user";
 
 require("./CreateAccountPage.css");
 
-function CreateAccountPage(): JSX.Element {
+const CreateAccountPage = (): JSX.Element => {
   // const { uuid } = require('uuidv4');
   const [userType, setUserType] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
@@ -29,7 +29,7 @@ function CreateAccountPage(): JSX.Element {
   });
   const [id, setID] = useState<string>(uuidv4());
 
-  // error messages
+  // Error messages
   const [userTypeError, setUserTypeError] = useState<string>("");
   const [nameError, setNameError] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
@@ -40,6 +40,12 @@ function CreateAccountPage(): JSX.Element {
   const navigate = useNavigate();
   const mainScreenPath: string = "/"; // Main screen (login)
   const successPath: string = "/VerifyAccountPage";
+
+  // Mobile View
+  let nameBox: string = "nameBox";
+  let administrator: string = "administrator";
+  let accountTypeBox: string = "accountTypeBox";
+  const [width, setWidth] = useState(window.innerWidth);
 
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>
@@ -90,7 +96,6 @@ function CreateAccountPage(): JSX.Element {
       //     signUpParams
       // )
     }).catch((error) => {
-      const { code } = error;
       setPasswordError(error.message);
       return false;
     });
@@ -272,52 +277,78 @@ function CreateAccountPage(): JSX.Element {
     validateForm();
   }
 
+  // Mobile View
+
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [width]);
+
+  // useEffect(() => {
+  //   width < 640 && handleSideNavToggle();
+  // }, [width]);
+
+  // function handleSideNavToggle() {
+  //   console.log("Mobile View Success");
+  // }
+
+  if (width <= 640) {
+    nameBox = "";
+    administrator = "admin";
+    accountTypeBox = "";
+  }
+
   // HTML Body
   return (
-    <div id="createAccountStyles">
+    <div>
       <div id="createAccountBox">
         <p id="createAccountText">Create an Account</p>
         <form id="createAccountForm">
           {/* Div for the user type section */}
-          <div id="accountTypeBox">
+          <div id={accountTypeBox}>
             <p id="userTypeLabel"> I am a </p>
-            <input
-              type="radio"
-              className="userTypeButton"
-              value="donor" // Specifies the value for the useState
-              name="userType" // connects all options under group "userType" -> only one can be selected at a time
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setUserType(e.target.value);
-                validateUserType(e.target.value);
-              }}
-            />
-            <span className="accountLabel">donor</span>
-            <input
-              type="radio"
-              className="userTypeButton"
-              value="volunteer"
-              name="userType"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setUserType(e.target.value);
-                validateUserType(e.target.value);
-              }}
-            />
-            <span className="accountLabel">volunteer</span>
-            <input
-              type="radio"
-              className="userTypeButton"
-              value="administrator"
-              name="userType"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setUserType(e.target.value);
-                validateUserType(e.target.value);
-              }}
-            />
-            <span className="accountLabel">administrator</span>
+            <div className="accountLabel">
+              <input
+                type="radio"
+                className="userTypeButton"
+                value="donor" // Specifies the value for the useState
+                name="userType" // connects all options under group "userType" -> only one can be selected at a time
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setUserType(e.target.value);
+                  validateUserType(e.target.value);
+                }}
+              />
+              donor
+              <input
+                type="radio"
+                className="userTypeButton"
+                value="volunteer"
+                name="userType"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setUserType(e.target.value);
+                  validateUserType(e.target.value);
+                }}
+              />
+              volunteer
+              <input
+                type="radio"
+                className="userTypeButton"
+                value="administrator"
+                name="userType"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setUserType(e.target.value);
+                  validateUserType(e.target.value);
+                }}
+              />
+              {administrator}
+            </div>
           </div>
           <div className="inputError">{userTypeError}</div>
 
-          <div id="nameBox">
+          <div id={nameBox}>
             <div className="labelInputBox" id="firstNameBox">
               <p className="formLabel">First Name</p>
               <input
@@ -430,8 +461,19 @@ function CreateAccountPage(): JSX.Element {
       </div>
     </div>
   );
-}
+};
 
-const styles = {} as const;
+// const styles = {
+
+//     @media only screen and (max-width: 640px) {
+//         nameBox: {
+//             display: "flex",
+//             flexDirection: "column",
+//             width: "100%",
+//             alignItems: "left",
+//             flexWrap: "wrap",
+//         },
+//     },
+// } as const;
 
 export default CreateAccountPage;
