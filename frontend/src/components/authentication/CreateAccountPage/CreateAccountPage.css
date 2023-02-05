@@ -1,85 +1,88 @@
 @import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
 @import "config/colors.css";
 
-#createAccountBox {
-  height: auto !important;
+#createAccountStyles #createAccountBox {
+  height: fit-content;
+  width: 715px;
   margin: auto;
 
   box-sizing: border-box;
   text-align: center;
 
   background: var(--white-gray);
-  margin: auto;
-  margin-top: 50vh;
+  margin-top: 55vh;
   transform: translateY(-50%);
-  box-shadow: 0px 8px 21px var(--box-shadow);
-  padding: 62px 70px 68px 70px;
-}
+  box-shadow: 0px 10px 24px var(--box-shadow);
+  padding: 84px 117px;
+  }
 
-#createAccountText {
+#createAccountStyles #createAccountText {
   font-family: Rubik;
   font-weight: 600;
   font-size: 36px;
-  line-height: 40px;
+  line-height: 10px;
   margin: 0px 0px 34px 0px;
   text-align: left;
 
   color: var(--black);
 }
 
-#accountTypeBox {
+#createAccountStyles #accountTypeBox {
   display: flex;
-  flex-wrap: wrap;
-  margin: 0px 0px 0px 0px;
-}
-
-.accountLabel input[type="radio"] {
-  height: 0.9em;
-}
-
-#userTypeLabel {
-  margin: 0px 0px 0px 0px;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.accountLabel {
-  color: var(--secondary);
-  font-weight: bold;
-  align-content: center;
-}
-
-.userTypeButton {
-  filter: grayscale();
-  margin: 2px 9px 0px 26px;
-}
-
-.userTypeButton:hover {
-  cursor: pointer;
-}
-
-#nameBox {
-  display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  padding: 10px 0px;
 }
 
-#firstNameBox {
-  width: 197px;
-  padding-right: 0.5rem;
-}
-#lastNameBox {
-  width: 197px;
-  padding-left: 0.5rem;
-}
-
-.labelInputBox {
-  display: flex;
-  flex-direction: column;
+#createAccountStyles #userTypeLabel {
+  margin: 0px 20px 0px 0px;
+  font-weight: bold;
+  font-size: 15px;
   text-align: left;
 }
 
-.formLabel {
+#createAccountStyles .accountLabel {
+  color: var(--secondary);
+  font-weight: bold;
+  align-items: center;
+  font-size: 15px;
+}
+
+#createAccountStyles input[type="radio"] {
+  filter: grayscale();
+  height: 1em;
+  width: 1em;
+  margin: 0px 6px 0 30px;
+}
+
+#createAccountStyles .userTypeButton:hover {
+  cursor: pointer;
+}
+
+#createAccountStyles #nameBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#createAccountStyles #firstNameBox {
+  width: 100%;
+  padding-right: 0.5rem;
+}
+#createAccountStyles #lastNameBox {
+  width: 100%;
+  padding-left: 0.5rem;
+}
+
+#createAccountStyles .labelInputBox {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
+}
+
+#createAccountStyles .formLabel {
   font-family: Rubik;
   font-style: normal;
   font-weight: bolder;
@@ -91,7 +94,7 @@
   margin: 21px 0px 5px 0px;
 }
 
-.inputBox {
+#createAccountStyles #createAccountInputBox {
   font-family: Rubik;
   box-sizing: border-box;
   height: 43px;
@@ -102,18 +105,18 @@
   font-weight: 500;
 }
 
-.inputError {
+#createAccountStyles .inputError {
   text-align: left;
   color: var(--red);
+  font-size: 13px;  
 }
 
-#signUpButton {
+#createAccountStyles #signUpButton {
   background: var(--primary);
   border: none;
 
   font-family: Rubik;
   font-style: normal;
-  font-weight: 500;
   font-size: 17px;
   line-height: 21px;
   margin: 26px 0px 12px 0px;
@@ -121,209 +124,88 @@
   width: 100%;
   color: var(--white);
 }
-
-#signUpButton:hover {
-  cursor: pointer;
-  border: 3px solid rgba(2, 5, 12, 0.15);
-}
-
-.createAccountLogin {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: 500;
+#createAccountStyles .createAccountLogin {
   font-size: 13px;
-  line-height: 16px;
-  margin: 0px 0px 0px 0px;
-
-  color: var(--black);
 }
 
-.logInBox {
-  display: flex;
-  justify-content: right;
-}
+@media only screen and (max-width: 1200px) {
 
-#logInLink {
-  color: var(--secondary);
-  margin: 0px 0px 0px 5px;
-}
-
-#logInLink:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-#passwordBox {
-  font-family: Rubik;
-  font-size: 13px;
-  font-weight: 500;
-}
-.passwordIcon {
-  color: var(--primary);
-}
-
-@media only screen and (max-height: 800px) {
-  #createAccountBox {
-    width: 415px;
-    height: 546px;
-
-    margin: auto;
-    margin-top: 50vh;
-    transform: translateY(-50%);
-    padding: 36px 50px 49px 50px;
+  #createAccountStyles #createAccountBox {
+    padding: 60px 90px;
+    width: 600px;
+    }
+  
+  #createAccountStyles #createAccountText {
+    font-size: 32px;
+    padding-bottom: 10px;
   }
-
-  #createAccountText {
-    font-size: 25px;
-    line-height: 28px;
-    margin: 0px 0px 24px 0px;
-  }
-
-  #userTypeLabel {
-    margin: 0px 0px 0px 0px;
-    font-size: 11px;
-  }
-
-  .userTypeButton {
-    margin: 1px 6px 0px 18px;
-  }
-
-  #firstNameBox {
-    width: 138px;
-  }
-  #lastNameBox {
-    width: 138px;
-  }
-
-  .formLabel {
-    font-size: 10px;
-    line-height: 13px;
-
-    margin: 15px 0px 4px 0px;
-  }
-
-  .inputBox {
-    height: 30px;
-    width: 100%;
-    padding: 6px;
-    font-size: 9px;
-  }
-
-  #signUpButton {
+  
+  #createAccountStyles #accountTypeBox {
+    padding: 0px;
     font-size: 12px;
-    line-height: 14px;
-    margin: 18px 0px 9px 0px;
-    height: 36px;
-    width: 100%;
   }
-
-  .createAccountLogin {
-    font-size: 10px;
-    line-height: 11px;
-    margin: 0px 0px 0px 0px;
+  #createAccountStyles input[type="radio"] {
+    height: 1.5em;
+    width: 1.5em;
   }
-
-  #logInLink {
-    margin: 0px 0px 0px 3px;
+  #createAccountStyles #userTypeLabel {
+    font-size: 13px;
   }
-}
-
-@media only screen and (min-width: 500px) {
-  #createAccountBox {
-    width: 405px;
-    height: 546px;
-
-    margin: auto;
-    margin-top: 50vh;
-    transform: translateY(-50%);
-    padding: 36px 44px 49px 44px;
+  
+  #createAccountStyles .accountLabel {
+    font-size: 13px;
   }
-
-  #createAccountText {
-    font-size: 25px;
-    line-height: 28px;
-    margin: 0px 0px 24px 0px;
-  }
-
-  #accountTypeBox {
-    margin: 0px 0px 3px 0px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .accountLabel {
-    font-size: 10px;
-    display: flex;
-    justify-content: space-around;
-    width: 80%;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  #userTypeLabel {
-    margin: 0px 0px 0px 0px;
-    font-size: 10px;
-  }
-
-  .userTypeButton {
-    margin: 0px 0px 0px 0px;
-  }
-
-  #firstNameBox {
-    width: 138px;
-  }
-  #lastNameBox {
-    width: 138px;
-  }
-
-  .formLabel {
-    font-size: 10px;
-    line-height: 13px;
-
-    margin: 15px 0px 4px 0px;
-  }
-
-  .inputBox {
-    height: 30px;
-    width: 100%;
-    padding: 6px;
-    font-size: 9px;
-  }
-
-  #signUpButton {
+  
+  
+  #createAccountStyles .formLabel {
     font-size: 12px;
-    line-height: 14px;
-    margin: 18px 0px 9px 0px;
-    height: 36px;
+    margin: 16px 0px 3px 0px;
+  }
+  
+  #createAccountStyles #createAccountInputBox {
+    font-size: 12px;
+  }
+  
+  #createAccountStyles .inputError {
+    font-size: 12px;
+  }
+  
+  #createAccountStyles #signUpButton {
+    background: var(--primary);
+    border: none;
+  
+    font-family: Rubik;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 21px;
+    margin: 26px 0px 12px 0px;
+    height: 45px;
     width: 100%;
+    color: var(--white);
   }
-
-  .createAccountLogin {
-    font-size: 10px;
-    line-height: 11px;
-    margin: 0px 0px 0px 0px;
-  }
-
-  #logInLink {
-    margin: 0px 0px 0px 3px;
+  #createAccountStyles .createAccountLogin {
+    font-size: 12px;
+    line-height: 12px;
   }
 }
 
-@media only screen and (max-width: 500px) {
-  #createAccountBox {
-    width: 405px;
-    height: 506px;
-
-    margin: auto;
+@media only screen and (max-width: 640px) {
+  #createAccountStyles #createAccountBox {
     margin-top: 50vh;
-    transform: translateY(-50%);
-    padding: 36px 44px 49px 44px;
+    box-shadow: none;
+    padding: 0px;
+    height: fit-content;
+    width: 75%;
   }
-  #accountTypeBox {
-    margin: 0px 0px 0px 0px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .accountLabel {
-    align-items: center;
+}
+
+@media only screen and (max-height: 640px) {
+  #createAccountStyles #createAccountBox {
+    margin-top: 0vh;
+    transform: translateY(0%);
+    box-shadow: none;
+    padding: 0px;
+    height: fit-content;
+    width: 50%;
   }
 }
