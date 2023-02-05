@@ -315,10 +315,8 @@
     #createAccountBox {
         width: 405px;
         height: 506px;
-
-        margin: auto;
-        margin-top: 50vh;
-        transform: translateY(-50%);
+        margin-top: 0px;
+        transform: translateY(0);
         padding: 36px 44px 49px 44px;
     }
     #accountTypeBox {
@@ -337,6 +335,8 @@
         margin: center;
         box-shadow: none;
         padding: none;
+        margin-top: 0px;
+        transform: translateY(0);
     } 
     
     #firstNameBox {
