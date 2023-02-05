@@ -1,68 +1,68 @@
 @import "config/colors.css";
 
 #successBox {
-    height: fit-content;
-    width: 350px;
-    background: var(--white-gray);
-    border: none;
-    margin: auto;
-    margin-top: 50vh;
-    transform: translateY(-50%);
-    box-shadow: 0px 10px 24px var(--box-shadow);
-    text-align: center;
-    padding: 40px 80px;
+  height: fit-content;
+  width: 350px;
+  background: var(--white-gray);
+  border: none;
+  margin: auto;
+  margin-top: 50vh;
+  transform: translateY(-50%);
+  box-shadow: 0px 10px 24px var(--box-shadow);
+  text-align: center;
+  padding: 40px 80px;
 }
 
 #checkCircle {
-    margin: 0;
+  margin: 0;
 }
 
 #successButton {
-    padding: 8px 40px;
-    background-color: var(--tertiary);
-    border: none;
-    color: white;
-    font-weight: 500;
+  padding: 8px 40px;
+  background-color: var(--tertiary);
+  border: none;
+  color: white;
+  font-weight: 500;
 }
 
 @media only screen and (max-width: 640px) {
-    #successBox {
-        box-shadow: none;
-        padding: 0px;
-        height: fit-content;
-        width: 75%;
-    }
+  #successBox {
+    box-shadow: none;
+    padding: 0px;
+    height: fit-content;
+    width: 75%;
+  }
 }
 
 @media only screen and (max-height: 530px) {
-    #successBox {
-        margin-top: 60vh;
-        box-shadow: none;
-        padding: 0px;
-        width: 75%;
-    }
+  #successBox {
+    margin-top: 60vh;
+    box-shadow: none;
+    padding: 0px;
+    width: 75%;
+  }
 }
 
 @media only screen and (max-height: 445px) {
-    #successBox {
-        margin-top: 70vh;
-    }
+  #successBox {
+    margin-top: 70vh;
+  }
 }
 
 @media only screen and (max-height: 380px) {
-    #successBox {
-        margin-top: 80vh;
-    }
+  #successBox {
+    margin-top: 80vh;
+  }
 }
 
 @media only screen and (max-height: 330px) {
-    #loginBox {
-        margin-top: 90vh;
-    }
+  #loginBox {
+    margin-top: 90vh;
+  }
 }
 
 @media only screen and (max-height: 290px) {
-    #loginBox {
-        margin-top: 100vh;
-    }
+  #loginBox {
+    margin-top: 100vh;
+  }
 }

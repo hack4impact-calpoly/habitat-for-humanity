@@ -106,6 +106,7 @@ dist
 # .DS_Store
 .DS_Store
 *.DS_Store
+**/.DS_Store
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
@@ -127,3 +128,4 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+**/.DS_Store

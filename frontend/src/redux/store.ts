@@ -1,5 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
-import donationReducer from './donationSlice';
+import { configureStore } from "@reduxjs/toolkit";
 import {
   persistStore,
   persistReducer,
@@ -9,16 +8,17 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+} from "redux-persist";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import donationReducer from "./donationSlice";
 
 const persistConfig = {
-  key: 'donation',
+  key: "donation",
   storage,
-}
+};
 
-const persistedReducer = persistReducer(persistConfig, donationReducer)
-export const store =  configureStore({
+const persistedReducer = persistReducer(persistConfig, donationReducer);
+export const store = configureStore({
   reducer: {
     donation: persistedReducer,
   },
@@ -31,7 +31,7 @@ export const store =  configureStore({
       },
     }),
 });
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);
 
 // types for typescript use
 export type AppDispatch = typeof store.dispatch;
