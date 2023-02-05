@@ -69,63 +69,75 @@
   cursor: pointer;
 }
 
+@media only screen and (max-width: 1100px) {
+    #donDropoffPage {
+        width: 90%;
+        transform: translateX(5%);
+    }
+}
 @media only screen and (max-width: 915px) {
-  #donDropoffPage {
-    padding: 0 10%;
-  }
+    #donDropoffPage {
+        width: 90%;
+        transform: translateX(5%);
+    }
 }
 
 @media only screen and (max-width: 750px) {
-  #donDropoffPage {
-    padding: 0 9%;
-  }
+    
+    #donDropoffPage {
+        width: 90%;
+        transform: translateX(5%);
+    }
 }
 
 @media only screen and (max-width: 640px) {
-  #donPDOptions {
-    display: block;
-  }
-
-  #radioPickUp {
-    margin-top: 20px;
-  }
+    .backButton, .nextButton {
+        padding: 8px 40px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
+    }
 }
 
 @media only screen and (max-width: 630px) {
-  #donDropoffPage {
-    padding: 0 5%;
-  }
-
-  #radioDropoff {
-    margin-right: 10px;
-  }
+    .backButton, .nextButton {
+        padding: 8px 40px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
+    }
 }
 
 @media only screen and (max-width: 560px) {
-  #donDropoffPage {
-    padding: 0 5%;
-  }
-
-  .radioLabel {
-    margin-left: 2px;
-  }
-
-  #radioDropoff {
-    margin-right: 5px;
-  }
+    .backButton, .nextButton {
+        padding: 8px 40px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
+    }
 }
 
 @media only screen and (max-width: 540px) {
-  #donDropoffPage {
-    padding: 0 5%;
-  }
+    .backButton, .nextButton {
+        padding: 8px 40px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
+    }
 }
 
 @media only screen and (max-width: 430px) {
-  .backButton,
-  .nextButton {
-    padding: 8px 40px;
-  }
+    .backButton, .nextButton {
+        padding: 8px 40px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
+    }
 }
 
 @media only screen and (max-width: 360px) {
@@ -134,13 +146,10 @@
     padding: 7px 38px;
   }
 
-  .donDropoffRow {
-    padding-bottom: 10px;
-  }
-
-  .donDropoffHours {
-    padding-left: 30px;
-  }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
+    }
 }
 
 @media only screen and (max-width: 300px) {
@@ -149,13 +158,17 @@
     padding: 7px 30px;
   }
 
-  .donDropoffRow {
-    padding-bottom: 9px;
-  }
-
-  .donDropoffHours {
-    padding-left: 25px;
-  }
+    .donDropoffRow {
+        padding-bottom: 9px;
+    }
+    
+    .donDropoffHours {
+        padding-left: 25px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
+    }
 }
 
 @media only screen and (max-width: 290px) {
@@ -168,13 +181,17 @@
     padding: 7px 30px;
   }
 
-  .donDropoffRow {
-    padding-bottom: 5px;
-    font-size: 15px;
-  }
-
-  .donDropoffHours {
-    padding-left: 15px;
-    font-size: 15px;
-  }
+    .donDropoffRow {
+        padding-bottom: 5px;
+        font-size: 15px;
+    }
+    
+    .donDropoffHours {
+        padding-left: 15px;
+        font-size: 15px;
+    }
+    #donDropoffPage {
+        width: 100%;
+        transform: translateX(5%);
+    }
 }
