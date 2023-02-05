@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+@import "config/colors.css";
+
+#newPasswordBox {
+    width: 50vw;
+    max-width: 577px;
+    margin: auto;
+
+    box-sizing: border-box;
+    text-align: center;
+
+    background: var(--white-gray);
+    margin: auto;
+    margin-top: 50vh;
+    transform: translateY(-50%);
+    box-shadow: 0px 8px 21px var(--box-shadow);
+    padding: 62px 70px 68px 70px;
+}
+
+#newPasswordText {
+    font-family: Rubik;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 40px;
+    margin: 0px 0px 34px 0px;
+    text-align: left;
+
+    color: var(--black);
+}
+
+.accountLabel input[type="radio"] {
+    height: 0.9em;
+}
+
+.accountLabel {
+    color: var(--secondary);
+    font-weight: bold;
+    align-content: center;
+}
+
+
+#nameBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#firstNameBox {
+    width: 197px;
+}
+
+#lastNameBox {
+    width: 197px;
+}
+
+.labelInputBox {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.formLabel {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: bolder;
+    font-size: 13px;
+    line-height: 18px;
+
+    color: var(--black);
+
+    margin: 21px 0px 5px 0px;
+}
+
+.clickable {
+    cursor: pointer;
+    color: var(--secondary);
+    text-decoration: underline;
+}
+
+.unclickable {
+    cursor: not-allowed;
+    color: var(--dark-gray);
+}
+
+.inputBox {
+    font-family: Rubik;
+    box-sizing: border-box;
+    height: 43px;
+    width: 100%;
+    border: 1px solid var(--input-box);
+    padding: 9px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+#submitButton {
+    background: var(--primary);
+    border: none;
+
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 21px;
+    margin: 26px 0px 12px 0px;
+    height: 51px;
+    width: 100%;
+    color: var(--white);
+}
+
+#submitButton:hover {
+    cursor: pointer;
+    border: 3px solid rgba(2, 5, 12, 0.15)
+}
+
+.createAccountLogin {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    margin: 0px 0px 0px 0px;
+
+    color: var(--black);
+}
+
+.logInBox {
+    display: flex;
+    justify-content: right;
+}
+
+#logInLink {
+    color: var(--secondary);
+    margin: 0px 0px 0px 5px;
+}
+
+#logInLink:hover {
+    text-decoration: underline;
+    cursor: pointer
+}
+
+#passwordBox {
+    font-family: Rubik;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.passwordIcon {
+    color: var(--primary);
+}
+
+#codeLine {
+    display: flex;
+    justify-content: space-between;
+}
