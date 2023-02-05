@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
+import { Box } from "@mui/material";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
@@ -12,11 +13,12 @@ import isMobilePhone from "validator/lib/isMobilePhone";
 import { v4 as uuidv4 } from "uuid";
 /* Backend */
 import { addUser, User } from "api/user";
+import { BsBoxArrowInDown } from "react-icons/bs";
 // import { debug } from "console";
 
 require("./CreateAccountPage.css");
 
-const CreateAccountPage = (): JSX.Element => {
+function CreateAccountPage(): JSX.Element {
   // const { uuid } = require('uuidv4');
   const [userType, setUserType] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
@@ -29,7 +31,7 @@ const CreateAccountPage = (): JSX.Element => {
   });
   const [id, setID] = useState<string>(uuidv4());
 
-  // Error messages
+  // error messages
   const [userTypeError, setUserTypeError] = useState<string>("");
   const [nameError, setNameError] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
@@ -40,12 +42,6 @@ const CreateAccountPage = (): JSX.Element => {
   const navigate = useNavigate();
   const mainScreenPath: string = "/"; // Main screen (login)
   const successPath: string = "/VerifyAccountPage";
-
-  // Mobile View
-  let nameBox: string = "nameBox";
-  let administrator: string = "administrator";
-  let accountTypeBox: string = "accountTypeBox";
-  const [width, setWidth] = useState(window.innerWidth);
 
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>
@@ -96,6 +92,7 @@ const CreateAccountPage = (): JSX.Element => {
       //     signUpParams
       // )
     }).catch((error) => {
+      const { code } = error;
       setPasswordError(error.message);
       return false;
     });
@@ -277,78 +274,77 @@ const CreateAccountPage = (): JSX.Element => {
     validateForm();
   }
 
-  // Mobile View
-
-  useEffect(() => {
-    function handleResize() {
-      setWidth(window.innerWidth);
-    }
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [width]);
-
-  // useEffect(() => {
-  //   width < 640 && handleSideNavToggle();
-  // }, [width]);
-
-  // function handleSideNavToggle() {
-  //   console.log("Mobile View Success");
-  // }
-
-  if (width <= 640) {
-    nameBox = "";
-    administrator = "admin";
-    accountTypeBox = "";
-  }
-
   // HTML Body
   return (
-    <div>
-      <div id="createAccountBox">
+    <Box id="createAccountStyles" sx={styles.container}>
+      <Box id="createAccountBox">
         <p id="createAccountText">Create an Account</p>
         <form id="createAccountForm">
           {/* Div for the user type section */}
-          <div id={accountTypeBox}>
-            <p id="userTypeLabel"> I am a </p>
-            <div className="accountLabel">
-              <input
-                type="radio"
-                className="userTypeButton"
-                value="donor" // Specifies the value for the useState
-                name="userType" // connects all options under group "userType" -> only one can be selected at a time
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setUserType(e.target.value);
-                  validateUserType(e.target.value);
+          <div id="accountTypeBox">
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                width: "100%",
+              }}
+            >
+              <Box sx={{ marginBottom: { xs: "10px", md: "0rem" } }}>
+                <p id="userTypeLabel"> I am a </p>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "100%",
                 }}
-              />
-              donor
-              <input
-                type="radio"
-                className="userTypeButton"
-                value="volunteer"
-                name="userType"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setUserType(e.target.value);
-                  validateUserType(e.target.value);
-                }}
-              />
-              volunteer
-              <input
-                type="radio"
-                className="userTypeButton"
-                value="administrator"
-                name="userType"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setUserType(e.target.value);
-                  validateUserType(e.target.value);
-                }}
-              />
-              {administrator}
-            </div>
+              >
+                <Box className="radioContainer">
+                  <input
+                    type="radio"
+                    className="userTypeButton"
+                    value="donor" // Specifies the value for the useState
+                    name="userType" // connects all options under group "userType" -> only one can be selected at a time
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setUserType(e.target.value);
+                      validateUserType(e.target.value);
+                    }}
+                  />
+                  <span className="accountLabel">donor</span>
+                </Box>
+                <Box className="radioContainer">
+                  <input
+                    type="radio"
+                    className="userTypeButton"
+                    value="volunteer"
+                    name="userType"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setUserType(e.target.value);
+                      validateUserType(e.target.value);
+                    }}
+                  />
+                  <span className="accountLabel">volunteer</span>
+                </Box>
+                <Box className="radioContainer">
+                  <input
+                    type="radio"
+                    className="userTypeButton"
+                    value="administrator"
+                    name="userType"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setUserType(e.target.value);
+                      validateUserType(e.target.value);
+                    }}
+                  />
+                  <span className="accountLabel">administrator</span>
+                </Box>
+              </Box>
+            </Box>
           </div>
-          <div className="inputError">{userTypeError}</div>
 
-          <div id={nameBox}>
+          <div className="inputError">{userTypeError}</div>
+          <div id="nameBox">
             <div className="labelInputBox" id="firstNameBox">
               <p className="formLabel">First Name</p>
               <input
@@ -458,22 +454,30 @@ const CreateAccountPage = (): JSX.Element => {
             Log In
           </Link>
         </div>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
-};
+}
 
-// const styles = {
-
-//     @media only screen and (max-width: 640px) {
-//         nameBox: {
-//             display: "flex",
-//             flexDirection: "column",
-//             width: "100%",
-//             alignItems: "left",
-//             flexWrap: "wrap",
-//         },
-//     },
-// } as const;
+const styles = {
+  container: {
+    display: "flex",
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+  },
+  createAccountCard: {
+    width: "50%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    boxSizing: "border-box",
+    textAlign: "center",
+    backgroundColor: "white",
+    boxShadow: "0px 10px 24px rgba(0, 0, 0, 0.25)",
+  },
+} as const;
 
 export default CreateAccountPage;
