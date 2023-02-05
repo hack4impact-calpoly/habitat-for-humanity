@@ -1,70 +1,72 @@
 @import "config/colors.css";
 
 #donDropoffPage {
-    margin-top: 100px;
-    width: 800px;
-    transform: translateX(40%);
+  margin-top: 100px;
+  width: 800px;
+  transform: translateX(40%);
 }
 
 .donDropoffPickupHeader {
-    padding-top: 25px;
-    color: var(--orange)
+  padding-top: 25px;
+  color: var(--orange);
 }
 
 #donPDOptions {
-    display: flex;
+  display: flex;
 }
 
 #donPDHeader {
-    color: var(--orange);
+  color: var(--orange);
 }
 
 .radioOptionLabel {
-    display: inline;
+  display: inline;
 }
 
 .radioLabel {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 #radioDropoff {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 .donDropoffRow {
-    padding-bottom: 15px;
+  padding-bottom: 15px;
 }
 
 .donDropoffHours {
-    padding-left: 35px;
+  padding-left: 35px;
 }
 
 #donDropoffButtons {
-    margin-top: 25px;
-    display: flex;
-    justify-content: space-between;
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.backButton, .nextButton {
-    padding: 10px 45px;
+.backButton,
+.nextButton {
+  padding: 10px 45px;
 }
 
 .backButton {
-    color: var(--tertiary);
-    font-weight: bold;
-    background-color: var(--white);
-    border: 2px solid var(--tertiary);
+  color: var(--tertiary);
+  font-weight: bold;
+  background-color: var(--white);
+  border: 2px solid var(--tertiary);
 }
 
 .nextButton {
-    background-color: var(--tertiary);
-    font-weight: bold;
-    color: var(--white);
-    border: 2px solid var(--tertiary);
+  background-color: var(--tertiary);
+  font-weight: bold;
+  color: var(--white);
+  border: 2px solid var(--tertiary);
 }
 
-.backButton:hover, .nextButton:hover {
-    cursor: pointer;
+.backButton:hover,
+.nextButton:hover {
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 1100px) {
@@ -139,9 +141,10 @@
 }
 
 @media only screen and (max-width: 360px) {
-    .backButton, .nextButton {
-        padding: 7px 38px;
-    }
+  .backButton,
+  .nextButton {
+    padding: 7px 38px;
+  }
 
     #donDropoffPage {
         width: 100%;
@@ -150,9 +153,10 @@
 }
 
 @media only screen and (max-width: 300px) {
-    .backButton, .nextButton {
-        padding: 7px 30px;
-    }
+  .backButton,
+  .nextButton {
+    padding: 7px 30px;
+  }
 
     .donDropoffRow {
         padding-bottom: 9px;
@@ -168,13 +172,14 @@
 }
 
 @media only screen and (max-width: 290px) {
-    #radioPickUp {
-        margin-top: 10px;
-    }
+  #radioPickUp {
+    margin-top: 10px;
+  }
 
-    .backButton, .nextButton {
-        padding: 7px 30px;
-    }
+  .backButton,
+  .nextButton {
+    padding: 7px 30px;
+  }
 
     .donDropoffRow {
         padding-bottom: 5px;

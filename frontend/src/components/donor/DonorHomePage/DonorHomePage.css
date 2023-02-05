@@ -1,119 +1,116 @@
 @import "config/colors.css";
 
-
 #donatePage {
-    text-align: center;
+  text-align: center;
 }
 
 #giftBox {
-    height: 350px;
-    width: 500px;
-    margin: auto;
-    margin-top: 40vh;
-    transform: translateY(-50%);
+  height: 350px;
+  width: 500px;
+  margin: auto;
+  margin-top: 40vh;
+  transform: translateY(-50%);
 }
 
 #donatePageGift {
-    width: 150px;
+  width: 150px;
 }
 
 #donatePageHeader {
-    color: var(--primary);
+  color: var(--primary);
 }
 
 #donatePageDesc {
-    font-size: 15px;
-    padding-bottom: 10px;
+  font-size: 15px;
+  padding-bottom: 10px;
 }
 
 #donatePageButton {
-    border: none;
-    padding: 15px 30px;
-    color: var(--white);
-    background: var(--secondary);
-    font-weight: bold;
-    font-size: 15px;
+  border: none;
+  padding: 15px 30px;
+  color: var(--white);
+  background: var(--secondary);
+  font-weight: bold;
+  font-size: 15px;
 }
 
 #donatePageButton:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 499px) {
-    #giftBox {
-        height: 380px;
-        width: 400px;
-    }
+  #giftBox {
+    height: 380px;
+    width: 400px;
+  }
 
-    #donatePageGift {
-        width: 120px;
-    }
+  #donatePageGift {
+    width: 120px;
+  }
 
-    #donatePageHeader {
-        font-size: 25px;
-    }
+  #donatePageHeader {
+    font-size: 25px;
+  }
 }
 
 @media only screen and (max-width: 400px) {
-    #giftBox {
-        height: 340px;
-        width: 300px;
-    }
+  #giftBox {
+    height: 340px;
+    width: 300px;
+  }
 
-    #donatePageGift {
-        width: 100px;
-    }
+  #donatePageGift {
+    width: 100px;
+  }
 
-    #donatePageHeader {
-        font-size: 20px;
-    }
+  #donatePageHeader {
+    font-size: 20px;
+  }
 
-    #donatePageDesc {
-        font-size: 13px;
-    }
+  #donatePageDesc {
+    font-size: 13px;
+  }
 }
 
 @media only screen and (max-width: 280px) {
-    #giftBox {
-        height: 300px;
-        width: 250px;
-    }
+  #giftBox {
+    height: 300px;
+    width: 250px;
+  }
 
-    #donatePageGift {
-        width: 100px;
-    }
+  #donatePageGift {
+    width: 100px;
+  }
 
-    #donatePageHeader {
-        font-size: 20px;
-    }
+  #donatePageHeader {
+    font-size: 20px;
+  }
 
-    #donatePageDesc {
-        font-size: 13px;
-    }
+  #donatePageDesc {
+    font-size: 13px;
+  }
 }
 
 @media only screen and (max-height: 490px) {
-    #giftBox {
-        margin-top: 50vh;
-    }
+  #giftBox {
+    margin-top: 50vh;
+  }
 }
-
 
 @media only screen and (max-height: 420px) {
-    #giftBox {
-        margin-top: 55vh;
-    }
+  #giftBox {
+    margin-top: 55vh;
+  }
 }
 
-
 @media only screen and (max-height: 320px) {
-    #giftBox {
-        margin-top: 60vh;
-    }
+  #giftBox {
+    margin-top: 60vh;
+  }
 }
 
 @media only screen and (max-height: 280px) {
-    #giftBox {
-        margin-top: 75vh;
-    }
+  #giftBox {
+    margin-top: 75vh;
+  }
 }

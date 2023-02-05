@@ -1,81 +1,96 @@
 @import "config/colors.css";
 
 #MainContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #SubmitInfoPage {
-    width: 50rem;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    align-self: center;
+  width: 50rem;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  align-self: center;
 }
 
 #SubmitInfoPage h2 {
-    color: var(--orange);
+  color: var(--orange);
 }
 
 #information {
-    padding-top: 40px;
+  padding-top: 40px;
 }
 
 p {
-    font-family: Rubik;
+  font-family: Rubik;
 }
 
 #ProductImages {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 img {
-    max-width:100%;
-    height:auto;
-    max-height:100%;
- }
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+}
 
 #SingleImages {
-    margin-right: 10px;
-    margin-top: 5px;
+  margin-right: 10px;
+  margin-top: 5px;
 }
 
 #Address {
-    white-space: pre-line;
+  white-space: pre-line;
 }
 
-input[type=radio] {
-    border: 0px;
-    width: 1.5em;
-    height: 1.5em;
-    vertical-align: middle;
+input[type="radio"] {
+  border: 0px;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
+}
+#ReStoreHoursTable {
+  width: 23rem;
+}
+.ReStoreHoursTableItem {
+  display: flex;
+}
+
+.ReStoreHoursTableItem > p {
+  margin: 0.5rem 0;
+  flex: 1;
+}
+
+.ReStoreHoursTableItem > :last-child {
+  flex: 2;
 }
 
 @media only screen and (max-width: 915px) {
-    img {
-        max-width:95%;
-     }
-     #SingleImages {
-        margin-right: -20px;
-        margin-top: 5px;
-    }
+  img {
+    max-width: 95%;
+  }
+  #SingleImages {
+    margin-right: -20px;
+    margin-top: 5px;
+  }
 }
 
 @media only screen and (max-width: 850px) {
-    img {
-        max-width:85%;
-     }
-     #SingleImages {
-        margin-right: -40px;
-        margin-top: 5px;
-    }
+  img {
+    max-width: 85%;
+  }
+  #SingleImages {
+    margin-right: -40px;
+    margin-top: 5px;
+  }
 }
 
 @media only screen and (max-width: 750px) {
-     #SingleImages {
-        margin-right: -155px;
-        margin-top: 5px;
-    }
+  #SingleImages {
+    margin-right: -155px;
+    margin-top: 5px;
+  }
 }
