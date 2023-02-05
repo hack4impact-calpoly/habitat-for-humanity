@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { BsCheckLg } from "react-icons/bs";
-import { useScreenSize } from "../../../hooks";
+import { useScreenSize } from "hooks";
 
 type ProgressBarProps = {
   activeStep: number;
