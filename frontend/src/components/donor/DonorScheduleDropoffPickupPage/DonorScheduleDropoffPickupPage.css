@@ -2,13 +2,16 @@
 
 #donDropoffPage {
   margin-top: 100px;
-  width: 800px;
-  transform: translateX(40%);
+  width: 100%;
 }
 
 .donDropoffPickupHeader {
   padding-top: 25px;
   color: var(--orange);
+}
+
+#makeDonationHeader{
+  display: none;
 }
 
 #donPDOptions {
@@ -87,7 +90,29 @@
   }
 
   #radioPickUp {
+    margin-top: 0px;
+  }
+  #donDropoffPage{
     margin-top: 20px;
+  }
+
+  #donDropoffSchedulingOptions{
+    display: none;
+  }
+
+  #makeDonationHeader{
+    display: unset;
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px; 
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .donDropoffPickupHeader{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-size: 18px;
   }
 }
 

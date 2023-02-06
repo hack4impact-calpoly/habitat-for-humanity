@@ -27,8 +27,9 @@ function DonatorScheduleDropoffPage(): JSX.Element {
     <div style={{ paddingBottom: "4rem" }}>
       <DonatorNavbar />
       <div id="donDropoffPage">
+        <p id="makeDonationHeader">Make a Donation</p>
         <ProgressBar activeStep={3} />
-        <div>
+        <div id="donDropoffSchedulingOptions">
           <h2 id="donPDHeader">Scheduling</h2>
           <h4>
             Does the donation need to be picked up or can you drop it off at our

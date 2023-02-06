@@ -161,8 +161,12 @@ function DonatorSchedulePickUp(): JSX.Element {
   };
 
   return (
-    <div>
+    <div id="donatorSchedulePickupPage">
       <h2 className="donDropoffPickupHeader">Time Availability</h2>
+      <p id="donatorPickupDescMobile">
+        Please select multiple dates and times you are available, and our staff
+        will choose from your availability.
+      </p>
       <div id="donatorPickupPage">
         <div id="calendarView">
           <FullCalendar

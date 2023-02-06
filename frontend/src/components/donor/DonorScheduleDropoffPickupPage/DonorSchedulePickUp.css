@@ -29,6 +29,13 @@
   margin-right: 10px;
 }
 
+#donatorPickupDescMobile {
+  font-style: italic;
+  color: var(--dark-gray);
+  display: none;
+  width: 305px;
+}
+
 #donatorPickupDesc {
   font-style: italic;
   color: var(--dark-gray);
@@ -70,10 +77,41 @@
   }
 }
 
-@media only screen and (max-width: 1082px) {
+@media only screen and (max-width: 640px) {
+
   #donatorPickupPage {
     display: block;
   }
+
+  #donatorPickupDescMobile {
+    display: contents;
+    font-size: 11px;
+    padding-bottom: 25px;
+  }
+  
+  #donatorPickupDesc {
+    display: none;
+  }
+
+  #donatorPickupHeader {
+    font-size: 16px;
+  }
+
+  #donatorPickUpTime{
+    height: 40px;
+  }
+  
+  .donatorPickUpTime {
+    border: 1px solid var(--box-border);
+    border-color: #8F8F8F;
+    padding-bottom: 9%;
+    margin-bottom: 2%;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000000;
+    height: 40px;
+  }
+
 }
 
 @media only screen and (max-width: 412px) {
