@@ -29,6 +29,8 @@ const ProgressStep = styled.div`
   height: 25px;
   background-color: var(--gray-dark);
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
 `;
 
 const PText = styled.div`
@@ -44,7 +46,6 @@ const PIcon = styled(BsCheckLg)`
   size: 2px;
   color: var(--white-gray);
   margin-top: 7px;
-  margin-left: 6px;
 `;
 
 function ProgressBar({ activeStep }: ProgressBarProps): JSX.Element {
@@ -56,9 +57,16 @@ function ProgressBar({ activeStep }: ProgressBarProps): JSX.Element {
 
   return (
     <PBContainer>
-      <ProgressStep style={{ backgroundColor: changeColor(1) }}>
+      <ProgressStep
+        style={{
+          backgroundColor: changeColor(1),
+          justifyContent: "flex-start",
+        }}
+      >
         <PText style={{ color: changeTextColor(1) }}>Item Info</PText>
-        {activeStep > 1 ? <PIcon size={12} /> : null}
+        {activeStep > 1 ? (
+          <PIcon size={12} style={{ marginLeft: "6px" }} />
+        ) : null}
       </ProgressStep>
       <ProgressStep style={{ backgroundColor: changeColor(2) }}>
         <PText style={{ color: changeTextColor(2) }}>Location</PText>
@@ -68,11 +76,15 @@ function ProgressBar({ activeStep }: ProgressBarProps): JSX.Element {
         <PText style={{ color: changeTextColor(3) }}>Schedule</PText>
         {activeStep > 3 ? <PIcon size={12} /> : null}
       </ProgressStep>
-      <ProgressStep style={{ backgroundColor: changeColor(4) }}>
+      <ProgressStep
+        style={{ backgroundColor: changeColor(4), justifyContent: "flex-end" }}
+      >
         <PText style={{ color: changeTextColor(4) }}>{`Review${
           !["xs"].includes(screenSize as string) ? ` + Submit` : ""
         }`}</PText>
-        {activeStep > 4 ? <PIcon size={12} /> : null}
+        {activeStep > 4 ? (
+          <PIcon size={12} style={{ marginRight: "6px" }} />
+        ) : null}
       </ProgressStep>
     </PBContainer>
   );
