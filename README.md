@@ -17,7 +17,7 @@
 <br>
 
 ## :computer: For Devs
-###Checking out an Issue:
+### Checking out an Issue:
 1. Create a branch off of `dev`
 
 Make sure you currently have the dev branch checked out:
@@ -47,7 +47,7 @@ git checkout -b 1-Login-Page
 ```
 The GitHub issue # is the key found on a GitHub Issues task
 
-###Getting Started:
+### Getting Started:
 1. Clone the repository...
 ```
 git clone https://github.com/hack4impact-calpoly/habitat-for-humanity.git
