@@ -41,6 +41,12 @@ npm i
 ```
 
 Name the branch with the GitHub issue ID and a short description of the task:
+
+```bash
+git checkout -b 1-Login-Page
+```
+The GitHub issue # is the key found on a GitHub Issues task
+
 Getting Started:
 1. Clone the repository...
 ```
