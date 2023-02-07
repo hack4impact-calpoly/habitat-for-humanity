@@ -18,34 +18,33 @@
 
 ## :computer: For Devs
 ### Checking out an Issue:
-1. Create a branch off of `dev`
 
-Make sure you currently have the dev branch checked out:
+1. Make sure you currently have the dev branch checked out:
 
 ```bash
 git checkout dev
 ```
 
-Pull any changes from the previous sprint:
+2. Pull any changes from the previous sprint:
 
 ```bash
 git pull
 ```
 
-Navigate to the `/frontend` or `/backend`
+3. Navigate to the `/frontend` and `/backend`
 
-Be sure to install any packages as a result of the previous sprint:
+4. Be sure to install any packages as a result of the previous sprint:
 
 ```bash
 npm i
 ```
 
-Name the branch with the GitHub issue ID and a short description of the task:
+5. Name the branch with the GitHub issue ID and a short description of the task:
 
 ```bash
 git checkout -b 1-Login-Page
 ```
-The GitHub issue # is the key found on a GitHub Issues task
+*The GitHub issue # is the key found on a GitHub Issues task
 
 ### Getting Started:
 1. Clone the repository...
