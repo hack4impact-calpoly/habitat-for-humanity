@@ -72,6 +72,7 @@ export const donationSlice = createSlice({
 export const {
   updateName,
   updateDimensions,
+  updatePhotos,
   updateAddress,
   updateCity,
   updateZip,

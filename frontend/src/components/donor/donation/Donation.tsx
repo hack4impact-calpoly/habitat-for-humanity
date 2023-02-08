@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateDimensions, updateName } from "redux/donationSlice";
+import {
+  updateDimensions,
+  updateName,
+  updatePhotos,
+} from "redux/donationSlice";
 import ProgressBar from "./ProgressBar";
 import Dropzone from "./Dropzone";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
@@ -110,6 +114,7 @@ function Donation(): JSX.Element {
   const updateStore = () => {
     dispatch(updateName(itemDescription));
     dispatch(updateDimensions(itemDimensions));
+    dispatch(updatePhotos(photos));
   };
 
   return (
