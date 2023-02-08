@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MutableRefObject, useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 
 const DropContainer = styled.div`
@@ -9,6 +9,9 @@ const DropContainer = styled.div`
   justify-content: center;
   align-content: center;
   background-color: var(--background);
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const UploadIcon = styled.div`
@@ -37,14 +40,65 @@ const Message = styled.h1`
   color: var(--black);
 `;
 
+const Input = styled.input`
+  height: 275px;
+  border: 1px dashed var(--dashed-box);
+  display: flex;
+  flex: column nowrap;
+  justify-content: center;
+  align-content: center;
+  background-color: var(--background);
+`;
+
 function DropZone(): JSX.Element {
+  const [file, setFile] = useState<string>("");
+  const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
+
+  const handleDragOver = useCallback((e) => {
+    e.preventDefault();
+  }, []);
+
+  const handleDrop = useCallback((e) => {
+    console.log("Dropped");
+    e.preventDefault();
+    processFile(e.dataTransfer.files);
+  }, []);
+
+  function processFile(files: FileList | null) {
+    if (files) {
+      const fileRef = files[0] || "";
+      console.log("This fileRef is:", fileRef);
+      const fileType: string = fileRef.type || "";
+      console.log("This file upload is of type:", fileType);
+      const reader = new FileReader();
+      reader.readAsBinaryString(fileRef);
+      reader.onload = (ev: any) => {
+        // convert it to base64
+        setFile(`data:${fileType};base64,${btoa(ev.target.result)}`);
+      };
+    }
+  }
+
   return (
-    <DropContainer>
+    <DropContainer
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onClick={() => inputRef.current.click()}
+    >
       <DropMessage>
         Upload Your Images
         <UploadIcon />
         <Message>
-          drop you image files or <br /> browse to choose a file
+          drop you image files or <br />
+          <span style={{ color: "var(--secondary)" }}>browse</span> to choose a
+          file
+          <input
+            type="file"
+            onChange={(e) => processFile(e.target.files)}
+            hidden
+            multiple
+            ref={inputRef}
+          />
         </Message>
       </DropMessage>
     </DropContainer>
