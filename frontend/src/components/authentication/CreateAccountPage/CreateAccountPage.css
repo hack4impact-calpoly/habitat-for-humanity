@@ -113,7 +113,7 @@
 #createAccountStyles .inputError {
   text-align: left;
   color: var(--red);
-  font-size: 13px;  
+  font-size: 13px;
 }
 
 #createAccountStyles #signUpButton {
@@ -134,17 +134,16 @@
 }
 
 @media only screen and (max-width: 1200px) {
-
   #createAccountStyles #createAccountBox {
     padding: 60px 90px;
     width: 600px;
-    }
-  
+  }
+
   #createAccountStyles #createAccountText {
     font-size: 32px;
     padding-bottom: 10px;
   }
-  
+
   #createAccountStyles #accountTypeBox {
     padding: 0px;
     font-size: 12px;
@@ -156,29 +155,28 @@
   #createAccountStyles #userTypeLabel {
     font-size: 13px;
   }
-  
+
   #createAccountStyles .accountLabel {
     font-size: 13px;
   }
-  
-  
+
   #createAccountStyles .formLabel {
     font-size: 12px;
     margin: 16px 0px 3px 0px;
   }
-  
+
   #createAccountStyles #createAccountInputBox {
     font-size: 12px;
   }
-  
+
   #createAccountStyles .inputError {
     font-size: 12px;
   }
-  
+
   #createAccountStyles #signUpButton {
     background: var(--primary);
     border: none;
-  
+
     font-family: Rubik;
     font-style: normal;
     font-size: 14px;
