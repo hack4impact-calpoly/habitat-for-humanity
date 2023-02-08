@@ -52,9 +52,7 @@ const Input = styled.input`
   background-color: var(--background);
 `;
 
-function DropZone(): JSX.Element {
-  const storedPhotos = useSelector((state: RootState) => state.donation.photos);
-  const [files, setFiles] = useState(storedPhotos);
+function DropZone({ setPhotos }: { setPhotos: any }): JSX.Element {
   const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
 
   const handleDragOver = useCallback((e) => {
@@ -73,7 +71,7 @@ function DropZone(): JSX.Element {
       console.log("This fileRefs are:", filesRef);
       const fileType: string = filesRef[0].type;
       console.log("The first file upload is of type:", fileType);
-      setFiles(filesRef);
+      setPhotos(filesRef);
       console.log("New file state:", files);
     }
   }
