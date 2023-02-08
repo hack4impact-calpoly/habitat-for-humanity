@@ -71,8 +71,10 @@ function Donation(): JSX.Element {
   const storedDims = useSelector(
     (state: RootState) => state.donation.dimensions
   );
+  const storedPhotos = useSelector((state: RootState) => state.donation.photos);
   const [itemDescription, setItemDescription] = useState(storedDesc);
   const [itemDimensions, setItemDimensions] = useState(storedDims);
+  const [photos, setPhotos] = useState(storedPhotos);
   const [descError, setDescError] = useState("");
   const [dimError, setDimError] = useState("");
 
@@ -143,7 +145,7 @@ function Donation(): JSX.Element {
         </InputSectionContainer>
         <UploadContainer>
           <SubHeader>Item Photos</SubHeader>
-          <Dropzone />
+          <Dropzone setPhotos={setPhotos} />
         </UploadContainer>
         <div id="donPickupButtons">
           <button
