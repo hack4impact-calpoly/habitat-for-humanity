@@ -245,30 +245,32 @@ function CreateAccountPage(): JSX.Element {
     return true;
   };
 
-  function processPhoneNumber(phoneNumber: string): boolean {
+    function processPhoneNumber(phoneNumber: string): boolean {
     /*
-        Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
-        Return: boolean (true if number successfuly processed, false if not)
-        */
+    Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
+    Return: boolean (true if number successfuly processed, false if not)
+    */
     try {
-      const processedString = phoneNumber.replace(/[^0-9]/g, "");
-      if (!isMobilePhone(processedString, "en-US")) {
-        setPhoneNumberError(
-          "Please enter your phone number in the form XXX-XXX-XXXX"
-        );
+        const processedString = phoneNumber.replace(/[^/d]/g, "");
+        if (processedString.length !== 10) {
+            setPhoneNumberError("Please enter your phone number in the form XXX-XXX-XXXX");
+            return false;
+          }
+        if (!isMobilePhone(processedString, "en-US")) {
+            setPhoneNumberError("Please enter your phone number in the form XXX-XXX-XXXX");
+            return false;
+        }
+          
+        // processedPhoneNumber = parseInt(processedString);
+        setPhoneNumber(processedString);
+    }
+    catch (error) {
+        console.error(error);
+        setPhoneNumberError("Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX");
         return false;
-      }
-      // processedPhoneNumber = parseInt(processedString);
-      setPhoneNumber(processedString);
-    } catch (error) {
-      console.error(error);
-      setPhoneNumberError(
-        "Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX"
-      );
-      return false;
     }
     return true;
-  }
+}
 
   function checkError(type: string) {
     validateForm();
