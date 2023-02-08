@@ -1,4 +1,6 @@
 import React, { MutableRefObject, useCallback, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
 import styled from "styled-components";
 
 const DropContainer = styled.div`
@@ -51,7 +53,8 @@ const Input = styled.input`
 `;
 
 function DropZone(): JSX.Element {
-  const [file, setFile] = useState<string>("");
+  const storedPhotos = useSelector((state: RootState) => state.donation.photos);
+  const [files, setFiles] = useState(storedPhotos);
   const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
 
   const handleDragOver = useCallback((e) => {
@@ -61,21 +64,17 @@ function DropZone(): JSX.Element {
   const handleDrop = useCallback((e) => {
     console.log("Dropped");
     e.preventDefault();
-    processFile(e.dataTransfer.files);
+    processFilesInput(e.dataTransfer.files);
   }, []);
 
-  function processFile(files: FileList | null) {
+  function processFilesInput(files: FileList | null) {
     if (files) {
-      const fileRef = files[0] || "";
-      console.log("This fileRef is:", fileRef);
-      const fileType: string = fileRef.type || "";
-      console.log("This file upload is of type:", fileType);
-      const reader = new FileReader();
-      reader.readAsBinaryString(fileRef);
-      reader.onload = (ev: any) => {
-        // convert it to base64
-        setFile(`data:${fileType};base64,${btoa(ev.target.result)}`);
-      };
+      const filesRef = Array.from(files);
+      console.log("This fileRefs are:", filesRef);
+      const fileType: string = filesRef[0].type;
+      console.log("The first file upload is of type:", fileType);
+      setFiles(filesRef);
+      console.log("New file state:", files);
     }
   }
 
@@ -94,9 +93,10 @@ function DropZone(): JSX.Element {
           file
           <input
             type="file"
-            onChange={(e) => processFile(e.target.files)}
+            onChange={(e) => processFilesInput(e.target.files)}
             hidden
             multiple
+            accept="image/*"
             ref={inputRef}
           />
         </Message>
