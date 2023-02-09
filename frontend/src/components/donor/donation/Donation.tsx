@@ -117,6 +117,11 @@ function Donation(): JSX.Element {
     dispatch(updatePhotos(photos));
   };
 
+  const dropzoneProps = {
+    photos,
+    setPhotos,
+  };
+
   return (
     <>
       <DonatorNavbar />
@@ -150,7 +155,7 @@ function Donation(): JSX.Element {
         </InputSectionContainer>
         <UploadContainer>
           <SubHeader>Item Photos</SubHeader>
-          <Dropzone setPhotos={setPhotos} />
+          <Dropzone {...dropzoneProps} />
         </UploadContainer>
         <div id="donPickupButtons">
           <button
