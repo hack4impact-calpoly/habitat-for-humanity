@@ -52,8 +52,19 @@ const Input = styled.input`
   background-color: var(--background);
 `;
 
-function DropZone({ setPhotos }: { setPhotos: any }): JSX.Element {
+const ImageContainer = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1em;
+`;
+
+function DropZone(props: any): JSX.Element {
   const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
+
+  // props destructuring
+  const { photos, setPhotos } = props;
 
   const handleDragOver = useCallback((e) => {
     e.preventDefault();
@@ -77,29 +88,40 @@ function DropZone({ setPhotos }: { setPhotos: any }): JSX.Element {
   }
 
   return (
-    <DropContainer
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-      onClick={() => inputRef.current.click()}
-    >
-      <DropMessage>
-        Upload Your Images
-        <UploadIcon />
-        <Message>
-          drop you image files or <br />
-          <span style={{ color: "var(--secondary)" }}>browse</span> to choose a
-          file
-          <input
-            type="file"
-            onChange={(e) => processFilesInput(e.target.files)}
-            hidden
-            multiple
-            accept="image/*"
-            ref={inputRef}
-          />
-        </Message>
-      </DropMessage>
-    </DropContainer>
+    // prints out the images if props.photos is not empty, else drop container
+    <div>
+      {photos.length > 0 ? (
+        <ImageContainer>
+          {photos.map((photo: any) => (
+            <img src={URL.createObjectURL(photo)} alt="uploaded" />
+          ))}
+        </ImageContainer>
+      ) : (
+        <DropContainer
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onClick={() => inputRef.current.click()}
+        >
+          <DropMessage>
+            Upload Your Images
+            <UploadIcon />
+            <Message>
+              drop you image files or <br />
+              <span style={{ color: "var(--secondary)" }}>browse</span> to
+              choose a file
+              <input
+                type="file"
+                onChange={(e) => processFilesInput(e.target.files)}
+                hidden
+                multiple
+                accept="image/*"
+                ref={inputRef}
+              />
+            </Message>
+          </DropMessage>
+        </DropContainer>
+      )}
+    </div>
   );
 }
 export default DropZone;
