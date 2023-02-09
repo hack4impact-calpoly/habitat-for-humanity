@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
@@ -32,17 +32,33 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const storedDimensions = useSelector(
     (state: RootState) => state.donation.dimensions
   );
+  const storedPhotos = useSelector((state: RootState) => state.donation.photos);
   const storedLocation = useSelector(
     (state: RootState) => state.donation.address
   );
   const storedDropOff = useSelector(
     (state: RootState) => state.donation.dropoff
   );
+  const [photoBase64s, setPhotoBase64s] = useState<string[]>([]);
 
   name = storedName;
   dimensions = storedDimensions;
+  // photos = storedPhotos;
   location = storedLocation;
   dropOff = storedDropOff;
+
+  // user FileReader to read an array of images and convert them to base64
+  useEffect(() => {
+    if (storedPhotos) {
+      storedPhotos.forEach((photo) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(photo);
+        reader.onloadend = () => {
+          setPhotoBase64s((prev) => [...prev, reader.result as string]);
+        };
+      });
+    }
+  }, []);
 
   const [dropOffOption, setDropOffOption] = useState(dropOff);
   const [serverError, setServerError] = useState<string>("");
@@ -52,6 +68,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     const donation: Item = {
       name: storedDonation.name,
       size: storedDonation.dimensions,
+      photos: storedDonation.photos,
       address: storedDonation.address,
       city: storedDonation.city,
       state: storedDonation.state,
@@ -107,9 +124,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <b>Item Photos</b>
             </p>
             <div id="ProductImages">
-              {photos?.map((imgSrc, index) => (
+              {photoBase64s?.map((photo, index) => (
                 <div key={index} id="SingleImages">
-                  <img src={imgSrc.src} alt="n" />
+                  <img src={photo} alt="n" />
                 </div>
               ))}
             </div>
