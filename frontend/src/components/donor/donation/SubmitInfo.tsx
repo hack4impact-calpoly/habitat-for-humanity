@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector } from "react-redux";
+import { Box, Container, Grid, Radio } from "@mui/material";
 import { Item, addItem } from "../../../api/item";
 
 import { RootState } from "../../../redux/store";
@@ -86,109 +87,126 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   };
 
   return (
-    <div>
+    <Grid container justifyContent="center" id="SubmitInfoPage">
       {!component && <DonatorNavbar />}
-
-      <div id={!component ? "MainContainer" : ""}>
-        <div id="SubmitInfoPage">
-          <div id="information">
-            {!component && <ProgressBar activeStep={4} />}
-            {/* <h2 id="Review">Review</h2>
-                    <p>Please review your donation information before you submit.</p> */}
-            <h2 id="ItemInfo">Item Information</h2>
-            <p id="itemName">
-              <b>Item Name:</b> {name}
-            </p>
-            <p id="itemDimensions">
-              <b>Item Dimensions: </b>
-              {dimensions}
-            </p>
-            <p id="itemPhotos">
-              <b>Item Photos</b>
-            </p>
-            <div id="ProductImages">
-              {photos?.map((imgSrc, index) => (
-                <div key={index} id="SingleImages">
-                  <img src={imgSrc.src} alt="n" />
-                </div>
-              ))}
-            </div>
-            <h2 id="Location">Location</h2>
-            <h4 id="Address">
-              {storedDonation.address} <br /> {storedDonation.city},{" "}
-              {storedDonation.state} {storedDonation.zipCode}
-            </h4>
+      <Grid
+        container
+        justifyContent="center"
+        direction="column"
+        sx={{
+          padding: { xs: "0 10%", sm: "0px 15%", md: "10px 20%" },
+          marginTop: { xs: "0", sm: "0px", md: "0 10px" },
+        }}
+      >
+        <Grid item>{!component && <ProgressBar activeStep={4} />}</Grid>
+        <Grid item className="submitDonationInfoReview" spacing={0}>
+          <h2 id="Review" style={{ marginTop: 0 }}>
+            Review
+          </h2>
+          <p>Please review your donation information before you submit.</p>
+          <h2 id="ItemInfo">Item Information</h2>
+          <p id="itemName">
+            <b>Item Name:</b> {name}
+          </p>
+          <p id="itemDimensions">
+            <b>Item Dimensions: </b>
+            {dimensions}
+          </p>
+          <p id="itemPhotos">
+            <b>Item Photos</b>
+          </p>
+          <div id="ProductImages">
+            {photos?.map((imgSrc, index) => (
+              <div key={index} id="SingleImages">
+                <img src={imgSrc.src} alt="n" />
+              </div>
+            ))}
           </div>
-          <div id="SchedulingInfo">
-            <h2 id="Scheduling">Scheduling</h2>
-            <h4 id="SchdulingDesc">
-              Does the donation need to be picked up or can you drop it off at
-              our ReStore?
-            </h4>
-          </div>
-          <div id="donPDOptions">
-            <div>
+          <h2 id="Location">Location</h2>
+          <h4 id="Address">
+            {storedDonation.address} <br /> {storedDonation.city},{" "}
+            {storedDonation.state} {storedDonation.zipCode}
+          </h4>
+          <h2 id="Scheduling">Scheduling</h2>
+          <h4 id="SchdulingDesc">
+            Does the donation need to be picked up or can you drop it off at our
+            ReStore?
+          </h4>
+          <Grid
+            className="dropOffOptions"
+            container
+            spacing={1}
+            justifyItems="start"
+            sx={{
+              direction: { sm: "row", xs: "column" },
+            }}
+          >
+            <Grid item>
               <input
                 type="radio"
-                className="radioOptionLabelCircle"
-                checked={dropOff}
-                onChange={() => setDropOffOption(true)}
+                checked={dropOffOption}
+                onClick={() => setDropOffOption(true)}
               />
-              <p id="radioDropoff" className="radioOptionLabel radioLabel">
+              <p id="radioDropoff" className="radioOptionLabel">
                 I can drop off at the ReStore
               </p>
-            </div>
-            <div id="radioPickUp">
+            </Grid>
+            <Grid item id="radioPickUp" alignItems="center">
               <input
                 type="radio"
-                className="radioOptionLabelCircle"
-                checked={!dropOff}
-                onChange={() => setDropOffOption(false)}
+                checked={!dropOffOption}
+                onClick={() => setDropOffOption(false)}
               />
-              <p className="radioOptionLabel radioLabel">
+              <p className="radioOptionLabel">
                 I need the item to be picked up
               </p>
+            </Grid>
+          </Grid>
+          <h2 id="ReStore">ReStore Drop Off Hours</h2>
+          <div id="ReStoreHoursTable">
+            <div className="ReStoreHoursTableItem">
+              <p>Monday</p>
+              <p>Closed</p>
+            </div>
+            <div className="ReStoreHoursTableItem">
+              <p>Tuesday</p>
+              <p>10:00 AM to 5:00 PM</p>
+            </div>
+            <div className="ReStoreHoursTableItem">
+              <p>Wednesday</p>
+              <p>10:00 AM to 5:00 PM</p>
+            </div>
+            <div className="ReStoreHoursTableItem">
+              <p>Thursday</p>
+              <p>10:00 AM to 5:00 PM</p>
+            </div>
+            <div className="ReStoreHoursTableItem">
+              <p>Friday</p>
+              <p>10:00 AM to 5:00 PM</p>
+            </div>
+            <div className="ReStoreHoursTableItem">
+              <p>Saturday</p>
+              <p>10:00 AM to 5:00 PM</p>
+            </div>
+            <div className="ReStoreHoursTableItem">
+              <p>Sunday</p>
+              <p>Closed</p>
             </div>
           </div>
-          <div id="ReStoreHours">
-            <h2 id="ReStore">ReStore Drop Off Hours</h2>
-            <div id="ReStoreHoursTable">
-              <div className="ReStoreHoursTableItem">
-                <p>Monday</p>
-                <p>Closed</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Tuesday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Wednesday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Thursday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Friday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Saturday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Sunday</p>
-                <p>Closed</p>
-              </div>
-            </div>
-          </div>
-          <div className="inputError">{serverError}</div>
-          {!component && (
-            <div
-              id="donPickupButtons"
-              style={{ display: "flex", flexDirection: "row" }}
-            >
+        </Grid>
+        <Grid item className="inputError">
+          {serverError}
+        </Grid>
+        {!component && (
+          <Grid
+            container
+            direction="row"
+            padding="30px 0px"
+            spacing={{ xs: 1, sm: 0 }}
+            justifyContent="start"
+            alignItems="center"
+          >
+            <Grid item>
               <button
                 type="button"
                 value="backButton"
@@ -197,7 +215,8 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               >
                 Back
               </button>
-              <div style={{ flexGrow: 1 }} />
+            </Grid>
+            <Grid item>
               <button
                 type="button"
                 value="nextButton"
@@ -206,11 +225,11 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               >
                 Next
               </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+            </Grid>
+          </Grid>
+        )}
+      </Grid>
+    </Grid>
   );
 };
 
