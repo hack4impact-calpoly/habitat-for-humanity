@@ -93,8 +93,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
         <div id="SubmitInfoPage">
           <div id="information">
             {!component && <ProgressBar activeStep={4} />}
-            {/* <h2 id="Review">Review</h2>
-                    <p>Please review your donation information before you submit.</p> */}
+            <h2 id="Review">Review</h2>
+            <p>Please review your donation information before you submit.</p>
+
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
               <b>Item Name:</b> {name}
