@@ -139,6 +139,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                 I can drop off at the ReStore
               </p>
             </div>
+            <br />
             <div id="radioPickUp">
               <input
                 type="radio"
