@@ -132,7 +132,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <input
                 type="radio"
                 className="radioOptionLabelCircle"
-                checked={dropOff}
+                checked={dropOffOption}
                 onChange={() => setDropOffOption(true)}
               />
               <p id="radioDropoff" className="radioOptionLabel radioLabel">
@@ -143,7 +143,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <input
                 type="radio"
                 className="radioOptionLabelCircle"
-                checked={!dropOff}
+                checked={!dropOffOption}
                 onChange={() => setDropOffOption(false)}
               />
               <p className="radioOptionLabel radioLabel">
