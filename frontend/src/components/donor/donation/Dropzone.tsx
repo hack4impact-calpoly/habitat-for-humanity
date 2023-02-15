@@ -54,10 +54,23 @@ const Input = styled.input`
 
 const ImageContainer = styled.div`
   display: flex;
-  flex-flow: row nowrap;
+  flex-wrap: wrap;
+  flex-direction: row;
   justify-content: center;
-  align-items: center;
-  margin-top: 1em;
+  flex-gap: 10px;
+  background-color: var(--background);
+  border: 1px dashed var(--dashed-box);
+`;
+
+const ClearMessage = styled.div`
+  text-align: left;
+  color: var(--secondary);
+  font-size: 15px;
+  font-weight: 500;
+  &:hover {
+    cursor: pointer;
+    color: var(--red);
+  }
 `;
 
 function DropZone(props: any): JSX.Element {
@@ -104,11 +117,27 @@ function DropZone(props: any): JSX.Element {
     // prints out the images if props.photos is not empty, else drop container
     <div>
       {photos.length > 0 ? (
-        <ImageContainer>
-          {photos.map((base64String: any, i: any) => (
-            <img src={base64String} alt="uploaded" key={i} />
-          ))}
-        </ImageContainer>
+        <div>
+          <ClearMessage onClick={() => setPhotos([])}>
+            Clear Images
+          </ClearMessage>
+          <ImageContainer>
+            {photos.map((base64String: any, i: any) => (
+              <img
+                src={base64String}
+                alt="uploaded"
+                key={i}
+                style={{
+                  height: "auto",
+                  width: "auto",
+                  margin: "10px",
+                  maxWidth: "20%",
+                  objectFit: "cover",
+                }}
+              />
+            ))}
+          </ImageContainer>
+        </div>
       ) : (
         <DropContainer
           onDragOver={handleDragOver}
