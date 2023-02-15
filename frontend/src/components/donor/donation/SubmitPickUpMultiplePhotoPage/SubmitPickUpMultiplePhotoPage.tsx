@@ -12,16 +12,8 @@ import sofa8 from "../images/sofa-08.png";
 
 require("./SubmitPickUpMultiplePhotoPage.css");
 
-const imagesPool = [
-  { src: sofa1 },
-  { src: sofa2 },
-  { src: sofa3 },
-  { src: sofa4 },
-  { src: sofa5 },
-  { src: sofa6 },
-  { src: sofa7 },
-  { src: sofa8 },
-];
+const imagesPool: string[] = [sofa1, sofa2, sofa3, sofa4, sofa5, sofa6, sofa7, sofa8];
+
 
 const address = "1 Grand Avenue \nSan Luis Obispo, CA 93407";
 

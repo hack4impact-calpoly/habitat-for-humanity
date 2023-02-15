@@ -4,7 +4,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 export interface DonationState {
   name: string;
   dimensions: string;
-  photos: File[];
+  photos: string[];
   address: string;
   city: string;
   state: string;
