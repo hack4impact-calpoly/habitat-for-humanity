@@ -23,6 +23,7 @@
   text-align: left;
 
   color: var(--black);
+  white-space: nowrap;
 }
 
 #createAccountStyles #accountTypeBox {
