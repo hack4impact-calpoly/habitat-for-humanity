@@ -92,8 +92,8 @@ function DropZone(props: any): JSX.Element {
     <div>
       {photos.length > 0 ? (
         <ImageContainer>
-          {photos.map((photo: any) => (
-            <img src={URL.createObjectURL(photo)} alt="uploaded" />
+          {photos.map((photo: any, i: any) => (
+            <img src={URL.createObjectURL(photo)} alt="uploaded" key={i} />
           ))}
         </ImageContainer>
       ) : (
