@@ -161,7 +161,7 @@ function DonatorSchedulePickUp(): JSX.Element {
             initialView="dayGridMonth"
             events={events}
             slotMinTime="10:00:00"
-            slotMaxTime="20:00:00"
+            slotMaxTime="18:00:00"
             selectable
             unselectAuto={false}
             longPressDelay={1}
