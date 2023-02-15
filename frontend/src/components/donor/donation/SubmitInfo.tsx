@@ -110,10 +110,13 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <b>Item Photos</b>
             </p>
             <div id="ProductImages">
-              {photos?.map((base64String, index) => (
-                <div key={index} id="SingleImages">
-                  <img src={base64String} alt="n" />
-                </div>
+              {photos.map((base64String: any, i: any) => (
+                <img
+                  src={base64String}
+                  alt="uploaded"
+                  key={i}
+                  id="ProductImage"
+                />
               ))}
             </div>
             <h2 id="Location">Location</h2>
