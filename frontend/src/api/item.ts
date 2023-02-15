@@ -103,7 +103,7 @@ export interface Item {
   name: string;
   // images: [mongoose.Schema.ObjectId]
   size: string;
-  photos: File[];
+  photos: string[];
   address: string;
   city: string;
   state: string;

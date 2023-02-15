@@ -12,7 +12,7 @@ require("./SubmitInfo.css");
 interface DummyComponentProps {
   name?: string;
   dimensions?: string;
-  photos?: { src: string }[];
+  photos?: string[];
   location?: string;
   dropOff?: boolean;
   component?: boolean;
@@ -39,26 +39,12 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const storedDropOff = useSelector(
     (state: RootState) => state.donation.dropoff
   );
-  const [photoBase64s, setPhotoBase64s] = useState<string[]>([]);
 
   name = storedName;
   dimensions = storedDimensions;
-  // photos = storedPhotos;
+  photos = storedPhotos;
   location = storedLocation;
   dropOff = storedDropOff;
-
-  // user FileReader to read an array of images and convert them to base64
-  useEffect(() => {
-    if (storedPhotos) {
-      storedPhotos.forEach((photo) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(photo);
-        reader.onloadend = () => {
-          setPhotoBase64s((prev) => [...prev, reader.result as string]);
-        };
-      });
-    }
-  }, []);
 
   const [dropOffOption, setDropOffOption] = useState(dropOff);
   const [serverError, setServerError] = useState<string>("");
@@ -124,9 +110,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <b>Item Photos</b>
             </p>
             <div id="ProductImages">
-              {photoBase64s?.map((photo, index) => (
+              {photos?.map((base64String, index) => (
                 <div key={index} id="SingleImages">
-                  <img src={photo} alt="n" />
+                  <img src={base64String} alt="n" />
                 </div>
               ))}
             </div>

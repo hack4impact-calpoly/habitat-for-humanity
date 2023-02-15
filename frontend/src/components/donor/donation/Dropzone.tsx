@@ -82,8 +82,21 @@ function DropZone(props: any): JSX.Element {
       console.log("This fileRefs are:", filesRef);
       const fileType: string = filesRef[0].type;
       console.log("The first file upload is of type:", fileType);
-      setPhotos(filesRef);
-      console.log("New file state:", files);
+      // convert the array of files into array of base64 strings
+      // to make sure the data is serializable to store in state
+      Promise.all(
+        filesRef.map(
+          (file) =>
+            new Promise<string>((resolve) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = (e: any) => resolve(reader.result as string);
+            })
+        )
+      ).then((photoData) => {
+        setPhotos(photoData);
+        console.log("New file state:", photoData);
+      });
     }
   }
 
@@ -92,8 +105,8 @@ function DropZone(props: any): JSX.Element {
     <div>
       {photos.length > 0 ? (
         <ImageContainer>
-          {photos.map((photo: any, i: any) => (
-            <img src={URL.createObjectURL(photo)} alt="uploaded" key={i} />
+          {photos.map((base64String: any, i: any) => (
+            <img src={base64String} alt="uploaded" key={i} />
           ))}
         </ImageContainer>
       ) : (
