@@ -28,7 +28,7 @@ const UploadIcon = styled.div`
   padding-top: 30px;
 `;
 
-const DropMessage = styled.h1`
+const DropMessage = styled.div`
   text-align: center;
   color: var(--primary);
   font-size: 23px;
@@ -106,7 +106,7 @@ function DropZone(props: any): JSX.Element {
             Upload Your Images
             <UploadIcon />
             <Message>
-              drop you image files or <br />
+              drop your image files or <br />
               <span style={{ color: "var(--secondary)" }}>browse</span> to
               choose a file
               <input
