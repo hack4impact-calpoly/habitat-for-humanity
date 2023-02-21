@@ -98,7 +98,9 @@ function DonatorLocationPage(): JSX.Element {
             className="donLocInput"
             type="number"
             value={zip === 0 ? undefined : zip}
-            onChange={(event) => setZip(Number(event?.target?.value))}
+            onChange={(event) =>
+              setZip(Number(event?.target?.value.slice(0, 5)))
+            }
           />
           <div className="inputError">{zipError}</div>
         </div>
