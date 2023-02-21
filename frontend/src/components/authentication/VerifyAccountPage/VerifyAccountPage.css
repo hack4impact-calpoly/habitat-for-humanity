@@ -270,3 +270,9 @@
     margin: 0px 0px 0px 3px;
   }
 }
+
+@media only screen and (max-height: 640px) {
+  #newPasswordBox{
+    width: 90vw;
+  }
+}
