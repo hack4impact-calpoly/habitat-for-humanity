@@ -3,6 +3,7 @@ import React from "react";
 import { Amplify } from "aws-amplify";
 // import { Authenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
+import awsExports from "aws-exports";
 
 // import Amplify from '@aws-amplify/core';
 // import { Auth } from '@aws-amplify/auth';
@@ -11,7 +12,7 @@ import "@aws-amplify/ui-react/styles.css";
 
 /* Authentication Screens */
 // import CreateAccountPage from './components/authentication/CreateAccountPage/CreateAccountPage';
-// import LoginPage from "./components/authentication/LoginPage/LoginPage";
+import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
@@ -34,7 +35,6 @@ import "@aws-amplify/ui-react/styles.css";
 // import DonatorLocationPage from './components/donator/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/donator/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/donator/Donation/Donation';
-import awsExports from "aws-exports";
 import DonorSchedulePickUp from "./components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp";
 
 // import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
@@ -44,11 +44,11 @@ Amplify.configure(awsExports);
 function App(): JSX.Element {
   return (
     // <SuccessPage />
-    // <LoginPage />
+    <LoginPage />
     // <DonatorHomePage />
     // <CreateAccountPage />
     // <ForgotPasswordPage />
-    <DonorSchedulePickUp />
+    // <DonorSchedulePickUp />
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
     // <LoginPage />
