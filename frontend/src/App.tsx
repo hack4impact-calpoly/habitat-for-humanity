@@ -36,7 +36,7 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonorSchedulePickUp from './components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp';
 
 import awsExports from "./aws-exports";
-// import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
+import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
 
 Amplify.configure(awsExports);
 
@@ -49,9 +49,9 @@ function App(): JSX.Element {
     // <DonorSchedulePickUp/>
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
-    <LoginPage />
+    // <LoginPage />
     // <DonatorNextStepsPage />
-    // <VerifyAccountPage />
+    <VerifyAccountPage />
     // <SubmitDropOffPage />
     // <SubmitPickUpPage />
     // <SubmitPickUpMultiplePhotoPage />
