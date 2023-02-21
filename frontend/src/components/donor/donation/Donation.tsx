@@ -11,6 +11,11 @@ import { RootState } from "../../../redux/store";
 const ContentContainer = styled.div`
   margin-left: 20%;
   margin-right: 20%;
+
+  @media only screen and (max-width: 640px) {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
 `;
 
 const DonationHeader = styled.h1`
@@ -20,6 +25,12 @@ const DonationHeader = styled.h1`
   font-size: 28px;
   margin-top: 3em;
   margin-bottom: 1em;
+
+  @media only screen and (max-width: 640px) {
+    margin-top: 1em;
+    font-size: 24px;
+    margin-bottom: 0px;
+  }
 `;
 
 const ItemHeader = styled.h1`
@@ -27,12 +38,22 @@ const ItemHeader = styled.h1`
   justify-content: left;
   color: var(--red);
   font-size: 30px;
+
+  @media only screen and (max-width: 640px) {
+    margin-bottom: 15px;
+  }
 `;
 
 const InputSectionContainer = styled.div`
   display: flex;
   gap: 30px;
   justify-content: center;
+
+  @media only screen and (max-width: 640px) {
+    gap: 0px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
 `;
 const StyledInput = styled.input`
   width: 100%;
@@ -42,6 +63,10 @@ const StyledInput = styled.input`
 const SubHeader = styled.h1`
   font-size: 20px;
   margin-top: 1em;
+  @media only screen and (max-width: 640px) {
+    margin-bottom: 0em;
+    margin-top: 0em;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -49,6 +74,9 @@ const InputContainer = styled.div`
   flex-flow: column nowrap;
   width: 50%;
   margin-bottom: 1em;
+  @media only screen and (max-width: 640px) {
+    width: 100%;
+  }
 `;
 const UploadContainer = styled.div`
   display: flex;
