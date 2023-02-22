@@ -50,6 +50,29 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const [serverError, setServerError] = useState<string>("");
   const navigate = useNavigate();
 
+  /* convert array of base64-encoded back into array of image files */
+  const convertToFiles = (photos: string[]): File[] => {
+    const files: File[] = [];
+    photos.forEach((photo, index) => {
+      const byteString = atob(photo.split(",")[1]);
+      const mimeString = photo.split(",")[0].split(":")[1].split(";")[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([ab], { type: mimeString });
+      // Create a file object with a unique name
+      const fileName = `image-${index}.${mimeString.split("/")[1]}`;
+      const file = new File([blob], fileName, { type: mimeString });
+      files.push(file);
+    });
+    return files;
+  };
+
+  /* print the converted array to console */
+  console.log("photos: ", convertToFiles(photos));
+
   const sendToDB = async () => {
     const donation: Item = {
       name: storedDonation.name,
