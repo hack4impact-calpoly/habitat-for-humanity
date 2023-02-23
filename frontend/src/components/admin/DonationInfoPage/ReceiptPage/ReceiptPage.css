@@ -1,0 +1,102 @@
+.contract-form {
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  
+  .header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .form-body {
+    margin-top: 2rem;
+  }
+  
+  .form-section {
+    margin-bottom: 2rem;
+  }
+  
+  .form-section h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 0.5rem;
+  }
+  
+  .form-field {
+    margin-bottom: 1rem;
+    display: flex;
+    
+    
+  }
+  
+  .form-field h4 {
+  
+    font-size: 1.1rem;
+    font-weight: bold;
+    white-space: nowrap;
+    padding-left: 10px;
+    /* margin-bottom: 0.5rem; */
+  }
+  
+  .form-field input {
+    width: 100%;
+    border: 1px solid #000000;
+    font-size: 1.5rem;
+  }
+  
+
+
+  
+
+  .signature-field{
+    display: block;
+    margin-bottom: 0px;
+    width: 100%;
+  }
+
+  .signature-field-flex{
+    display: flex;
+    
+  }
+
+  .signature-field input{
+    width: 90%;
+    border: 1px solid #000000;
+    font-size: 1.5rem;
+  }
+
+  .value-field{
+    display:flex;
+  }
+
+  .value-div{
+    width: 30%;
+    margin-left:50vw;
+  }
+
+  .head{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .logo-input{
+    display: block;
+  }
+
+  .forFlex{
+    display: flex;
+  }
+
+  .forFlex input{
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 1.5rem;
+  }
