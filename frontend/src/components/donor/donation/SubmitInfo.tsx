@@ -93,8 +93,8 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
         <div id="SubmitInfoPage">
           <div id="information">
             {!component && <ProgressBar activeStep={4} />}
-            {/* <h2 id="Review">Review</h2>
-                    <p>Please review your donation information before you submit.</p> */}
+            <h2 id="Review">Review</h2>
+            <p>Please review your donation information before you submit.</p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
               <b>Item Name:</b> {name}
@@ -131,18 +131,19 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <input
                 type="radio"
                 className="radioOptionLabelCircle"
-                checked={dropOff}
+                checked={dropOffOption}
                 onChange={() => setDropOffOption(true)}
               />
               <p id="radioDropoff" className="radioOptionLabel radioLabel">
                 I can drop off at the ReStore
               </p>
             </div>
+            <br />
             <div id="radioPickUp">
               <input
                 type="radio"
                 className="radioOptionLabelCircle"
-                checked={!dropOff}
+                checked={!dropOffOption}
                 onChange={() => setDropOffOption(false)}
               />
               <p className="radioOptionLabel radioLabel">
@@ -187,22 +188,27 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
           {!component && (
             <div
               id="donPickupButtons"
-              style={{ display: "flex", flexDirection: "row" }}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+              }}
             >
               <button
                 type="button"
                 value="backButton"
                 className="donPickupButton backButton"
                 onClick={buttonNavigation}
+                style={{ padding: "10px 45px" }}
               >
                 Back
               </button>
-              <div style={{ flexGrow: 1 }} />
               <button
                 type="button"
                 value="nextButton"
                 className="donPickupButton nextButton"
                 onClick={buttonNavigation}
+                style={{ padding: "10px 45px" }}
               >
                 Next
               </button>

@@ -28,7 +28,13 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint", "prettier"],
   rules: {
-    "prettier/prettier": "error",
+    // CRLF compatibility
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine":"auto"
+      },
+    ],
     // suppress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",
     // allow prop-spreading
