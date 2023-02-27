@@ -33,7 +33,7 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonatorLocationPage from './components/donator/DonationLocationPage/DonatorLocationPage';
 // import DonatorNextStepsPage from './components/donator/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/donator/Donation/Donation';
-// import DonorSchedulePickUp from './components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp';
+import DonorSchedulePickUp from "./components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp";
 
 import awsExports from "./aws-exports";
 // import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
@@ -46,10 +46,10 @@ function App(): JSX.Element {
     // <LoginPage />
     // <DonatorHomePage />
     // <CreateAccountPage />
-    // <DonorSchedulePickUp/>
+    <DonorSchedulePickUp/>
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
-    <LoginPage />
+    // <LoginPage />
     // <DonatorNextStepsPage />
     // <VerifyAccountPage />
     // <SubmitDropOffPage />
