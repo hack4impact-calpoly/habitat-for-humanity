@@ -39,7 +39,7 @@ function AdminNavbar(): JSX.Element {
 
   const navlinkHandler = (header: string): string => {
     if (header === navBarHeaders[0]) {
-      return tempPath;
+      return "/Admin/Calendar";
     }
     if (header === navBarHeaders[1]) {
       return tempPath;
