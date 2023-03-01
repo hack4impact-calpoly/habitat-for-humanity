@@ -4,7 +4,7 @@ import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector } from "react-redux";
 import { Item, addItem } from "../../../api/item";
-
+import { addImages, getImages, getImageByID } from "../../../api/image";
 import { RootState } from "../../../redux/store";
 
 require("./SubmitInfo.css");
@@ -51,9 +51,10 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const navigate = useNavigate();
 
   /* convert array of base64-encoded back into array of image files */
-  const convertToFiles = (photos: string[]): File[] => {
+  const convertToFiles = (photos: string[] | undefined): File[] => {
     const files: File[] = [];
-    photos.forEach((photo, index) => {
+    const timestamp = new Date().getTime(); // Get the current timestamp
+    photos?.forEach((photo, index) => {
       const byteString = atob(photo.split(",")[1]);
       const mimeString = photo.split(",")[0].split(":")[1].split(";")[0];
       const ab = new ArrayBuffer(byteString.length);
@@ -63,15 +64,28 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
       }
       const blob = new Blob([ab], { type: mimeString });
       // Create a file object with a unique name
-      const fileName = `image-${index}.${mimeString.split("/")[1]}`;
+      const fileName = `image-${timestamp}-${index}.${
+        mimeString.split("/")[1]
+      }`;
       const file = new File([blob], fileName, { type: mimeString });
       files.push(file);
     });
     return files;
   };
 
-  /* print the converted array to console */
-  console.log("photos: ", convertToFiles(photos));
+  /* Send image files array to S3 */
+  const sendImagesToS3 = async (): Promise<boolean> => {
+    const files = convertToFiles(photos);
+    console.log("Converted back to Files: ", files);
+    try {
+      await addImages(files);
+      console.log("Images uploaded successfully!");
+      return true;
+    } catch (error) {
+      console.error("Error: ", error);
+      return false;
+    }
+  };
 
   const sendToDB = async () => {
     const donation: Item = {
@@ -88,7 +102,8 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
       status: "Needs Approval",
     };
     const response = await addItem(donation);
-    if (!response) {
+    const imagesUploaded = await sendImagesToS3();
+    if (!response || !imagesUploaded) {
       setServerError(
         "There was an error sending your donation. Please try again later."
       );

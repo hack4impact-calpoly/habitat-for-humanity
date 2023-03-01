@@ -38,10 +38,10 @@ const s3 = new Aws.S3({
   secretAccessKey:process.env.AWS_ACCESS_KEY_SECRET       // secretAccessKey is also store in .env file
 })
 
-console.log('Connected to S3 bucket \'habitat-photo-bucket\'')
+console.log('Connected to S3 bucket \'habitat4humanity-images\'');
 
 // now how to handle the post request and to upload photo (upload photo using the key defined below in upload.single ie: productimage )
-router.post('/', upload.single('productImage'), async (req, res) => {
+router.post('/', upload.single("productImage"), async (req, res) => {
     console.log('This is the file %s', req.file)  // to check the data in the console that is being uploaded
 
     const params = {
