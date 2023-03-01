@@ -107,7 +107,7 @@ function DropZone(props: any): JSX.Element {
   const { photos, setPhotos } = props;
 
   // Set the maximum image size limit
-  const MAX_IMAGE_SIZE = 5000000; // 5 MB
+  const MAX_IMAGE_SIZE = 6000000; // 5 MB
 
   const handleDragOver = useCallback((e) => {
     e.preventDefault();
