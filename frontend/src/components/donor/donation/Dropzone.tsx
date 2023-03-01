@@ -122,7 +122,21 @@ function DropZone(props: any): JSX.Element {
       console.log("This fileRefs are:", filesRef);
       const fileType: string = filesRef[0].type;
       console.log("The first file upload is of type:", fileType);
-      // convert the array of files into array of base64 strings
+
+      // Set the maximum file size limit
+      const MAX_SIZE = 5000000; // 5 MB
+
+      // Check each file's size and return if it exceeds the limit
+      const tooLargeFiles = filesRef.filter((file) => file.size > MAX_SIZE);
+      if (tooLargeFiles.length) {
+        console.log("Too Large Files:", tooLargeFiles);
+        alert(
+          "Some files are too large. Please only upload files smaller than 5MB."
+        );
+        return;
+      }
+
+      // Convert the array of files into array of base64 strings
       // to make sure the data is serializable to store in state
       Promise.all(
         filesRef.map(async (file) => {
