@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector } from "react-redux";
+import { Event } from "redux/donationSlice";
+import moment from "moment";
 import { Item, addItem } from "../../../api/item";
-
 import { RootState } from "../../../redux/store";
 
 require("./SubmitInfo.css");
@@ -15,6 +16,7 @@ interface DummyComponentProps {
   photos?: { src: string }[];
   location?: string;
   dropOff?: boolean;
+  pickupTimes?: Event[];
   component?: boolean;
 }
 // TODO: eventually use DonorScheduleDropoff/Pickup pages instead of this component
@@ -24,6 +26,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   photos,
   location,
   dropOff,
+  pickupTimes,
   component,
 }) => {
   const storedDonation = useSelector((state: RootState) => state.donation);
@@ -39,10 +42,32 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     (state: RootState) => state.donation.dropoff
   );
 
+  const storedPickupTimes = useSelector(
+    (state: RootState) => state.donation.pickupTimes
+  );
+  console.log(storedPickupTimes);
+  const prevDate: string = "";
+
+  // This is for preprocessing the pickUp times to get them into an array of arrays
+  const groupedTimes: Record<string, any[]> = {};
+  storedPickupTimes.forEach((time) => {
+    const day = moment(time.start).format("dddd, MMMM Do");
+    if (!groupedTimes[day]) {
+      groupedTimes[day] = [];
+    }
+    groupedTimes[day].push(time);
+  });
+
+  const processedTimes = Object.entries(groupedTimes).map(([day, times]) => [
+    day,
+    times,
+  ]);
+
   name = storedName;
   dimensions = storedDimensions;
   location = storedLocation;
   dropOff = storedDropOff;
+  pickupTimes = storedPickupTimes;
 
   const [dropOffOption, setDropOffOption] = useState(dropOff);
   const [serverError, setServerError] = useState<string>("");
@@ -126,23 +151,26 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               our ReStore?
             </h4>
           </div>
+          {/* if they can drop off at restore, show hours
+          if they need pick up, show their selected times */}
           <div id="donPDOptions">
             <div>
               <input
                 type="radio"
                 className="radioOptionLabelCircle"
-                checked={dropOff}
+                checked={dropOffOption}
                 onChange={() => setDropOffOption(true)}
               />
               <p id="radioDropoff" className="radioOptionLabel radioLabel">
                 I can drop off at the ReStore
               </p>
             </div>
+            <br />
             <div id="radioPickUp">
               <input
                 type="radio"
                 className="radioOptionLabelCircle"
-                checked={!dropOff}
+                checked={!dropOffOption}
                 onChange={() => setDropOffOption(false)}
               />
               <p className="radioOptionLabel radioLabel">
@@ -150,59 +178,92 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               </p>
             </div>
           </div>
-          <div id="ReStoreHours">
-            <h2 id="ReStore">ReStore Drop Off Hours</h2>
-            <div id="ReStoreHoursTable">
-              <div className="ReStoreHoursTableItem">
-                <p>Monday</p>
-                <p>Closed</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Tuesday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Wednesday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Thursday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Friday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Saturday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Sunday</p>
-                <p>Closed</p>
+          {dropOffOption ? (
+            <div id="ReStoreHours">
+              <h2 id="ReStore">ReStore Drop Off Hours</h2>
+              <div id="ReStoreHoursTable">
+                <div className="ReStoreHoursTableItem">
+                  <p>Monday</p>
+                  <p>Closed</p>
+                </div>
+                <div className="ReStoreHoursTableItem">
+                  <p>Tuesday</p>
+                  <p>10:00 AM to 5:00 PM</p>
+                </div>
+                <div className="ReStoreHoursTableItem">
+                  <p>Wednesday</p>
+                  <p>10:00 AM to 5:00 PM</p>
+                </div>
+                <div className="ReStoreHoursTableItem">
+                  <p>Thursday</p>
+                  <p>10:00 AM to 5:00 PM</p>
+                </div>
+                <div className="ReStoreHoursTableItem">
+                  <p>Friday</p>
+                  <p>10:00 AM to 5:00 PM</p>
+                </div>
+                <div className="ReStoreHoursTableItem">
+                  <p>Saturday</p>
+                  <p>10:00 AM to 5:00 PM</p>
+                </div>
+                <div className="ReStoreHoursTableItem">
+                  <p>Sunday</p>
+                  <p>Closed</p>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div>
+              <h2 id="ReStore">Time Availability</h2>
+              <div id="times">
+                {processedTimes.map(([day, times], index) => (
+                  <div key={index} className="timeAvailability">
+                    <div className="dayTitle">
+                      <b>{day}</b>
+                    </div>
+                    {Array.isArray(times) &&
+                      times.map((time, index) => {
+                        if (typeof time === "object" && time !== null) {
+                          return (
+                            <p key={index} className="timeBox">
+                              {`${moment(time.start).format("LT")} to ${moment(
+                                time.end
+                              ).format("LT")}`}
+                            </p>
+                          );
+                        }
+                        return null;
+                      })}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="inputError">{serverError}</div>
           {!component && (
             <div
               id="donPickupButtons"
-              style={{ display: "flex", flexDirection: "row" }}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+              }}
             >
               <button
                 type="button"
                 value="backButton"
                 className="donPickupButton backButton"
                 onClick={buttonNavigation}
+                style={{ padding: "10px 45px" }}
               >
                 Back
               </button>
-              <div style={{ flexGrow: 1 }} />
               <button
                 type="button"
                 value="nextButton"
                 className="donPickupButton nextButton"
                 onClick={buttonNavigation}
+                style={{ padding: "10px 45px" }}
               >
                 Next
               </button>

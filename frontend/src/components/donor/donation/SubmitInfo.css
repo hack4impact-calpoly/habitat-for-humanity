@@ -46,6 +46,10 @@ img {
   white-space: pre-line;
 }
 
+#ReviewDesc {
+  font-weight: 400;
+}
+
 input[type="radio"] {
   border: 0px;
   width: 1.5em;
@@ -69,6 +73,7 @@ input[type="radio"] {
 }
 
 @media only screen and (max-width: 915px) {
+
   img {
     max-width: 95%;
   }
@@ -79,6 +84,10 @@ input[type="radio"] {
 }
 
 @media only screen and (max-width: 850px) {
+  #SubmitInfoPage {
+    width: 90%;
+    transform: translateX(0%);
+}
   img {
     max-width: 85%;
   }
@@ -88,7 +97,38 @@ input[type="radio"] {
   }
 }
 
+#times {
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.timeAvailibility {
+  display: flex;
+  margin: 0 1rem;
+} 
+
+ .dayTitle {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+} 
+
+ .timeBox {
+  border: 1px solid var(--box-border);
+  padding: 1%;
+  margin-bottom: 1%;
+  font-weight: 500;
+  margin-right: 1rem;
+  display: inline-block;
+} 
+
+
 @media only screen and (max-width: 750px) {
+  #SubmitInfoPage {
+    width: 90%;
+    transform: translateX(0%);
+}
   #SingleImages {
     margin-right: -155px;
     margin-top: 5px;
