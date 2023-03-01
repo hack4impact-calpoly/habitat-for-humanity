@@ -16,6 +16,7 @@ import "@aws-amplify/ui-react/styles.css";
 import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
 // import SuccessPage from './components/authentication/SuccessPage/SuccessPage';
+// import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
 
 /* Admin Screens */
 // import DonationInfoPage from './components/admin/DonationInfoPage/DonationInfoPage';
@@ -36,7 +37,6 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonorSchedulePickUp from "./components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp";
 
 import awsExports from "./aws-exports";
-// import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
 
 Amplify.configure(awsExports);
 
