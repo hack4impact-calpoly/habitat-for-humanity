@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
 @import "config/colors.css";
 
-#newPasswordBox {
+#verifyAccountBox {
   width: 50vw;
   max-width: 577px;
   margin: auto;
@@ -17,44 +17,28 @@
   padding: 62px 70px 68px 70px;
 }
 
-#newPasswordText {
+#verifyAccountText {
   font-family: Rubik;
   font-weight: 600;
   font-size: 36px;
   line-height: 40px;
   margin: 0px 0px 34px 0px;
   text-align: left;
-
-  color: var(--black);
-}
-
-.accountLabel input[type="radio"] {
-  height: 0.9em;
-}
-
-.accountLabel {
-  color: var(--secondary);
-  font-weight: bold;
-  align-content: center;
-}
-
-#nameBox {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-#firstNameBox {
-  width: 197px;
-}
-
-#lastNameBox {
-  width: 197px;
+  color: #011338;
 }
 
 .labelInputBox {
   display: flex;
   flex-direction: column;
+  text-align: left;
+}
+
+.verificationCodeMessage{
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
   text-align: left;
 }
 
@@ -107,45 +91,16 @@
   color: var(--white);
 }
 
+#sendNewCodeLink{
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 600;
+  color:var(--secondary);
+}
+
 #submitButton:hover {
   cursor: pointer;
   border: 3px solid rgba(2, 5, 12, 0.15);
-}
-
-.createAccountLogin {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 13px;
-  line-height: 16px;
-  margin: 0px 0px 0px 0px;
-
-  color: var(--black);
-}
-
-.logInBox {
-  display: flex;
-  justify-content: right;
-}
-
-#logInLink {
-  color: var(--secondary);
-  margin: 0px 0px 0px 5px;
-}
-
-#logInLink:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-#passwordBox {
-  font-family: Rubik;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.passwordIcon {
-  color: var(--primary);
 }
 
 #codeLine {
@@ -163,18 +118,6 @@
   #userTypeLabel {
     margin: 0px 0px 0px 0px;
     font-size: 11px;
-  }
-
-  .accountLabel {
-    font-size: 10px;
-  }
-
-  #firstNameBox {
-    width: 138px;
-  }
-
-  #lastNameBox {
-    width: 138px;
   }
 
   /* .formLabel {
@@ -271,8 +214,38 @@
   }
 }
 
-@media only screen and (max-height: 640px) {
-  #newPasswordBox{
+@media only screen and (max-width: 640px) {
+  #verifyAccountBox {
     width: 90vw;
+    background: none;
+    margin: auto;
+    margin-top: 40vh;
+    box-shadow: none;
+    padding: 35px;
   }
+
+  .verificationCodeMessage{
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .formLabel{
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  #sendNewCodeLink{
+    font-family: 'Rubik';
+    font-style: normal;
+    font-size: 14px;
+    line-height: 17px;
+    font-weight: 600;
+  }
+
 }
