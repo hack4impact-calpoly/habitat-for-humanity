@@ -73,6 +73,33 @@ const ClearMessage = styled.div`
   }
 `;
 
+const compressImage = async (file: Blob, quality: number) => {
+  // Create a new Image
+  const image = new Image();
+  image.src = URL.createObjectURL(file);
+  await new Promise((resolve) => {
+    image.onload = resolve;
+  });
+
+  // Create a canvas and draw the image on it
+  const canvas = document.createElement("canvas");
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const context = canvas.getContext("2d");
+  context?.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+  // Compress the image and return the compressed image as a Blob
+  return new Promise((resolve) => {
+    canvas.toBlob(
+      (blob) => {
+        resolve(blob);
+      },
+      "image/jpeg",
+      quality / 100
+    );
+  });
+};
+
 function DropZone(props: any): JSX.Element {
   const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
 
@@ -98,14 +125,17 @@ function DropZone(props: any): JSX.Element {
       // convert the array of files into array of base64 strings
       // to make sure the data is serializable to store in state
       Promise.all(
-        filesRef.map(
-          (file) =>
-            new Promise<string>((resolve) => {
-              const reader = new FileReader();
-              reader.readAsDataURL(file);
-              reader.onload = (e: any) => resolve(reader.result as string);
-            })
-        )
+        filesRef.map(async (file) => {
+          // Compress the file before converting it to base64
+          const quality = 40; // Adjust the quality level as desired from 0 - 100
+          const compressedFile = (await compressImage(file, quality)) as Blob;
+          console.log("Compressed file:", compressedFile);
+          return new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(compressedFile);
+            reader.onload = (e: any) => resolve(reader.result as string);
+          });
+        })
       ).then((photoData) => {
         setPhotos(photoData);
         console.log("New file state:", photoData);
