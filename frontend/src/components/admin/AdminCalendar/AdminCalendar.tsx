@@ -10,8 +10,14 @@ function AdminCalendar(): JSX.Element {
     <div>
       <AdminNavbar />
 
-      <div>
-        <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />
+      <div style={{ display: "flex" }}>
+        <div style={{ width: "30%", padding: "3%" }}>
+          <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />
+        </div>
+
+        <div style={{ width: "80%", padding: "5%" }}>
+          <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridWeek" />
+        </div>
       </div>
     </div>
   );
