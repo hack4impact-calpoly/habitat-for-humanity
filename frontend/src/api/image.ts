@@ -43,14 +43,16 @@ export const addImages = async (images: File[]): Promise<boolean> => {
   const formData = new FormData();
   images.forEach((image) => {
     formData.append("productImage", image);
+    formData.append("name", image.name);
   });
   try {
     const res = await fetch(imageURL, {
       method: "POST",
       body: formData,
     });
+    const data = await res.json();
     if (!res.ok) {
-      throw new Error(`${res.status}-${res.statusText}`);
+      throw new Error(data.message);
     }
     console.log("Images uploaded successfully");
     return true;
