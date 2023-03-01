@@ -40,20 +40,24 @@ export const getImageByID = async (imageID: string) =>
 
 // Add images to S3
 export const addImages = async (images: File[]): Promise<boolean> => {
-  const formData = new FormData();
-  images.forEach((image) => {
+  const promises = images.map((image) => {
+    const formData = new FormData();
     formData.append("productImage", image);
     formData.append("name", image.name);
-  });
-  try {
-    const res = await fetch(imageURL, {
+    return fetch(imageURL, {
       method: "POST",
       body: formData,
     });
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message);
-    }
+  });
+
+  try {
+    const results = await Promise.all(promises);
+    results.forEach((res) => {
+      if (!res.ok) {
+        console.error(`Error: ${res.status} ${res.statusText}`);
+        throw new Error(`Error: ${res.status} ${res.statusText}`);
+      }
+    });
     console.log("Images uploaded successfully");
     return true;
   } catch (error) {

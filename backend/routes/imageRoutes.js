@@ -58,7 +58,7 @@ router.post('/', upload.single("productImage"), async (req, res) => {
       }
 
       // If not then below code will be executed
-      let name = req.body.name;
+      let name = req.body.name || req.file.originalname;
       const { Location, ETag, Bucket, Key } = data;
 
       let newImage = new Image({
@@ -77,15 +77,51 @@ router.post('/', upload.single("productImage"), async (req, res) => {
     })
 })
 
-// downloads a file from s3
-function getFileStream(fileKey) {
-  const downloadParams = {
-    Key: fileKey,
-    Bucket: String(process.env.AWS_BUCKET_NAME)
-  }
+// // upload multiple images with 10 being the max number of images, max 12 images
+// router.post("/multiple", upload.array("productImages", 12), async (req, res) => {
+//   // req.files will contain an array of uploaded files
+//   const files = req.files;
 
-  return s3.getObject(downloadParams).createReadStream()
-}
+//   // Loop through each file and perform the S3 upload
+//   for (const file of files) {
+//     const params = {
+//       Bucket: String(process.env.AWS_BUCKET_NAME),
+//       Key: String(file.originalname),
+//       Body: file.buffer,
+//       ContentType: "image/jpeg"
+//     };
+//     s3.upload(params, async (error, data) => {
+//       if (error) {
+//         res.status(500).send({err: error});
+//       } else {
+//         let newImage = new Image({
+//           _id: mongoose.Types.ObjectId(),
+//           key: data.Key,
+//           name: file.originalname,
+//           link: data.Location
+//         });
+//         try {
+//           await newImage.save();
+//         } catch (error) {
+//           res.status(400).send(error);
+//         }
+//       }
+//     });
+//   }
+
+//   // Return a success message to the client
+//   res.send({ message: "Images uploaded successfully" });
+// });
+
+// // downloads a file from s3
+// function getFileStream(fileKey) {
+//   const downloadParams = {
+//     Key: fileKey,
+//     Bucket: String(process.env.AWS_BUCKET_NAME)
+//   }
+
+//   return s3.getObject(downloadParams).createReadStream()
+// }
 
 // Get all the product data from db 
 router.get('/', async (req, res) => {
