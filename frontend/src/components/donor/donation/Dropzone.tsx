@@ -106,6 +106,9 @@ function DropZone(props: any): JSX.Element {
   // props destructuring
   const { photos, setPhotos } = props;
 
+  // Set the maximum image size limit
+  const MAX_IMAGE_SIZE = 5000000; // 5 MB
+
   const handleDragOver = useCallback((e) => {
     e.preventDefault();
   }, []);
@@ -123,11 +126,10 @@ function DropZone(props: any): JSX.Element {
       const fileType: string = filesRef[0].type;
       console.log("The first file upload is of type:", fileType);
 
-      // Set the maximum file size limit
-      const MAX_SIZE = 5000000; // 5 MB
-
       // Check each file's size and return if it exceeds the limit
-      const tooLargeFiles = filesRef.filter((file) => file.size > MAX_SIZE);
+      const tooLargeFiles = filesRef.filter(
+        (file) => file.size > MAX_IMAGE_SIZE
+      );
       if (tooLargeFiles.length) {
         console.log("Too Large Files:", tooLargeFiles);
         alert(
@@ -195,6 +197,10 @@ function DropZone(props: any): JSX.Element {
               drop your image files or <br />
               <span style={{ color: "var(--secondary)" }}>browse</span> to
               choose a file
+              <br />
+              <span style={{ color: "silver" }}>
+                maximum {(MAX_IMAGE_SIZE / 1000000).toFixed(0)}MB
+              </span>
               <input
                 type="file"
                 onChange={(e) => processFilesInput(e.target.files)}
