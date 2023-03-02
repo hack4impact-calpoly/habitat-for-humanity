@@ -7,15 +7,15 @@ require("./AdminCalendar.css");
 
 function AdminCalendar(): JSX.Element {
   return (
-    <div>
+    <div style={{ height: "100vh" }}>
       <AdminNavbar />
 
-      <div style={{ display: "flex" }}>
-        <div style={{ width: "30%", padding: "3%" }}>
+      <div style={{ display: "flex", height: "100%" }}>
+        <div className="smallCalendarContainer">
           <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />
         </div>
 
-        <div style={{ width: "80%", padding: "5%" }}>
+        <div className="mainCalendarContainer">
           <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridWeek" />
         </div>
       </div>
