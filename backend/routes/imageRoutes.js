@@ -77,8 +77,8 @@ router.post('/', upload.single("productImage"), async (req, res) => {
     })
 })
 
-// // upload multiple images with 10 being the max number of images, max 12 images
-// router.post("/multiple", upload.array("productImages", 12), async (req, res) => {
+// // upload multiple images with 10 being the max number of images, max 10 images
+// router.post("/multiple", upload.array("productImages", 10), async (req, res) => {
 //   // req.files will contain an array of uploaded files
 //   const files = req.files;
 
