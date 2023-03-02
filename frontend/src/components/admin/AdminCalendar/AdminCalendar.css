@@ -1,1 +1,20 @@
+@import "config/colors.css";
 
+.mainCalendarContainer{
+    width: 80%;
+    padding: 5%;
+    padding-top: 3%;
+    height: 10%;
+    
+
+}
+
+.smallCalendarContainer{
+    width: 30%;
+    padding: 3%; 
+    height:100%
+
+}
+
+
+  
