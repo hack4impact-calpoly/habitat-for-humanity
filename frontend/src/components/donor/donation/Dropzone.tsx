@@ -33,13 +33,14 @@ const DropMessage = styled.div`
   color: var(--primary);
   font-size: 23px;
   font-weight: 500;
-  margin-top: 2em;
+  margin-top: 1.2em;
 `;
 
 const Message = styled.h1`
   font-size: 15px;
   line-height: 25px;
   color: var(--black);
+  text-align: center;
 `;
 
 const Input = styled.input`
@@ -107,7 +108,11 @@ function DropZone(props: any): JSX.Element {
   const { photos, setPhotos } = props;
 
   // Set the maximum image size limit
-  const MAX_IMAGE_SIZE = 6000000; // 5 MB
+  const MAX_IMAGE_SIZE = 5000000; // 5 MB
+  // Set the maximum number of images to be uploaded
+  const MAX_IMAGE_COUNT = 10;
+  // Set the compressed image quality (1-100)
+  const COMPRESSED_IMAGE_QUALITY = 40;
 
   const handleDragOver = useCallback((e) => {
     e.preventDefault();
@@ -138,13 +143,20 @@ function DropZone(props: any): JSX.Element {
         return;
       }
 
+      if (filesRef.length > MAX_IMAGE_COUNT) {
+        alert(`Please only upload up to ${MAX_IMAGE_COUNT} images.`);
+        return;
+      }
+
       // Convert the array of files into array of base64 strings
       // to make sure the data is serializable to store in state
       Promise.all(
         filesRef.map(async (file) => {
           // Compress the file before converting it to base64
-          const quality = 40; // Adjust the quality level as desired from 0 - 100
-          const compressedFile = (await compressImage(file, quality)) as Blob;
+          const compressedFile = (await compressImage(
+            file,
+            COMPRESSED_IMAGE_QUALITY
+          )) as Blob;
           console.log("Compressed file:", compressedFile);
           return new Promise<string>((resolve) => {
             const reader = new FileReader();
@@ -200,6 +212,10 @@ function DropZone(props: any): JSX.Element {
               <br />
               <span style={{ color: "silver" }}>
                 maximum {(MAX_IMAGE_SIZE / 1000000).toFixed(0)}MB
+              </span>
+              <br />
+              <span style={{ color: "silver" }}>
+                limit of {MAX_IMAGE_COUNT} images
               </span>
               <input
                 type="file"
