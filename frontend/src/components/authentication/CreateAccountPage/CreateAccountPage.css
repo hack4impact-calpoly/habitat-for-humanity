@@ -23,6 +23,7 @@
   text-align: left;
 
   color: var(--black);
+  white-space: nowrap;
 }
 
 #createAccountStyles #accountTypeBox {
@@ -200,7 +201,23 @@
     padding: 0px;
     height: fit-content;
     width: 75%;
+    margin-top: 20%;
+    margin-bottom: 20%;
   }
+  #createAccountStyles #nameBox {
+    display: flex;
+    flex-direction: column;  }
+  #createAccountStyles #firstNameBox {
+    padding-right: 0;
+  }
+  #createAccountStyles #lastNameBox {
+    padding-left: 0;
+  }
+  #createAccountStyles #createAccountText {
+    padding-bottom: 0px;
+    margin: 0px 0px 30px 0px;
+  }
+
 }
 
 @media only screen and (max-height: 640px) {
@@ -209,5 +226,20 @@
     padding: 0px;
     height: fit-content;
     width: 50%;
+    margin-top: 3%;
+  }
+  #createAccountStyles #nameBox {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0%;
+  }
+  #createAccountStyles #firstNameBox {
+    padding-right: 0;
+  }
+  #createAccountStyles #lastNameBox {
+    padding-left: 0;
+  }
+  #createAccountStyles .formLabel {
+    margin: 5px 0px 5px 0px;
   }
 }
