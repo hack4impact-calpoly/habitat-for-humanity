@@ -2,6 +2,7 @@ import React, { MutableRefObject, useCallback, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
 import styled from "styled-components";
+import { addImages, deleteImage, getImageByName } from "../../../api/image";
 
 const DropContainer = styled.div`
   height: 275px;
@@ -124,6 +125,57 @@ function DropZone(props: any): JSX.Element {
     processFilesInput(e.dataTransfer.files);
   }, []);
 
+  const clearImages = async (photos: string[]): Promise<void> => {
+    try {
+      // Delete each image from S3 using the deleteImage function
+      await Promise.all(
+        photos.map((photoUrl) => {
+          const filename = photoUrl.split("/").pop();
+          return deleteImage(filename);
+        })
+      );
+    } catch (error) {
+      console.error("(clearImages) Error: ", error);
+      throw error;
+    }
+    setPhotos([]);
+  };
+
+  /* Send image files array to S3 and receive URL */
+  const sendImagesToS3 = async (files: File[]): Promise<string[]> => {
+    // Generate a unique name for each file
+    const timestamp = new Date().getTime();
+    const newUniqueFiles = files.map((file, index) => {
+      const mimeString = file.type;
+      const fileName = `image-${timestamp}-${index}.${
+        mimeString.split("/")[1]
+      }`;
+      return new File([file], fileName, { type: mimeString });
+    });
+    try {
+      console.log(
+        "(sendImagesToS3) Uploading following images: ",
+        newUniqueFiles
+      );
+      await addImages(newUniqueFiles);
+      console.log("(sendImagesToS3) Images uploaded successfully for state!");
+    } catch (error) {
+      console.error("Error: ", error);
+      throw error;
+    }
+
+    console.log("the files argument list in sendImagesToS3:", newUniqueFiles);
+
+    // Create an array of image URLs directly from S3
+    // FOR LATER: IMPLEMENT PRESIGNED URL
+    const imageUrls = newUniqueFiles.map(
+      (file) =>
+        `https://habitat4humanity-images.s3.us-west-2.amazonaws.com/${file.name}`
+    );
+
+    return imageUrls;
+  };
+
   function processFilesInput(files: FileList | null) {
     if (files) {
       const filesRef = Array.from(files);
@@ -148,26 +200,37 @@ function DropZone(props: any): JSX.Element {
         return;
       }
 
-      // Convert the array of files into array of base64 strings
-      // to make sure the data is serializable to store in state
+      // Convert the array of files into array of compressed Blob objects
       Promise.all(
-        filesRef.map(async (file) => {
-          // Compress the file before converting it to base64
-          const compressedFile = (await compressImage(
+        filesRef.map(async (file, index) => {
+          // Compress the file before uploading it to S3
+          console.log("compressing file...");
+          const compressedFile = await compressImage(
             file,
             COMPRESSED_IMAGE_QUALITY
-          )) as Blob;
-          console.log("Compressed file:", compressedFile);
-          return new Promise<string>((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(compressedFile);
-            reader.onload = (e: any) => resolve(reader.result as string);
-          });
+          );
+          return compressedFile;
         })
-      ).then((photoData) => {
-        setPhotos(photoData);
-        console.log("New file state:", photoData);
-      });
+      )
+        .then((compressedFiles) => {
+          // Send the compressed image files to S3 and retrieve their URLs
+          console.log("a file compression done.");
+          console.log(
+            "compressedFiles as file[] ready for sending: ",
+            compressedFiles as File[]
+          );
+          console.log("starting sending to S3...");
+          return sendImagesToS3(compressedFiles as File[]);
+        })
+        .then((imageUrls) => {
+          console.log("imageUrls retrieved... setting state...");
+          setPhotos(imageUrls);
+          console.log("New file state:", imageUrls);
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+          alert("An error occurred while uploading the images");
+        });
     }
   }
 
@@ -176,7 +239,7 @@ function DropZone(props: any): JSX.Element {
     <div>
       {photos.length > 0 ? (
         <div>
-          <ClearMessage onClick={() => setPhotos([])}>
+          <ClearMessage onClick={() => clearImages(photos)}>
             Clear Images
           </ClearMessage>
           <ImageContainer>

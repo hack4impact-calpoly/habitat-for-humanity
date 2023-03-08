@@ -51,6 +51,8 @@ router.post('/', upload.single("productImage"), async (req, res) => {
       ContentType:"image/jpeg"                 // Necessary to define the image content-type to view the photo in the browser with the link
     };
 
+    console.log(params)
+
     // uploading the photo using s3 instance and saving the key in the database.
     s3.upload(params, async (error, data) => {
       if(error) {
@@ -76,52 +78,6 @@ router.post('/', upload.single("productImage"), async (req, res) => {
       
     })
 })
-
-// // upload multiple images with 10 being the max number of images, max 10 images
-// router.post("/multiple", upload.array("productImages", 10), async (req, res) => {
-//   // req.files will contain an array of uploaded files
-//   const files = req.files;
-
-//   // Loop through each file and perform the S3 upload
-//   for (const file of files) {
-//     const params = {
-//       Bucket: String(process.env.AWS_BUCKET_NAME),
-//       Key: String(file.originalname),
-//       Body: file.buffer,
-//       ContentType: "image/jpeg"
-//     };
-//     s3.upload(params, async (error, data) => {
-//       if (error) {
-//         res.status(500).send({err: error});
-//       } else {
-//         let newImage = new Image({
-//           _id: mongoose.Types.ObjectId(),
-//           key: data.Key,
-//           name: file.originalname,
-//           link: data.Location
-//         });
-//         try {
-//           await newImage.save();
-//         } catch (error) {
-//           res.status(400).send(error);
-//         }
-//       }
-//     });
-//   }
-
-//   // Return a success message to the client
-//   res.send({ message: "Images uploaded successfully" });
-// });
-
-// // downloads a file from s3
-// function getFileStream(fileKey) {
-//   const downloadParams = {
-//     Key: fileKey,
-//     Bucket: String(process.env.AWS_BUCKET_NAME)
-//   }
-
-//   return s3.getObject(downloadParams).createReadStream()
-// }
 
 // Get all the product data from db 
 router.get('/', async (req, res) => {
@@ -164,4 +120,34 @@ router.get("/:imageId", async (req, res) => {
   }
 })
 
-module.exports = router
+// delete an image by filename
+router.delete('/:filename', async (req, res) => {
+  console.log('Processing DELETE request');
+  try {
+    const { filename } = req.params;
+    console.log('Deleting image with filename \"%s\"', filename);
+    // check if image exists in S3 bucket
+    const params = {
+      Bucket: String(process.env.AWS_BUCKET_NAME),
+      Key: String(filename),
+    };
+    console.log("looking for param: ", params);
+    await s3.headObject(params).promise();
+
+    console.log('Image exists in S3 bucket');
+
+    // delete image from S3 bucket
+    await s3.deleteObject(params).promise();
+
+    // delete image from MongoDB
+    await Image.deleteOne({ filename: filename });
+
+    res.send({ message: 'Image deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Internal server error' });
+  }
+});
+
+
+module.exports = router;
