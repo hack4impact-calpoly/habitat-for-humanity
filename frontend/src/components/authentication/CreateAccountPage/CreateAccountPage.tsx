@@ -251,7 +251,7 @@ function CreateAccountPage(): JSX.Element {
     Return: boolean (true if number successfuly processed, false if not)
     */
     try {
-      const processedString = phoneNumber.replace(/[^/d]/g, "");
+      const processedString = phoneNumber.replace(/[^0-9]/g, "");
       if (processedString.length !== 10) {
         setPhoneNumberError(
           "Please enter your phone number in the form XXX-XXX-XXXX"
