@@ -120,6 +120,32 @@ router.get("/:imageId", async (req, res) => {
   }
 })
 
+// Route for getting a presigned URL
+router.get('/presigned-url/:filename', async (req, res) => {
+  console.log('Processing GET request');
+  try {
+    const { filename } = req.params;
+    console.log('Getting presigned URL for image with filename \"%s\"', filename);
+    // check if image exists in S3 bucket
+    const params = {
+      Bucket: String(process.env.AWS_BUCKET_NAME),
+      Key: String(filename),
+    };
+    console.log("looking for param: ", params);
+    await s3.headObject(params).promise();
+
+    console.log('Image exists in S3 bucket');
+
+    // get presigned URL for image
+    const url = s3.getSignedUrl('getObject', params);
+
+    res.send({ url: url });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Internal server error' });
+  }
+});
+
 // delete an image by filename
 router.delete('/:filename', async (req, res) => {
   console.log('Processing DELETE request');

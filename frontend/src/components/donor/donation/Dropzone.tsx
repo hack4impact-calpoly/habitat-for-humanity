@@ -141,6 +141,21 @@ function DropZone(props: any): JSX.Element {
     setPhotos([]);
   };
 
+  const getPresignedUrl = async (filename: string): Promise<string> => {
+    /* Get presigned URL form backend (router.get('/presigned-url/:filename')) using fetch directly: */
+    const response = await fetch(
+      `http://localhost:3001/api/images/presigned-url/${filename}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Error getting presigned URL");
+    }
+
+    const presignedUrl = await response.json();
+    console.log("RETRIEVED PRESIGNED URL:", presignedUrl);
+    return presignedUrl.url;
+  };
+
   /* Send image files array to S3 and receive URL */
   const sendImagesToS3 = async (files: File[]): Promise<string[]> => {
     // Generate a unique name for each file
@@ -166,12 +181,20 @@ function DropZone(props: any): JSX.Element {
 
     console.log("the files argument list in sendImagesToS3:", newUniqueFiles);
 
+    // generate presigned URLs for each image
+    const imageUrls = await Promise.all(
+      newUniqueFiles.map((file) => {
+        const fileName = file.name;
+        return getPresignedUrl(fileName);
+      })
+    );
+
     // Create an array of image URLs directly from S3
     // FOR LATER: IMPLEMENT PRESIGNED URL
-    const imageUrls = newUniqueFiles.map(
-      (file) =>
-        `https://habitat4humanity-images.s3.us-west-2.amazonaws.com/${file.name}`
-    );
+    // const imageUrls = newUniqueFiles.map(
+    //   (file) =>
+    //     `https://habitat4humanity-images.s3.us-west-2.amazonaws.com/${file.name}`
+    // );
 
     return imageUrls;
   };
@@ -243,9 +266,9 @@ function DropZone(props: any): JSX.Element {
             Clear Images
           </ClearMessage>
           <ImageContainer>
-            {photos.map((base64String: any, i: any) => (
+            {photos.map((url: any, i: any) => (
               <img
-                src={base64String}
+                src={url}
                 alt="uploaded"
                 key={i}
                 style={{
