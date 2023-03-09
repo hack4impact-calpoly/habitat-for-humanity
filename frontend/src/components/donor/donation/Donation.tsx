@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { updateDimensions, updateName } from "redux/donationSlice";
-import ProgressBar from "./ProgressBar";
-import Dropzone from "./Dropzone";
-import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+import styled from "styled-components";
+
 import { RootState } from "../../../redux/store";
+import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+import Dropzone from "./Dropzone";
+import ProgressBar from "./ProgressBar";
 
 const ContentContainer = styled.div`
   margin-left: 20%;
