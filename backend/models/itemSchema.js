@@ -28,7 +28,7 @@ const itemSchema = new mongoose.Schema(
     zipCode: { type: String, required: true },
     scheduling: {type: String, required: true},
     timeAvailability: { type: [[Date, Date]], required: true },
-    //donorId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    donorId: { type: mongoose.Schema.Types.ObjectId, required: true },
     timeSubmitted: { type: Date, required: true },
     timeApproved: { type: Date, required: false },
     status: { type: String, required: true },

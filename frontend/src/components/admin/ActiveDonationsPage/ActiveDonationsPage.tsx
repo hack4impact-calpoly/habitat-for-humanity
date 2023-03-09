@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,6 +6,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
+import { getUserByID } from "api/user";
+import { Item, getItems } from "../../../api/item";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 
 require("./ActiveDonationsPage.css");
@@ -94,9 +96,22 @@ const dummyData = [
 function ActiveDonationPage(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [items, setItems] = useState<Item[]>([]);
+  const [names, setNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    getItems().then((res) => setItems(res));
+  }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+  };
+
+  const getDonorName = (donorId: string, itemIndex: number) => {
+    getUserByID(donorId).then((res) => {
+      names[itemIndex] = `${res.firstName} ${res.lastName}`;
+      console.log(names);
+    });
   };
 
   const handleChangeRowsPerPage = (
@@ -105,10 +120,12 @@ function ActiveDonationPage(): JSX.Element {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
   return (
     <div>
       <AdminNavbar />
+      {/* {items.map((item) => (
+        <p>{item.name}</p>
+      ))} */}
       <div id="activeDonPage">
         <h1 id="activeDonHeader">Active Donations</h1>
         <TableContainer>
@@ -123,22 +140,26 @@ function ActiveDonationPage(): JSX.Element {
               </TableRow>
             </TableHead>
             <TableBody>
-              {dummyData
+              {items
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
                   // TODO: wrap parent link to new page
                   <TableRow key={index}>
+                    {getDonorName(
+                      "52491dd4-106b-4b20-a03d-c773494b7f8f",
+                      index
+                    )}
                     <TableCell component="th" scope="row">
-                      {d.Donor}
+                      {names[index]}
                     </TableCell>
-                    <TableCell>{d.Type}</TableCell>
-                    <TableCell>{d.DateRecieved}</TableCell>
-                    <TableCell>{d.DateApproved}</TableCell>
-                    {d.Status === "Scheduled" ? (
-                      <TableCell>{d.Status}</TableCell>
+                    <TableCell>{d.scheduling}</TableCell>
+                    <TableCell>{d.timeSubmitted}</TableCell>
+                    <TableCell>{d.timeApproved}</TableCell>
+                    {d.status === "Scheduled" ? (
+                      <TableCell>{d.status}</TableCell>
                     ) : (
                       <TableCell>
-                        <p className="needApproval">{d.Status}</p>
+                        <p className="needApproval">{d.status}</p>
                       </TableCell>
                     )}
                   </TableRow>
