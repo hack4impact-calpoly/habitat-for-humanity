@@ -252,20 +252,12 @@ function CreateAccountPage(): JSX.Element {
     */
     try {
       const processedString = phoneNumber.replace(/[^0-9]/g, "");
-      if (processedString.length !== 10) {
-        setPhoneNumberError(
-          "Please enter your phone number in the form XXX-XXX-XXXX"
-        );
-        return false;
-      }
       if (!isMobilePhone(processedString, "en-US")) {
         setPhoneNumberError(
           "Please enter your phone number in the form XXX-XXX-XXXX"
         );
         return false;
       }
-
-      // processedPhoneNumber = parseInt(processedString);
       setPhoneNumber(processedString);
     } catch (error) {
       console.error(error);
@@ -275,10 +267,6 @@ function CreateAccountPage(): JSX.Element {
       return false;
     }
     return true;
-  }
-
-  function checkError(type: string) {
-    validateForm();
   }
 
   // HTML Body
