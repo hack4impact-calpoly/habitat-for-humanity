@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ProgressBar from "components/donor/donation/ProgressBar";
-
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { updateAddress, updateCity, updateZip } from "redux/donationSlice";
-import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+
 import { RootState, store } from "../../../redux/store";
+import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
 require("./DonorLocationPage.css");
 

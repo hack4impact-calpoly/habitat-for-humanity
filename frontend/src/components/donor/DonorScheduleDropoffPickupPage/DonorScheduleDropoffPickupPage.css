@@ -55,6 +55,8 @@
   font-weight: bold;
   background-color: var(--white);
   border: 2px solid var(--tertiary);
+  width: 200px;
+  margin-right: 50px;
 }
 
 .nextButton {
@@ -62,6 +64,7 @@
   font-weight: bold;
   color: var(--white);
   border: 2px solid var(--tertiary);
+  width: 200px;
 }
 
 .backButton:hover,
@@ -69,21 +72,7 @@
   cursor: pointer;
 }
 
-@media only screen and (max-width: 1100px) {
-    #donDropoffPage {
-        width: 90%;
-        transform: translateX(5%);
-    }
-}
-@media only screen and (max-width: 915px) {
-    #donDropoffPage {
-        width: 90%;
-        transform: translateX(5%);
-    }
-}
-
-@media only screen and (max-width: 750px) {
-    
+@media only screen and (max-width: 1160px) {
     #donDropoffPage {
         width: 90%;
         transform: translateX(5%);
@@ -94,104 +83,13 @@
     .backButton, .nextButton {
         padding: 8px 40px;
     }
-    #donDropoffPage {
-        width: 100%;
-        transform: translateX(5%);
-    }
-}
-
-@media only screen and (max-width: 630px) {
-    .backButton, .nextButton {
-        padding: 8px 40px;
-    }
-    #donDropoffPage {
-        width: 100%;
-        transform: translateX(5%);
-    }
-}
-
-@media only screen and (max-width: 560px) {
-    .backButton, .nextButton {
-        padding: 8px 40px;
-    }
-    #donDropoffPage {
-        width: 100%;
-        transform: translateX(5%);
-    }
-}
-
-@media only screen and (max-width: 540px) {
-    .backButton, .nextButton {
-        padding: 8px 40px;
-    }
-    #donDropoffPage {
-        width: 100%;
-        transform: translateX(5%);
-    }
-}
-
-@media only screen and (max-width: 430px) {
-    .backButton, .nextButton {
-        padding: 8px 40px;
-    }
-    #donDropoffPage {
-        width: 100%;
-        transform: translateX(5%);
-    }
-}
-
-@media only screen and (max-width: 360px) {
-  .backButton,
-  .nextButton {
-    padding: 7px 38px;
-  }
-
-    #donDropoffPage {
-        width: 100%;
-        transform: translateX(5%);
-    }
-}
-
-@media only screen and (max-width: 300px) {
-  .backButton,
-  .nextButton {
-    padding: 7px 30px;
-  }
-
-    .donDropoffRow {
-        padding-bottom: 9px;
+    .backButton {
+      width: 150px;
     }
     
-    .donDropoffHours {
-        padding-left: 25px;
-    }
-    #donDropoffPage {
-        width: 100%;
-        transform: translateX(5%);
+    .nextButton {
+      width: 150px;
     }
 }
 
-@media only screen and (max-width: 290px) {
-  #radioPickUp {
-    margin-top: 10px;
-  }
 
-  .backButton,
-  .nextButton {
-    padding: 7px 30px;
-  }
-
-    .donDropoffRow {
-        padding-bottom: 5px;
-        font-size: 15px;
-    }
-    
-    .donDropoffHours {
-        padding-left: 15px;
-        font-size: 15px;
-    }
-    #donDropoffPage {
-        width: 100%;
-        transform: translateX(5%);
-    }
-}

@@ -247,9 +247,9 @@ function CreateAccountPage(): JSX.Element {
 
   function processPhoneNumber(phoneNumber: string): boolean {
     /*
-        Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
-        Return: boolean (true if number successfuly processed, false if not)
-        */
+    Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
+    Return: boolean (true if number successfuly processed, false if not)
+    */
     try {
       const processedString = phoneNumber.replace(/[^0-9]/g, "");
       if (!isMobilePhone(processedString, "en-US")) {
@@ -258,7 +258,6 @@ function CreateAccountPage(): JSX.Element {
         );
         return false;
       }
-      // processedPhoneNumber = parseInt(processedString);
       setPhoneNumber(processedString);
     } catch (error) {
       console.error(error);
@@ -268,10 +267,6 @@ function CreateAccountPage(): JSX.Element {
       return false;
     }
     return true;
-  }
-
-  function checkError(type: string) {
-    validateForm();
   }
 
   // HTML Body

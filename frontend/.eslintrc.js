@@ -32,7 +32,7 @@ module.exports = {
     "prettier/prettier": [
       "error",
       {
-        "endOfLine":"auto"
+        endOfLine: "auto",
       },
     ],
     // suppress errors for missing 'import React' in files
