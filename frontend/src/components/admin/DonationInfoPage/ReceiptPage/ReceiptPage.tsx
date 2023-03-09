@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+
 import logo from "./logo.png";
+
 // import Tabs from "@mui/material/Tabs";
 // import Tab from "@mui/material/Tab";
 // import PropTypes from "prop-types";
@@ -32,18 +34,20 @@ function ReceiptPage(): JSX.Element {
             <h1>Donation Receipt</h1>
           </div>
           <div className="forFlex">
-            <h2>For</h2>
-            <input
-              type="text"
-              name="donationFor"
-              value={contract.donationFor}
-              onChange={(event) =>
-                setContract((prevContract) => ({
-                  ...prevContract,
-                  donationFor: event.target.value,
-                }))
-              }
-            />
+            <div style={{ display: "flex", flex: 1 }}>
+              <h2>For</h2>
+              <input
+                type="text"
+                name="donationFor"
+                value={contract.donationFor}
+                onChange={(event) =>
+                  setContract((prevContract) => ({
+                    ...prevContract,
+                    donationFor: event.target.value,
+                  }))
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -51,119 +55,135 @@ function ReceiptPage(): JSX.Element {
         <div className="form-section">
           <h2>Personal Information</h2>
           <div className="form-field">
-            <h4>First Name:</h4>
-            <input
-              type="text"
-              name="firstName"
-              value={contract.firstName}
-              onChange={(event) =>
-                setContract((prevContract) => ({
-                  ...prevContract,
-                  firstName: event.target.value,
-                }))
-              }
-            />
-            <h4>Last Name:</h4>
-            <input
-              type="text"
-              name="lastName"
-              value={contract.lastName}
-              onChange={(event) =>
-                setContract((prevContract) => ({
-                  ...prevContract,
-                  lastName: event.target.value,
-                }))
-              }
-            />
+            <div style={{ display: "flex", width: "50%" }}>
+              <h4>First Name:</h4>
+              <input
+                type="text"
+                name="firstName"
+                value={contract.firstName}
+                onChange={(event) =>
+                  setContract((prevContract) => ({
+                    ...prevContract,
+                    firstName: event.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div style={{ display: "flex", width: "50%" }}>
+              <h4>Last Name:</h4>
+              <input
+                type="text"
+                name="lastName"
+                value={contract.lastName}
+                onChange={(event) =>
+                  setContract((prevContract) => ({
+                    ...prevContract,
+                    lastName: event.target.value,
+                  }))
+                }
+              />
+            </div>
           </div>
           <div className="form-field">
-            <h4>Business Name:</h4>
-            <input
-              id="businessName"
-              type="text"
-              name="businessName"
-              value={contract.businessName}
-              onChange={(event) =>
-                setContract((prevContract) => ({
-                  ...prevContract,
-                  businessName: event.target.value,
-                }))
-              }
-            />
+            <div style={{ display: "flex", flex: 1 }}>
+              <h4>Business Name:</h4>
+              <input
+                id="businessName"
+                type="text"
+                name="businessName"
+                value={contract.businessName}
+                onChange={(event) =>
+                  setContract((prevContract) => ({
+                    ...prevContract,
+                    businessName: event.target.value,
+                  }))
+                }
+              />
+            </div>
           </div>
           <div className="form-field">
-            <h4>Address:</h4>
-            <input
-              type="text"
-              name="address"
-              value={contract.address}
-              onChange={(event) =>
-                setContract((prevContract) => ({
-                  ...prevContract,
-                  address: event.target.value,
-                }))
-              }
-            />
+            <div style={{ display: "flex" }}>
+              <h4>Address:</h4>
+              <input
+                type="text"
+                name="address"
+                value={contract.address}
+                onChange={(event) =>
+                  setContract((prevContract) => ({
+                    ...prevContract,
+                    address: event.target.value,
+                  }))
+                }
+              />
+            </div>
           </div>
           <div className="form-field">
-            <h4>City,State,Zipcode:</h4>
-            <input
-              type="text"
-              name="cityStateZipcode"
-              value={contract.cityStateZipcode}
-              onChange={(event) =>
-                setContract((prevContract) => ({
-                  ...prevContract,
-                  cityStateZipcode: event.target.value,
-                }))
-              }
-            />
+            <div style={{ display: "flex", flex: 1 }}>
+              <h4>City, State, Zipcode:</h4>
+              <input
+                type="text"
+                name="cityStateZipcode"
+                value={contract.cityStateZipcode}
+                onChange={(event) =>
+                  setContract((prevContract) => ({
+                    ...prevContract,
+                    cityStateZipcode: event.target.value,
+                  }))
+                }
+              />
+            </div>
           </div>
           <div className="form-field">
-            <h4>Phone:</h4>
-            <input
-              type="text"
-              name="phone"
-              value={contract.phone}
-              onChange={(event) =>
-                setContract((prevContract) => ({
-                  ...prevContract,
-                  phone: event.target.value,
-                }))
-              }
-            />
-            <h4>Cell:</h4>
-            <input
-              type="text"
-              name="cell"
-              value={contract.cell}
-              onChange={(event) =>
-                setContract((prevContract) => ({
-                  ...prevContract,
-                  cell: event.target.value,
-                }))
-              }
-            />
+            <div style={{ display: "flex", width: "50%" }}>
+              <h4>Phone:</h4>
+              <input
+                type="text"
+                name="phone"
+                value={contract.phone}
+                onChange={(event) =>
+                  setContract((prevContract) => ({
+                    ...prevContract,
+                    phone: event.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div style={{ display: "flex", width: "50%" }}>
+              <h4>Cell:</h4>
+              <input
+                type="text"
+                name="cell"
+                value={contract.cell}
+                onChange={(event) =>
+                  setContract((prevContract) => ({
+                    ...prevContract,
+                    cell: event.target.value,
+                  }))
+                }
+              />
+            </div>
           </div>
           <div className="form-field">
-            <h4>Email Address:</h4>
-            <input
-              type="text"
-              name="email"
-              value={contract.email}
-              onChange={(event) =>
-                setContract((prevContract) => ({
-                  ...prevContract,
-                  email: event.target.value,
-                }))
-              }
-            />
+            <div style={{ display: "flex", flex: 1 }}>
+              <h4>Email Address:</h4>
+              <input
+                type="text"
+                name="email"
+                value={contract.email}
+                onChange={(event) =>
+                  setContract((prevContract) => ({
+                    ...prevContract,
+                    email: event.target.value,
+                  }))
+                }
+              />
+            </div>
           </div>
           <h2>Donated Items</h2>
           <div className="form-field">
             <textarea
               rows={4}
-              style={{ width: "100%" }}
+              style={{ width: "100%", padding: "0.5rem" }}
               value={contract.donatedItems}
               onChange={(event) =>
                 setContract((prevContract) => ({
@@ -175,7 +195,10 @@ function ReceiptPage(): JSX.Element {
           </div>
           <div className="value-div">
             <div className="form-field">
-              <h4>Value$:</h4>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <h4>Value: </h4>
+                <h3 style={{ margin: 0, marginRight: -5, marginLeft: 5 }}>$</h3>
+              </div>
               <input
                 type="text"
                 name="value"
@@ -213,7 +236,9 @@ function ReceiptPage(): JSX.Element {
                 }))
               }
             />
-            <h4>Authorizing Signature</h4>
+            <h4 style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>
+              Authorizing Signature
+            </h4>
           </div>
           <div className="signature-field">
             <input
@@ -227,7 +252,7 @@ function ReceiptPage(): JSX.Element {
                 }))
               }
             />
-            <h4>Date</h4>
+            <h4 style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>Date</h4>
           </div>
         </div>
       </div>
