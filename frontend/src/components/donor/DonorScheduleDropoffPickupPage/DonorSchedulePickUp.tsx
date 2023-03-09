@@ -1,4 +1,5 @@
 import "moment-timezone";
+import "@fullcalendar/react/dist/vdom";
 
 import moment from "moment";
 import React, { useState } from "react";
@@ -6,13 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Event, updatePickupTimes } from "redux/donationSlice";
 
+import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import Checkbox from "@mui/material/Checkbox";
-import { RadioButtonChecked } from "@mui/icons-material";
 
 import { RootState } from "../../../redux/store";
 
