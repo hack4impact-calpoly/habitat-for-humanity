@@ -130,7 +130,6 @@ router.get('/presigned-url/:filename', async (req, res) => {
     const params = {
       Bucket: String(process.env.AWS_BUCKET_NAME),
       Key: String(filename),
-      Expires: 3600, // 1 hour
     };
     console.log("looking for param: ", params);
     await s3.headObject(params).promise();
