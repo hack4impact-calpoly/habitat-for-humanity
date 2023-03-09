@@ -128,6 +128,7 @@ export const addItem = async (item: Item) =>
     body: JSON.stringify({
       name: item.name,
       size: item.size,
+      photos: item.photos,
       address: item.address,
       city: item.city,
       zipCode: item.zipCode,

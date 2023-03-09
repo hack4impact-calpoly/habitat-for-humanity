@@ -74,18 +74,18 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   };
 
   /* Send image files array to S3 */
-  const sendImagesToS3 = async (): Promise<boolean> => {
-    const files = convertToFiles(photos);
-    console.log("Converted back to Files: ", files);
-    try {
-      await addImages(files);
-      console.log("Images uploaded successfully!");
-      return true;
-    } catch (error) {
-      console.error("Error: ", error);
-      return false;
-    }
-  };
+  // const sendImagesToS3 = async (): Promise<boolean> => {
+  //   const files = convertToFiles(photos);
+  //   console.log("Converted back to Files: ", files);
+  //   try {
+  //     await addImages(files);
+  //     console.log("Images uploaded successfully!");
+  //     return true;
+  //   } catch (error) {
+  //     console.error("Error: ", error);
+  //     return false;
+  //   }
+  // };
 
   const sendToDB = async () => {
     const donation: Item = {
@@ -102,8 +102,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
       status: "Needs Approval",
     };
     const response = await addItem(donation);
-    const imagesUploaded = await sendImagesToS3();
-    if (!response || !imagesUploaded) {
+    console.log("To be sent to DB:", donation);
+    // const imagesUploaded = await sendImagesToS3();
+    if (!response) {
       setServerError(
         "There was an error sending your donation. Please try again later."
       );
