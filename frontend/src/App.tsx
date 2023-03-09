@@ -5,6 +5,10 @@ import "@aws-amplify/ui-react/styles.css";
 import { Amplify } from "aws-amplify";
 import React from "react";
 
+// import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
+// import SuccessPage from './components/authentication/SuccessPage/SuccessPage';
+/* Admin Screens */
+// import DonationInfoPage from './components/admin/DonationInfoPage/DonationInfoPage';
 /* Donator Screens */
 // import DonatorNavbar from './components/donator/DonatorNavbar/DonatorNavbar';
 // import DonatorProfilePage from './components/donator/DonatorProfile/DonatorProfile';
@@ -20,10 +24,6 @@ import React from "react";
 // import Donation from './components/donator/Donation/Donation';
 // import DonorSchedulePickUp from './components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp';
 import awsExports from "./aws-exports";
-// import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
-// import SuccessPage from './components/authentication/SuccessPage/SuccessPage';
-/* Admin Screens */
-import DonationInfoPage from "./components/admin/DonationInfoPage/DonationInfoPage";
 // import Amplify from '@aws-amplify/core';
 // import { Auth } from '@aws-amplify/auth';
 // import awsconfig from './aws-exports';
@@ -34,6 +34,10 @@ import DonationInfoPage from "./components/admin/DonationInfoPage/DonationInfoPa
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 import LoginPage from "./components/authentication/LoginPage/LoginPage";
 
+// import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
+
+Amplify.configure(awsExports);
+
 function App(): JSX.Element {
   return (
     // <SuccessPage />
@@ -43,14 +47,13 @@ function App(): JSX.Element {
     // <DonorSchedulePickUp/>
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
-    // <LoginPage />
+    <LoginPage />
     // <DonatorNextStepsPage />
     // <VerifyAccountPage />
     // <SubmitDropOffPage />
     // <SubmitPickUpPage />
     // <SubmitPickUpMultiplePhotoPage />
     // <DonatorNextStepsPage />
-    <DonationInfoPage />
     // <DonorScheduleDropoffPickupPage />
   );
 }

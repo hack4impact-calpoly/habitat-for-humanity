@@ -37,7 +37,6 @@
 #donPickupButtons {
   margin: 50px 0;
   display: flex;
-  justify-content: space-between;
 }
 
 .fc h2 {
@@ -71,6 +70,9 @@
 @media only screen and (max-width: 1082px) {
   #donatorPickupPage {
     display: block;
+  }
+  #donPickupButtons {
+    justify-content: space-between;
   }
 }
 
