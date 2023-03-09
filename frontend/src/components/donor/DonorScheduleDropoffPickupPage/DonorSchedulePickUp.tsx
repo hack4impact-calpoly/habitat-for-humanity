@@ -1,15 +1,19 @@
+import "moment-timezone";
+
+import moment from "moment";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
+import { Event, updatePickupTimes } from "redux/donationSlice";
+
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import moment from "moment";
-import "moment-timezone";
-import Checkbox from "@mui/material/Checkbox";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { useDispatch, useSelector } from "react-redux";
-import { updatePickupTimes, Event } from "redux/donationSlice";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import Checkbox from "@mui/material/Checkbox";
+import { RadioButtonChecked } from "@mui/icons-material";
+
 import { RootState } from "../../../redux/store";
 
 require("./DonorSchedulePickUp.css");
