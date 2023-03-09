@@ -74,6 +74,7 @@ input[type="radio"] {
 }
 
 @media only screen and (max-width: 915px) {
+
   img {
     max-width: 95%;
   }
@@ -84,6 +85,10 @@ input[type="radio"] {
 }
 
 @media only screen and (max-width: 850px) {
+  #SubmitInfoPage {
+    width: 90%;
+    transform: translateX(0%);
+}
   img {
     max-width: 85%;
   }
@@ -94,6 +99,10 @@ input[type="radio"] {
 }
 
 @media only screen and (max-width: 750px) {
+  #SubmitInfoPage {
+    width: 90%;
+    transform: translateX(0%);
+}
   #SingleImages {
     margin-right: -155px;
     margin-top: 5px;
