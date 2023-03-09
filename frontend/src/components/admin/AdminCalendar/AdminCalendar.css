@@ -1,13 +1,150 @@
 @import "config/colors.css";
 
+
 .mainCalendarContainer{
     width: 80%;
+    height: auto;
     padding: 5%;
     padding-top: 3%;
-    height: 10%;
-    
+    padding-left: 3%;
+}
+
+ .mainCalendarContainer .fc-timegrid-event-harness-inset .fc-timegrid-event,
+  .mainCalendarContainer .fc-timegrid-event.fc-event-mirror,
+  .mainCalendarContainer .fc-timegrid-more-link{
+    box-shadow: none;
+}
+
+
+
+.mainCalendarContainer .fc-timegrid-event-harness{
+    background-color: rgb(206, 243, 255);
+}
+
+
+.mainCalendarContainer .fc-direction-ltr .fc-timegrid-col-events {
+    margin: 0;
+    }
+
+ .mainCalendarContainer .fc-timegrid-event-harness-inset .fc-timegrid-event{
+    box-shadow: 0px;
+ }
+
+.mainCalendarContainer .fc-timegrid-event .fc-event-main {
+    padding: 0;
+    }
+
+.mainCalendarContainer .fc-timegrid-axis{
+    border-style: none;
+}
+
+.mainCalendarContainer .fc-scrollgrid-sync-inner{
+    color: grey;
+}
+
+.mainCalendarContainer .fc-button:hover {
+    background-color: transparent;
+    color: inherit;
+    border-color: inherit;
+    cursor: default;
+  } 
+
+.mainCalendarContainer .past-day{
+     background-color: rgb(240, 239, 239);
+    /*background-color: rgb(255, 255, 255)*/
 
 }
+
+.mainCalendarContainer .fc-theme-standard th{
+    border-left: none;
+    border-right: none;
+}
+
+ 
+
+.mainCalendarContainer .fc-past-event {
+    color: #aaa;
+    }
+
+ .fc .fc-button-primary{
+    background-color: white;
+    border: 0px;
+    
+}
+
+
+
+.mainCalendarContainer .fc-header-toolbar{
+    margin-left:55px;
+}
+
+.mainCalendarContainer .fc-timegrid-slot-label {
+    vertical-align: top;
+    }
+.fc-event {
+    /* Make events fill the entire cell */
+    width: 100%;
+    height: 100%;
+  }
+
+  .fc-event-time {
+    /* Hide event time */
+    display: none;
+  }
+  
+
+.mainCalendarContainer .fc .fc-col-header-cell-cushion {
+    padding-bottom: 10px;
+
+}
+
+.mainCalendarContainer .fc-toolbar h2 {
+    color: var(--orange);
+  }
+
+.mainCalendarContainer .fc-event-main-frame{
+    background-color: rgb(206, 243, 255);
+  }
+/*
+.mainCalendarContainer .fc .fc-timegrid-slot-minor {
+    border-top-style: none;
+    border-style: none;
+}*/
+
+
+.mainCalendarContainer .fc-timegrid-slot-label {
+        border-style: none;
+} 
+
+
+.mainCalendarContainer .fc .fc-timegrid-col.fc-day-today {
+    background-color: transparent;
+}
+
+.mainCalendarContainer .fc .fc-timegrid-slot{
+        height: 3.5em;
+}
+
+
+        /*Above is all css affecting the large admin calendar*/
+/*************************************************************************/
+        /*Below is all of the css affecting the small calendar*/
+
+
+
+    /* an exception; this css applies to both calendars */
+    .fc .fc-scrollgrid{
+        border-left-width: 0;
+        border-top-width: 0;
+    }
+
+    .fc-icon{
+        background-color: white;
+        color:grey;
+    }
+
+
+      
 
 .smallCalendarContainer{
     width: 30%;
@@ -16,5 +153,30 @@
 
 }
 
+.smallCalendarContainer .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{
+    min-height:.10rem;
+}
 
+.smallCalendarContainer .fc-daygrid-day-top{
+    justify-content: center;
+}
+
+.smallCalendarContainer .fc-theme-standard td, .smallCalendarContainer .fc-theme-standard th{
+        border-style: none;
+    }   
+      
+.smallCalendarContainer .fc-day-disabled{
+    background-color: white;
+}
   
+.smallCalendarContainer .fc-toolbar-chunk{
+    font-size: 12px;
+    padding-left: 15px;
+}
+
+.smallCalendarContainer .fc-button:hover {
+    background-color: transparent;
+    color: inherit;
+    border-color: inherit;
+    cursor: default;
+  } 
