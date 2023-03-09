@@ -56,6 +56,8 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
       city: storedDonation.city,
       state: storedDonation.state,
       zipCode: storedDonation.zipCode.toString(),
+      donorId: "6276cdba59bd54c320e10345", // TODO get donor id from current user
+      timeApproved: new Date(),
       scheduling: storedDonation.dropoff ? "Dropoff" : "Pickup",
       timeAvailability: [[new Date(), new Date()]], // TODO
       timeSubmitted: new Date(),

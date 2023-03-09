@@ -13,7 +13,7 @@ import "@aws-amplify/ui-react/styles.css";
 // import CreateAccountPage from './components/authentication/CreateAccountPage/CreateAccountPage';
 // import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
-import LoginPage from "./components/authentication/LoginPage/LoginPage";
+// import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
 // import SuccessPage from './components/authentication/SuccessPage/SuccessPage';
 
@@ -34,6 +34,7 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonatorNextStepsPage from './components/donator/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/donator/Donation/Donation';
 // import DonorSchedulePickUp from './components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp';
+import ActiveDonationPage from "components/admin/ActiveDonationsPage/ActiveDonationsPage";
 
 import awsExports from "./aws-exports";
 // import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
@@ -49,7 +50,7 @@ function App(): JSX.Element {
     // <DonorSchedulePickUp/>
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
-    <LoginPage />
+    // <LoginPage />
     // <DonatorNextStepsPage />
     // <VerifyAccountPage />
     // <SubmitDropOffPage />
@@ -58,6 +59,7 @@ function App(): JSX.Element {
     // <DonatorNextStepsPage />
     // <DonationInfoPage/>
     // <DonorScheduleDropoffPickupPage />
+    <ActiveDonationPage />
   );
 }
 

@@ -109,9 +109,10 @@ export interface Item {
   zipCode: string;
   scheduling: string; // Pickup or Dropoff
   timeAvailability: [[Date, Date]];
-  // donorId: null,  type: mongoose.Schema.Types.ObjectId
+  donorId: string;
+  // type: mongoose.Schema.Types.ObjectId
   timeSubmitted: Date;
-  // timeApproved: Date,
+  timeApproved: Date;
   status: string; // approved or needs approval
   // notes: string
   // timeAccepted: Date
