@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
 @import "config/colors.css";
 
-#newPasswordBox {
+#newVerifyAccountBox {
   width: 50vw;
   max-width: 577px;
   margin: auto;
