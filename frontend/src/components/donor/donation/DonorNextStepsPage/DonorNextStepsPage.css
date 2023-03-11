@@ -52,48 +52,11 @@
   }
 }
 
-@media only screen and (max-width: 1400px) {
-  #donNextStepsPage {
-    padding: 0 15%;
-  }
-}
-
 @media only screen and (max-width: 840px) {
   #donNextStepsDesc {
     padding-right: 0;
   }
-
   #donNextStepsPage {
     padding: 0 12%;
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  #donNextStepsPage {
-    padding: 0 8%;
-  }
-}
-
-@media only screen and (max-width: 630px) {
-  #donNextStepsPage {
-    padding: 0 10%;
-  }
-}
-
-@media only screen and (max-width: 550px) {
-  .doneButton {
-    padding: 6px 40px;
-  }
-}
-
-@media only screen and (max-width: 320px) {
-  #donNextStepsHeader {
-    font-size: 20px;
-  }
-
-  #donNextStepsDesc,
-  #donNextStepsQuestions,
-  #donNextStepsPhone {
-    font-size: 92%;
   }
 }
