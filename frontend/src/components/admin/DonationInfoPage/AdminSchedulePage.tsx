@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Table from "@mui/material/Table";
@@ -7,13 +7,28 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
-interface availableTimes {
+interface AvailableTimes {
   day: string;
   hours: string[];
 }
 
-function AdminSchedulePage(props: availableTimes[]): JSX.Element {
+interface Availability extends AvailableTimes {
+  selected: boolean[];
+  volunteer: string[];
+}
+
+function AdminSchedulePage(props: { times: AvailableTimes[] }): JSX.Element {
+  const { times } = props;
+  const [availability, setAvailability] = useState<Availability[]>(
+    times.map((time) => {
+      const newTime = { ...time, selected: [], volunteer: [] };
+      return newTime;
+    })
+  );
+
   return (
     <div id="DonInfo">
       <div id="DonationInfoPage">
@@ -21,10 +36,11 @@ function AdminSchedulePage(props: availableTimes[]): JSX.Element {
           <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
             Schedule Donation
           </h2>
+
           <div id="TimeTable" style={{ marginTop: "3rem" }}>
-            {props.map((element, index) => {
-              const { day } = element;
-              const { hours } = element;
+            {times.map((time, index) => {
+              const { day } = time;
+              const { hours } = time;
               return (
                 <div style={{ marginTop: "3rem" }}>
                   <h2
@@ -52,13 +68,22 @@ function AdminSchedulePage(props: availableTimes[]): JSX.Element {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {hours.map((element1, index1) => (
+                        {hours.map((hour, index1) => (
                           <TableRow key={index1}>
                             <TableCell sx={{ padding: 0, margin: 0 }}>
-                              <Checkbox key={index1} />
+                              <Checkbox
+                                key={index1}
+                                checked={availability[index].selected[index1]}
+                                onChange={(event) => {
+                                  const newAvailability = [...availability];
+                                  newAvailability[index].selected[index1] =
+                                    event.target.checked;
+                                  setAvailability(newAvailability);
+                                }}
+                              />
                             </TableCell>
                             <TableCell>
-                              <p>{element1}</p>
+                              <p>{hour}</p>
                             </TableCell>
                             <TableCell>
                               <TextField
@@ -70,6 +95,13 @@ function AdminSchedulePage(props: availableTimes[]): JSX.Element {
                                     md: "80%",
                                     lg: "60%",
                                   },
+                                }}
+                                value={availability[index].volunteer[index1]}
+                                onChange={(event) => {
+                                  const newAvailability = [...availability];
+                                  newAvailability[index].volunteer[index1] =
+                                    event.target.value;
+                                  setAvailability(newAvailability);
                                 }}
                               />
                             </TableCell>
