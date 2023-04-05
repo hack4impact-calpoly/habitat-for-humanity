@@ -58,6 +58,7 @@ function AdminCalendar(): JSX.Element {
             plugins={[dayGridPlugin]}
             showNonCurrentDates={false}
             initialView="dayGridMonth"
+            dayCellClassNames={addCustomClassNames}
             headerToolbar={{
               start: "title",
               center: "",
@@ -66,6 +67,18 @@ function AdminCalendar(): JSX.Element {
             dayHeaderFormat={{
               weekday: "narrow",
             }}
+            events={[
+              {
+                backgroundColor: "#97e4fc",
+                start: "2023-03-07",
+                display: "background",
+              },
+              {
+                backgroundColor: "#97e4fc",
+                start: "2023-02-26",
+                display: "background",
+              },
+            ]}
           />
         </div>
 
@@ -122,6 +135,11 @@ function AdminCalendar(): JSX.Element {
                 `,
                 start: "2023-02-26T08:00:00",
                 end: "2023-02-26T11:00:00",
+                name: "Jane Lee",
+                address: "1 Mustang Drive San Luis Obispo, Ca 93407",
+                email: "janetesting@gmail.com",
+                phone: "805-555-5555",
+                volunteer: "Real Person",
               },
             ]}
           />
