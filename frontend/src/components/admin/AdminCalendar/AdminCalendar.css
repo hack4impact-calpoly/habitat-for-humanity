@@ -9,30 +9,27 @@
     padding-left: 3%;
 }
 
- .mainCalendarContainer .fc-timegrid-event-harness-inset .fc-timegrid-event,
-  .mainCalendarContainer .fc-timegrid-event.fc-event-mirror,
-  .mainCalendarContainer .fc-timegrid-more-link{
+.mainCalendarContainer .fc-timegrid-event-harness-inset .fc-timegrid-event,
+.mainCalendarContainer .fc-timegrid-event.fc-event-mirror,
+.mainCalendarContainer .fc-timegrid-more-link{
     box-shadow: none;
 }
-
-
 
 .mainCalendarContainer .fc-timegrid-event-harness{
     background-color: rgb(206, 243, 255);
 }
 
-
 .mainCalendarContainer .fc-direction-ltr .fc-timegrid-col-events {
     margin: 0;
-    }
+}
 
- .mainCalendarContainer .fc-timegrid-event-harness-inset .fc-timegrid-event{
+.mainCalendarContainer .fc-timegrid-event-harness-inset .fc-timegrid-event{
     box-shadow: 0px;
- }
+}
 
-.mainCalendarContainer .fc-timegrid-event .fc-event-main {
+.mainCalendarContainer .fc-timegrid-event .fc-event-main{
     padding: 0;
-    }
+}
 
 .mainCalendarContainer .fc-timegrid-axis{
     border-style: none;
@@ -42,12 +39,12 @@
     color: grey;
 }
 
-.mainCalendarContainer .fc-button:hover {
+.mainCalendarContainer .fc-button:hover{
     background-color: transparent;
     color: inherit;
     border-color: inherit;
     cursor: default;
-  } 
+} 
 
 .mainCalendarContainer .past-day{
      background-color: rgb(240, 239, 239);
@@ -60,11 +57,9 @@
     border-right: none;
 }
 
- 
-
 .mainCalendarContainer .fc-past-event {
     color: #aaa;
-    }
+}
 
  .fc .fc-button-primary{
     background-color: white;
@@ -72,27 +67,25 @@
     
 }
 
-
-
 .mainCalendarContainer .fc-header-toolbar{
     margin-left:55px;
 }
 
 .mainCalendarContainer .fc-timegrid-slot-label {
     vertical-align: top;
-    }
+}
+
 .fc-event {
     /* Make events fill the entire cell */
     width: 100%;
     height: 100%;
-  }
+}
 
-  .fc-event-time {
+.fc-event-time {
     /* Hide event time */
     display: none;
-  }
+}
   
-
 .mainCalendarContainer .fc .fc-col-header-cell-cushion {
     padding-bottom: 10px;
 
@@ -100,22 +93,21 @@
 
 .mainCalendarContainer .fc-toolbar h2 {
     color: var(--orange);
-  }
+}
 
 .mainCalendarContainer .fc-event-main-frame{
     background-color: rgb(206, 243, 255);
-  }
+}
+
 /*
 .mainCalendarContainer .fc .fc-timegrid-slot-minor {
     border-top-style: none;
     border-style: none;
 }*/
 
-
 .mainCalendarContainer .fc-timegrid-slot-label {
         border-style: none;
 } 
-
 
 .mainCalendarContainer .fc .fc-timegrid-col.fc-day-today {
     background-color: transparent;
@@ -143,9 +135,6 @@
         color:grey;
     }
 
-
-      
-
 .smallCalendarContainer{
     width: 30%;
     padding: 3%; 
@@ -162,8 +151,8 @@
 }
 
 .smallCalendarContainer .fc-theme-standard td, .smallCalendarContainer .fc-theme-standard th{
-        border-style: none;
-    }   
+    border-style: none;
+}   
       
 .smallCalendarContainer .fc-day-disabled{
     background-color: white;
@@ -174,9 +163,19 @@
     padding-left: 15px;
 }
 
-.smallCalendarContainer .fc-button:hover {
+.smallCalendarContainer .fc-button:hover{
     background-color: transparent;
     color: inherit;
     border-color: inherit;
     cursor: default;
-  } 
+} 
+
+.smallCalendarContainer .past-day{
+    color: #8f8f8f;
+    text-decoration: line-through;
+}
+
+.smallCalendarContainer .today{
+    color:black; 
+    text-decoration: none;
+}
