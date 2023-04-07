@@ -7,27 +7,13 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 
 interface AvailableTimes {
   day: string;
   hours: string[];
 }
-
-interface Availability extends AvailableTimes {
-  selected: boolean[];
-  volunteer: string[];
-}
-
 function AdminSchedulePage(props: { times: AvailableTimes[] }): JSX.Element {
   const { times } = props;
-  const [availability, setAvailability] = useState<Availability[]>(
-    times.map((time) => {
-      const newTime = { ...time, selected: [], volunteer: [] };
-      return newTime;
-    })
-  );
 
   return (
     <div id="DonInfo">
@@ -71,20 +57,9 @@ function AdminSchedulePage(props: { times: AvailableTimes[] }): JSX.Element {
                         {hours.map((hour, index1) => (
                           <TableRow key={index1}>
                             <TableCell sx={{ padding: 0, margin: 0 }}>
-                              <Checkbox
-                                key={index1}
-                                checked={availability[index].selected[index1]}
-                                onChange={(event) => {
-                                  const newAvailability = [...availability];
-                                  newAvailability[index].selected[index1] =
-                                    event.target.checked;
-                                  setAvailability(newAvailability);
-                                }}
-                              />
+                              <Checkbox key={index1} />
                             </TableCell>
-                            <TableCell>
-                              <p>{hour}</p>
-                            </TableCell>
+                            <TableCell>{hour}</TableCell>
                             <TableCell>
                               <TextField
                                 variant="outlined"
@@ -95,13 +70,6 @@ function AdminSchedulePage(props: { times: AvailableTimes[] }): JSX.Element {
                                     md: "80%",
                                     lg: "60%",
                                   },
-                                }}
-                                value={availability[index].volunteer[index1]}
-                                onChange={(event) => {
-                                  const newAvailability = [...availability];
-                                  newAvailability[index].volunteer[index1] =
-                                    event.target.value;
-                                  setAvailability(newAvailability);
                                 }}
                               />
                             </TableCell>
