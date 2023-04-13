@@ -47,7 +47,7 @@ function App(): JSX.Element {
     // <LoginPage />
     // <DonatorHomePage />
     // <CreateAccountPage />
-    // <DonorSchedulePickUp/>
+    // <DonorSchedulePickUp />
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
     // <LoginPage />
