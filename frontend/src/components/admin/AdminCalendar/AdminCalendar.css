@@ -16,7 +16,10 @@
 }
 
 .mainCalendarContainer .fc-timegrid-event-harness{
-    background-color: rgb(206, 243, 255);
+    /*background-color: rgb(206, 243, 255);*/
+    background-color: #D4F7FF;
+    
+    
 }
 
 .mainCalendarContainer .fc-direction-ltr .fc-timegrid-col-events {
@@ -115,7 +118,7 @@
 }
 
 .mainCalendarContainer .fc .fc-timegrid-slot{
-        height: 3.5em;
+        height: 4.6em;
 }
 
 
@@ -180,3 +183,6 @@
     color:black; 
     text-decoration: none;
 }
+
+
+
