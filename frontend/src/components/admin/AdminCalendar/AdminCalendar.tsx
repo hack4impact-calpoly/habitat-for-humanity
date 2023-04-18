@@ -5,7 +5,7 @@ import FullCalendar, {
 import React, { useState } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { Button, Modal, Box, Typography } from "@mui/material";
+import { Modal, Box, Typography } from "@mui/material";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 
 require("./AdminCalendar.css");
@@ -15,12 +15,62 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
-  height: 350,
+  width: 380,
+  height: 247,
   bgcolor: "background.paper",
-  border: "2px solid grey",
-  boxShadow: 24,
+  border: "1px solid #DFDFDF",
+  boxShadow: "10px 4px 20px rgba(49, 77, 137, 0.1)",
   p: 4,
+};
+
+const modalAddressStyle = {
+  color: "#314D89",
+  fontFamily: "Rubik",
+  fontStyle: "normal",
+  fontWeight: "bold",
+  fontSize: "13px",
+  lineHeight: "15px",
+  marginBottom: "10px",
+};
+
+const modalDefaultText = {
+  color: "#000000",
+  fontFamily: "Rubik",
+  fontStyle: "normal",
+  fontWeight: "400",
+  fontSize: "13px",
+  lineHeight: "15px",
+  marginTop: "5px",
+  marginBottom: "5px",
+};
+
+const modalTitleText = {
+  color: "#011338",
+  fontFamily: "Rubik",
+  fontStyle: "normal",
+  fontWeight: "bolder",
+  fontSize: "13px",
+  lineHeight: "15px",
+  marginTop: "5px",
+  marginBottom: "5px",
+};
+
+const viewDonnationButton = {
+  width: "112px",
+  height: "30px",
+  background: "#314D89",
+  color: "white",
+  fontFamily: "Rubik",
+  fontStyle: "normal",
+  fontWeight: "400",
+  fontSize: "13px",
+  lineHeight: "15px",
+  marginTop: "15px",
+  boxShadow: "none",
+  borderTopWidth: "0px",
+  borderBottomWidth: "0px",
+  borderRightWidth: "0px",
+  borderLeftWidth: "0px",
 };
 
 function AdminCalendar(): JSX.Element {
@@ -47,11 +97,11 @@ function AdminCalendar(): JSX.Element {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Typography style={modalAddressStyle}>
               {clickedEvent!.event.extendedProps.address}
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <p>
+            <Typography>
+              <p style={modalDefaultText}>
                 {new Date(clickedEvent!.event.start!).toLocaleDateString(
                   "en-US",
                   {
@@ -73,12 +123,35 @@ function AdminCalendar(): JSX.Element {
                     hour12: true,
                   }
                 )}
-                <p> need to fetch name of person assigned to this</p>
+                <p style={{ marginTop: "10px", marginBottom: "0px" }}>
+                  <span style={modalTitleText}>Volunteer </span>
+                  <span style={modalDefaultText}>
+                    {clickedEvent!.event.extendedProps.volunteer}
+                  </span>
+                </p>
               </p>
-              <p>donor : {clickedEvent!.event.extendedProps.name}</p>
-              <p>item: (need to fetch this)</p>
-              <p>phone : {clickedEvent!.event.extendedProps.phone}</p>
-              <button type="button">view donnation</button>
+              <p style={{ marginTop: "0px", marginBottom: "0px" }}>
+                <span style={modalTitleText}>Donor </span>
+                <span style={modalDefaultText}>
+                  {clickedEvent!.event.extendedProps.name}
+                </span>
+              </p>
+              <p style={{ marginTop: "0px", marginBottom: "0px" }}>
+                <span style={modalTitleText}> Item</span>
+                <span style={modalDefaultText}> (need to fetch this)</span>
+              </p>
+
+              <p style={{ marginTop: "0px", marginBottom: "0px" }}>
+                <span style={modalTitleText}>Phone </span>
+                <span style={modalDefaultText}>
+                  {clickedEvent!.event.extendedProps.phone}
+                </span>
+              </p>
+              <span>
+                <button type="button" style={viewDonnationButton}>
+                  View Donation
+                </button>
+              </span>
             </Typography>
           </Box>
         </Modal>
@@ -154,8 +227,8 @@ function AdminCalendar(): JSX.Element {
                 textColor: "black",
                 backgroundColor: "transparent",
                 borderColor: "transparent",
-                start: "2023-03-07T10:00:00",
-                end: "2023-03-07T11:00:00",
+                start: "2023-04-17T10:00:00",
+                end: "2023-04-17T11:00:00",
                 name: "Jane Lee",
                 address: "1 Mustang Drive San Luis Obispo, Ca 93407",
                 email: "janetesting@gmail.com",
@@ -170,9 +243,9 @@ function AdminCalendar(): JSX.Element {
                 San Luis Obispo, Ca
                 93407
                 `,
-                start: "2023-02-26T08:00:00",
-                end: "2023-02-26T11:00:00",
-                name: "Jane Lee",
+                start: "2023-04-19T08:00:00",
+                end: "2023-04-19T09:00:00",
+                name: "Eduardo Huezo-Lopez",
                 address: "1 Mustang Drive San Luis Obispo, Ca 93407",
                 email: "janetesting@gmail.com",
                 phone: "805-555-5555",
@@ -192,17 +265,26 @@ function customEvent(args: EventContentArg) {
       <h1
         style={{
           display: "flex",
-          fontSize: "15px",
-          justifyContent: "center",
-          marginTop: "0px",
-          marginBottom: "0px",
+          fontSize: "14px",
+          marginTop: "7px",
+          marginBottom: "5px",
+          marginLeft: "5px",
+          marginRight: "5px",
+          lineHeight: "15px",
         }}
       >
         {args.event.extendedProps.name}
       </h1>
 
       <div
-        style={{ display: "flex", justifyContent: "center", fontSize: "10px" }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          fontSize: "10px",
+          marginLeft: "5px",
+          marginRight: "5px",
+          fontFamily: "Rubik",
+        }}
       >
         {args.event.extendedProps.address}
       </div>
