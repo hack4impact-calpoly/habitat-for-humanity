@@ -2,13 +2,33 @@ import FullCalendar, {
   EventClickArg,
   EventContentArg,
 } from "@fullcalendar/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Modal, Box, Typography } from "@mui/material";
+import { Types } from "mongoose";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 
 require("./AdminCalendar.css");
+
+interface DonationEvent {
+  title: string;
+  startTime: Date;
+  endTime: Date;
+  volunteerId: Types.ObjectId;
+  itemId: Types.ObjectId;
+  address: string;
+  city: string;
+  zipCode: string;
+  volunteerFirstName: string;
+  volunteerLastName: string;
+  donorFirstName: string;
+  donorLastName: string;
+  itemName: string;
+  phone: string;
+  pickupAvailability: string[][];
+  location: string;
+}
 
 const style = {
   position: "absolute" as "absolute",
@@ -75,11 +95,41 @@ const viewDonnationButton = {
 
 function AdminCalendar(): JSX.Element {
   const [open, setOpen] = useState(false);
-  const [clickedEvent, setEvent] = useState<EventClickArg>();
+  const [calendarEvents, setCalendarEvents] = useState<DonationEvent[]>([]);
+  const [clickedEvent, setClickedEvent] = useState<EventClickArg>();
+
+  //  right now we are using an endpoint that does not filter by date
+  useEffect(() => {
+    console.log("calendar events updated", calendarEvents);
+  }, [calendarEvents]);
+
+  useEffect(() => {
+    //  need to change the ways that events are stored
+    //  so that the match the input that full calendar expects
+    fetch("http://localhost:3001/api/events/")
+      .then((response) => response.json())
+      .then((data) => {
+        const updatedEvents = data.map((event: DonationEvent) => ({
+          ...event, // spread the existing properties of the event object
+          //  start: event.startTime.toString().split(".")[0], // update the start property with the new Date object
+          start: "2023-04-17T00:09:00",
+          end: "2023-04-17T00:10:00",
+          //  end: event.endTime.toString().split(".")[0],
+          textColor: "Black",
+          backgroundColor: "transparent",
+          borderColor: "transparent",
+          // update the end property with the new Date object
+        }));
+
+        console.log("update: ", updatedEvents);
+        setCalendarEvents(updatedEvents);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
   const renderModalComponent = (args: EventClickArg) => {
     console.log(args.event.extendedProps.address);
-    setEvent(args);
+    setClickedEvent(args);
     setOpen(true);
   };
 
@@ -95,6 +145,7 @@ function AdminCalendar(): JSX.Element {
           onClose={closeModalComponent}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
+          BackdropProps={{ invisible: true }}
         >
           <Box sx={style}>
             <Typography style={modalAddressStyle}>
@@ -222,36 +273,7 @@ function AdminCalendar(): JSX.Element {
               center: "",
               end: "prev,next",
             }}
-            events={[
-              {
-                textColor: "black",
-                backgroundColor: "transparent",
-                borderColor: "transparent",
-                start: "2023-04-17T10:00:00",
-                end: "2023-04-17T11:00:00",
-                name: "Jane Lee",
-                address: "1 Mustang Drive San Luis Obispo, Ca 93407",
-                email: "janetesting@gmail.com",
-                phone: "805-555-5555",
-                volunteer: "Real Person",
-              },
-              {
-                textColor: "black",
-                backgroundColor: "transparent",
-                borderColor: "transparent",
-                title: `Jane Lee 1 Mustang Drive
-                San Luis Obispo, Ca
-                93407
-                `,
-                start: "2023-04-19T08:00:00",
-                end: "2023-04-19T09:00:00",
-                name: "Eduardo Huezo-Lopez",
-                address: "1 Mustang Drive San Luis Obispo, Ca 93407",
-                email: "janetesting@gmail.com",
-                phone: "805-555-5555",
-                volunteer: "Real Person",
-              },
-            ]}
+            events={[...calendarEvents]}
           />
         </div>
       </div>
@@ -260,6 +282,7 @@ function AdminCalendar(): JSX.Element {
 }
 
 function customEvent(args: EventContentArg) {
+  console.log("in here", args.event.extendedProps.title);
   return (
     <div>
       <h1
@@ -279,7 +302,6 @@ function customEvent(args: EventContentArg) {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
           fontSize: "10px",
           marginLeft: "5px",
           marginRight: "5px",
