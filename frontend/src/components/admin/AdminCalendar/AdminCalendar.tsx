@@ -112,8 +112,8 @@ function AdminCalendar(): JSX.Element {
         const updatedEvents = data.map((event: DonationEvent) => ({
           ...event, // spread the existing properties of the event object
           //  start: event.startTime.toString().split(".")[0], // update the start property with the new Date object
-          start: "2023-04-17T00:09:00",
-          end: "2023-04-17T00:10:00",
+          start: "2023-04-17T09:00:00",
+          end: "2023-04-17T10:00:00",
           //  end: event.endTime.toString().split(".")[0],
           textColor: "Black",
           backgroundColor: "transparent",
@@ -199,7 +199,13 @@ function AdminCalendar(): JSX.Element {
                 </span>
               </p>
               <span>
-                <button type="button" style={viewDonnationButton}>
+                <button
+                  type="button"
+                  style={viewDonnationButton}
+                  onClick={() => {
+                    window.location.href = "/Admin/DonationInfo";
+                  }}
+                >
                   View Donation
                 </button>
               </span>
@@ -273,7 +279,19 @@ function AdminCalendar(): JSX.Element {
               center: "",
               end: "prev,next",
             }}
-            events={[...calendarEvents]}
+            events={[
+              {
+                textColor: "black",
+                backgroundColor: "transparent",
+                borderColor: "transparent",
+                title: `Jane Lee 1 Mustang Drive
+              San Luis Obispo, Ca
+              93407`,
+                start: "2023-04-17T09:00:00",
+                end: "2023-04-17T11:00:00",
+              },
+              ...calendarEvents,
+            ]}
           />
         </div>
       </div>
