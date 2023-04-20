@@ -43,7 +43,7 @@ console.log('Connected to S3 bucket \'habitat4humanity-images\'');
 // now how to handle the post request and to upload photo (upload photo using the key defined below in upload.single ie: productimage )
 router.post('/', upload.single("productImage"), async (req, res) => {
     console.log('This is the file %s', req.file)  // to check the data in the console that is being uploaded
-
+    
     const params = {
       Bucket: String(process.env.AWS_BUCKET_NAME),
       Key: String(req?.file?.originalname),               // Name of the image
@@ -61,7 +61,8 @@ router.post('/', upload.single("productImage"), async (req, res) => {
 
       // If not then below code will be executed
       let name = req.body.name || req.file.originalname;
-      const { Location, ETag, Bucket, Key } = data;
+      const {ETag, Bucket, Key } = data;
+      const Location = data.Location || `https://${Bucket}.s3.amazonaws.com/${Key}`;
 
       let newImage = new Image({
         _id: mongoose.Types.ObjectId(),
