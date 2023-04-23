@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
-import { getUserByID } from "api/user";
+import { User, getDonors } from "api/user";
 import { Item, getItems } from "../../../api/item";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 
@@ -98,20 +99,15 @@ function ActiveDonationPage(): JSX.Element {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
   const [names, setNames] = useState<string[]>([]);
+  const [donors, setDonors] = useState<User[]>([]);
 
   useEffect(() => {
     getItems().then((res) => setItems(res));
+    getDonors().then((res) => setDonors(res));
   }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-  };
-
-  const getDonorName = (donorId: string, itemIndex: number) => {
-    getUserByID(donorId).then((res) => {
-      names[itemIndex] = `${res.firstName} ${res.lastName}`;
-      console.log(names);
-    });
   };
 
   const handleChangeRowsPerPage = (
@@ -123,9 +119,6 @@ function ActiveDonationPage(): JSX.Element {
   return (
     <div>
       <AdminNavbar />
-      {/* {items.map((item) => (
-        <p>{item.name}</p>
-      ))} */}
       <div id="activeDonPage">
         <h1 id="activeDonHeader">Active Donations</h1>
         <TableContainer>
@@ -145,21 +138,19 @@ function ActiveDonationPage(): JSX.Element {
                 .map((d, index) => (
                   // TODO: wrap parent link to new page
                   <TableRow key={index}>
-                    {getDonorName(
-                      "52491dd4-106b-4b20-a03d-c773494b7f8f",
-                      index
-                    )}
                     <TableCell component="th" scope="row">
                       {names[index]}
                     </TableCell>
                     <TableCell>{d.scheduling}</TableCell>
                     <TableCell>{d.timeSubmitted}</TableCell>
                     <TableCell>{d.timeApproved}</TableCell>
-                    {d.status === "Scheduled" ? (
+                    {d.status === "Approved" ? (
                       <TableCell>{d.status}</TableCell>
                     ) : (
                       <TableCell>
-                        <p className="needApproval">{d.status}</p>
+                        <Link to={d.status}>
+                          <p className="needApproval">{d.status}</p>
+                        </Link>
                       </TableCell>
                     )}
                   </TableRow>
