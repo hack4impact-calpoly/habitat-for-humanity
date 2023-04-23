@@ -135,6 +135,7 @@ export const addItem = async (item: Item) =>
       timeAvailability: item.timeAvailability,
       timeSubmitted: item.timeSubmitted,
       status: item.status,
+      donorId: item.donorId,
     }),
   })
     .then(async (res) => {
