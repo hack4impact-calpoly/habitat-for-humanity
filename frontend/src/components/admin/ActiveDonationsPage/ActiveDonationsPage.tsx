@@ -98,16 +98,21 @@ function ActiveDonationPage(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
-  const [names, setNames] = useState<string[]>([]);
   const [donors, setDonors] = useState<User[]>([]);
 
   useEffect(() => {
     getItems().then((res) => setItems(res));
     getDonors().then((res) => setDonors(res));
+    console.log(items);
   }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+  };
+
+  const getDonorName = (id: string) => {
+    const donor = donors.find((d) => d.id === id);
+    return `${donor?.firstName} ${donor?.lastName}`;
   };
 
   const handleChangeRowsPerPage = (
@@ -139,7 +144,7 @@ function ActiveDonationPage(): JSX.Element {
                   // TODO: wrap parent link to new page
                   <TableRow key={index}>
                     <TableCell component="th" scope="row">
-                      {names[index]}
+                      {getDonorName(d.donorId)}
                     </TableCell>
                     <TableCell>{d.scheduling}</TableCell>
                     <TableCell>{d.timeSubmitted}</TableCell>
@@ -160,7 +165,7 @@ function ActiveDonationPage(): JSX.Element {
           <TablePagination
             rowsPerPageOptions={[8, 10, 15]}
             component="div"
-            count={dummyData.length}
+            count={items.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
