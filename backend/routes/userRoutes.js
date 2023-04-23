@@ -26,7 +26,7 @@ router.get("/id/:userId", async (req, res) => {
 //get all volunteers
 router.get("/volunteers", async (req, res) => {
   try {
-    const volunteers = await User.find({ userType: "Volunteer"}).exec();
+    const volunteers = await User.find({ userType: "volunteer"}).exec();
     res.send(volunteers)
   } catch (error) {
     res.status(400).send(error);
@@ -36,7 +36,7 @@ router.get("/volunteers", async (req, res) => {
 //get all donors
 router.get("/donors", async (req, res) => {
   try {  
-    const donor = await User.find({ userType: "Donor"})
+    const donor = await User.find({ userType: "donor"})
     res.send(donor)
   } catch (error) {
     res.status(400).send(error);
@@ -46,7 +46,7 @@ router.get("/donors", async (req, res) => {
 //get all admins
 router.get("/admins", async (req, res) => {
   try {  
-    const admins = await User.find({userType: "Admin"})
+    const admins = await User.find({userType: "administrator"})
     res.send(admins)
   } catch (error) {
     res.status(400).send(error);
