@@ -8,6 +8,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 import { User, getDonors } from "api/user";
+import moment from "moment";
+import "moment-timezone";
 import { Item, getItems } from "../../../api/item";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 
@@ -21,79 +23,6 @@ const header = [
   "Status",
 ];
 
-const dummyData = [
-  {
-    Donor: "John Doe",
-    Type: "Pickup",
-    DateRecieved: "Jan 11. at 8:11 AM",
-    DateApproved: "N/A",
-    Status: "Needs Approval",
-  },
-  {
-    Donor: "Sally Smith",
-    Type: "Drop off",
-    DateRecieved: "Jan 11. at 8:12 AM",
-    DateApproved: "Jan 14 at 5:20 PM",
-    Status: "Scheduled",
-  },
-  {
-    Donor: "John Doe",
-    Type: "Pickup",
-    DateRecieved: "Jan 11. at 8:11 AM",
-    DateApproved: "N/A",
-    Status: "Needs Approval",
-  },
-  {
-    Donor: "Sally Smith",
-    Type: "Drop off",
-    DateRecieved: "Jan 11. at 8:12 AM",
-    DateApproved: "Jan 14 at 5:20 PM",
-    Status: "Scheduled",
-  },
-  {
-    Donor: "John Doe",
-    Type: "Pickup",
-    DateRecieved: "Jan 11. at 8:11 AM",
-    DateApproved: "N/A",
-    Status: "Needs Approval",
-  },
-  {
-    Donor: "Sally Smith",
-    Type: "Drop off",
-    DateRecieved: "Jan 11. at 8:12 AM",
-    DateApproved: "Jan 14 at 5:20 PM",
-    Status: "Scheduled",
-  },
-  {
-    Donor: "John Doe",
-    Type: "Pickup",
-    DateRecieved: "Jan 11. at 8:11 AM",
-    DateApproved: "N/A",
-    Status: "Needs Approval",
-  },
-  {
-    Donor: "Sally Smith",
-    Type: "Drop off",
-    DateRecieved: "Jan 11. at 8:12 AM",
-    DateApproved: "Jan 14 at 5:20 PM",
-    Status: "Scheduled",
-  },
-  {
-    Donor: "John Doe",
-    Type: "Pickup",
-    DateRecieved: "Jan 11. at 8:11 AM",
-    DateApproved: "N/A",
-    Status: "Needs Approval",
-  },
-  {
-    Donor: "Sally Smith",
-    Type: "Drop off",
-    DateRecieved: "Jan 11. at 8:12 AM",
-    DateApproved: "Jan 14 at 5:20 PM",
-    Status: "Scheduled",
-  },
-];
-
 function ActiveDonationPage(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
@@ -103,7 +32,6 @@ function ActiveDonationPage(): JSX.Element {
   useEffect(() => {
     getItems().then((res) => setItems(res));
     getDonors().then((res) => setDonors(res));
-    console.log(items);
   }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -115,6 +43,7 @@ function ActiveDonationPage(): JSX.Element {
     return `${donor?.firstName} ${donor?.lastName}`;
   };
 
+  const convertTime = (time: Date) => (time ? moment(time).format("lll") : "");
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -147,13 +76,13 @@ function ActiveDonationPage(): JSX.Element {
                       {getDonorName(d.donorId)}
                     </TableCell>
                     <TableCell>{d.scheduling}</TableCell>
-                    <TableCell>{d.timeSubmitted}</TableCell>
-                    <TableCell>{d.timeApproved}</TableCell>
+                    <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
+                    <TableCell>{convertTime(d.timeApproved)}</TableCell>
                     {d.status === "Approved" ? (
                       <TableCell>{d.status}</TableCell>
                     ) : (
                       <TableCell>
-                        <Link to={d.status}>
+                        <Link to={`/item/${d._id}`}>
                           <p className="needApproval">{d.status}</p>
                         </Link>
                       </TableCell>
