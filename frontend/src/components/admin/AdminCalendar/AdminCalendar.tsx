@@ -8,6 +8,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { Modal, Box, Typography } from "@mui/material";
 import { Types } from "mongoose";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
+import SmallCalendar from "./SmallCalendar";
 
 require("./AdminCalendar.css");
 
@@ -29,6 +30,24 @@ interface DonationEvent {
   pickupAvailability: string[][];
   location: string;
 }
+
+const eventHeader = {
+  display: "flex",
+  fontSize: "14px",
+  marginTop: "7px",
+  marginBottom: "5px",
+  marginLeft: "5px",
+  marginRight: "5px",
+  lineHeight: "15px",
+};
+
+const eventDiv = {
+  display: "flex",
+  fontSize: "10px",
+  marginLeft: "5px",
+  marginRight: "5px",
+  fontFamily: "Rubik",
+};
 
 const style = {
   position: "absolute" as "absolute",
@@ -111,14 +130,13 @@ function AdminCalendar(): JSX.Element {
       .then((data) => {
         const updatedEvents = data.map((event: DonationEvent) => ({
           ...event, // spread the existing properties of the event object
-          //  start: event.startTime.toString().split(".")[0], // update the start property with the new Date object
+          //  start: event.startTime.toString().split(".")[0],
           start: "2023-04-17T09:00:00",
           end: "2023-04-17T10:00:00",
           //  end: event.endTime.toString().split(".")[0],
           textColor: "Black",
           backgroundColor: "transparent",
           borderColor: "transparent",
-          // update the end property with the new Date object
         }));
 
         console.log("update: ", updatedEvents);
@@ -128,7 +146,9 @@ function AdminCalendar(): JSX.Element {
   }, []);
 
   const renderModalComponent = (args: EventClickArg) => {
-    console.log(args.event.extendedProps.address);
+    //  sets a state var to true on click of an event
+    //  we pass the information of any clicked event to a different state
+    //  is used as onClick event for the main calender
     setClickedEvent(args);
     setOpen(true);
   };
@@ -140,13 +160,7 @@ function AdminCalendar(): JSX.Element {
   return (
     <div>
       {open ? (
-        <Modal
-          open={open}
-          onClose={closeModalComponent}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-          BackdropProps={{ invisible: true }}
-        >
+        <Modal open={open} onClose={closeModalComponent}>
           <Box sx={style}>
             <Typography style={modalAddressStyle}>
               {clickedEvent!.event.extendedProps.address}
@@ -219,34 +233,7 @@ function AdminCalendar(): JSX.Element {
       <AdminNavbar />
 
       <div id="smallCalendar" style={{ display: "flex", height: "100%" }}>
-        <div className="smallCalendarContainer">
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            showNonCurrentDates={false}
-            initialView="dayGridMonth"
-            dayCellClassNames={addCustomClassNames}
-            headerToolbar={{
-              start: "title",
-              center: "",
-              end: "prev,next",
-            }}
-            dayHeaderFormat={{
-              weekday: "narrow",
-            }}
-            events={[
-              {
-                backgroundColor: "#97e4fc",
-                start: "2023-03-07",
-                display: "background",
-              },
-              {
-                backgroundColor: "#97e4fc",
-                start: "2023-02-26",
-                display: "background",
-              },
-            ]}
-          />
-        </div>
+        <SmallCalendar address="xd" />
 
         <div id="myCalendar" className="mainCalendarContainer">
           <FullCalendar
@@ -279,19 +266,7 @@ function AdminCalendar(): JSX.Element {
               center: "",
               end: "prev,next",
             }}
-            events={[
-              {
-                textColor: "black",
-                backgroundColor: "transparent",
-                borderColor: "transparent",
-                title: `Jane Lee 1 Mustang Drive
-              San Luis Obispo, Ca
-              93407`,
-                start: "2023-04-17T09:00:00",
-                end: "2023-04-17T11:00:00",
-              },
-              ...calendarEvents,
-            ]}
+            events={[...calendarEvents]}
           />
         </div>
       </div>
@@ -300,41 +275,24 @@ function AdminCalendar(): JSX.Element {
 }
 
 function customEvent(args: EventContentArg) {
-  console.log("in here", args.event.extendedProps.title);
+  //  sets up the styling and content of an event cell
   return (
     <div>
-      <h1
-        style={{
-          display: "flex",
-          fontSize: "14px",
-          marginTop: "7px",
-          marginBottom: "5px",
-          marginLeft: "5px",
-          marginRight: "5px",
-          lineHeight: "15px",
-        }}
-      >
-        {args.event.extendedProps.name}
+      <h1 style={eventHeader}>
+        {args.event.extendedProps.donorFirstName}{" "}
+        {args.event.extendedProps.donorLastName}
       </h1>
 
-      <div
-        style={{
-          display: "flex",
-          fontSize: "10px",
-          marginLeft: "5px",
-          marginRight: "5px",
-          fontFamily: "Rubik",
-        }}
-      >
-        {args.event.extendedProps.address}
+      <div style={eventDiv}>
+        {args.event.extendedProps.address} {args.event.extendedProps.city}{" "}
+        {args.event.extendedProps.zipcode}
       </div>
     </div>
   );
 }
 
 function addCustomClassNames(info: any) {
-  // add classnames that decide how each cell is styled
-  // used to add past days grey color
+  // add classnames that styles past days as grey
   const classNames = [];
 
   if (info.date < new Date()) {
