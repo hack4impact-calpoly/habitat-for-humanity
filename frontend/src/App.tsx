@@ -11,7 +11,7 @@ import "@aws-amplify/ui-react/styles.css";
 
 /* Authentication Screens */
 // import CreateAccountPage from './components/authentication/CreateAccountPage/CreateAccountPage';
-// import LoginPage from "./components/authentication/LoginPage/LoginPage";
+import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
@@ -19,7 +19,7 @@ import "@aws-amplify/ui-react/styles.css";
 
 /* Admin Screens */
 // import DonationInfoPage from './components/admin/DonationInfoPage/DonationInfoPage';
-import DonationInfoPage from "components/admin/DonationInfoPage/DonationInfoPage";
+// import DonationInfoPage from "components/admin/DonationInfoPage/DonationInfoPage";
 /* Donator Screens */
 // import DonatorNavbar from './components/donator/DonatorNavbar/DonatorNavbar';
 // import DonatorProfilePage from './components/donator/DonatorProfile/DonatorProfile';
@@ -34,7 +34,7 @@ import DonationInfoPage from "components/admin/DonationInfoPage/DonationInfoPage
 // import DonatorNextStepsPage from './components/donator/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/donator/Donation/Donation';
 // import DonorSchedulePickUp from './components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp';
-import ActiveDonationPage from "./components/admin/ActiveDonationsPage/ActiveDonationsPage";
+// import ActiveDonationPage from "./components/admin/ActiveDonationsPage/ActiveDonationsPage";
 
 import awsExports from "./aws-exports";
 
@@ -45,7 +45,7 @@ Amplify.configure(awsExports);
 function App(): JSX.Element {
   return (
     // <SuccessPage />
-    // <LoginPage />
+    <LoginPage />
     // <DonatorHomePage />
     // <CreateAccountPage />
     // <DonorSchedulePickUp />
@@ -58,7 +58,7 @@ function App(): JSX.Element {
     // <SubmitPickUpPage />
     // <SubmitPickUpMultiplePhotoPage />
     // <DonatorNextStepsPage />
-    <DonationInfoPage />
+    // <DonationInfoPage />
     // <DonorScheduleDropoffPickupPage />
     // <ActiveDonationPage />
   );
