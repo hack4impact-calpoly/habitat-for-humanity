@@ -43,7 +43,9 @@ function ActiveDonationPage(): JSX.Element {
     return `${donor?.firstName} ${donor?.lastName}`;
   };
 
-  const convertTime = (time: Date) => (time ? moment(time).format("lll") : "");
+  const convertTime = (time: Date) =>
+    time ? moment(time).format("MMM Mo [at] h:mm A") : "N/A";
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -71,7 +73,12 @@ function ActiveDonationPage(): JSX.Element {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
                   // TODO: wrap parent link to new page
-                  <TableRow key={index}>
+                  <TableRow
+                    key={index}
+                    component={Link}
+                    to={`DonationInfo/${d._id}`}
+                    style={{ textDecoration: "none" }}
+                  >
                     <TableCell component="th" scope="row">
                       {getDonorName(d.donorId)}
                     </TableCell>
@@ -79,12 +86,12 @@ function ActiveDonationPage(): JSX.Element {
                     <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
                     <TableCell>{convertTime(d.timeApproved)}</TableCell>
                     {d.status === "Approved" ? (
-                      <TableCell>{d.status}</TableCell>
+                      <TableCell>
+                        <p style={{ margin: 0 }}>{d.status}</p>
+                      </TableCell>
                     ) : (
                       <TableCell>
-                        <Link to={`/item/${d._id}`}>
-                          <p className="needApproval">{d.status}</p>
-                        </Link>
+                        <p className="needApproval">{d.status}</p>
                       </TableCell>
                     )}
                   </TableRow>

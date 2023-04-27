@@ -55,7 +55,7 @@ render(
 
             {/* Admin Other Routes */}
             <Route path="ActiveDonations" element={<ActiveDonations />} />
-            <Route path="DonationInfo" element={<DonationInfo />} />
+            <Route path="DonationInfo/:id" element={<DonationInfo />} />
 
             {/* Donor Catch all case -> Donor Error */}
             <Route path="*" element={<p>ERROR 404: Page Not Found</p>} />
