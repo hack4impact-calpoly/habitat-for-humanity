@@ -35,7 +35,7 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import Donation from './components/donator/Donation/Donation';
 // import DonorSchedulePickUp from './components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp';
 
-import awsExports from "./.aws-exports";
+import awsExports from "./aws-exports";
 // import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
 
 Amplify.configure(awsExports);
