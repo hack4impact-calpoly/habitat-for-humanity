@@ -16,7 +16,7 @@ export const getItems = async () =>
         // check server response
         throw new Error(`${res.status}-${res.statusText}`);
       }
-      console.log(items);
+      // console.log(items);
       return items;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
@@ -100,6 +100,7 @@ export const getItemsByDonorID = async (donorID: string) =>
 /* ----------------------POST/PUT Requests---------------------------*/
 // Item data model
 export interface Item {
+  _id?: string;
   name: string;
   // images: [mongoose.Schema.ObjectId]
   size: string;
@@ -118,7 +119,7 @@ export interface Item {
   // timeAccepted: Date
 }
 
-// Add a new User to User DB
+// Add a new Item to Item DB
 export const addItem = async (item: Item) =>
   fetch(itemURL, {
     headers: {

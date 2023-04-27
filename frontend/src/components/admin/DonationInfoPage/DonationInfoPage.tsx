@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { getUserByID, User } from "api/user";
+import { getItemByID, Item } from "api/item";
 import SubmitInfo from "../../donor/donation/SubmitInfo";
 import ContactInfo from "../../donor/donation/ContactInfo";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
@@ -53,8 +56,6 @@ TabPanel.propTypes = {
 
 const imagesPool = [{ src: sofa1 }];
 
-const address = "1 Grand Avenue \nSan Luis Obispo, CA 93407";
-
 const avaiTimes = [
   {
     day: "Tuesday, January 11",
@@ -78,9 +79,60 @@ const avaiTimes = [
   },
 ];
 
+const emptyItem: Item = {
+  _id: "",
+  name: "",
+  size: "",
+  address: "",
+  city: "",
+  state: "",
+  zipCode: "",
+  scheduling: "",
+  timeAvailability: [[new Date(), new Date()]],
+  donorId: "",
+  timeSubmitted: new Date(),
+  timeApproved: new Date(),
+  status: "",
+};
+
+const emptyUser: User = {
+  id: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  userType: "",
+};
+
 function DonationInfoPage(): JSX.Element {
   const [value, setValue] = React.useState(0);
+  const [item, setItem] = useState<Item>(emptyItem);
+  const [donor, setDonor] = useState<User>(emptyUser);
+  const { id } = useParams();
 
+  useEffect(() => {
+    const fetchedItem =
+      typeof id === "string"
+        ? getItemByID(id)
+            .then((item) => setItem(item))
+            .catch((err) => {
+              console.log(err);
+              setItem(emptyItem);
+            })
+        : setItem(emptyItem);
+  }, []);
+
+  useEffect(() => {
+    if (item.donorId !== "") {
+      console.log(item.donorId);
+      const fetchedDonor = getUserByID(item.donorId)
+        .then((donor) => setDonor(donor))
+        .catch((err) => {
+          console.log(err);
+          setDonor(emptyUser);
+        });
+    }
+  }, [item]);
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue);
   };
@@ -120,16 +172,16 @@ function DonationInfoPage(): JSX.Element {
             <div id="DonInfo">
               <div id="DonationInfoPage">
                 <ContactInfo
-                  name="John Smith"
-                  email="johndoe@gmail.com"
-                  phone="123-456-7890"
+                  name={`${donor.firstName} ${donor.lastName}`}
+                  email={donor.email}
+                  phone={donor.phone}
                 />
                 <SubmitInfo
-                  name="Sofa"
-                  dimensions='83" x 32" x 38"'
+                  name={item.name}
+                  dimensions={item.size}
                   photos={imagesPool}
-                  location={address}
-                  dropOff={false}
+                  location={item.address}
+                  dropOff={item.scheduling === "Dropoff"}
                   component
                 />
                 <div id="TimeHours">

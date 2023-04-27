@@ -9,9 +9,11 @@ import "@aws-amplify/ui-react/styles.css";
 // import awsconfig from './aws-exports';
 // import { withAuthenticator } from '@aws-amplify/ui-react';
 
+import ActiveDonationPage from "components/admin/ActiveDonationsPage/ActiveDonationsPage";
+
 /* Authentication Screens */
 // import CreateAccountPage from './components/authentication/CreateAccountPage/CreateAccountPage';
-// import LoginPage from "./components/authentication/LoginPage/LoginPage";
+import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
@@ -34,7 +36,6 @@ import "@aws-amplify/ui-react/styles.css";
 // import DonatorNextStepsPage from './components/donator/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/donator/Donation/Donation';
 // import DonorSchedulePickUp from './components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp';
-import ActiveDonationPage from "components/admin/ActiveDonationsPage/ActiveDonationsPage";
 
 import awsExports from "./aws-exports";
 // import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
