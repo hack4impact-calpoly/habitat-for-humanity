@@ -1,8 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "images/logo.png";
+import { Box, Menu, MenuItem, IconButton } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 require("./AdminNavbar.css");
+
+const CALENDAR_HEADER = 0;
+const AVAILABILITY_HEADER = 1;
+const DONATION_APPROVALS_HEADER = 2;
+const HISTORY_HEADER = 3;
+const PROFILE_HEADER = 4;
+const SIGN_OUT_HEADER = 5;
 
 const navBarHeaders: string[] = [
   "Calendar",
@@ -17,10 +26,21 @@ const navBarHeaders: string[] = [
 // test underline by setting either variable to "/"
 const donationApprovalsPath: string = "/Admin/DonationApproval";
 const signoutPath: string = "/";
-const tempPath: string = "/Admin";
+const adminHomePath: string = "/Admin";
+const donationInfoPath: string = "/Admin/DonationInfo";
 
 function AdminNavbar(): JSX.Element {
+  const navigate = useNavigate();
+  const [anchor, setAnchor] = useState(null);
   const pagePath = window.location.pathname;
+
+  const handleOpenNavMenu = (event: any) => {
+    setAnchor(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchor(null);
+  };
 
   const underline = (header: string): boolean => {
     if (
@@ -38,22 +58,22 @@ function AdminNavbar(): JSX.Element {
   };
 
   const navlinkHandler = (header: string): string => {
-    if (header === navBarHeaders[0]) {
-      return tempPath;
+    if (header === navBarHeaders[CALENDAR_HEADER]) {
+      return adminHomePath;
     }
-    if (header === navBarHeaders[1]) {
-      return tempPath;
+    if (header === navBarHeaders[AVAILABILITY_HEADER]) {
+      return adminHomePath;
     }
-    if (header === navBarHeaders[2]) {
-      return tempPath;
+    if (header === navBarHeaders[DONATION_APPROVALS_HEADER]) {
+      return adminHomePath;
     }
-    if (header === navBarHeaders[3]) {
-      return tempPath;
+    if (header === navBarHeaders[HISTORY_HEADER]) {
+      return adminHomePath;
     }
-    if (header === navBarHeaders[4]) {
-      return tempPath;
+    if (header === navBarHeaders[PROFILE_HEADER]) {
+      return adminHomePath;
     }
-    if (header === navBarHeaders[5]) {
+    if (header === navBarHeaders[SIGN_OUT_HEADER]) {
       return signoutPath;
     }
     // Sign Out to be implemented, just route to main page for now (login)
@@ -61,9 +81,16 @@ function AdminNavbar(): JSX.Element {
     return "/Admin";
   };
 
-  return (
-    <div id="adminNavbar">
-      <img src={logo} alt="logo" id="adminNavbarLogo" />
+  const renderDesktopNavbar = () => (
+    <Box sx={styles.adminNavbar}>
+      <a href="/Admin">
+        <Box
+          component="img"
+          src={logo}
+          alt="logo"
+          sx={{ width: { md: "12rem" } }}
+        />
+      </a>
       <div id="adminNavbarHeaders">
         {
           // need to add links to pages
@@ -71,15 +98,11 @@ function AdminNavbar(): JSX.Element {
         {navBarHeaders?.map(
           (header: string, index: number): JSX.Element =>
             underline(header) ? (
-              <div className="adminNavbarHeader" key={index}>
-                <Link
-                  id="adminNavbarUnderline"
-                  className="adminNavbarLink"
-                  to={navlinkHandler(header)}
-                >
+              <Box className="adminNavbarLink">
+                <Link id="adminNavbarUnderline" to={navlinkHandler(header)}>
                   {header}
                 </Link>
-              </div>
+              </Box>
             ) : (
               <Link
                 key={index}
@@ -91,8 +114,107 @@ function AdminNavbar(): JSX.Element {
             )
         )}
       </div>
-    </div>
+    </Box>
+  );
+
+  const renderMobileNavbar = () => (
+    <Box
+      sx={{
+        ...styles.adminNavbar,
+        padding: "1rem 1rem",
+        display: { xs: "flex", md: "none" },
+      }}
+    >
+      <a href="/Admin">
+        <Box
+          component="img"
+          src={logo}
+          alt="logo"
+          sx={{ width: { xs: "10rem" } }}
+        />
+      </a>
+      <IconButton
+        size="large"
+        aria-label="Menu"
+        aria-controls="menu-appbar"
+        aria-haspopup="true"
+        onClick={handleOpenNavMenu}
+        sx={{ color: "black" }}
+      >
+        <MenuIcon />
+      </IconButton>
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchor}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        open={Boolean(anchor)}
+        onClose={handleCloseNavMenu}
+        TransitionProps={{ timeout: 0 }}
+      >
+        {navBarHeaders?.map((page, index) => navItem(page, index))}
+      </Menu>
+    </Box>
+  );
+
+  const navItem = (item: any, index: number) => (
+    <MenuItem
+      key={index}
+      onClick={() => {
+        handleCloseNavMenu();
+        navigate(navlinkHandler(item));
+      }}
+    >
+      <Box
+        key={index}
+        href={navlinkHandler(item)}
+        textAlign="center"
+        component="a"
+        sx={[
+          {
+            m: 0,
+            textDecoration: "none",
+            color: "#314d89",
+            fontSize: "17px",
+            fontWeight: "bold",
+            paddingBottom: "2px",
+            borderBottom: underline(item) ? "1.5px solid #314d89" : "none",
+          },
+        ]}
+        onClick={() => navigate(navlinkHandler(item))}
+      >
+        {item}
+      </Box>
+    </MenuItem>
+  );
+  return (
+    <>
+      {renderDesktopNavbar()}
+      {renderMobileNavbar()}
+    </>
   );
 }
+
+const styles = {
+  adminNavbar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    backgroundColor: "var(--white-gray)",
+    border: "2px solid var(--gray-light)",
+    boxSizing: "border-box",
+    boxShadow: "0px 4px 25px rgba(49, 77, 137, 0.05)",
+    borderTop: "none",
+    display: { xs: "none", md: "flex" },
+    padding: "1rem 2rem",
+  },
+} as const;
 
 export default AdminNavbar;
