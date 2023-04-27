@@ -1,12 +1,14 @@
-import React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
-import Typography from "@mui/material/Typography";
+import React from "react";
+
 import Box from "@mui/material/Box";
-import SubmitInfo from "../../donor/donation/SubmitInfo";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
+
 import ContactInfo from "../../donor/donation/ContactInfo";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
+import SubmitInfo from "../../donor/donation/SubmitInfo";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import ReceiptPage from "./ReceiptPage/ReceiptPage";
 import temp from "./temp.png";
