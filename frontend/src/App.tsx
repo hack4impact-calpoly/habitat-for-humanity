@@ -8,9 +8,9 @@ import React from "react";
 // import DonorScheduleDropoffPickupPage from "components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage";
 // import SuccessPage from './components/authentication/SuccessPage/SuccessPage';
 /* Admin Screens */
-import Donation from "components/donor/donation/Donation";
+// import Donation from "components/donor/donation/Donation";
 
-import DonationInfoPage from "./components/admin/DonationInfoPage/DonationInfoPage";
+// import DonationInfoPage from "./components/admin/DonationInfoPage/DonationInfoPage";
 // import ActiveDonationPage from "components/admin/ActiveDonationsPage/ActiveDonationsPage";
 /* Donator Screens */
 // import DonatorNavbar from './components/donator/DonatorNavbar/DonatorNavbar';
@@ -33,7 +33,7 @@ import awsExports from "./aws-exports";
 // import { withAuthenticator } from '@aws-amplify/ui-react';
 /* Authentication Screens */
 // import CreateAccountPage from './components/authentication/CreateAccountPage/CreateAccountPage';
-// import LoginPage from "./components/authentication/LoginPage/LoginPage";
+import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
@@ -49,7 +49,7 @@ function App(): JSX.Element {
     // <DonorSchedulePickUp/>
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
-    // <LoginPage />
+    <LoginPage />
     // <DonatorNextStepsPage />
     // <VerifyAccountPage />
     // <SubmitDropOffPage />
@@ -57,7 +57,7 @@ function App(): JSX.Element {
     // <SubmitPickUpMultiplePhotoPage />
     // <DonatorNextStepsPage />
     // <DonorScheduleDropoffPickupPage />
-    <DonationInfoPage />
+    // <DonationInfoPage />
   );
 }
 
