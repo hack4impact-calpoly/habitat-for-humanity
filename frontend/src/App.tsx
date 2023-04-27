@@ -41,13 +41,13 @@ Amplify.configure(awsExports);
 function App(): JSX.Element {
   return (
     // <SuccessPage />
-    // <LoginPage />
+    <LoginPage />
     // <DonatorHomePage />
     // <CreateAccountPage />
     // <DonorSchedulePickUp/>
     // <DonatorProfileEditPage />
     // <DonatorLocationPage />
-    <LoginPage />
+    // <LoginPage />
     // <DonatorNextStepsPage />
     // <VerifyAccountPage />
     // <SubmitDropOffPage />
@@ -55,6 +55,7 @@ function App(): JSX.Element {
     // <SubmitPickUpMultiplePhotoPage />
     // <DonatorNextStepsPage />
     // <DonorScheduleDropoffPickupPage />
+    // <ActiveDonationPage />
   );
 }
 
