@@ -1,16 +1,20 @@
+import "moment-timezone";
+import "@fullcalendar/react/dist/vdom";
+
+import moment from "moment";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
+import { Event, updatePickupTimes } from "redux/donationSlice";
+
+import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import moment from "moment";
-import Checkbox from "@mui/material/Checkbox";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { RadioButtonChecked } from "@mui/icons-material";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import Checkbox from "@mui/material/Checkbox";
 
-import { useDispatch, useSelector } from "react-redux";
-import { updatePickupTimes, Event } from "redux/donationSlice";
 import { RootState } from "../../../redux/store";
 
 require("./DonorSchedulePickUp.css");
@@ -40,37 +44,24 @@ const monthNames = [
   "December",
 ];
 
-// Dummy times
-const listTimes: Event[] = [
-  {
-    start: "2022-02-25T18:00:00Z",
-    end: "2022-02-25T19:00:00Z",
-  },
-  {
-    start: "2022-02-25T19:00:00Z",
-    end: "2022-02-25T20:00:00Z",
-  },
-  {
-    start: "2022-02-25T20:00:00Z",
-    end: "2022-02-25T21:00:00Z",
-  },
-  {
-    start: "2022-02-25T21:00:00Z",
-    end: "2022-02-25T22:00:00Z",
-  },
-  {
-    start: "2022-02-25T22:00:00Z",
-    end: "2022-02-25T23:00:00Z",
-  },
-  {
-    start: "2022-02-25T23:00:00Z",
-    end: "2022-02-25T00:00:00Z",
-  },
-  {
-    start: "2022-02-25T00:00:00Z",
-    end: "2022-02-25T01:00:00Z",
-  },
-];
+// returns hour intervals for calendarEdit given an ISO 8601 string
+const getHourIntervals = (curDay: string): { start: string; end: string }[] => {
+  const startDate = moment(curDay).tz("UTC").startOf("day").add(18, "hours");
+  const fourPM = moment(startDate).add(-18, "hours").toISOString();
+  const threePM = moment(startDate).add(5, "hours").toISOString();
+  const intervals: { start: string; end: string }[] = [];
+  for (let i = 0; i < 5; i++) {
+    const start = moment(startDate).add(i, "hours").toISOString();
+    const end = moment(startDate)
+      .add(i + 1, "hours")
+      .toISOString();
+    intervals.push({ start, end });
+  }
+
+  intervals.push({ start: threePM, end: fourPM });
+
+  return intervals;
+};
 
 function DonatorSchedulePickUp(): JSX.Element {
   const today = new Date();
@@ -84,7 +75,9 @@ function DonatorSchedulePickUp(): JSX.Element {
   );
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState<Event[]>(storedEvents);
-  const [times, setTimes] = useState<Event[]>(listTimes);
+  const [times, setTimes] = useState<Event[]>(
+    getHourIntervals(moment().toISOString())
+  );
   const [pickupError, setPickupError] = useState<string>("");
 
   const dispatch = useDispatch();
@@ -98,8 +91,7 @@ function DonatorSchedulePickUp(): JSX.Element {
       } ${String(startDate.getDate())}`
     );
     // Re render checked boxes
-    setTimes([]);
-    setTimes(listTimes);
+    setTimes(getHourIntervals(startDate.toISOString()));
   };
 
   const updateStore = () => {
@@ -160,6 +152,10 @@ function DonatorSchedulePickUp(): JSX.Element {
     setEvents(events.filter((e) => e.start !== startTime && e.end !== endTime));
   };
 
+  // evaluates event's presence in a list of events.
+  const evaluateEventPresence = (startTime: string, endTime: string): boolean =>
+    events.some((event) => event.start === startTime && event.end === endTime);
+
   return (
     <div>
       <h2 className="donDropoffPickupHeader">Time Availability</h2>
@@ -215,6 +211,10 @@ function DonatorSchedulePickUp(): JSX.Element {
                         ? addEvent(availEvent.start, availEvent.end)
                         : removeEvent(availEvent.start, availEvent.end)
                     }
+                    checked={evaluateEventPresence(
+                      availEvent.start,
+                      availEvent.end
+                    )}
                   />
                   {`${startTime} to ${endTime}`}
                 </div>
