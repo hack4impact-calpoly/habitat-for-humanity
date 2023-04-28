@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ProgressBar from "components/donor/donation/ProgressBar";
-
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { updateAddress, updateCity, updateZip } from "redux/donationSlice";
-import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+
 import { RootState, store } from "../../../redux/store";
+import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
 require("./DonorLocationPage.css");
 
@@ -98,7 +98,9 @@ function DonatorLocationPage(): JSX.Element {
             className="donLocInput"
             type="number"
             value={zip === 0 ? undefined : zip}
-            onChange={(event) => setZip(Number(event?.target?.value))}
+            onChange={(event) =>
+              setZip(Number(event?.target?.value.slice(0, 5)))
+            }
           />
           <div className="inputError">{zipError}</div>
         </div>

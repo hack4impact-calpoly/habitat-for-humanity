@@ -29,6 +29,7 @@
   text-align: left;
 
   color: var(--black);
+  white-space: nowrap;
 }
 
 #createAccountStyles #accountTypeBox {
@@ -119,7 +120,7 @@
 #createAccountStyles .inputError {
   text-align: left;
   color: var(--red);
-  font-size: 13px;  
+  font-size: 13px;
 }
 
 #createAccountStyles #signUpButton {
@@ -157,6 +158,20 @@
   #createAccountStyles #lastNameBox {
     padding-left: 0rem;
   }
+  #createAccountStyles #nameBox {
+    display: flex;
+    flex-direction: column;  }
+  #createAccountStyles #firstNameBox {
+    padding-right: 0;
+  }
+  #createAccountStyles #lastNameBox {
+    padding-left: 0;
+  }
+  #createAccountStyles #createAccountText {
+    padding-bottom: 0px;
+    margin: 0px 0px 30px 0px;
+  }
+
 }
 
 /* for nest hub */
@@ -180,5 +195,19 @@
     top: 0;
     left: 0;
     right: 0;
+  }
+  #createAccountStyles #nameBox {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0%;
+  }
+  #createAccountStyles #firstNameBox {
+    padding-right: 0;
+  }
+  #createAccountStyles #lastNameBox {
+    padding-left: 0;
+  }
+  #createAccountStyles .formLabel {
+    margin: 5px 0px 5px 0px;
   }
 }
