@@ -88,74 +88,7 @@
   justify-content: center;
 }
 
-
-
-@media only screen and (max-width: 915px) {
-  #SubmitPickUpPage {
-    padding: 0 10%;
-    padding-bottom: 50px;
-  }
-}
-
-@media only screen and (max-width: 750px) {
-  #SubmitPickUpPage {
-    padding: 0 9%;
-  }
-
-  .rejectButton {
-    padding: 10px 25px;
-    margin-right: 6px;
-  }
-
-  .approveButton {
-    padding: 10px 25px;
-  }
-}
-
-@media only screen and (max-width: 640px) {
-  #donPDOptions {
-    display: block;
-  }
-
-  .backButton {
-    padding: 8px 40px;
-  }
-
-  .rejectButton {
-    padding: 10px 20px;
-    margin-right: 4px;
-  }
-
-  .approveButton {
-    padding: 10px 20px;
-  }
-}
-
-@media only screen and (max-width: 560px) {
-  #DonInfoBox {
-    padding: 62px 37px 68px 37px;
-  }
-
-  .IndividTabs {
-    font-size: 16px;
-  }
-}
-
-@media only screen and (max-width: 430px) {
-  #DonInfoBox {
-    padding: 62px 37px 68px 37px;
-  }
-
-  .IndividTabs {
-    font-size: 16px;
-  }
-
-  img {
-    width: 70%;
-  }
-
-  .backButton,
-  .rejectButton {
-    padding: 8px 40px;
-  }
+.TimeAvailability {
+  margin-top: 3rem;
+  color: var(--orange);
 }
