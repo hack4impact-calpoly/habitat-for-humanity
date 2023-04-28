@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
@@ -269,6 +269,11 @@ function CreateAccountPage(): JSX.Element {
     return true;
   }
 
+  function checkError(type: string) {
+    validateForm();
+  }
+  // checks if page is in mobile view
+  const isMobile = useMediaQuery("(max-width: 640px)");
   // HTML Body
   return (
     <Box id="createAccountStyles" sx={styles.container}>
@@ -340,28 +345,36 @@ function CreateAccountPage(): JSX.Element {
 
           <div className="inputError">{userTypeError}</div>
           <div id="nameBox">
-            <div className="labelInputBox" id="firstNameBox">
-              <p className="formLabel">First Name</p>
-              <input
-                className="inputBox"
-                type="text"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setFirstName(e.target.value);
-                  validateFirstName(e.target.value);
-                }}
-              />
-            </div>
-            <div className="labelInputBox" id="lastNameBox">
-              <p className="formLabel">Last Name</p>
-              <input
-                className="inputBox"
-                type="text"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setLastName(e.target.value);
-                  validateLastName(e.target.value);
-                }}
-              />
-            </div>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                width: "100%",
+              }}
+            >
+              <div className="labelInputBox" id="firstNameBox">
+                <p className="formLabel">First Name</p>
+                <input
+                  className="inputBox"
+                  type="text"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setFirstName(e.target.value);
+                    validateFirstName(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="labelInputBox" id="lastNameBox">
+                <p className="formLabel">Last Name</p>
+                <input
+                  className="inputBox"
+                  type="text"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setLastName(e.target.value);
+                    validateLastName(e.target.value);
+                  }}
+                />
+              </div>
+            </Box>
           </div>
           <div className="inputError">{nameError}</div>
 
