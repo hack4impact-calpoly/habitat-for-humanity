@@ -7,12 +7,10 @@ import { getItemByID, Item } from "api/item";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import ContactInfo from "../../donor/donation/ContactInfo";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
-import SubmitInfo from "../../donor/donation/SubmitInfo";
+import DonationInfoTab from "./DonationInfoTab";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import ReceiptPage from "./ReceiptPage/ReceiptPage";
-import temp from "./temp.png";
 import AdminSchedulePage from "./AdminSchedulePage";
 
 require("./DonationInfoPage.css");
@@ -168,46 +166,7 @@ function DonationInfoPage(): JSX.Element {
             </Box>
           </div>
           <TabPanel value={value} index={0}>
-            <div id="DonInfo">
-              <div id="DonationInfoPage">
-                <ContactInfo
-                  name={`${donor.firstName} ${donor.lastName}`}
-                  email={donor.email}
-                  phone={donor.phone}
-                />
-                <SubmitInfo
-                  name={item.name}
-                  dimensions={item.size}
-                  photos={imagesPool}
-                  location={item.address}
-                  dropOff={item.scheduling === "Dropoff"}
-                  component
-                />
-                <div id="TimeHours">
-                  <h2 className="TimeAvailability">Time Availability</h2>
-                  <div id="TimeTable">
-                    {avaiTimes.map((element, index) => {
-                      const { day } = element;
-                      const { hours } = element;
-                      return (
-                        <tr key={index}>
-                          <h4 className="donDropoffRow" key={index}>
-                            {day}
-                          </h4>
-                          <div id="DayHours">
-                            {hours.map((element1, index1) => (
-                              <div id="EachDayHours" key={index1}>
-                                {element1}
-                              </div>
-                            ))}
-                          </div>
-                        </tr>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <DonationInfoTab />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <AdminSchedulePage times={avaiTimes} />
