@@ -32,7 +32,15 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const storedDimensions = useSelector(
     (state: RootState) => state.donation.dimensions
   );
-  const storedPhotos = useSelector((state: RootState) => state.donation.photos);
+  const statePhotos = useSelector((state: RootState) => state.donation.photos);
+
+  // storedPhotos is an array of images names,
+  // if access is needed, images name can be used
+  // to generate presigned urls.
+  const storedPhotos = statePhotos.map((url) => {
+    const parts = url.split("/");
+    return parts[parts.length - 1].split("?")[0];
+  });
   const storedLocation = useSelector(
     (state: RootState) => state.donation.address
   );
@@ -51,27 +59,27 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const navigate = useNavigate();
 
   /* convert array of base64-encoded back into array of image files */
-  const convertToFiles = (photos: string[] | undefined): File[] => {
-    const files: File[] = [];
-    const timestamp = new Date().getTime(); // Get the current timestamp
-    photos?.forEach((photo, index) => {
-      const byteString = atob(photo.split(",")[1]);
-      const mimeString = photo.split(",")[0].split(":")[1].split(";")[0];
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
-      const blob = new Blob([ab], { type: mimeString });
-      // Create a file object with a unique name
-      const fileName = `image-${timestamp}-${index}.${
-        mimeString.split("/")[1]
-      }`;
-      const file = new File([blob], fileName, { type: mimeString });
-      files.push(file);
-    });
-    return files;
-  };
+  // const convertToFiles = (photos: string[] | undefined): File[] => {
+  //   const files: File[] = [];
+  //   const timestamp = new Date().getTime(); // Get the current timestamp
+  //   photos?.forEach((photo, index) => {
+  //     const byteString = atob(photo.split(",")[1]);
+  //     const mimeString = photo.split(",")[0].split(":")[1].split(";")[0];
+  //     const ab = new ArrayBuffer(byteString.length);
+  //     const ia = new Uint8Array(ab);
+  //     for (let i = 0; i < byteString.length; i++) {
+  //       ia[i] = byteString.charCodeAt(i);
+  //     }
+  //     const blob = new Blob([ab], { type: mimeString });
+  //     // Create a file object with a unique name
+  //     const fileName = `image-${timestamp}-${index}.${
+  //       mimeString.split("/")[1]
+  //     }`;
+  //     const file = new File([blob], fileName, { type: mimeString });
+  //     files.push(file);
+  //   });
+  //   return files;
+  // };
 
   /* Send image files array to S3 */
   // const sendImagesToS3 = async (): Promise<boolean> => {
@@ -91,7 +99,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     const donation: Item = {
       name: storedDonation.name,
       size: storedDonation.dimensions,
-      photos: storedDonation.photos,
+      photos: storedPhotos,
       address: storedDonation.address,
       city: storedDonation.city,
       state: storedDonation.state,
@@ -149,9 +157,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <b>Item Photos</b>
             </p>
             <div id="ProductImages">
-              {photos.map((base64String: any, i: any) => (
+              {statePhotos.map((imagePresignedUrl: any, i: any) => (
                 <img
-                  src={base64String}
+                  src={imagePresignedUrl}
                   alt="uploaded"
                   key={i}
                   id="ProductImage"
