@@ -6,7 +6,6 @@ import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../api/item";
-
 import { RootState } from "../../../redux/store";
 
 require("./SubmitInfo.css");
