@@ -189,8 +189,6 @@ function DropZone(props: any): JSX.Element {
       })
     );
 
-    // Create an array of image URLs directly from S3
-    // FOR LATER: IMPLEMENT PRESIGNED URL
     // const imageUrls = newUniqueFiles.map(
     //   (file) =>
     //     `https://habitat4humanity-images.s3.us-west-2.amazonaws.com/${file.name}`
