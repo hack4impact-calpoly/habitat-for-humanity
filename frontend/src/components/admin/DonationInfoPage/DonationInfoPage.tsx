@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { getUserByID, User } from "api/user";
 import { getItemByID, Item } from "api/item";
-import SubmitInfo from "../../donor/donation/SubmitInfo";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
 import ContactInfo from "../../donor/donation/ContactInfo";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
+import SubmitInfo from "../../donor/donation/SubmitInfo";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import ReceiptPage from "./ReceiptPage/ReceiptPage";
 import temp from "./temp.png";
+import AdminSchedulePage from "./AdminSchedulePage";
 
 require("./DonationInfoPage.css");
 
@@ -39,11 +40,9 @@ function TabPanel(props: {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      <Box sx={{ p: 3 }}>
+        <Typography>{children}</Typography>
+      </Box>
     </div>
   );
 }
@@ -211,10 +210,7 @@ function DonationInfoPage(): JSX.Element {
             </div>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            {/* Scheduling Page goes here
-                          Replace image with actual scheduling component
-                        */}
-            <img src={temp} alt="Schedule" style={{ paddingTop: "4rem" }} />
+            <AdminSchedulePage times={avaiTimes} />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <ReceiptPage />
