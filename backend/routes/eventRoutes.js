@@ -19,6 +19,7 @@ router.get("/", async (req, res) => {
 //get event by eventId
 router.get("/eventId/:eventId", async (req, res) => {
   try {
+    console.log("look here", req.params.eventId)
     const event = await Event.findOne({ _id: req.params.eventId})
     res.status(200).send(event)
     console.log('Got event with id %s', req.params.eventId)
@@ -89,13 +90,16 @@ router.post('/', async (req, res) => {
   }
 });
 
+//not sure if this put request includes the location field described in the event schema
 //update event given key-value pair(s)
 router.put("/eventId/:eventId", async (req, res) => {
   try {
     let event = await Event.findOne({ _id: req.params.eventId });
 
-    if (req.body.title) {event.title = req.body.title;}
-    if (req.body.startTime) {event.email = req.body.startTime;}
+    console.log("look here !!", req.body)
+    console.log("look here", req.body.startTime)
+    if (req.body.title) {event.title = req.body.title}
+    if (req.body.startTime) {event.startTime = req.body.startTime;}
     if (req.body.endTime) {event.endTime = req.body.endTime;}
     if (req.body.volunteerId) {event.volunteerId = req.body.volunteerId;}
     if (req.body.itemId) {event.itemId = req.body.itemId;}
@@ -108,7 +112,7 @@ router.put("/eventId/:eventId", async (req, res) => {
     if (req.body.donorLastName) {event.donorLastName = req.body.donorLastName;}
     if (req.body.itemName) {event.itemName = req.body.itemName;}
     if (req.body.phone) {event.phone = req.body.phone;}
-
+  
     await event.save();
     res.send({msg: `Updated event ${req.params.eventId} to: ${event}`});
   } catch(error) {

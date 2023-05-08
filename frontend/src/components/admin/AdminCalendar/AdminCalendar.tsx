@@ -118,28 +118,27 @@ function AdminCalendar(): JSX.Element {
   const [clickedEvent, setClickedEvent] = useState<EventClickArg>();
 
   //  right now we are using an endpoint that does not filter by date
+  /*
   useEffect(() => {
     console.log("calendar events updated", calendarEvents);
   }, [calendarEvents]);
+*/
 
   useEffect(() => {
-    //  need to change the ways that events are stored
-    //  so that the match the input that full calendar expects
+    //  need to strip the timezone indicator in order for fc api to process start and end dates correctly
     fetch("http://localhost:3001/api/events/")
       .then((response) => response.json())
       .then((data) => {
         const updatedEvents = data.map((event: DonationEvent) => ({
           ...event, // spread the existing properties of the event object
-          //  start: event.startTime.toString().split(".")[0],
-          start: "2023-04-17T09:00:00",
-          end: "2023-04-17T10:00:00",
-          //  end: event.endTime.toString().split(".")[0],
+          start: event.startTime.toString().split(".")[0],
+          end: event.endTime.toString().split(".")[0],
           textColor: "Black",
           backgroundColor: "transparent",
           borderColor: "transparent",
         }));
 
-        console.log("update: ", updatedEvents);
+        //  console.log("update: ", updatedEvents);
         setCalendarEvents(updatedEvents);
       })
       .catch((error) => console.error(error));
@@ -147,8 +146,8 @@ function AdminCalendar(): JSX.Element {
 
   const renderModalComponent = (args: EventClickArg) => {
     //  sets a state var to true on click of an event
-    //  we pass the information of any clicked event to a different state
-    //  is used as onClick event for the main calender
+    //  we pass the information of any clicked event to a state var
+    //  is used as onClick trigger for the main calender
     setClickedEvent(args);
     setOpen(true);
   };
@@ -233,6 +232,8 @@ function AdminCalendar(): JSX.Element {
       <AdminNavbar />
 
       <div id="smallCalendar" style={{ display: "flex", height: "100%" }}>
+        {/* im not sure if i would need to pass props in the future
+            so i created filler props */}
         <SmallCalendar address="xd" />
 
         <div id="myCalendar" className="mainCalendarContainer">
@@ -273,7 +274,7 @@ function AdminCalendar(): JSX.Element {
     </div>
   );
 }
-
+//  controls how the inside of an event cell looks
 function customEvent(args: EventContentArg) {
   //  sets up the styling and content of an event cell
   return (

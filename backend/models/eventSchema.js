@@ -26,7 +26,7 @@ const eventSchema = new mongoose.Schema(
     itemName: { type: String, required: true },
     phone: { type: String, required: true },
     pickupAvailability: { type: [[String]], required: true },
-    location: { type: String, required: true }
+    location: { type: String, required: false }
   },
   { collection: "Events" }
 );
