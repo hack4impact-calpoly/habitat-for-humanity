@@ -43,6 +43,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const storedDonorID = useSelector(
     (state: RootState) => state.donation.donorID
   );
+  const storedEvents = useSelector(
+    (state: RootState) => state.donation.pickupTimes
+  );
   const dispatch = useDispatch();
 
   const setCurrentUserID = async () => {
@@ -76,7 +79,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
       donorId: storedDonation.donorID,
       timeApproved: new Date(),
       scheduling: storedDonation.dropoff ? "Dropoff" : "Pickup",
-      timeAvailability: [[new Date(), new Date()]], // TODO
+      timeAvailability: storedDonation.pickupTimes, // TODO
       timeSubmitted: new Date(),
       status: "Needs Approval",
     };
@@ -107,6 +110,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   return (
     <div>
       {!component && <DonatorNavbar />}
+      {console.log(storedDonation.pickupTimes)}
       <div id={!component ? "MainContainer" : ""}>
         <div id="SubmitInfoPage">
           <div id="information">
