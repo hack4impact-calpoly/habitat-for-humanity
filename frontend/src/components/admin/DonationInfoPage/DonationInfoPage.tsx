@@ -7,8 +7,9 @@ import { getItemByID, Item } from "api/item";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
+import { Event } from "redux/donationSlice";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
-import DonationInfoTab from "./DonationInfoTab";
+import DonationInfoTab, { getDay, getTime } from "./DonationInfoTab";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import ReceiptPage from "./ReceiptPage/ReceiptPage";
 import AdminSchedulePage from "./AdminSchedulePage";
@@ -85,7 +86,7 @@ const emptyItem: Item = {
   state: "",
   zipCode: "",
   scheduling: "",
-  timeAvailability: [[new Date(), new Date()]],
+  timeAvailability: [{ start: "", end: "" }],
   donorId: "",
   timeSubmitted: new Date(),
   timeApproved: new Date(),
@@ -101,10 +102,18 @@ const emptyUser: User = {
   userType: "",
 };
 
+const emptyEvents: Event[] = [
+  {
+    start: "",
+    end: "",
+  },
+];
+
 function DonationInfoPage(): JSX.Element {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
   const [donor, setDonor] = useState<User>(emptyUser);
+  const [availableTimes, setAvailableTimes] = useState<Event[]>(emptyEvents);
   const { id } = useParams();
 
   useEffect(() => {
@@ -121,7 +130,6 @@ function DonationInfoPage(): JSX.Element {
 
   useEffect(() => {
     if (item.donorId !== "") {
-      console.log(item.donorId);
       const fetchedDonor = getUserByID(item.donorId)
         .then((donor) => setDonor(donor))
         .catch((err) => {
@@ -129,7 +137,11 @@ function DonationInfoPage(): JSX.Element {
           setDonor(emptyUser);
         });
     }
+    if (item.timeAvailability) {
+      setAvailableTimes(item.timeAvailability);
+    }
   }, [item]);
+
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue);
   };
@@ -166,10 +178,10 @@ function DonationInfoPage(): JSX.Element {
             </Box>
           </div>
           <TabPanel value={value} index={0}>
-            <DonationInfoTab />
+            <DonationInfoTab item={item} donor={donor} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <AdminSchedulePage times={avaiTimes} />
+            <AdminSchedulePage times={availableTimes} />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <ReceiptPage />
