@@ -7,13 +7,20 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import moment from "moment";
+import { Event } from "redux/donationSlice";
+import {
+  collectDates,
+  belongsToDay,
+  getDay,
+  getTime,
+  getDayShort,
+} from "./DonationInfoTab";
 
-interface AvailableTimes {
-  day: string;
-  hours: string[];
-}
-function AdminSchedulePage(props: { times: AvailableTimes[] }): JSX.Element {
+function AdminSchedulePage(props: { times: Event[] }): JSX.Element {
   const { times } = props;
+
+  const dates = collectDates(times);
 
   return (
     <div id="DonInfo">
@@ -24,63 +31,66 @@ function AdminSchedulePage(props: { times: AvailableTimes[] }): JSX.Element {
           </h2>
 
           <div id="TimeTable" style={{ marginTop: "3rem" }}>
-            {times.map((time, index) => {
-              const { day } = time;
-              const { hours } = time;
-              return (
-                <div style={{ marginTop: "3rem" }}>
-                  <h2
-                    className="donScheduleRow"
-                    key={index}
-                    style={{
-                      color: `var(--primary)`,
-                    }}
-                  >
-                    {day}
-                  </h2>
-                  <TableContainer id="ScheduleTable">
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell align="left" sx={{ width: "1%" }}>
-                            {" "}
-                          </TableCell>
-                          <TableCell align="left" sx={{ width: "30%" }}>
-                            <h3>Time</h3>
-                          </TableCell>
-                          <TableCell align="left" sx={{ width: "70%" }}>
-                            <h3>Assign Available Volunteers</h3>
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {hours.map((hour, index1) => (
-                          <TableRow key={index1}>
-                            <TableCell sx={{ padding: 0, margin: 0 }}>
-                              <Checkbox key={index1} />
-                            </TableCell>
-                            <TableCell>{hour}</TableCell>
-                            <TableCell>
-                              <TextField
-                                variant="outlined"
-                                margin="none"
-                                sx={{
-                                  width: {
-                                    sm: "100%",
-                                    md: "80%",
-                                    lg: "60%",
-                                  },
-                                }}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </div>
-              );
-            })}
+            {dates.map((date, index) => (
+              <div style={{ marginTop: "3rem" }}>
+                <h2
+                  className="donScheduleRow"
+                  key={index}
+                  style={{
+                    color: `var(--primary)`,
+                  }}
+                >
+                  {getDayShort(date)}
+                </h2>
+                <TableContainer id="ScheduleTable">
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="left" sx={{ width: "1%" }}>
+                          {" "}
+                        </TableCell>
+                        <TableCell align="left" sx={{ width: "30%" }}>
+                          <h3>Time</h3>
+                        </TableCell>
+                        <TableCell align="left" sx={{ width: "70%" }}>
+                          <h3>Assign Staff/Volunteers</h3>
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {times.map((event, index) => {
+                        if (belongsToDay(date, event)) {
+                          return (
+                            <TableRow key={index}>
+                              <TableCell sx={{ padding: 0, margin: 0 }}>
+                                <Checkbox key={index} />
+                              </TableCell>
+                              <TableCell>{`${getTime(event.start)} to ${getTime(
+                                event.end
+                              )}`}</TableCell>
+                              <TableCell>
+                                <TextField
+                                  variant="outlined"
+                                  margin="none"
+                                  sx={{
+                                    width: {
+                                      sm: "100%",
+                                      md: "80%",
+                                      lg: "60%",
+                                    },
+                                  }}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        }
+                        return null;
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </div>
+            ))}
           </div>
         </div>
       </div>
