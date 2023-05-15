@@ -9,7 +9,7 @@ import ActiveDonationPage from "components/admin/ActiveDonationsPage/ActiveDonat
 
 /* Authentication Screens */
 // import CreateAccountPage from './components/authentication/CreateAccountPage/CreateAccountPage';
-// import LoginPage from "./components/authentication/LoginPage/LoginPage";
+import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import CreateAccountPage from './components/CreateAccountPage/CreateAccountPage';
 // import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import DonorScheduleDropoffPickupPage from 'components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage';
@@ -38,7 +38,7 @@ Amplify.configure(awsExports);
 function App(): JSX.Element {
   return (
     // <SuccessPage />
-    // <LoginPage />
+    <LoginPage />
     // <DonatorHomePage />
     // <CreateAccountPage />
     // <DonorSchedulePickUp/>
@@ -52,7 +52,7 @@ function App(): JSX.Element {
     // <SubmitPickUpMultiplePhotoPage />
     // <DonatorNextStepsPage />
     // <DonorScheduleDropoffPickupPage />
-    <ActiveDonationPage />
+    // <ActiveDonationPage />
   );
 }
 
