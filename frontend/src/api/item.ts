@@ -1,3 +1,5 @@
+import { Event } from "redux/donationSlice";
+
 const itemURL: string = "http://localhost:3001/api/items/";
 
 /* ------------------GET Requests----------------- */
@@ -109,7 +111,7 @@ export interface Item {
   state: string;
   zipCode: string;
   scheduling: string; // Pickup or Dropoff
-  timeAvailability: [[Date, Date]];
+  timeAvailability: Event[];
   donorId: string;
   // type: mongoose.Schema.Types.ObjectId
   timeSubmitted: Date;
