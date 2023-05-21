@@ -5,60 +5,65 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Radio, TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import RadioGroup from "@mui/material/RadioGroup";
-import moment from "moment";
 import "moment-timezone";
-import { Event } from "redux/donationSlice";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Item } from "api/item";
 import { User } from "api/user";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../redux/store";
+import { useDispatch } from "react-redux";
+import { updateDonationStatus } from "redux/eventSlice";
 
 interface InfoTabProps {
   item: Item;
   donor: User;
+  timeSlots: TimeSlot[];
 }
-export function collectDates(events: Event[]) {
+
+export interface TimeSlot {
+  eventStart: string;
+  eventEnd: string;
+  timeSlotString: string;
+  dayString: string;
+  volunteer: string;
+}
+
+export function collectDates(timeSlots: TimeSlot[]) {
   const dates: string[] = [];
-  events.forEach((event) => {
-    const date = event.start.split("T")[0];
-    if (!dates.includes(date)) {
-      dates.push(date);
+  if (timeSlots[0].eventStart === undefined) return dates;
+  timeSlots.forEach((timeSlot) => {
+    if (!dates.includes(timeSlot.dayString)) {
+      dates.push(timeSlot.dayString);
     }
   });
   return dates;
 }
 
-export function belongsToDay(date: string, event: Event) {
-  return event.start.split("T")[0] === date;
-}
-
-export const getTime = (time: string) =>
-  time ? moment(time).format("h:mm A") : "N/A";
-
-export const getDay = (time: string) =>
-  time ? moment(time).utc().format("dddd, MMMM Do YYYY") : "N/A";
-
-export const getDayShort = (time: string) =>
-  time ? moment(time).format("dddd, MMMM Do YYYY") : "N/A";
-
 function DonationInfoTab(props: InfoTabProps): JSX.Element {
-  const { item, donor } = props;
+  const { item, donor, timeSlots } = props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
+  const [pickup, setPickup] = useState<boolean>(true);
+
+  useEffect(() => {
+    setDonationStatus(item.status);
+    setPickup(item.scheduling === "Pickup");
+  }, [item]);
 
   const handleChange = (event: SelectChangeEvent) => {
     setDonationStatus(event.target.value);
+    updateStore();
   };
 
-  const [pickup, setPickup] = React.useState(true);
-  const dates = collectDates(item.timeAvailability);
+  const dates = collectDates(timeSlots);
+
+  const dispatch = useDispatch();
+  const updateStore = () => {
+    dispatch(updateDonationStatus(donationStatus));
+  };
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={6} spacing={4}>
+      <Grid item xs={12} sm={6}>
         <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
           Donation Status
         </h2>
@@ -69,7 +74,7 @@ function DonationInfoTab(props: InfoTabProps): JSX.Element {
             displayEmpty
             // inputProps={{ "aria-label": "Without label" }}
           >
-            <MenuItem value="" sx={{ color: "var(--orange)" }}>
+            <MenuItem value="Needs Approval" sx={{ color: "var(--orange)" }}>
               <em>
                 <b>Needs Approval</b>
               </em>
@@ -155,35 +160,38 @@ function DonationInfoTab(props: InfoTabProps): JSX.Element {
           <FormControl component="fieldset">
             <RadioGroup aria-label="gender" name="gender1" value={pickup} row>
               <FormControlLabel
-                value={!pickup}
+                value={pickup}
+                checked={!pickup}
                 control={<Radio />}
-                disabled
+                disabled={pickup}
                 label="I can drop off at the ReStore"
               />
               <FormControlLabel
-                value={pickup}
+                checked={pickup}
+                value={!pickup}
                 control={<Radio />}
+                disabled={!pickup}
                 label="I need the item to be picked up"
               />
             </RadioGroup>
           </FormControl>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} display={!pickup ? "none" : "block"}>
         <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
           Time Availability
         </h2>
         {dates.map((date, index) => (
-          <div id="availability">
-            <h3>{getDayShort(date)}</h3>
+          <div id="availability" key={index}>
+            <h3>{date}</h3>
             <div
               style={{ display: "flex", flexDirection: "row", columnGap: 15 }}
             >
-              {item.timeAvailability.map((element, index) => {
-                if (belongsToDay(date, element))
+              {timeSlots.map((timeSlot, index1) => {
+                if (timeSlot.dayString === date)
                   return (
                     <p
-                      key={index}
+                      key={index1}
                       style={{
                         border: "2px solid #acacac",
                         boxSizing: "border-box",
@@ -194,7 +202,7 @@ function DonationInfoTab(props: InfoTabProps): JSX.Element {
                         justifyContent: "center",
                       }}
                     >
-                      {getTime(element.start)} to {getTime(element.end)}
+                      {timeSlot.timeSlotString}
                     </p>
                   );
 
