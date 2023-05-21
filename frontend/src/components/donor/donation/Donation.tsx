@@ -119,6 +119,13 @@ function Donation(): JSX.Element {
     }
   };
 
+  const backButtonNavigation = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): void => {
+    const nextPath: string = "/Donor/Donate/Disclosure";
+    navigate(nextPath);
+  };
+
   const validInput = () => {
     let valid = true;
     setDescError("");
@@ -174,7 +181,24 @@ function Donation(): JSX.Element {
           <SubHeader>Item Photos</SubHeader>
           <Dropzone />
         </UploadContainer>
-        <div id="donPickupButtons">
+        <div
+          id="donPickupButtons"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: "30px",
+            marginTop: "30px",
+          }}
+        >
+          <button
+            type="button"
+            value="backButton"
+            className="donPickupButton backButton"
+            onClick={backButtonNavigation}
+          >
+            Back
+          </button>
           <button
             type="button"
             value="nextButton"
