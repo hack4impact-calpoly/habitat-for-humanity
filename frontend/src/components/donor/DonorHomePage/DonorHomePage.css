@@ -8,8 +8,7 @@
   height: 350px;
   width: 500px;
   margin: auto;
-  margin-top: 40vh;
-  transform: translateY(-50%);
+  margin-top: 20vh;
 }
 
 #donatePageGift {
@@ -38,79 +37,17 @@
   cursor: pointer;
 }
 
-@media only screen and (max-width: 499px) {
+@media only screen and (max-width: 640px) {
   #giftBox {
-    height: 380px;
-    width: 400px;
-  }
-
-  #donatePageGift {
-    width: 120px;
-  }
-
-  #donatePageHeader {
-    font-size: 25px;
+    margin-top: 15vh;
+    height: 25vh;
+    width: 90vw;
   }
 }
 
-@media only screen and (max-width: 400px) {
+/* nest hub */
+@media only screen and (max-width: 1024px) and (max-height: 600px){
   #giftBox {
-    height: 340px;
-    width: 300px;
-  }
-
-  #donatePageGift {
-    width: 100px;
-  }
-
-  #donatePageHeader {
-    font-size: 20px;
-  }
-
-  #donatePageDesc {
-    font-size: 13px;
-  }
-}
-
-@media only screen and (max-width: 280px) {
-  #giftBox {
-    height: 300px;
-    width: 250px;
-  }
-
-  #donatePageGift {
-    width: 100px;
-  }
-
-  #donatePageHeader {
-    font-size: 20px;
-  }
-
-  #donatePageDesc {
-    font-size: 13px;
-  }
-}
-
-@media only screen and (max-height: 490px) {
-  #giftBox {
-    margin-top: 50vh;
-  }
-}
-
-@media only screen and (max-height: 420px) {
-  #giftBox {
-    margin-top: 55vh;
-  }
-}
-
-@media only screen and (max-height: 320px) {
-  #giftBox {
-    margin-top: 60vh;
-  }
-}
-
-@media only screen and (max-height: 280px) {
-  #giftBox {
-    margin-top: 75vh;
+    margin-top: 10vh;
   }
 }

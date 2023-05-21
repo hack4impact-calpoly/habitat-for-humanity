@@ -7,7 +7,7 @@
 }
 
 #SubmitInfoPage {
-  width: 50rem;
+  width: 60%;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -68,38 +68,22 @@ input[type="radio"] {
   flex: 2;
 }
 
-@media only screen and (max-width: 915px) {
+.backButton {
+  padding: 10px 45px;
+} 
 
-  img {
-    max-width: 95%;
+@media only screen and (max-width: 640px){
+  .backButton {
+    padding: 10px 45px;
   }
-  #SingleImages {
-    margin-right: -20px;
-    margin-top: 5px;
-  }
-}
-
-@media only screen and (max-width: 850px) {
   #SubmitInfoPage {
-    width: 90%;
-    transform: translateX(0%);
-}
-  img {
-    max-width: 85%;
+    width: 80vw;
   }
-  #SingleImages {
-    margin-right: -40px;
-    margin-top: 5px;
+  #information {
+    padding: 0px;
+    width: 80vw;
   }
-}
-
-@media only screen and (max-width: 750px) {
-  #SubmitInfoPage {
-    width: 90%;
-    transform: translateX(0%);
-}
-  #SingleImages {
-    margin-right: -155px;
-    margin-top: 5px;
+  #ReStoreHoursTable {
+    width: 80vw;
   }
 }
