@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -28,6 +28,8 @@ function ActiveDonationPage(): JSX.Element {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
   const [donors, setDonors] = useState<User[]>([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getItems().then((res) => setItems(res));
@@ -61,7 +63,7 @@ function ActiveDonationPage(): JSX.Element {
           <Table>
             <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
               <TableRow>
-                {header.map((h, index: number) => (
+                {header.map((h, index) => (
                   <TableCell key={index}>
                     <p className="tableCell">{h}</p>
                   </TableCell>
@@ -75,13 +77,13 @@ function ActiveDonationPage(): JSX.Element {
                   // TODO: wrap parent link to new page
                   <TableRow
                     key={index}
-                    component={Link}
-                    to={`DonationInfo/${d._id}`}
+                    // to={`DonationInfo/${d._id}`}
+                    onClick={() => {
+                      navigate(`DonationInfo/${d._id}/`);
+                    }}
                     style={{ textDecoration: "none" }}
                   >
-                    <TableCell component="th" scope="row">
-                      {getDonorName(d.donorId)}
-                    </TableCell>
+                    <TableCell scope="row">{getDonorName(d.donorId)}</TableCell>
                     <TableCell>{d.scheduling}</TableCell>
                     <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
                     <TableCell>{convertTime(d.timeApproved)}</TableCell>
