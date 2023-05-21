@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./DisclosurePage.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,21 @@ const DisclosurePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [checkboxChecked, setCheckboxChecked] = useState(false);
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobileScreen = () => {
+      const screenWidth = window.innerWidth;
+      setIsMobileScreen(screenWidth <= 768); // Adjust the breakpoint as per your needs
+    };
+
+    checkIfMobileScreen();
+    window.addEventListener("resize", checkIfMobileScreen);
+
+    return () => {
+      window.removeEventListener("resize", checkIfMobileScreen);
+    };
+  }, []);
 
   const BackRouteChange = (): void => {
     const donateLocationPath = "/Donor";
@@ -38,22 +53,30 @@ const DisclosurePage = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: "0px",
         }}
       >
         <img
           src={donationGuidelines}
           alt="donation-guidelines"
-          style={{ width: "65vw" }}
+          style={{ width: isMobileScreen ? "100vw" : "65vw" }}
         />
-        <div style={{ width: "70vw" }}>
-          <h2 style={{ color: "#F23E16" }}> Terms and Regulations </h2>
-          <p>
+        <div style={{ width: isMobileScreen ? "90vw" : "70vw" }}>
+          <h2
+            style={{
+              color: "#F23E16",
+              fontSize: isMobileScreen ? "20px" : "25px",
+            }}
+          >
+            Terms and Regulations
+          </h2>
+          <p style={{ fontSize: isMobileScreen ? "15px" : "17px" }}>
             Habitat for Humanity SLO County reserves the right to deny a
             donation upon arrival due to discrepancy of item based on provided
             description or photo received.
           </p>
-          <p>Unauthorized dumping of items is illegal under penal code 374.3</p>
+          <p style={{ fontSize: isMobileScreen ? "15px" : "17px" }}>
+            Unauthorized dumping of items is illegal under penal code 374.3
+          </p>
         </div>
       </div>
       {/* checkbox */}
@@ -61,9 +84,10 @@ const DisclosurePage = () => {
         style={{
           display: "flex",
           flexDirection: "row",
-          marginLeft: "40vw",
+          marginLeft: isMobileScreen ? "5vw" : "40vw",
           marginTop: "30px",
           marginRight: "15vw",
+          fontSize: isMobileScreen ? "15px" : "17px",
         }}
       >
         <input type="checkbox" onChange={handleCheckboxChange} />
@@ -79,7 +103,7 @@ const DisclosurePage = () => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-          marginBottom: "30px",
+          marginBottom: isMobileScreen ? "10px" : "30px",
           marginTop: "30px",
         }}
       >
@@ -88,7 +112,10 @@ const DisclosurePage = () => {
           value="backButton"
           className="disclosureBackButton"
           onClick={BackRouteChange}
-          style={{ padding: "10px 45px", marginLeft: "15vw" }}
+          style={{
+            padding: "10px 45px",
+            marginLeft: isMobileScreen ? "5vw" : "15vw",
+          }}
         >
           Back
         </button>
@@ -99,7 +126,7 @@ const DisclosurePage = () => {
           onClick={NextRouteChange}
           style={{
             padding: "10px 45px",
-            marginRight: "15vw",
+            marginRight: isMobileScreen ? "5vw" : "15vw",
             border: checkboxChecked ? undefined : "2px solid transparent",
             backgroundColor: checkboxChecked ? undefined : "gray",
             cursor: checkboxChecked ? "pointer" : "not-allowed",
