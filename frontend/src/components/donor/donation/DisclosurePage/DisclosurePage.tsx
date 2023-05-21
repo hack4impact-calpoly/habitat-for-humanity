@@ -128,7 +128,7 @@ const DisclosurePage = () => {
             padding: "10px 45px",
             marginRight: isMobileScreen ? "5vw" : "15vw",
             border: checkboxChecked ? undefined : "2px solid transparent",
-            backgroundColor: checkboxChecked ? undefined : "gray",
+            backgroundColor: checkboxChecked ? undefined : "#CDCDCD",
             cursor: checkboxChecked ? "pointer" : "not-allowed",
           }}
         >
