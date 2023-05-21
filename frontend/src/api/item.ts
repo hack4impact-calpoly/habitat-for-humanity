@@ -37,7 +37,7 @@ export const getItemByID = async (itemID: string) =>
         // check server response
         throw new Error(`${res.status}-${res.statusText}`);
       }
-      console.log(item);
+      // console.log(item);
       return item;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
@@ -128,6 +128,42 @@ export const addItem = async (item: Item) =>
       "Content-Type": "application/json",
     },
     method: "POST",
+    body: JSON.stringify({
+      name: item.name,
+      size: item.size,
+      address: item.address,
+      city: item.city,
+      zipCode: item.zipCode,
+      scheduling: item.scheduling,
+      timeAvailability: item.timeAvailability,
+      timeSubmitted: item.timeSubmitted,
+      status: item.status,
+      donorId: item.donorId,
+    }),
+  })
+    .then(async (res) => {
+      const response = await res.json();
+      console.log(res.ok);
+      if (!res.ok) {
+        // check server response
+        return false;
+        console.log(response);
+        // throw new Error(res.status + "-" + res.statusText)
+      }
+      return true;
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+      return false;
+    });
+
+// Update Item
+export const updateItem = async (item: Item) =>
+  fetch(`${itemURL}/itemId/${item._id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       name: item.name,
       size: item.size,
