@@ -83,6 +83,7 @@ const emptyUser: User = {
 
 const emptyTimeSlots: TimeSlot[] = [
   {
+    id: "",
     eventStart: "",
     eventEnd: "",
     timeSlotString: "",
@@ -197,6 +198,7 @@ function DonationInfoPage(): JSX.Element {
     if (item.timeAvailability) {
       const newAvailableTimes: TimeSlot[] = item.timeAvailability.map(
         (event) => ({
+          id: `${event.start},${event.end}`,
           eventStart: event.start,
           eventEnd: event.end,
           timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
