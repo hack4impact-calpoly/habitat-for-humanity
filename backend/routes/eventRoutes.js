@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router()
+var mongoose = require('mongoose');
 const Event = require('../models/eventSchema.js');
 const Item = require('../models/itemSchema.js');
 const User = require('../models/userSchema.js');
@@ -60,8 +61,8 @@ router.get("/location/:city/:address", async (req, res) => {
 */
 router.post('/', async (req, res) => {
   const { title, startTime, endTime, volunteerId, itemId } = req.body;
-  const volunteer = await User.findOne({ _id: volunteerId })
-  const item = await Item.findOne({ _id: itemId })
+  const volunteer = await User.findOne({ _id: mongoose.types.ObjectId(volunteerId) })
+  const item = await Item.findOne({ _id: mongoose.types.ObjectId(itemId) })
   const donor = await User.findOne({ _id: item.donorId })
 
   let newEvent = new Event({
