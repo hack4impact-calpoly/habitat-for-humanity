@@ -16,10 +16,12 @@ import { collectDates, TimeSlot } from "./DonationInfoTab";
 function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): JSX.Element {
   const { timeSlots } = props;
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<TimeSlot[]>([]);
+  const [timeSlotIds, setTimeSlotIds] = useState<string[]>([]);
 
   const dates = collectDates(timeSlots);
 
   useEffect(() => {
+    setTimeSlotIds(selectedTimeSlots.map((ts) => ts.id));
     updateStore();
   }, [selectedTimeSlots]);
 
@@ -38,7 +40,16 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): JSX.Element {
 
   const handleVolunteerInput =
     (timeSlot: TimeSlot) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      timeSlot.volunteer = event.target.value;
+      const newTimeSlots = selectedTimeSlots.map((ts) => {
+        if (
+          ts.timeSlotString === timeSlot.timeSlotString &&
+          ts.dayString === timeSlot.dayString
+        ) {
+          return { ...ts, volunteer: event.target.value };
+        }
+        return ts;
+      });
+      setSelectedTimeSlots(newTimeSlots);
     };
 
   const dispatch = useDispatch();
@@ -49,9 +60,9 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): JSX.Element {
 
   return (
     <div id="DonInfo">
-      <Button onClick={() => console.log(selectedTimeSlots)}>
+      {/* <Button onClick={() => console.log(selectedTimeSlots)}>
         Check timeslots
-      </Button>
+      </Button> */}
       <div id="DonationInfoPage">
         <div id="TimeHours">
           <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
@@ -93,7 +104,7 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): JSX.Element {
                                 <Checkbox
                                   key={index1}
                                   onChange={handleCheckbox(timeSlot)}
-                                  checked={selectedTimeSlots.includes(timeSlot)}
+                                  checked={timeSlotIds.includes(timeSlot.id)}
                                 />
                               </TableCell>
                               <TableCell>{timeSlot.timeSlotString}</TableCell>
@@ -101,7 +112,6 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): JSX.Element {
                                 <TextField
                                   variant="outlined"
                                   margin="none"
-                                  label="Name"
                                   sx={{
                                     width: {
                                       sm: "100%",
@@ -110,9 +120,7 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): JSX.Element {
                                     },
                                   }}
                                   onChange={handleVolunteerInput(timeSlot)}
-                                  disabled={
-                                    !selectedTimeSlots.includes(timeSlot)
-                                  }
+                                  disabled={!timeSlotIds.includes(timeSlot.id)}
                                 />
                               </TableCell>
                             </TableRow>
