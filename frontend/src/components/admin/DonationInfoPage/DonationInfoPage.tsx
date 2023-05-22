@@ -4,12 +4,11 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { getUserByID, User } from "api/user";
 import { getItemByID, Item, updateItem } from "api/item";
-
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
-import { Event, addEvent } from "api/event";
+import { addEvent } from "api/event";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -116,54 +115,47 @@ function DonationInfoPage(): JSX.Element {
     const nextPath: string = "/Admin";
 
     if (e.currentTarget.value === "back") {
+      sendUpdatedItemToDB("Needs Approval");
       navigate(backPath);
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
+      sendUpdatedItemToDB("Rejected");
       navigate(backPath);
     } else if (e.currentTarget.value === "approve") {
-      // if (await storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot))) {
-      //   console.log("Success submitting events!");
-      //   navigate(nextPath);
-      // }
-      console.log(storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot)));
+      if (
+        (await storedTimeSlots.map((timeSlot) =>
+          sendEventToDB(timeSlot, item)
+        )) &&
+        (await sendUpdatedItemToDB("Approved and Scheduled"))
+      ) {
+        console.log("Success submitting events!");
+        navigate(nextPath);
+      }
     }
   };
 
-  const sendEventToDB = (timeSlot: TimeSlot) => {
-    const arr: string[][] = [[], []];
-    arr[0][0] = "test";
-    arr[0][1] = "test";
-    const event: Event = {
+  const sendEventToDB = (timeSlot: TimeSlot, item: Item) => {
+    const event = {
       title: `${item.name} ${item.scheduling}`,
       startTime: new Date(timeSlot.eventStart),
       endTime: new Date(timeSlot.eventEnd),
-      volunteerId: "a0da0a77-8b2b-4db4-b042-2f2904165116",
+      volunteerId: "dd9b6616-6353-438a-8bb8-a0b022c32b5e", // TODO add correct volunteer id
       itemId: item._id === undefined ? "" : item._id,
-      address: item.address,
-      city: item.city,
-      zipCode: item.zipCode,
-      volunteerFirstName: timeSlot.volunteer.split(" ")[0],
-      volunteerLastName: timeSlot.volunteer.split(" ")[1],
-      donorFirstName: donor.firstName,
-      donorLastName: donor.lastName,
-      itemName: item.name,
-      phone: donor.phone,
-      pickupAvailability: arr, // TODO
-      location: item.city,
     };
-    // console.log(event)
-    // const response = addEvent(event);
-    // if (!response) {
-    //   // "There was an error saving the events. Please try again later."
-    //   // TODO: add error message to user
-    // }
-    return event;
+    console.log(event);
+    const response = addEvent(event);
+    if (!response) {
+      // "There was an error saving the events. Please try again later."
+      // TODO: add error message to user
+    }
+    return response;
   };
 
-  const sendUpdatedItemToDB = async () => {
+  // Update item status in DB TODO: add other statuses
+  const sendUpdatedItemToDB = async (status: string) => {
     const updatedItem: Item = {
       ...item,
-      status: "Approved and Scheduled",
+      status: status,
     };
 
     const response = await updateItem(updatedItem);
@@ -174,6 +166,7 @@ function DonationInfoPage(): JSX.Element {
     return response;
   };
 
+  // Fetch and set item on load
   useEffect(() => {
     const fetchedItem =
       typeof id === "string"
@@ -186,6 +179,7 @@ function DonationInfoPage(): JSX.Element {
         : setItem(emptyItem);
   }, []);
 
+  // Fetch and set donor and available times on item change
   useEffect(() => {
     if (item.donorId !== "") {
       const fetchedDonor = getUserByID(item.donorId)
