@@ -46,7 +46,7 @@ function ActiveDonationPage(): JSX.Element {
   };
 
   const convertTime = (time: Date) =>
-    time ? moment(time).format("MMM Mo [at] h:mm A") : "N/A";
+    time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -87,7 +87,7 @@ function ActiveDonationPage(): JSX.Element {
                     <TableCell>{d.scheduling}</TableCell>
                     <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
                     <TableCell>{convertTime(d.timeApproved)}</TableCell>
-                    {d.status === "Approved" ? (
+                    {d.status === "Approved and Scheduled" ? (
                       <TableCell>
                         <p style={{ margin: 0 }}>{d.status}</p>
                       </TableCell>
