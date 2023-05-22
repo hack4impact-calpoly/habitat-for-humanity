@@ -47,19 +47,20 @@ function DonationInfoTab(props: InfoTabProps): JSX.Element {
 
   useEffect(() => {
     setDonationStatus(item.status);
+    updateDonationStatus(donationStatus);
     setPickup(item.scheduling === "Pickup");
   }, [item]);
 
   const handleChange = (event: SelectChangeEvent) => {
     setDonationStatus(event.target.value);
-    updateStore();
+    updateStoredStatus(event.target.value);
   };
 
   const dates = collectDates(timeSlots);
 
   const dispatch = useDispatch();
-  const updateStore = () => {
-    dispatch(updateDonationStatus(donationStatus));
+  const updateStoredStatus = (status: string) => {
+    dispatch(updateDonationStatus(status));
   };
 
   return (
