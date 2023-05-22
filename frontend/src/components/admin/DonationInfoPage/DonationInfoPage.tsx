@@ -11,6 +11,7 @@ import moment from "moment";
 import { addEvent } from "api/event";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
+import { clearTimeSlots } from "redux/eventSlice";
 import { RootState } from "../../../redux/store";
 import DonationInfoTab, { TimeSlot } from "./DonationInfoTab";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
@@ -115,21 +116,25 @@ function DonationInfoPage(): JSX.Element {
     const nextPath: string = "/Admin";
 
     if (e.currentTarget.value === "back") {
-      sendUpdatedItemToDB("Needs Approval");
+      sendUpdatedItemToDB(storedStatus, false);
       navigate(backPath);
+      navigate(0); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
-      sendUpdatedItemToDB("Rejected");
+      sendUpdatedItemToDB("Rejected", false);
       navigate(backPath);
+      navigate(0); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
       if (
         (await storedTimeSlots.map((timeSlot) =>
           sendEventToDB(timeSlot, item)
         )) &&
-        (await sendUpdatedItemToDB("Approved and Scheduled"))
+        (await sendUpdatedItemToDB("Approved and Scheduled", true))
       ) {
         console.log("Success submitting events!");
+        clearTimeSlots(); // Clear time slots from redux
         navigate(nextPath);
+        navigate(0); // Reload page after navigating back to fetch changes
       }
     }
   };
@@ -152,12 +157,17 @@ function DonationInfoPage(): JSX.Element {
   };
 
   // Update item status in DB TODO: add other statuses
-  const sendUpdatedItemToDB = async (status: string) => {
-    const updatedItem: Item = {
+  const sendUpdatedItemToDB = async (status: string, newApproval: boolean) => {
+    let updatedItem: Item = {
       ...item,
-      status: status,
+      status,
     };
-
+    if (newApproval) {
+      updatedItem = {
+        ...updatedItem,
+        timeApproved: new Date(),
+      };
+    }
     const response = await updateItem(updatedItem);
     if (!response) {
       // "There was an error updating the item. Please try again later."
@@ -217,9 +227,7 @@ function DonationInfoPage(): JSX.Element {
 
   return (
     <div>
-      {/* <Button onClick={() => console.log(storedTimeSlots)}>
-        Check timeslots
-      </Button> */}
+      {/* <Button onClick={() => console.log(storedStatus)}>Check status</Button> */}
       <AdminNavbar />
       <div id="DonInfoPage">
         <div id="ActiveDonHeader">
