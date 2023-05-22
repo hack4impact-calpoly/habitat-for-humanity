@@ -173,6 +173,7 @@ export const updateItem = async (item: Item) =>
       scheduling: item.scheduling,
       timeAvailability: item.timeAvailability,
       timeSubmitted: item.timeSubmitted,
+      timeApproved: item.timeApproved,
       status: item.status,
       donorId: item.donorId,
     }),
