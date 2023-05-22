@@ -10,6 +10,7 @@ export interface EventSlice {
 }
 
 export interface TimeSlot {
+  id: string;
   eventStart: string;
   eventEnd: string;
   timeSlotString: string;
