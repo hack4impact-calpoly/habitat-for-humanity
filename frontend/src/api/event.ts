@@ -125,17 +125,6 @@ export interface Event {
   endTime: Date;
   volunteerId: string;
   itemId: string;
-  address: string;
-  city: string;
-  zipCode: string;
-  volunteerFirstName: string;
-  volunteerLastName: string;
-  donorFirstName: string;
-  donorLastName: string;
-  itemName: string;
-  phone: string;
-  pickupAvailability: string[][];
-  location: string;
 }
 
 // Add a new Event to the Event DB
@@ -151,17 +140,6 @@ export const addEvent = async (event: Event) =>
       endTime: event.endTime,
       volunteerId: event.volunteerId,
       itemId: event.itemId,
-      address: event.address,
-      city: event.city,
-      zipCode: event.zipCode,
-      volunteerFirstName: event.volunteerFirstName,
-      volunteerLastName: event.volunteerLastName,
-      donorFirstName: event.donorFirstName,
-      donorLastName: event.donorLastName,
-      itemName: event.itemName,
-      phone: event.phone,
-      pickupAvailability: event.pickupAvailability,
-      location: event.location,
     }),
   })
     .then(async (res) => {
