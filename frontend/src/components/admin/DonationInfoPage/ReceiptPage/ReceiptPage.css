@@ -1,0 +1,128 @@
+.contract-form {
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  
+  .header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .form-body {
+    margin-top: 2rem;
+  }
+  
+  .form-section {
+    margin-bottom: 2rem;
+  }
+  
+  .form-section h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 0.5rem;
+  }
+  
+  .form-field {
+    margin-bottom: 1rem;
+    display: flex;
+  }
+  
+  .form-field h4 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    white-space: nowrap;
+    padding-left: 10px;
+    margin: 0;
+  }
+  
+  .form-field input {
+    font-size: 1rem;
+    border-width: 0;
+    border-bottom: 2px solid #000000;
+    height: 2rem;
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    width: 100%;
+  }
+  
+  .signature-field{
+    display: block;
+    margin-bottom: 0px;
+    width: 100%;
+  }
+
+  .signature-field-flex{
+    display: flex;
+    
+  }
+
+  .signature-field input{
+    width: 90%;
+    height: 2rem;
+    font-size: 1.5rem;
+    border-width: 0;
+    border-bottom: 2px solid #000000;
+    height: 2rem;
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    background-color: #D5F7FF;
+    font-weight: 500;
+  }
+
+  .signature-field input:focus{
+    outline: none;
+    background-color: transparent;
+  }
+
+  .value-field{
+    display:flex;
+  }
+
+  .value-div{
+    width: 30%;
+    margin-left:50vw;
+  }
+
+  .head{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .logo-input{
+    display: block;
+  }
+
+  .forFlex {
+    display: flex;
+    justify-content: 'center';
+  }
+
+  .forFlex h2 {
+    margin: 0rem;
+  }
+
+  .forFlex input {
+    height: 2rem;
+    font-size: 1.5rem;
+    border-width: 0;
+    border-bottom: 2px solid #000000;
+    height: 2rem;
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    width: 100%;
+    background-color: #D5F7FF;
+    font-weight: 500;
+  }
+
+  .forFlex input:focus{
+    outline: none;
+    background-color: transparent;
+  }

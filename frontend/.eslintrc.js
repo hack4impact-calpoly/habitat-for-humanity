@@ -28,7 +28,13 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint", "prettier"],
   rules: {
-    "prettier/prettier": "error",
+    // CRLF compatibility
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
     // suppress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",
     // allow prop-spreading
@@ -45,5 +51,11 @@ module.exports = {
     "react/require-default-props": "off",
     "react/function-component-definition": "off",
     "import/prefer-default-export": "off",
+    'prettier/prettier': [
+      'error',
+      {
+        'endOfLine': 'auto',
+      }
+    ]
   },
 };
