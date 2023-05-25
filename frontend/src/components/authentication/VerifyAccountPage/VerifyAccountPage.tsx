@@ -198,7 +198,7 @@ function VerifyAccountPage(): JSX.Element {
   // HTML Body
   return (
     <div>
-      <div id="newPasswordBox">
+      <div id="newVerifyAccountBox">
         <p id="newPasswordText">Verify Account</p>
         <form id="createAccountForm">
           <p className="forgotPasswordMessage">

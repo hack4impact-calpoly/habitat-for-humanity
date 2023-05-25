@@ -1,13 +1,15 @@
 @import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
 @import "config/colors.css";
 
-#newPasswordBox {
+#newVerifyAccountBox {
   width: 50vw;
   max-width: 577px;
   margin: auto;
 
+
   box-sizing: border-box;
   text-align: center;
+
 
   background: var(--white-gray);
   margin: auto;
@@ -17,46 +19,34 @@
   padding: 62px 70px 68px 70px;
 }
 
-#newPasswordText {
+
+#verifyAccountText {
   font-family: Rubik;
   font-weight: 600;
   font-size: 36px;
   line-height: 40px;
   margin: 0px 0px 34px 0px;
   text-align: left;
-
-  color: var(--black);
+  color: #011338;
 }
 
-.accountLabel input[type="radio"] {
-  height: 0.9em;
-}
-
-.accountLabel {
-  color: var(--secondary);
-  font-weight: bold;
-  align-content: center;
-}
-
-#nameBox {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-#firstNameBox {
-  width: 197px;
-}
-
-#lastNameBox {
-  width: 197px;
-}
 
 .labelInputBox {
   display: flex;
   flex-direction: column;
   text-align: left;
 }
+
+
+.verificationCodeMessage{
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: left;
+}
+
 
 .formLabel {
   font-family: Rubik;
@@ -65,10 +55,13 @@
   font-size: 13px;
   line-height: 18px;
 
+
   color: var(--black);
+
 
   margin: 21px 0px 5px 0px;
 }
+
 
 .clickable {
   cursor: pointer;
@@ -76,10 +69,12 @@
   text-decoration: underline;
 }
 
+
 .unclickable {
   cursor: not-allowed;
   color: var(--dark-gray);
 }
+
 
 .inputBox {
   font-family: Rubik;
@@ -92,9 +87,11 @@
   font-weight: 500;
 }
 
+
 #submitButton {
   background: var(--primary);
   border: none;
+
 
   font-family: Rubik;
   font-style: normal;
@@ -107,51 +104,26 @@
   color: var(--white);
 }
 
+
+#sendNewCodeLink{
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 600;
+  color:var(--secondary);
+}
+
+
 #submitButton:hover {
   cursor: pointer;
   border: 3px solid rgba(2, 5, 12, 0.15);
 }
 
-.createAccountLogin {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 13px;
-  line-height: 16px;
-  margin: 0px 0px 0px 0px;
-
-  color: var(--black);
-}
-
-.logInBox {
-  display: flex;
-  justify-content: right;
-}
-
-#logInLink {
-  color: var(--secondary);
-  margin: 0px 0px 0px 5px;
-}
-
-#logInLink:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-#passwordBox {
-  font-family: Rubik;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.passwordIcon {
-  color: var(--primary);
-}
 
 #codeLine {
   display: flex;
   justify-content: space-between;
 }
+
 
 @media only screen and (max-height: 800px) {
   #createAccountText {
@@ -160,29 +132,21 @@
     margin: 0px 0px 24px 0px;
   }
 
+
   #userTypeLabel {
     margin: 0px 0px 0px 0px;
     font-size: 11px;
   }
 
-  .accountLabel {
-    font-size: 10px;
-  }
-
-  #firstNameBox {
-    width: 138px;
-  }
-
-  #lastNameBox {
-    width: 138px;
-  }
 
   /* .formLabel {
         font-size: 10px;
         line-height: 13px;
 
+
         margin: 15px 0px 4px 0px;
     } */
+
 
   .inputBox {
     height: 30px;
@@ -190,6 +154,7 @@
     padding: 6px;
     font-size: 9px;
   }
+
 
   #signUpButton {
     font-size: 12px;
@@ -199,16 +164,19 @@
     width: 100%;
   }
 
+
   .createAccountLogin {
     font-size: 10px;
     line-height: 11px;
     margin: 0px 0px 0px 0px;
   }
 
+
   #logInLink {
     margin: 0px 0px 0px 3px;
   }
 }
+
 
 @media only screen and (max-width: 700px) {
   #createAccountText {
@@ -217,33 +185,41 @@
     margin: 0px 0px 24px 0px;
   }
 
+
   #accountTypeBox {
     margin: 0px 0px 3px 0px;
   }
+
 
   #userTypeLabel {
     margin: 0px 0px 0px 0px;
     font-size: 10px;
   }
 
+
   .accountLabel {
     font-size: 10px;
   }
+
 
   #firstNameBox {
     width: 138px;
   }
 
+
   #lastNameBox {
     width: 138px;
   }
+
 
   /* .formLabel {
         font-size: 10px;
         line-height: 13px;
 
+
         margin: 15px 0px 4px 0px;
     } */
+
 
   .inputBox {
     height: 30px;
@@ -251,6 +227,7 @@
     padding: 6px;
     font-size: 9px;
   }
+
 
   #signUpButton {
     font-size: 12px;
@@ -260,13 +237,56 @@
     width: 100%;
   }
 
+
   .createAccountLogin {
     font-size: 10px;
     line-height: 11px;
     margin: 0px 0px 0px 0px;
   }
 
+
   #logInLink {
     margin: 0px 0px 0px 3px;
   }
+}
+
+
+@media only screen and (max-width: 640px) {
+  #verifyAccountBox {
+    width: 90vw;
+    background: none;
+    margin: auto;
+    margin-top: 40vh;
+    box-shadow: none;
+    padding: 35px;
+  }
+
+
+  .verificationCodeMessage{
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+
+  .formLabel{
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+
+  #sendNewCodeLink{
+    font-family: 'Rubik';
+    font-style: normal;
+    font-size: 14px;
+    line-height: 17px;
+    font-weight: 600;
+  }
+
+
 }
