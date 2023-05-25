@@ -12,6 +12,7 @@ import SubmitInfo from "../../donor/donation/SubmitInfo";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import ReceiptPage from "./ReceiptPage/ReceiptPage";
 import temp from "./temp.png";
+import AdminSchedulePage from "./AdminSchedulePage";
 
 require("./DonationInfoPage.css");
 
@@ -38,11 +39,9 @@ function TabPanel(props: {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      <Box sx={{ p: 3 }}>
+        <Typography>{children}</Typography>
+      </Box>
     </div>
   );
 }
@@ -161,10 +160,7 @@ function DonationInfoPage(): JSX.Element {
             </div>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            {/* Scheduling Page goes here
-                          Replace image with actual scheduling component
-                        */}
-            <img src={temp} alt="Schedule" style={{ paddingTop: "4rem" }} />
+            <AdminSchedulePage times={avaiTimes} />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <ReceiptPage />

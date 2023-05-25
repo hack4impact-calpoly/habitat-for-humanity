@@ -1,9 +1,10 @@
 @import "config/colors.css";
 
 #donDropoffPage {
-  margin-top: 100px;
-  width: 800px;
-  transform: translateX(40%);
+  margin-top: 5%;
+  margin-left: 20%;
+  margin-right: 20%;
+  width: 60%;
 }
 
 .donDropoffPickupHeader {
@@ -55,8 +56,6 @@
   font-weight: bold;
   background-color: var(--white);
   border: 2px solid var(--tertiary);
-  width: 200px;
-  margin-right: 50px;
 }
 
 .nextButton {
@@ -64,7 +63,6 @@
   font-weight: bold;
   color: var(--white);
   border: 2px solid var(--tertiary);
-  width: 200px;
 }
 
 .backButton:hover,
@@ -72,24 +70,20 @@
   cursor: pointer;
 }
 
-@media only screen and (max-width: 1160px) {
-    #donDropoffPage {
-        width: 90%;
-        transform: translateX(5%);
-    }
-}
-
 @media only screen and (max-width: 640px) {
-    .backButton, .nextButton {
-        padding: 8px 40px;
-    }
-    .backButton {
-      width: 150px;
-    }
-    
-    .nextButton {
-      width: 150px;
-    }
+  .backButton,.nextButton {
+    padding: 10px 45px;
+  }
+  #donDropoffPage {
+    margin-top: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+  }
+  #donPDOptions {
+    flex-direction: column;
+  }
+  #radioPickUp {
+    margin-top: 5%;
+  }
 }
-
-
