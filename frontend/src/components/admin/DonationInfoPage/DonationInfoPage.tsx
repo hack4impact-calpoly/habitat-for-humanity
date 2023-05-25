@@ -52,7 +52,7 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-const imagesPool = [{ src: sofa1 }];
+const imagesPool: string[] = [sofa1];
 
 const address = "1 Grand Avenue \nSan Luis Obispo, CA 93407";
 
