@@ -198,10 +198,10 @@ function VerifyAccountPage(): JSX.Element {
   // HTML Body
   return (
     <div>
-      <div id="verifyAccountBox">
-        <p id="verifyAccountText">Verify Account</p>
-        <form id="verifyAccountForm">
-          <p className="verificationCodeMessage">
+      <div id="newVerifyAccountBox">
+        <p id="newPasswordText">Verify Account</p>
+        <form id="createAccountForm">
+          <p className="forgotPasswordMessage">
             Please check your email for a verification code, and fill out the
             fields accordingly.
           </p>

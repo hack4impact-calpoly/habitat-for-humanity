@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Box, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import {
@@ -152,35 +153,56 @@ function DonatorProfileEditPage(): JSX.Element {
     return true;
   }
 
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
   return (
     <div id="donatorProfileEditPage">
       <DonatorNavbar />
       <div id="editProfileBox">
         <p id="editProfileText">Edit Profile</p>
         <form id="form">
-          <div id="nameBox">
-            <div className="labelInputBox" id="firstNameBox">
-              <p className="formLabel">First Name</p>
-              <input
-                className="inputBox"
-                value={firstName}
-                type="text"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setFirstName(e.target.value)
-                }
-              />
-            </div>
-            <div className="labelInputBox" id="lastNameBox">
-              <p className="formLabel">Last Name</p>
-              <input
-                className="inputBox"
-                value={lastName}
-                type="text"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setLastName(e.target.value)
-                }
-              />
-            </div>
+          <div id="DonorNameBox">
+            <Box
+              sx={{
+                display: isMobile ? "" : "flex",
+                width: "80vw",
+              }}
+            >
+              <div className="labelInputBox" id="firstNameBox">
+                <Box
+                  sx={{
+                    width: isMobile ? "80vw" : "200px",
+                  }}
+                >
+                  <p className="formLabel">First Name</p>
+                  <input
+                    className="inputBox"
+                    value={firstName}
+                    type="text"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setFirstName(e.target.value)
+                    }
+                  />
+                </Box>
+              </div>
+              <div className="labelInputBox" id="lastNameBox">
+                <Box
+                  sx={{
+                    width: isMobile ? "80vw" : "200px",
+                  }}
+                >
+                  <p className="formLabel">Last Name</p>
+                  <input
+                    className="inputBox"
+                    value={lastName}
+                    type="text"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setLastName(e.target.value)
+                    }
+                  />
+                </Box>
+              </div>
+            </Box>
           </div>
           <div className="labelInputBox">
             <p className="formLabel">Email</p>
