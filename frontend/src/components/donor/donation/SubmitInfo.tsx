@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Auth } from "aws-amplify";
+import { updateDonorID } from "redux/donationSlice";
 import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../api/item";
 import { addImages, getImages, getImageByID } from "../../../api/image";
 import { RootState } from "../../../redux/store";
@@ -17,6 +19,7 @@ interface DummyComponentProps {
   dropOff?: boolean;
   component?: boolean;
 }
+
 // TODO: eventually use DonorScheduleDropoff/Pickup pages instead of this component
 const SubmitInfo: React.FC<DummyComponentProps> = ({
   name,
@@ -47,6 +50,24 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const storedDropOff = useSelector(
     (state: RootState) => state.donation.dropoff
   );
+  const storedDonorID = useSelector(
+    (state: RootState) => state.donation.donorID
+  );
+  const storedEvents = useSelector(
+    (state: RootState) => state.donation.pickupTimes
+  );
+  const dispatch = useDispatch();
+
+  const setCurrentUserID = async () => {
+    Auth.currentUserInfo().then((user) => {
+      const { attributes = {} } = user;
+      dispatch(updateDonorID(attributes["custom:id"]));
+    });
+  };
+
+  useEffect(() => {
+    setCurrentUserID();
+  }, []);
 
   name = storedName;
   dimensions = storedDimensions;
@@ -104,8 +125,10 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
       city: storedDonation.city,
       state: storedDonation.state,
       zipCode: storedDonation.zipCode.toString(),
+      donorId: storedDonation.donorID,
+      timeApproved: new Date(),
       scheduling: storedDonation.dropoff ? "Dropoff" : "Pickup",
-      timeAvailability: [[new Date(), new Date()]], // TODO
+      timeAvailability: storedDonation.pickupTimes, // TODO
       timeSubmitted: new Date(),
       status: "Needs Approval",
     };
@@ -138,7 +161,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   return (
     <div>
       {!component && <DonatorNavbar />}
-
+      {console.log(storedDonation.pickupTimes)}
       <div id={!component ? "MainContainer" : ""}>
         <div id="SubmitInfoPage">
           <div id="information">
