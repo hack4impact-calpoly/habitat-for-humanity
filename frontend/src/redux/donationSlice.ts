@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 export interface DonationState {
   name: string;
   dimensions: string;
+  photos: string[];
   address: string;
   city: string;
   state: string;
@@ -20,6 +21,7 @@ export interface Event {
 const initialState: DonationState = {
   name: "",
   dimensions: "",
+  photos: [],
   address: "",
   city: "",
   state: "",
@@ -38,6 +40,9 @@ export const donationSlice = createSlice({
     },
     updateDimensions: (state, action) => {
       state.dimensions = action.payload;
+    },
+    updatePhotos: (state, action) => {
+      state.photos = action.payload;
     },
     updateAddress: (state, action) => {
       state.address = action.payload;
@@ -67,6 +72,7 @@ export const donationSlice = createSlice({
 export const {
   updateName,
   updateDimensions,
+  updatePhotos,
   updateAddress,
   updateCity,
   updateZip,

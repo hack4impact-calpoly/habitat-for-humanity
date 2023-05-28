@@ -17,12 +17,14 @@ const userEndpoints = require("./routes/userRoutes.js")
 const itemEndpoints = require("./routes/itemRoutes.js")
 const eventEndpoints = require("./routes/eventRoutes.js")
 const imageEndpoints = require("./routes/imageRoutes.js")
+const emailEndpoints = require("./routes/emailRoutes.js")
 
 
 app.use("/api/users", userEndpoints)
 app.use("/api/items", itemEndpoints)
 app.use("/api/events", eventEndpoints)
 app.use("/api/images", imageEndpoints)
+app.use("/api/email", emailEndpoints)
 
 
 app.use((req, res, next) => {

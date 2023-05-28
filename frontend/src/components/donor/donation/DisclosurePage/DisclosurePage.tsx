@@ -84,13 +84,19 @@ const DisclosurePage = () => {
         style={{
           display: "flex",
           flexDirection: "row",
-          marginLeft: isMobileScreen ? "5vw" : "40vw",
+          alignItems: "top",
+          marginLeft: "5vw",
           marginTop: "30px",
           marginRight: "15vw",
+          justifyContent: "right",
           fontSize: isMobileScreen ? "15px" : "17px",
         }}
       >
-        <input type="checkbox" onChange={handleCheckboxChange} />
+        <input
+          type="checkbox"
+          onChange={handleCheckboxChange}
+          style={{ height: "1rem", marginRight: "0.5rem", marginTop: "0.3rem" }}
+        />
         <strong>
           I understand and agree to the Donation Guidelines and Terms and
           Regulations
