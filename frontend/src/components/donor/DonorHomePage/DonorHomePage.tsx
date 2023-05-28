@@ -12,7 +12,7 @@ function DonatorHomePage(): JSX.Element {
   const dispatch = useDispatch();
 
   const routeChange = (): void => {
-    const donateLocationPath = "/Donor/Donate/ItemInfo";
+    const donateLocationPath = "/Donor/Donate/Disclosure";
     dispatch(clearAll());
     navigate(donateLocationPath);
   };
