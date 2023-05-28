@@ -82,6 +82,7 @@ function ActiveDonationPage(): JSX.Element {
                       navigate(`DonationInfo/${d._id}/`);
                     }}
                     style={{ textDecoration: "none" }}
+                    className="tableRow"
                   >
                     <TableCell scope="row">{getDonorName(d.donorId)}</TableCell>
                     <TableCell>{d.scheduling}</TableCell>
