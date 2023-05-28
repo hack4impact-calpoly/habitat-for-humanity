@@ -17,6 +17,7 @@ import DonationInfoTab, { TimeSlot } from "./DonationInfoTab";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import ReceiptPage from "./ReceiptPage/ReceiptPage";
 import AdminSchedulePage from "./AdminSchedulePage";
+import sofa1 from "../../donor/donation/images/sofa-01.png";
 
 require("./DonationInfoPage.css");
 
@@ -56,6 +57,10 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
+const imagesPool: string[] = [sofa1];
+
+const date = new Date();
+
 const emptyItem: Item = {
   _id: "",
   name: "",
@@ -70,6 +75,7 @@ const emptyItem: Item = {
   timeSubmitted: new Date(),
   timeApproved: new Date(),
   status: "",
+  photos: [""],
 };
 
 const emptyUser: User = {

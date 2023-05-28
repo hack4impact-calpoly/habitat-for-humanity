@@ -106,6 +106,7 @@ export interface Item {
   name: string;
   // images: [mongoose.Schema.ObjectId]
   size: string;
+  photos: string[];
   address: string;
   city: string;
   state: string;
@@ -131,6 +132,7 @@ export const addItem = async (item: Item) =>
     body: JSON.stringify({
       name: item.name,
       size: item.size,
+      photos: item.photos,
       address: item.address,
       city: item.city,
       zipCode: item.zipCode,
