@@ -5,7 +5,7 @@ import sofa1 from "../images/sofa-01.png";
 
 require("./SubmitPickUpPage.css");
 
-const imagesPool = [{ src: sofa1 }];
+const imagesPool: string[] = [sofa1];
 
 const address = "1 Grand Avenue \nSan Luis Obispo, CA 93407";
 

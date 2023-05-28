@@ -118,7 +118,7 @@
   #buttonBox {
     margin: 38px 0px 0px 0px;
     height: 34px;
-    display: flex;
+  display: flex;
     flex-direction: row;
   }
 

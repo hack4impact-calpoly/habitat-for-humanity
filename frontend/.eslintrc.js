@@ -51,11 +51,5 @@ module.exports = {
     "react/require-default-props": "off",
     "react/function-component-definition": "off",
     "import/prefer-default-export": "off",
-    'prettier/prettier': [
-      'error',
-      {
-        'endOfLine': 'auto',
-      }
-    ]
   },
 };
