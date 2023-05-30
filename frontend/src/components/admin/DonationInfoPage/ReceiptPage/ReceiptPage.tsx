@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { Item } from "api/item";
+import { User } from "api/user";
 import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
-
+import moment from "moment";
 import logo from "./logo.png";
 
 // import Tabs from "@mui/material/Tabs";
@@ -29,22 +30,45 @@ const exportPdf = (id: string) => {
   );
 };
 
-function ReceiptPage(): JSX.Element {
+interface ReceiptTabProps {
+  item: Item;
+  donor: User;
+}
+
+function ReceiptPage(props: ReceiptTabProps): JSX.Element {
+  const { item, donor } = props;
+  const fullName = `${donor?.firstName} ${donor?.lastName}`;
+  const fullZip = `${item?.city}, California ${item?.zipCode}`;
   const [contract, setContract] = useState({
-    donationFor: "",
-    firstName: "",
-    lastName: "",
+    donationFor: fullName ?? "",
+    firstName: donor?.firstName ?? "",
+    lastName: donor?.lastName ?? "",
     businessName: "",
-    address: "",
-    cityStateZipcode: "",
-    phone: "",
+    address: item?.address ?? "",
+    cityStateZipcode: fullZip ?? "",
+    phone: donor?.phone ?? "",
     cell: "",
-    email: "",
-    donatedItems: "",
+    email: donor?.email ?? "",
+    donatedItems: item?.name ?? "",
     value: "",
     signature: "",
-    date: "",
+    date: moment().format("MM/DD/YYYY"),
   });
+
+  useEffect(() => {
+    setContract((prevContract) => ({
+      ...prevContract,
+      donationFor: fullName ?? "",
+      firstName: donor?.firstName ?? "",
+      lastName: donor?.lastName ?? "",
+      email: donor?.email ?? "",
+      phone: donor?.phone ?? "",
+      address: item?.address ?? "",
+      cityStateZipcode: fullZip ?? "",
+      donatedItems: item?.name ?? "",
+    }));
+  }, [props]);
+
   return (
     <div>
       <div id="receiptPage" style={{ padding: "5%" }}>

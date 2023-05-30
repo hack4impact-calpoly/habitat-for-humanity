@@ -25,6 +25,7 @@ const navBarHeaders: string[] = [
 const donationApprovalsPath: string = "/Admin/DonationApproval";
 const signoutPath: string = "/";
 const adminHomePath: string = "/Admin";
+const calendarPath: string = "/Admin/Calendar";
 const donationInfoPath: string = "/Admin/DonationInfo";
 
 function AdminNavbar(): JSX.Element {
@@ -56,8 +57,8 @@ function AdminNavbar(): JSX.Element {
   };
 
   const navlinkHandler = (header: string): string => {
-    if (header === navBarHeaders[0]) {
-      return "/Admin/Calendar";
+    if (header === navBarHeaders[CALENDAR_HEADER]) {
+      return calendarPath;
     }
     if (header === navBarHeaders[AVAILABILITY_HEADER]) {
       return adminHomePath;
