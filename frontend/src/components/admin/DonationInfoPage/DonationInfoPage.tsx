@@ -275,7 +275,7 @@ function DonationInfoPage(): JSX.Element {
             <AdminSchedulePage timeSlots={availableTimes} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <ReceiptPage />
+            <ReceiptPage item={item} donor={donor} />
           </TabPanel>
         </div>
         <div id="DonInfoButtons">
