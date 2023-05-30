@@ -33,6 +33,7 @@ import VerifyAccountPage from "./components/authentication/VerifyAccountPage/Ver
 // ------------ Admin Imports-----------//
 import ActiveDonations from "./components/admin/ActiveDonationsPage/ActiveDonationsPage";
 import DonationInfo from "./components/admin/DonationInfoPage/DonationInfoPage";
+import AdminCalendar from "./components/admin/AdminCalendar/AdminCalendar";
 
 const rootElement = document.getElementById("root");
 const PGate = PersistGate as any;
@@ -56,6 +57,8 @@ render(
 
             {/* Admin Other Routes */}
             <Route path="ActiveDonations" element={<ActiveDonations />} />
+            {/*<Route path="DonationInfo" element={<DonationInfo />} />*/}
+            <Route path="Calendar" element={<AdminCalendar />} />
             <Route path="DonationInfo/:id" element={<DonationInfo />} />
 
             {/* Donor Catch all case -> Donor Error */}
