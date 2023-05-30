@@ -14,8 +14,8 @@ const eventSchema = new mongoose.Schema(
     title: { type: String, required: true },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
-    volunteerId: { type: mongoose.Types.ObjectId, required: true },
-    itemId: { type: mongoose.Types.ObjectId, required: true },
+    volunteerId: { type: String, required: true }, // This should be changed to volunteer Id eventually
+    itemId: { type: String, required: true }, // This should be changed to itemId eventually
     address: { type: String, required: true },
     city: { type: String, required: true },
     zipCode: { type: String, required: true },
