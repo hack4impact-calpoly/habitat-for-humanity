@@ -4,8 +4,6 @@
   margin-top: 5%; 
   margin-left: 20%;
   margin-right: 20%;
-
-  background: var(--white-gray);
 }
 
 #donLocHeader {
@@ -40,6 +38,10 @@
   border: 1px solid var(--box-border);
   box-sizing: border-box;
   font-size: 16px;
+}
+
+#donBox {
+  position: relative;
 }
 
 .donLocInput[type="number"] {
