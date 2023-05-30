@@ -296,7 +296,8 @@ function CreateAccountPage(): JSX.Element {
                 sx={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "space-between",
+                  justifyContent: "left",
+                  gap: "0.5rem",
                   width: "100%",
                 }}
               >
@@ -312,19 +313,6 @@ function CreateAccountPage(): JSX.Element {
                     }}
                   />
                   <span className="accountLabel">donor</span>
-                </Box>
-                <Box className="radioContainer">
-                  <input
-                    type="radio"
-                    className="userTypeButton"
-                    value="volunteer"
-                    name="userType"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setUserType(e.target.value);
-                      validateUserType(e.target.value);
-                    }}
-                  />
-                  <span className="accountLabel">volunteer</span>
                 </Box>
                 <Box className="radioContainer">
                   <input
