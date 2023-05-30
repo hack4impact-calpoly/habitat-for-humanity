@@ -7,6 +7,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Modal, Box, Typography } from "@mui/material";
 import { Types } from "mongoose";
+import moment from "moment";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import SmallCalendar from "./SmallCalendar";
 
@@ -118,27 +119,35 @@ function AdminCalendar(): JSX.Element {
   const [clickedEvent, setClickedEvent] = useState<EventClickArg>();
 
   //  right now we are using an endpoint that does not filter by date
-  /*
+
   useEffect(() => {
     console.log("calendar events updated", calendarEvents);
   }, [calendarEvents]);
-*/
 
   useEffect(() => {
-    //  need to strip the timezone indicator in order for fc api to process start and end dates correctly
     fetch("http://localhost:3001/api/events/")
       .then((response) => response.json())
       .then((data) => {
-        const updatedEvents = data.map((event: DonationEvent) => ({
-          ...event, // spread the existing properties of the event object
-          start: event.startTime.toString().split(".")[0],
-          end: event.endTime.toString().split(".")[0],
-          textColor: "Black",
-          backgroundColor: "transparent",
-          borderColor: "transparent",
-        }));
+        const updatedEvents = data.map((event: any) => {
+          const strippedStart = moment
+            .utc(event.startTime)
+            .utcOffset("-08:00")
+            .format();
+          const strippedEnd = moment
+            .utc(event.endTime)
+            .utcOffset("-08:00")
+            .format();
 
-        //  console.log("update: ", updatedEvents);
+          return {
+            ...event,
+            start: strippedStart,
+            end: strippedEnd,
+            textColor: "Black",
+            backgroundColor: "transparent",
+            borderColor: "transparent",
+          };
+        });
+
         setCalendarEvents(updatedEvents);
       })
       .catch((error) => console.error(error));
@@ -190,19 +199,23 @@ function AdminCalendar(): JSX.Element {
                 <p style={{ marginTop: "10px", marginBottom: "0px" }}>
                   <span style={modalTitleText}>Volunteer </span>
                   <span style={modalDefaultText}>
-                    {clickedEvent!.event.extendedProps.volunteer}
+                    {clickedEvent!.event.extendedProps.volunteerFirstName}{" "}
+                    {clickedEvent!.event.extendedProps.volunteerLastName}
                   </span>
                 </p>
               </p>
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
                 <span style={modalTitleText}>Donor </span>
                 <span style={modalDefaultText}>
-                  {clickedEvent!.event.extendedProps.name}
+                  {clickedEvent!.event.extendedProps.donorFirstName}{" "}
+                  {clickedEvent!.event.extendedProps.donorLastName}
                 </span>
               </p>
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
-                <span style={modalTitleText}> Item</span>
-                <span style={modalDefaultText}> (need to fetch this)</span>
+                <span style={modalTitleText}>Item </span>
+                <span style={modalDefaultText}>
+                  {clickedEvent!.event.extendedProps.itemName}
+                </span>
               </p>
 
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
