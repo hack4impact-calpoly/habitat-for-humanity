@@ -1,17 +1,23 @@
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import React from "react";
-
 import Box from "@mui/material/Box";
+import { getUserByID, User } from "api/user";
+import { getItemByID, Item, updateItem } from "api/item";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-
-import ContactInfo from "../../donor/donation/ContactInfo";
-import sofa1 from "../../donor/donation/images/sofa-01.png";
-import SubmitInfo from "../../donor/donation/SubmitInfo";
+import moment from "moment";
+import { addEvent } from "api/event";
+import { Button } from "@mui/material";
+import { useSelector } from "react-redux";
+import { clearTimeSlots } from "redux/eventSlice";
+import { RootState } from "../../../redux/store";
+import DonationInfoTab, { TimeSlot } from "./DonationInfoTab";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import ReceiptPage from "./ReceiptPage/ReceiptPage";
-import temp from "./temp.png";
+import AdminSchedulePage from "./AdminSchedulePage";
+import sofa1 from "../../donor/donation/images/sofa-01.png";
 
 require("./DonationInfoPage.css");
 
@@ -38,11 +44,9 @@ function TabPanel(props: {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      <Box sx={{ p: 3 }}>
+        <Typography component="span">{children}</Typography>
+      </Box>
     </div>
   );
 }
@@ -53,41 +57,183 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-const imagesPool = [{ src: sofa1 }];
+const imagesPool: string[] = [sofa1];
 
-const address = "1 Grand Avenue \nSan Luis Obispo, CA 93407";
+const date = new Date();
 
-const avaiTimes = [
+const emptyItem: Item = {
+  _id: "",
+  name: "",
+  size: "",
+  address: "",
+  city: "",
+  state: "",
+  zipCode: "",
+  scheduling: "",
+  timeAvailability: [{ start: "", end: "" }],
+  donorId: "",
+  timeSubmitted: new Date(),
+  timeApproved: new Date(),
+  status: "",
+  photos: [""],
+};
+
+const emptyUser: User = {
+  id: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  userType: "",
+};
+
+const emptyTimeSlots: TimeSlot[] = [
   {
-    day: "Tuesday, January 11",
-    hours: [
-      "10:00 AM to 11:00AM",
-      "11:00 AM to 12:00 PM",
-      "12:00 PM to 1:00 PM",
-    ],
-  },
-  {
-    day: "Wednesday, January 12",
-    hours: [
-      "10:00 AM to 11:00AM",
-      "11:00 AM to 12:00 PM",
-      "12:00 PM to 1:00 PM",
-    ],
-  },
-  {
-    day: "Friday, January 14",
-    hours: ["2:00 PM to 3:00PM", "3:00 PM to 4:00PM", "4:00 PM to 5:00PM"],
+    id: "",
+    eventStart: "",
+    eventEnd: "",
+    timeSlotString: "",
+    dayString: "",
+    volunteer: "",
   },
 ];
 
+const getTime = (time: string) =>
+  time ? moment(time).format("h:mm A") : "N/A";
+
+const getDay = (time: string) =>
+  time ? moment(time).utc().format("dddd, MMMM Do YYYY") : "N/A";
+const getDayShort = (time: string) =>
+  time ? moment(time).format("dddd, MMMM Do YYYY") : "N/A";
+
 function DonationInfoPage(): JSX.Element {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState<number>(0);
+  const [item, setItem] = useState<Item>(emptyItem);
+  const [donor, setDonor] = useState<User>(emptyUser);
+  const [availableTimes, setAvailableTimes] =
+    useState<TimeSlot[]>(emptyTimeSlots);
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+  const buttonNavigation = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): Promise<void> => {
+    const backPath: string = "/Admin";
+    const nextPath: string = "/Admin";
+
+    if (e.currentTarget.value === "back") {
+      sendUpdatedItemToDB(storedStatus, false);
+      navigate(backPath);
+      navigate(0); // Reload page after navigating back to fetch changes
+    } else if (e.currentTarget.value === "reject") {
+      updateItem({ ...item, status: "Rejected" });
+      sendUpdatedItemToDB("Rejected", false);
+      navigate(backPath);
+      navigate(0); // Reload page after navigating back to fetch changes
+    } else if (e.currentTarget.value === "approve") {
+      if (
+        (await storedTimeSlots.map((timeSlot) =>
+          sendEventToDB(timeSlot, item)
+        )) &&
+        (await sendUpdatedItemToDB("Approved and Scheduled", true))
+      ) {
+        console.log("Success submitting events!");
+        clearTimeSlots(); // Clear time slots from redux
+        navigate(nextPath);
+        navigate(0); // Reload page after navigating back to fetch changes
+      }
+    }
+  };
+
+  const sendEventToDB = (timeSlot: TimeSlot, item: Item) => {
+    const event = {
+      title: `${item.name} ${item.scheduling}`,
+      startTime: new Date(timeSlot.eventStart),
+      endTime: new Date(timeSlot.eventEnd),
+      volunteerId: "dd9b6616-6353-438a-8bb8-a0b022c32b5e", // TODO add correct volunteer id
+      itemId: item._id === undefined ? "" : item._id,
+    };
+    console.log(event);
+    const response = addEvent(event);
+    if (!response) {
+      // "There was an error saving the events. Please try again later."
+      // TODO: add error message to user
+    }
+    return response;
+  };
+
+  // Update item status in DB TODO: add other statuses
+  const sendUpdatedItemToDB = async (status: string, newApproval: boolean) => {
+    let updatedItem: Item = {
+      ...item,
+      status,
+    };
+    if (newApproval) {
+      updatedItem = {
+        ...updatedItem,
+        timeApproved: new Date(),
+      };
+    }
+    const response = await updateItem(updatedItem);
+    if (!response) {
+      // "There was an error updating the item. Please try again later."
+      // TODO: add error message to user
+    }
+    return response;
+  };
+
+  // Fetch and set item on load
+  useEffect(() => {
+    const fetchedItem =
+      typeof id === "string"
+        ? getItemByID(id)
+            .then((item) => setItem(item))
+            .catch((err) => {
+              console.log(err);
+              setItem(emptyItem);
+            })
+        : setItem(emptyItem);
+  }, []);
+
+  // Fetch and set donor and available times on item change
+  useEffect(() => {
+    if (item.donorId !== "") {
+      const fetchedDonor = getUserByID(item.donorId)
+        .then((donor) => setDonor(donor))
+        .catch((err) => {
+          console.log(err);
+          setDonor(emptyUser);
+        });
+    }
+    if (item.timeAvailability) {
+      const newAvailableTimes: TimeSlot[] = item.timeAvailability.map(
+        (event) => ({
+          id: `${event.start},${event.end}`,
+          eventStart: event.start,
+          eventEnd: event.end,
+          timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
+          dayString: `${getDay(event.start)}`,
+          volunteer: "",
+        })
+      );
+      setAvailableTimes(newAvailableTimes);
+    }
+  }, [item]);
 
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue);
   };
+
+  const storedStatus = useSelector(
+    (state: RootState) => state.event.donationStatus
+  );
+  const storedTimeSlots = useSelector(
+    (state: RootState) => state.event.timeSlots
+  );
+
   return (
     <div>
+      {/* <Button onClick={() => console.log(storedStatus)}>Check status</Button> */}
       <AdminNavbar />
       <div id="DonInfoPage">
         <div id="ActiveDonHeader">
@@ -118,67 +264,44 @@ function DonationInfoPage(): JSX.Element {
               </Tabs>
             </Box>
           </div>
-          <TabPanel value={value} index={0}>
-            <div id="DonInfo">
-              <div id="DonationInfoPage">
-                <ContactInfo
-                  name="John Smith"
-                  email="johndoe@gmail.com"
-                  phone="123-456-7890"
-                />
-                <SubmitInfo
-                  name="Sofa"
-                  dimensions='83" x 32" x 38"'
-                  photos={imagesPool}
-                  location={address}
-                  dropOff={false}
-                  component
-                />
-                <div id="TimeHours">
-                  <h2 className="TimeAvailability">Time Availability</h2>
-                  <div id="TimeTable">
-                    {avaiTimes.map((element, index) => {
-                      const { day } = element;
-                      const { hours } = element;
-                      return (
-                        <tr key={index}>
-                          <h4 className="donDropoffRow" key={index}>
-                            {day}
-                          </h4>
-                          <div id="DayHours">
-                            {hours.map((element1, index1) => (
-                              <div id="EachDayHours" key={index1}>
-                                {element1}
-                              </div>
-                            ))}
-                          </div>
-                        </tr>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <TabPanel value={value} index={0} component="span">
+            <DonationInfoTab
+              item={item}
+              donor={donor}
+              timeSlots={availableTimes}
+            />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            {/* Scheduling Page goes here
-                          Replace image with actual scheduling component
-                        */}
-            <img src={temp} alt="Schedule" style={{ paddingTop: "4rem" }} />
+            <AdminSchedulePage timeSlots={availableTimes} />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <ReceiptPage />
           </TabPanel>
         </div>
         <div id="DonInfoButtons">
-          <button type="button" className="backButton">
+          <button
+            type="button"
+            className="backButton"
+            value="back"
+            onClick={buttonNavigation}
+          >
             Back
           </button>
           <div id="NextButtons">
-            <button type="button" className="rejectButton">
+            <button
+              type="button"
+              className="rejectButton"
+              value="reject"
+              onClick={buttonNavigation}
+            >
               Reject Donation
             </button>
-            <button type="button" className="approveButton">
+            <button
+              type="button"
+              className="approveButton"
+              value="approve"
+              onClick={buttonNavigation}
+            >
               Approve and Schedule
             </button>
           </div>

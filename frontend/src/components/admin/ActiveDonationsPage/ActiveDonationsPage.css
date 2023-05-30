@@ -15,8 +15,14 @@
   font-weight: 600;
 }
 
+.tableRow:hover {
+  background-color: var(--gray-light);
+  cursor: pointer;
+}
+
 .needApproval {
   color: var(--orange);
   margin: 0;
   font-weight: 600;
-}
+  text-decoration: none;
+  }
