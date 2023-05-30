@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateDimensions, updateName } from "redux/donationSlice";
-import ProgressBar from "./ProgressBar";
-import Dropzone from "./Dropzone";
-import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+import {
+  updateDimensions,
+  updateName,
+  updatePhotos,
+} from "redux/donationSlice";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { RootState } from "../../../redux/store";
+import DonatorNavbar from "../DonorNavbar/DonorNavbar";
+import Dropzone from "./Dropzone";
+import ProgressBar from "./ProgressBar";
 
 const ContentContainer = styled.div`
   margin-left: 20%;
@@ -99,8 +103,10 @@ function Donation(): JSX.Element {
   const storedDims = useSelector(
     (state: RootState) => state.donation.dimensions
   );
+  const storedPhotos = useSelector((state: RootState) => state.donation.photos);
   const [itemDescription, setItemDescription] = useState(storedDesc);
   const [itemDimensions, setItemDimensions] = useState(storedDims);
+  const [photos, setPhotos] = useState(storedPhotos);
   const [descError, setDescError] = useState("");
   const [dimError, setDimError] = useState("");
 
@@ -116,6 +122,13 @@ function Donation(): JSX.Element {
         navigate(nextPath);
       }
     }
+  };
+
+  const backButtonNavigation = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): void => {
+    const nextPath: string = "/Donor/Donate/Disclosure";
+    navigate(nextPath);
   };
 
   const validInput = () => {
@@ -136,6 +149,12 @@ function Donation(): JSX.Element {
   const updateStore = () => {
     dispatch(updateName(itemDescription));
     dispatch(updateDimensions(itemDimensions));
+    dispatch(updatePhotos(photos));
+  };
+
+  const dropzoneProps = {
+    photos,
+    setPhotos,
   };
 
   return (
@@ -171,9 +190,26 @@ function Donation(): JSX.Element {
         </InputSectionContainer>
         <UploadContainer>
           <SubHeader>Item Photos</SubHeader>
-          <Dropzone />
+          <Dropzone {...dropzoneProps} />
         </UploadContainer>
-        <div id="donPickupButtons">
+        <div
+          id="donPickupButtons"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: "30px",
+            marginTop: "30px",
+          }}
+        >
+          <button
+            type="button"
+            value="backButton"
+            className="donPickupButton backButton"
+            onClick={backButtonNavigation}
+          >
+            Back
+          </button>
           <button
             type="button"
             value="nextButton"

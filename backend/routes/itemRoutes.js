@@ -89,14 +89,14 @@ router.post("/", async (req, res) => {
       status
     });
 
-    //validate provided availability is [[startTime, endTime], ...]
-    for (let i = 0; i < req.body.timeAvailability.length; i++) {
-      if (req.body.timeAvailability[i].length !== 2) {
-        res.status(400).send(
-          {error: `Availability provided not in format [[startTime, endTime]]: "${req.body.availability}"`}
-          );
-      }
-    }
+    // //validate provided availability is [[startTime, endTime], ...]
+    // for (let i = 0; i < req.body.timeAvailability.length; i++) {
+    //   if (req.body.timeAvailability[i].length !== 2) {
+    //     res.status(400).send(
+    //       {error: `Availability provided not in format [[startTime, endTime]]: "${req.body.availability}"`}
+    //       );
+    //   }
+    // }
     // console.log(newUser);
     await newItem.save();
     res.send({msg: `${newItem} added to the ItemDB`});

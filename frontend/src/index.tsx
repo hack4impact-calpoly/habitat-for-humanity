@@ -19,6 +19,7 @@ import NewPasswordPage from "./components/authentication/NewPasswordPage/NewPass
 // ----------- Donor Imports------------//
 import DonatorHome from "./components/donor/DonorHomePage/DonorHomePage";
 // Donor "Make A Donation" Imports
+import DisclosurePage from "./components/donor/donation/DisclosurePage/DisclosurePage";
 import DonatorItemInfo from "./components/donor/donation/Donation";
 import DonatorLocation from "./components/donor/DonorLocationPage/DonorLocationPage";
 import DonatorScheduleDropoffPickup from "./components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage";
@@ -56,8 +57,9 @@ render(
 
             {/* Admin Other Routes */}
             <Route path="ActiveDonations" element={<ActiveDonations />} />
-            <Route path="DonationInfo" element={<DonationInfo />} />
+            {/*<Route path="DonationInfo" element={<DonationInfo />} />*/}
             <Route path="Calendar" element={<AdminCalendar />} />
+            <Route path="DonationInfo/:id" element={<DonationInfo />} />
 
             {/* Donor Catch all case -> Donor Error */}
             <Route path="*" element={<p>ERROR 404: Page Not Found</p>} />
@@ -80,6 +82,7 @@ render(
 
             {/* Donor Make a Donation Pages */}
             <Route path="Donate">
+              <Route path="Disclosure" element={<DisclosurePage />} />
               <Route path="ItemInfo" element={<DonatorItemInfo />} />
               <Route path="Location" element={<DonatorLocation />} />
               <Route
