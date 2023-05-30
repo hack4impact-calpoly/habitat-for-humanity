@@ -1,6 +1,8 @@
 import React from "react";
 
 // React Router Imports
+import DonationHistory from "components/donor/DonationHistory/DonationHistory";
+
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -77,6 +79,16 @@ render(
               <Route
                 path="*"
                 element={<p>ERROR 404: Profile Page Not Found</p>}
+              />
+            </Route>
+            {/* Donor History Page */}
+            <Route path="History">
+              <Route path="" element={<DonationHistory />} />
+
+              {/* Profile Page catch all case -> History Error */}
+              <Route
+                path="*"
+                element={<p>ERROR 404: History Page Not Found</p>}
               />
             </Route>
 

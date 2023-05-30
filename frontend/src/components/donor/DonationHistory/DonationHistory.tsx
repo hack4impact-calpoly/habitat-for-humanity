@@ -7,19 +7,17 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
-import { User, getDonors } from "api/user";
+import { User, getDonors, getUserByID } from "api/user";
 import moment from "moment";
 import "moment-timezone";
-import { Item, getItems, getItemsByDonorID } from "../../../api/item";
-import DonorNavbar from "../DonorNavbar/DonorNavbar";
 import { Auth } from "aws-amplify";
 import { useSelector, useDispatch } from "react-redux";
 import { updateDonorID } from "redux/donationSlice";
 import { RootState } from "../../../redux/store";
+import { Item, getItems, getItemsByDonorID } from "../../../api/item";
+import DonorNavbar from "../DonorNavbar/DonorNavbar";
 
-
-
-require("./ActiveDonationsPage.css");
+require("./DonationHistory.css");
 
 const header = [
   "Donor",
