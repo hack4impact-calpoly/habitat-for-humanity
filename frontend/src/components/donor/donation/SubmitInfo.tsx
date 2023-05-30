@@ -267,7 +267,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               style={{
                 display: "flex",
                 flexDirection: "row",
-                justifyContent: "flex-start",
+                justifyContent: "space-between",
               }}
             >
               <button
