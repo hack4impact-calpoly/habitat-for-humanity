@@ -37,6 +37,7 @@
 #donPickupButtons {
   margin: 50px 0;
   display: flex;
+  justify-content: space-between;
 }
 
 .fc h2 {
