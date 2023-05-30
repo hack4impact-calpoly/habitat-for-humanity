@@ -16,9 +16,7 @@ const SIGN_OUT_HEADER = 5;
 const navBarHeaders: string[] = [
   "Calendar",
   "Availablility",
-  "Donation Approvals",
-  "History",
-  "Profile",
+  "Donations",
   "Sign Out",
 ];
 
