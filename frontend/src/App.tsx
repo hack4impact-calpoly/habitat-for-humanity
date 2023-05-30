@@ -18,7 +18,7 @@ import React from "react";
 /* Admin Screens */
 // import Donation from "components/donor/donation/Donation";
 
-import DonationInfoPage from "components/admin/DonationInfoPage/DonationInfoPage";
+// import DonationInfoPage from "components/admin/DonationInfoPage/DonationInfoPage";
 // import ActiveDonationPage from "components/admin/ActiveDonationsPage/ActiveDonationsPage";
 /* Donator Screens */
 // import DonatorNavbar from './components/donator/DonatorNavbar/DonatorNavbar';
@@ -51,7 +51,7 @@ Amplify.configure(awsExports);
 function App(): JSX.Element {
   return (
     // <SuccessPage />
-    // <LoginPage />
+    <LoginPage />
     // <DonatorHomePage />
     // <CreateAccountPage />
     // <DonorSchedulePickUp/>
@@ -65,7 +65,7 @@ function App(): JSX.Element {
     // <SubmitPickUpMultiplePhotoPage />
     // <DonatorNextStepsPage />
     // <DonorScheduleDropoffPickupPage />
-    <DonationInfoPage />
+    // <DonationInfoPage />
     // <ActiveDonationPage />
   );
 }
