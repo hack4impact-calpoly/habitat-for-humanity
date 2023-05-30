@@ -27,6 +27,7 @@
     "install": "^0.13.0",
     "jspdf": "^2.5.1",
     "moment": "^2.29.1",
+    "mongoose": "^7.0.4",
     "moment-timezone": "^0.5.41",
     "npm": "^9.6.1",
     "prop-types": "^15.8.1",
