@@ -121,8 +121,10 @@ export const getEventsByLocation = async (location: string) =>
 // Format for an event
 export interface Event {
   title: string;
-  pick_up_availability: string;
-  location: string;
+  startTime: Date;
+  endTime: Date;
+  volunteerId: string;
+  itemId: string;
 }
 
 // Add a new Event to the Event DB
@@ -134,8 +136,10 @@ export const addEvent = async (event: Event) =>
     method: "POST",
     body: JSON.stringify({
       title: event.title,
-      pick_up_availability: event.pick_up_availability,
-      location: event.location,
+      startTime: event.startTime,
+      endTime: event.endTime,
+      volunteerId: event.volunteerId,
+      itemId: event.itemId,
     }),
   })
     .then(async (res) => {

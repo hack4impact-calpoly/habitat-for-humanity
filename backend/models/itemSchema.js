@@ -1,3 +1,4 @@
+
 // import { ObjectId, Schema, Types } from 'mongoose';
 const mongoose = require("mongoose");
 const { itemConnection } = require("../connection");
@@ -18,6 +19,7 @@ const { itemConnection } = require("../connection");
 //     status: string;
 // }
 
+
 const itemSchema = new mongoose.Schema(
   {
     name: {type: String, required: true },
@@ -27,8 +29,11 @@ const itemSchema = new mongoose.Schema(
     city: { type: String, required: true },
     zipCode: { type: String, required: true },
     scheduling: {type: String, required: true},
-    timeAvailability: { type: [[Date, Date]], required: true },
-    //donorId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    timeAvailability: [{
+      start: {type: String, required: false},
+      end: {type: String, required: false}
+    }],
+    donorId: { type: String, required: true },
     timeSubmitted: { type: Date, required: true },
     timeApproved: { type: Date, required: false },
     status: { type: String, required: true },

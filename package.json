@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "react-aws-s3": "^1.5.0"
+  }
+}
