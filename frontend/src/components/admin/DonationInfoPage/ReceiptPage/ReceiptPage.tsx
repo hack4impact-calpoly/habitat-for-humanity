@@ -15,7 +15,7 @@ require("./ReceiptPage.css");
 const exportPdf = (id: string) => {
   const input = document.getElementById(id);
 
-  html2canvas(input!, { scale: 1 }).then(
+  html2canvas(input!, { scale: 5 }).then(
     (canvas: { toDataURL: (arg0: string) => any }) => {
       const imgData = canvas.toDataURL("image/jpeg");
       const pdfDOC = new JsPDF();
