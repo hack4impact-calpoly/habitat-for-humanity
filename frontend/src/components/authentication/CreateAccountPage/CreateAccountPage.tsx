@@ -318,14 +318,14 @@ function CreateAccountPage(): JSX.Element {
                   <input
                     type="radio"
                     className="userTypeButton"
-                    value="administrator"
+                    value="volunteer"
                     name="userType"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setUserType(e.target.value);
                       validateUserType(e.target.value);
                     }}
                   />
-                  <span className="accountLabel">administrator</span>
+                  <span className="accountLabel">volunteer</span>
                 </Box>
               </Box>
             </Box>
