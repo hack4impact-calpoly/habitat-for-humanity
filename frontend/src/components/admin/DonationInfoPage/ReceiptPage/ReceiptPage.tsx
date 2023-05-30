@@ -24,7 +24,7 @@ const exportPdf = (id: string) => {
       const width = pdfDOC.internal.pageSize.getWidth();
       const height = pdfDOC.internal.pageSize.getHeight();
 
-      pdfDOC.addImage(imgData, "JPEG", 0, 0, width, height);
+      pdfDOC.addImage(imgData, "JPEG", 0, height / 50, width, height * 0.75);
       pdfDOC.save("receipt.pdf");
     }
   );

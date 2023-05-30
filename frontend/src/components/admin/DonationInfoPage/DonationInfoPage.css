@@ -54,6 +54,7 @@
 .rejectButton {
   background-color: var(--white);
   font-weight: bold;
+  cursor: pointer;
   color: var(--red);
   border: 2px solid var(--red);
   margin-right: 12px;
@@ -61,6 +62,7 @@
 
 .approveButton {
   color: var(--white);
+  cursor: pointer;
   font-weight: bold;
   background-color: var(--tertiary);
   border: 2px solid var(--tertiary);
