@@ -225,11 +225,12 @@ function AdminCalendar(): JSX.Element {
                 </span>
               </p>
               <span>
+                {/* prettier-ignore */}
                 <button
                   type="button"
                   style={viewDonnationButton}
                   onClick={() => {
-                    window.location.href = "/Admin/DonationInfo";
+                    window.location.href = `/Admin/DonationInfo/${clickedEvent!.event.extendedProps.itemId}`;
                   }}
                 >
                   View Donation
