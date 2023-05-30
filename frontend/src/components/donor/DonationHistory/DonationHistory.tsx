@@ -53,8 +53,10 @@ function DonationHistory(): JSX.Element {
   }, []);
 
   useEffect(() => {
+    console.log(storedDonorID);
     getItemsByDonorID(storedDonorID).then((res) => setItems(res));
-    getDonors().then((res) => setDonors(res));
+    getUserByID(storedDonorID).then((res) => setDonors([res]));
+    console.log(donors);
   }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -62,6 +64,7 @@ function DonationHistory(): JSX.Element {
   };
 
   const getDonorName = (id: string) => {
+    console.log(id);
     const donor = donors.find((d) => d.id === id);
     return `${donor?.firstName} ${donor?.lastName}`;
   };
