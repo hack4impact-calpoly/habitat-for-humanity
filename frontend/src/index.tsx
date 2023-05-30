@@ -57,7 +57,7 @@ render(
 
             {/* Admin Other Routes */}
             <Route path="ActiveDonations" element={<ActiveDonations />} />
-            {/*<Route path="DonationInfo" element={<DonationInfo />} />*/}
+            <Route path="DonationInfo" element={<DonationInfo />} />
             <Route path="Calendar" element={<AdminCalendar />} />
             <Route path="DonationInfo/:id" element={<DonationInfo />} />
 
