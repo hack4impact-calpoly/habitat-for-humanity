@@ -48,6 +48,13 @@ function ActiveDonationPage(): JSX.Element {
   const convertTime = (time: Date) =>
     time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
 
+  const sortReceivedTime = (don1: any, don2: any) => {
+    if (don1.timeSubmitted > don2.timeSubmitted) {
+      return -1;
+    }
+    return 1;
+  };
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -72,6 +79,7 @@ function ActiveDonationPage(): JSX.Element {
             </TableHead>
             <TableBody>
               {items
+                .sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
                   // TODO: wrap parent link to new page
