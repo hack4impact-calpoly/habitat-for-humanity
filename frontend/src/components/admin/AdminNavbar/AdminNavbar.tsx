@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "images/logo.png";
+import logo from "images/ReStoreLogo.png";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -16,7 +16,7 @@ const SIGN_OUT_HEADER = 5;
 const navBarHeaders: string[] = [
   "Calendar",
   "Availablility",
-  "Donations",
+  "Active Donations",
   "Sign Out",
 ];
 
