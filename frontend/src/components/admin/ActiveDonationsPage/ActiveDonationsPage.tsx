@@ -19,7 +19,7 @@ const header = [
   "Donor",
   "Type",
   "Date/Time Received",
-  "Date/Time Approved",
+  "Date/Time Approved-Rejected",
   "Status",
 ];
 
