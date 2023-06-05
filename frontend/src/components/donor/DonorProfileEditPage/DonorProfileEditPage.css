@@ -1,145 +1,136 @@
-@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
 @import "config/colors.css";
 
-
 #editProfileBox {
-    width: 410px;
-    height: 600px;
-    margin: auto;
-
-    margin-top: 50vh;
-    transform: translateY(-50%);
-    justify-content: center;
-}
-#editProfileText{
-    font-family: Rubik;
-    font-weight: 700;
-    font-size: 30px;
-    line-height: 35px;
-    margin: 0px 0px 5px 0px;
-
-    color: var(--primary);
+  width: 420px;
+  height: 620px;
+  margin: auto;  
+  position: absolute;
+  top: 25vh;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
-#nameBox {
-    display: flex;
-    align-items: center;
-    margin: 0px 0px 0px 0px;
-    border: none;
+#editProfileText {
+  font-family: Rubik;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 35px;
+  margin: 0px 0px 5px 0px;
+
+  color: var(--primary);
+}
+
+#DonorNameBox {
+  display: flex;
+  align-items: center;
+  margin: 0px 0px 0px 0px;
+  border: none;
 }
 
 #firstNameBox {
-    width: auto !important;
+  margin-right: 5%;
 }
 #lastNameBox {
-    width: auto !important;
-    margin: 0x 0px 0px 30px;
+  margin: 0x 0px 0px 30px;
 }
 
 .labelInputBox {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
 .formLabel {
-    font-family: Rubik;
-    font-style: normal;
-    font-weight: bolder;
-    font-size: 14px;
-    line-height: 19px;
-    
-    color: var(--black);
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: bolder;
+  font-size: 14px;
+  line-height: 19px;
 
-    margin: 18px 0px 5px 0px;
+  color: var(--black);
+
+  margin: 18px 0px 5px 0px;
 }
 
 .labelInputBox .inputBox {
-    border: 1px solid var(--input-box);
-    font-family: Rubik;
-    box-sizing: border-box;
-    height: 48px;
-    width: 100%;
-    padding: 9px;
-    font-size: 14px;
-    font-weight: 400;
+  border: 1px solid var(--input-box);
+  font-family: Rubik;
+  box-sizing: border-box;
+  height: 48px;
+  width: 100%;
+  padding: 9px;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 #buttonBox {
-    margin: 33px 0px 0px 0px;
-    height: 40px;
-    display: flex;
-    flex-direction: row;
+  margin: 33px 0px 0px 0px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
 }
 
-.buttons{
-    height: 100%;
-    width: 150px;
-    font-family: Rubik;
-    font-weight: 600;
+.buttons {
+  height: 100%;
+  width: 150px;
+  font-family: Rubik;
+  font-weight: 600;
 }
 
-.buttons:hover{
-    cursor:pointer;
+.buttons:hover {
+  cursor: pointer;
 }
 
 #backButton {
-    background: var(--white);
-    color: var(--tertiary);
-    border: 2px solid var(--tertiary);
+  background: var(--white);
+  color: var(--tertiary);
+  border: 2px solid var(--tertiary);
 }
 
 #spacing {
-    flex-grow: 1;
+  flex-grow: 1;
 }
-
-
 
 #saveChangesButton {
-    background: var(--tertiary);
-    border: 0px solid var(--tertiary);
-    color: var(--white);
+  background: var(--tertiary);
+  border: 0px solid var(--tertiary);
+  color: var(--white);
 }
 
-@media only screen and (max-width: 525px) {
-    /* 85% original size */
-    #editProfileBox {
-        width: 349px;
-        height: 510px;
-    
-        margin-top: 50vh;
-        transform: translateY(-50%);
-    }
-    #editProfileText{
-        font-size: 26px;
-        line-height: 30px;
-        margin: 0px 0px 4px 0px;
-    }
-    
-    #firstNameBox {
-        width: auto !important;
-    }
-    #lastNameBox {
-        width: auto !important;
-        margin: 0x 0px 0px 25px;
-    }
-    
-    .formLabel {
-        font-size: 12px;
-        line-height: 16px;
+@media only screen and (max-width: 640px) {
+  #editProfileBox {
+    width: 80vw;
+  }
+  #editProfileText {
+    font-size: 26px;
+    line-height: 30px;
+    margin: 0px 0px 4px 0px;
+  }
+  .formLabel {
+    font-size: 12px;
+    line-height: 16px;
 
-        margin: 15px 0px 4px 0px;
-    }
-    
-    #buttonBox {
-        margin: 38px 0px 0px 0px;
-        height: 34px;
-        display: flex;
-        flex-direction: row;
-    }
-    
-    .buttons{
-        height: 100%;
-        width: 127px;
-    }
+    margin: 15px 0px 4px 0px;
+  }
+
+  #buttonBox {
+    margin: 38px 0px 0px 0px;
+    height: 34px;
+  display: flex;
+    flex-direction: row;
+  }
+
+  .buttons {
+    height: 100%;
+    width: 127px;
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 1024px) and (max-height: 600px){
+  #editProfileBox {
+    top: 50vh;
+  }
 }

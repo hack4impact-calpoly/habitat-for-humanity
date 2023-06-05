@@ -1,49 +1,51 @@
 #donLocPage {
-    height: fit-content;
-    width: 800px;
-    background: var(--white-gray);
-    margin: auto;
-    margin-top: 40vh;
-    transform: translateY(-50%);
-    padding: 1%;
+  height: fit-content;
+  width: 60%;
+  margin-top: 5%; 
+  margin-left: 20%;
+  margin-right: 20%;
 }
 
 #donLocHeader {
-    margin-top: 0;
-    color: var(--orange)
+  margin-top: 0;
+  color: var(--orange);
 }
 
 .inputLabel {
-    color: var(--primary);
-    font-weight: bold;
-    margin: 0;
-    margin-bottom: 3px;
+  color: var(--primary);
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 3px;
 }
 
 #donLocTopInputs {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 #docLocBottomInputs {
-    margin-top: 30px;
-    border-radius: 0;
+  margin-top: 30px;
+  border-radius: 0;
 }
 
-#docLocBottomInputs::after{
-    border-radius: 0;
+#docLocBottomInputs::after {
+  border-radius: 0;
 }
 
 .donLocInput {
-    width: 380px;
-    height: 35px;
-    border: 1px solid var(--box-border);
-    box-sizing: border-box;
-    font-size: 16px;
+  width: 27vw;
+  height: 35px;
+  border: 1px solid var(--box-border);
+  box-sizing: border-box;
+  font-size: 16px;
 }
 
-.donLocInput[type=number] {
-    -moz-appearance: textfield;
+#donBox {
+  position: relative;
+}
+
+.donLocInput[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .donLocInput::-webkit-outer-spin-button,
@@ -53,185 +55,75 @@
 }
 
 .donLocInput:focus {
-    outline: none;
-    border-width: 2px;
+  outline: none;
+  border-width: 2px;
 }
 
 #docLocButtons {
-    margin-top: 50px;
-    display: flex;
-    justify-content: space-between;
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.backButton, .nextButton {
-    padding: 10px 45px;
-
+.backButton,
+.nextButton {
+  padding: 10px 45px;
 }
 
 .backButton {
-    color: var(--tertiary);
-    font-weight: bold;
-    background-color: var(--white);
-    border: 2px solid var(--tertiary);
+  color: var(--tertiary);
+  font-weight: bold;
+  background-color: var(--white);
+  border: 2px solid var(--tertiary);
 }
 
 .nextButton {
-    background-color: var(--tertiary);
+  background-color: var(--tertiary);
+  font-weight: bold;
+  color: var(--white);
+  border: 2px solid var(--tertiary);
+}
+
+.backButton:focus,
+.nextButton:focus {
+  outline: none;
+  border: 1px solid var(--box-border);
+}
+
+.backButton:hover,
+.nextButton:hover {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 640px) {
+  #donLocPage {
+    width: 80%;
+    margin-top: 5%; 
+    margin-left: 10%;
+    margin-right: 10%;
+  
+    background: var(--white-gray);
+  }
+  #donLocTopInputs {
+    display: contents;
+    justify-content: space-between;
+    }
+  .donLocInput {
+    width: 80vw;
+  }
+  .backButton, .nextButton {
+    padding: 10px 30px;
+  }
+  .inputLabel {
+    color: var(--primary);
     font-weight: bold;
-    color: var(--white);
-    border: 2px solid var(--tertiary);
-}
+    margin-bottom: 0;
+    margin-top: 10%;
+  }
+  #docLocBottomInputs {
+    margin-top: 10%;
+    border-radius: 0;
+    margin-bottom: 10vh;
+  }
 
-.backButton:focus, .nextButton:focus {
-    outline: none;
-    border: 1px solid var(--box-border);
-}
-
-.backButton:hover, .nextButton:hover {
-    cursor: pointer;
-}
-
-@media only screen and (max-width: 850px) {
-    #donLocPage {
-        width: 640px;
-    }
-
-    .donLocInput {
-        width: 280px;
-        height: 35px;
-        font-size: 17px;
-    }
-}
-
-@media only screen and (max-width: 750px) {
-    #donLocPage {
-        width: 580px;
-    }
-
-    .donLocInput {
-        width: 280px;
-        height: 32px;
-        font-size: 16px;
-    }
-}
-
-@media only screen and (max-width: 650px) {
-    #donLocPage {
-        width: 530px;
-    }
-
-    .donLocInput {
-        width: 250px;
-        height: 30px;
-        font-size: 16px;
-    }
-}
-
-
-@media only screen and (max-width: 550px) {
-    #donLocPage {
-        width: 400px;
-    }
-
-    .donLocInput {
-        width: 100%;
-        height: 35px;
-        font-size: 18px;
-        margin: 0px 0px 15px 0px;
-    }
-
-    .backButton, .nextButton {
-        padding: 10px 45px;
-    }
-
-    #donLocTopInputs {
-        display: contents;
-        justify-content: space-between;
-    }
-
-    #docLocBottomInputs {
-        margin-top: 0px;
-        border-radius: 0;
-    }
-    
-    #docLocBottomInputs::after{
-        border-radius: 0;
-    }
-}
-
-@media only screen and (max-width: 450px) {
-    #donLocPage {
-        width: 300px;
-    }
-
-    .donLocInput {
-        height: 32px;
-        font-size: 15px;
-    }
-
-    .backButton, .nextButton {
-        padding: 10px 35px;
-    }
-
-    #donLocTopInputs {
-        display: contents;
-        justify-content: space-between;
-    }
-
-    #docLocBottomInputs {
-        margin-top: 0px;
-        border-radius: 0;
-    }
-}
-
-@media only screen and (max-width: 350px) {
-    #donLocPage {
-        width: 200px;
-    }
-
-    .donLocInput {
-        height: 32px;
-        font-size: 12px;
-    }
-
-    #donLocHeader {
-        font-size: 20px;
-    }
-
-    .inputLabel {
-        font-size: 13px;
-    }
-
-    .backButton, .nextButton {
-        padding: 6px 20px;
-        font-size: 12px;
-    }
-
-    #donLocTopInputs {
-        display: contents;
-        justify-content: space-between;
-    }
-
-    #docLocBottomInputs {
-        margin-top: 0px;
-        border-radius: 0;
-    }
-}
-
-@media only screen and (max-height: 550px) {
-    #donLocPage {
-        margin-top: 50vh;
-    }
-}
-
-@media only screen and (max-height: 350px) {
-    #donLocPage {
-        margin-top: 60vh;
-    }
-}
-
-@media only screen and (max-height: 300px) {
-    #donLocPage {
-        margin-top: 70vh;
-    }
 }

@@ -17,17 +17,46 @@
 <br>
 
 ## :computer: For Devs
+### Checking out an Issue:
 
+1. Make sure you currently have the dev branch checked out:
+
+```bash
+git checkout dev
+```
+
+2. Pull any changes from the previous sprint:
+
+```bash
+git pull
+```
+
+3. Navigate to the `/frontend` and `/backend`
+
+4. Be sure to install any packages as a result of the previous sprint:
+
+```bash
+npm i
+```
+
+5. Name the branch with the GitHub issue ID and a short description of the task:
+
+```bash
+git checkout -b 1-Login-Page
+```
+*The GitHub issue # is the key found on a GitHub Issues task
+
+### Getting Started:
 1. Clone the repository...
 ```
 git clone https://github.com/hack4impact-calpoly/habitat-for-humanity.git
 ```
-3. Navigate to the `/frontend` or `/backend` folder
-4. Run...
+2. Navigate to the `/frontend` or `/backend` folder
+3. Run...
 ```
 npm i
 ```
-5. Run...
+4. Run...
 ```
 npm start
 ```
