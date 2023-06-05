@@ -7,14 +7,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
-import { User, getDonors, getUserByID } from "api/user";
+import { User, getUserByID } from "api/user";
 import moment from "moment";
 import "moment-timezone";
 import { Auth } from "aws-amplify";
 import { useSelector, useDispatch } from "react-redux";
 import { updateDonorID } from "redux/donationSlice";
 import { RootState } from "../../../redux/store";
-import { Item, getItems, getItemsByDonorID } from "../../../api/item";
+import { Item, getItemsByDonorID } from "../../../api/item";
 import DonorNavbar from "../DonorNavbar/DonorNavbar";
 
 require("./DonationHistory.css");
@@ -53,10 +53,8 @@ function DonationHistory(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    console.log(storedDonorID);
     getItemsByDonorID(storedDonorID).then((res) => setItems(res));
     getUserByID(storedDonorID).then((res) => setDonors([res]));
-    console.log(donors);
   }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -82,7 +80,7 @@ function DonationHistory(): JSX.Element {
     <div>
       <DonorNavbar />
       <div id="activeDonPage">
-        <h1 id="activeDonHeader">Active Donations</h1>
+        <h1 id="activeDonHeader">Donation History</h1>
         <TableContainer>
           <Table>
             <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
