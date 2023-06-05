@@ -26,7 +26,7 @@ router.get("/id/:userId", async (req, res) => {
 //get all volunteers
 router.get("/volunteers", async (req, res) => {
   try {
-    const volunteers = await User.find({ userType: "Volunteer"}).exec();
+    const volunteers = await User.find({ userType: "volunteer"}).exec();
     res.send(volunteers)
   } catch (error) {
     res.status(400).send(error);
@@ -36,7 +36,7 @@ router.get("/volunteers", async (req, res) => {
 //get all donors
 router.get("/donors", async (req, res) => {
   try {  
-    const donor = await User.find({ userType: "Donor"})
+    const donor = await User.find({ userType: "donor"})
     res.send(donor)
   } catch (error) {
     res.status(400).send(error);
@@ -46,7 +46,7 @@ router.get("/donors", async (req, res) => {
 //get all admins
 router.get("/admins", async (req, res) => {
   try {  
-    const admins = await User.find({userType: "Admin"})
+    const admins = await User.find({userType: "administrator"})
     res.send(admins)
   } catch (error) {
     res.status(400).send(error);
@@ -90,7 +90,7 @@ router.post("/", async (req, res) => {
 //update user firstName
 router.put("/firstName/:userId", async (req, res) => {
   try {
-    let user = await User.findOne({ _id: req.params.userId })
+    let user = await User.findOne({ id: req.params.userId })
     user.firstName = req.body.firstName;
 
     await user.save();
@@ -114,7 +114,7 @@ router.put("/firstName/:userId", async (req, res) => {
 //update user lastName
 router.put("/lastName/:userId", async (req, res) => {
   try {
-    let user = await User.findOne({ _id: req.params.userId })
+    let user = await User.findOne({ id: req.params.userId })
     user.lastName = req.body.lastName;
 
     await user.save();
@@ -138,7 +138,7 @@ router.put("/lastName/:userId", async (req, res) => {
 //update user email
 router.put("/email/:userId", async (req, res) => {
   try {
-    let user = await User.findOne({ _id: req.params.userId })
+    let user = await User.findOne({ id: req.params.userId })
     user.email = req.body.email;
 
     await user.save();
@@ -162,11 +162,11 @@ router.put("/email/:userId", async (req, res) => {
 //update user phone
 router.put("/phone/:userId", async (req, res) => {
   try {
-    let user = await User.findOne({ _id: req.params.userId })
+    let user = await User.findOne({ id: req.params.userId })
     user.phone = req.body.phone;
 
     await user.save();
-
+    console.log(req.body.phone);
     res.send({
       msg: `Updated user "${req.params.userId}" with new phone number: "${req.body.phone}"`
     });

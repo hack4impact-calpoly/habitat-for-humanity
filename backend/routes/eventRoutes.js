@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router()
+var mongoose = require('mongoose');
 const Event = require('../models/eventSchema.js');
 const Item = require('../models/itemSchema.js');
 const User = require('../models/userSchema.js');
@@ -19,6 +20,7 @@ router.get("/", async (req, res) => {
 //get event by eventId
 router.get("/eventId/:eventId", async (req, res) => {
   try {
+    console.log("look here", req.params.eventId)
     const event = await Event.findOne({ _id: req.params.eventId})
     res.status(200).send(event)
     console.log('Got event with id %s', req.params.eventId)
@@ -55,14 +57,14 @@ router.get("/location/:city/:address", async (req, res) => {
  * @param {string} title          title of the new Event
  * @param {Date} startTime        starting time represented as a Date object
  * @param {Date} endTime          ending time represented as a Date object
- * @param {ObjectId} volunteerId  volunteer assigned to event
+ * @param {string} volunteerId  volunteer assigned to event
  * @param {ObjectId} itemId       item to be picked up
 */
-router.post('/', async (req, res) => {
+router.post('/', async (req, res) => { //TODO add error handling
   const { title, startTime, endTime, volunteerId, itemId } = req.body;
-  const volunteer = await User.findOne({ _id: volunteerId })
+  const volunteer = await User.findOne({ id: volunteerId})
   const item = await Item.findOne({ _id: itemId })
-  const donor = await User.findOne({ _id: item.donorId })
+  const donor = await User.findOne({ id: item.donorId })
 
   let newEvent = new Event({
     "title": title,
@@ -84,18 +86,22 @@ router.post('/', async (req, res) => {
   try {
     newEvent.save();
     res.send({msg: `${newEvent} added to the EventDB`});
+    console.log(`Added ${title} to EventDB`)
   } catch (error) {
     res.status(400).send(error);
   }
 });
 
+//not sure if this put request includes the location field described in the event schema
 //update event given key-value pair(s)
 router.put("/eventId/:eventId", async (req, res) => {
   try {
     let event = await Event.findOne({ _id: req.params.eventId });
 
-    if (req.body.title) {event.title = req.body.title;}
-    if (req.body.startTime) {event.email = req.body.startTime;}
+    console.log("look here !!", req.body)
+    console.log("look here", req.body.startTime)
+    if (req.body.title) {event.title = req.body.title}
+    if (req.body.startTime) {event.startTime = req.body.startTime;}
     if (req.body.endTime) {event.endTime = req.body.endTime;}
     if (req.body.volunteerId) {event.volunteerId = req.body.volunteerId;}
     if (req.body.itemId) {event.itemId = req.body.itemId;}
@@ -108,7 +114,7 @@ router.put("/eventId/:eventId", async (req, res) => {
     if (req.body.donorLastName) {event.donorLastName = req.body.donorLastName;}
     if (req.body.itemName) {event.itemName = req.body.itemName;}
     if (req.body.phone) {event.phone = req.body.phone;}
-
+  
     await event.save();
     res.send({msg: `Updated event ${req.params.eventId} to: ${event}`});
   } catch(error) {

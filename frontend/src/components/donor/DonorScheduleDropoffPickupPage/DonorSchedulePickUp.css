@@ -1,96 +1,98 @@
 @import "config/colors.css";
 
 #donatorPickupPage {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    flex-wrap: wrap;
-    overflow-x: hidden;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow-x: hidden;
 }
 
-#calendarView, #calendarEdit {
-    flex-basis: 45%;
+#calendarView,
+#calendarEdit {
+  flex-basis: 45%;
 }
 
 #donatorPickupHeader {
-    color: var(--primary)
+  color: var(--primary);
 }
 
 .donatorPickUpTime {
-    border: 1px solid var(--box-border);
-    padding: 2%;
-    margin-bottom: 2%;
-    font-weight: 500;
+  border: 1px solid var(--box-border);
+  padding: 2%;
+  margin-bottom: 2%;
+  font-weight: 500;
 }
 
 .donatorPickupCheckbox {
-    border-radius: 50%;
-    margin-right: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 #donatorPickupDesc {
-    font-style: italic;
-    color: var(--dark-gray);
+  font-style: italic;
+  color: var(--dark-gray);
 }
 
 #donPickupButtons {
-    margin: 50px 0;
-}
-
-.donPickupButton {
-    margin-right: 20px;
+  margin: 50px 0;
+  display: flex;
+  justify-content: space-between;
 }
 
 .fc h2 {
-    font-size: 20px;
- }
+  font-size: 20px;
+}
 
 @media only screen and (max-width: 1324px) {
-    #calendarView {
-        flex-basis: 50%;
-    }
+  #calendarView {
+    flex-basis: 50%;
+  }
 
-    #calendarEdit {
-        flex-basis: 45%
-    }
+  #calendarEdit {
+    flex-basis: 45%;
+  }
 }
 
 @media only screen and (max-width: 1164px) {
-    #calendarView {
-        flex-basis: 52%;
-    }
+  #calendarView {
+    flex-basis: 52%;
+  }
 
-    #calendarEdit {
-        flex-basis: 40%
-    }
+  #calendarEdit {
+    flex-basis: 40%;
+  }
 
-    #donatorPickupHeader {
-        font-size: 25px;
-    }
+  #donatorPickupHeader {
+    font-size: 25px;
+  }
 }
 
 @media only screen and (max-width: 1082px) {
-    #donatorPickupPage {
-        display: block;
-    }
+  #donatorPickupPage {
+    display: block;
+  }
+  #donPickupButtons {
+    justify-content: space-between;
+  }
 }
 
 @media only screen and (max-width: 412px) {
-    .fc .fc-toolbar-title {
-        font-size: 20px;
-    }
+  .fc .fc-toolbar-title {
+    font-size: 20px;
+  }
 
-    .fc .fc-button {
-        font-size: 12px;
-    }
+  .fc .fc-button {
+    font-size: 12px;
+  }
 }
 
 @media only screen and (max-width: 412px) {
-    .fc .fc-toolbar-title {
-        font-size: 15px;
-    }
+  .fc .fc-toolbar-title {
+    font-size: 15px;
+  }
 
-    .fc .fc-button {
-        font-size: 10px;
-    }
+  .fc .fc-button {
+    font-size: 10px;
+  }
 }

@@ -1,169 +1,96 @@
 @import "config/colors.css";
-@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
 
-
-#DonInfoPage{
-    font-family: Rubik;
-    padding: 3% 8%;
-    padding-bottom: 70px;
+#DonInfoPage {
+  font-family: Rubik;
+  padding: 3% 8%;
+  padding-bottom: 70px;
 }
 
-#ActiveDonHeader{
-    font-family: Rubik;
-    color: var(--primary);
-    font-weight: bold;
+#ActiveDonHeader {
+  font-family: Rubik;
+  color: var(--primary);
+  font-weight: bold;
 }
-
 
 #DonInfoBox {
-    box-sizing: border-box;
-    background: var(--white-gray);
-    box-shadow: 0px 8px 21px var(--box-shadow);
-    padding: 62px 77px 68px 77px;
+  box-sizing: border-box;
+  background: var(--white-gray);
+  box-shadow: 0px 8px 21px var(--box-shadow);
+  padding: 62px 77px 68px 77px;
 }
 
-
-.IndividTabs{
-    font-size: 20px;
-    font-family: Rubik;
-    font-weight: bold;
-    text-transform: none;
+.IndividTabs {
+  font-size: 20px;
+  font-family: Rubik;
+  font-weight: bold;
+  text-transform: none;
 }
-
 
 #DonationInfoPage {
-    font-family: Rubik;
-    padding-bottom: 70px;
+  font-family: Rubik;
+  padding-bottom: 70px;
 }
 
 #DonInfoButtons {
-    margin-top: 25px;
-    display: flex;
-    justify-content: space-between;
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.backButton, .rejectButton, .approveButton {
-    padding: 10px 45px;
+.backButton,
+.rejectButton,
+.approveButton {
+  padding: 10px 45px;
 }
 
 .backButton {
-    color: var(--tertiary);
-    font-weight: bold;
-    background-color: var(--white);
-    border: 2px solid var(--tertiary);
+  color: var(--tertiary);
+  font-weight: bold;
+  background-color: var(--white);
+  border: 2px solid var(--tertiary);
 }
 
 .rejectButton {
-    background-color: var(--white);
-    font-weight: bold;
-    color: var(--red);
-    border: 2px solid var(--red);
-    margin-right: 12px;
+  background-color: var(--white);
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--red);
+  border: 2px solid var(--red);
+  margin-right: 12px;
 }
 
 .approveButton {
-    color: var(--white);
-    font-weight: bold;
-    background-color: var(--tertiary);
-    border: 2px solid var(--tertiary);
+  color: var(--white);
+  cursor: pointer;
+  font-weight: bold;
+  background-color: var(--tertiary);
+  border: 2px solid var(--tertiary);
 }
 
-
-.backButton:hover, .rejectButton:hover .approveButton:hover{
-    cursor: pointer;
+.backButton:hover,
+.rejectButton:hover .approveButton:hover {
+  cursor: pointer;
 }
-
 
 #DayHours {
-    max-width: 1000px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+  max-width: 1000px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 #EachDayHours {
-    border: 2px solid #ACACAC;
-    box-sizing: border-box;
-    width: 212px;
-    height: 49px;
-    display: flex;
-    padding-top: 13px;
-    justify-content: center;
+  border: 2px solid #acacac;
+  box-sizing: border-box;
+  width: 212px;
+  height: 49px;
+  display: flex;
+  padding-top: 13px;
+  justify-content: center;
 }
 
 .TimeAvailability {
-    margin-top: 3rem;
-    color: var(--orange);
+  margin-top: 3rem;
+  color: var(--orange);
 }
-
-@media only screen and (max-width: 915px) {
-    #SubmitPickUpPage {
-        padding: 0 10%;
-        padding-bottom: 50px;
-    }
-}
-
-@media only screen and (max-width: 750px) {
-    #SubmitPickUpPage {
-        padding: 0 9%;
-    }
-    
-    .rejectButton{
-        padding: 10px 25px;
-        margin-right: 6px;
-    }
-
-    .approveButton{
-        padding: 10px 25px;
-    }
-    
-}
-
-@media only screen and (max-width: 640px) {
-    #donPDOptions {
-        display: block;
-    }
-
-    .backButton{
-        padding: 10px 20px;
-    }
-
-    .rejectButton{
-        padding: 10px 20px;
-        margin-right: 4px;
-    }
-
-    .approveButton{
-        padding: 10px 20px;
-    }
-}
-
-@media only screen and (max-width: 560px) {
-    #DonInfoBox {
-        padding: 62px 37px 68px 37px;
-    }
-
-    .IndividTabs{
-        font-size: 16px;
-    }
-}
-
-@media only screen and (max-width: 430px) {
-
-    #DonInfoBox {
-        padding: 62px 37px 68px 37px;
-    }
-
-    .IndividTabs{
-        font-size: 16px;
-    }
-
-    img{
-        width: 70%;
-    }
-
-    .backButton, .rejectButton {
-        padding: 8px 40px;
-    }
-}
-

@@ -1,95 +1,62 @@
 @import "config/colors.css";
 
 #donNextStepsPage {
-    padding: 0 18%;
-    padding-top: 50px;
+  padding: 0 18%;
+  padding-top: 50px;
 }
 
 #donNextStepsHeader {
-    color: var(--orange);
+  color: var(--orange);
 }
 
-#donNextStepsDesc, #donNextStepsQuestions, #donNextStepsPhone {
-    font-weight: 400;
+#donNextStepsDesc,
+#donNextStepsQuestions,
+#donNextStepsPhone {
+  font-weight: 400;
 }
 
 #donNextStepsDesc {
-    padding-right: 35%;
+  padding-right: 35%;
 }
 
 #donNextStepsQuestions {
-    display: inline;
+  display: inline;
 }
 
 #donNextStepsPhone {
-    display: inline;
-    color: var(--tertiary);
+  display: inline;
+  color: var(--tertiary);
 }
 
 #donNextStepsPhone:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .doneButton {
-    background-color: var(--tertiary);
-    font-weight: bold;
-    color: var(--white);
-    border: 2px solid var(--tertiary);
-    padding: 10px 45px;
-    display: block;
-    margin-top: 5%;
+  background-color: var(--tertiary);
+  font-weight: bold;
+  color: var(--white);
+  border: 2px solid var(--tertiary);
+  padding: 10px 45px;
+  display: block;
+  margin-top: 5%;
 }
 
 .doneButton:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 1050px) {
-    #donNextStepsDesc {
-        padding-right: 15%;
-    }
-}
-
-@media only screen and (max-width: 1400px) {
-    #donNextStepsPage {
-        padding: 0 15%;
-    }
+  #donNextStepsDesc {
+    padding-right: 15%;
+  }
 }
 
 @media only screen and (max-width: 840px) {
-    #donNextStepsDesc {
-        padding-right: 0;
-    }
-
-    #donNextStepsPage {
-        padding: 0 12%;
-    }
-}
-
-@media only screen and (max-width: 700px) {
-    #donNextStepsPage {
-        padding: 0 8%;
-    }
-}
-
-@media only screen and (max-width: 630px) {
-    #donNextStepsPage {
-        padding: 0 10%;
-    }
-}
-
-@media only screen and (max-width: 550px) {
-    .doneButton {
-        padding: 6px 40px;
-    }
-}
-
-@media only screen and (max-width: 320px) {
-    #donNextStepsHeader {
-        font-size: 20px;
-    }
-
-    #donNextStepsDesc, #donNextStepsQuestions, #donNextStepsPhone {
-        font-size: 92%;
-    }
+  #donNextStepsDesc {
+    padding-right: 0;
+  }
+  #donNextStepsPage {
+    padding: 0 12%;
+  }
 }

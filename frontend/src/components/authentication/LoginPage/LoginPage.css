@@ -1,169 +1,146 @@
 @import "config/colors.css";
 
-
 #loginBox {
-    height: auto;
-    width: fit-content;
-    background: var(--white-gray);
-    border: none;
-    margin: auto;
-    margin-top: 50vh;
-    transform: translateY(-50%);
-    box-shadow: 0px 10px 24px var(--box-shadow);
-    text-align: center;
-    padding: 40px 80px;
+  height: auto;
+  width: fit-content;
+  background: var(--white-gray);
+  border: none;
+  margin: auto;
+  box-shadow: 0px 10px 24px var(--box-shadow);
+  text-align: center;
+  padding: 40px 80px;
+
+  position: absolute;
+  top: 20vh;
+  left: 50px;
+  right: 50px;
 }
 
 #loginLogo {
-    height: 115px;
-    width: auto;
+  height: 115px;
+  width: auto;
 }
 
 #loginForm {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 .loginInput {
-    box-sizing: border-box;
-    height: 48px;
-    font-size: 13.5px;
-    width: 100%;
-    border: 1.5px solid var(--input-box);
-    padding: 2%;
+  box-sizing: border-box;
+  height: 48px;
+  font-size: 13.5px;
+  width: 100%;
+  border: 1.5px solid var(--input-box);
+  padding: 2%;
 }
 
 .inputError {
-    text-align: left;
-    color: var(--red);
+  text-align: left;
+  color: var(--red);
 }
 
 #passwordBox {
-    font-family: inherit;
+  font-family: inherit;
 }
 
 .passwordIcon {
-    color: var(--primary);
-    margin-right: 6px;
+  color: var(--primary);
+  margin-right: 6px;
 }
 
 .loginLabel {
-    color: var(--primary);
-    text-align: left;
-    margin: 0 0 2px 0;
-    font-weight: 500;
-    font-size: 15px;
+  color: var(--primary);
+  text-align: left;
+  margin: 0 0 2px 0;
+  font-weight: 500;
+  font-size: 15px;
 }
 
 #loginPassword {
-    margin-top: 30px;
-    display: flex;
-    justify-content: space-between;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
 }
 
 #loginForgotPassword {
-    color: var(--secondary);
-    margin: 0;
-    font-weight: 500;
-    font-size: 13px;
+  color: var(--secondary);
+  margin: 0;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 #loginForgotPassword:hover {
-    text-decoration: underline;
-    cursor: pointer;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 #loginSubmit {
-    margin-top: 20px;
-    width: 100%;
-    background-color: var(--primary);
-    color: var(--white);
-    padding: 15px;
-    border: none;
-    font-weight: bold;
+  margin-top: 20px;
+  width: 100%;
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 15px;
+  border: none;
+  font-weight: bold;
 }
 
 #loginSubmit:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .loginCreateAccount {
-    display: inline;
-    font-size: 13px;
-    font-weight: 500;
+  display: inline;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 #createAccountLink {
-    color: var(--secondary);
+  color: var(--secondary);
 }
 
 #createAccountLink:hover {
-    text-decoration: underline;
-    cursor: pointer;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+img {
+  max-width: 10%;
+  height: auto;
+  max-height: 100%;
 }
 
 @media only screen and (max-width: 640px) {
-    #loginBox {
-        box-shadow: none;
-        padding: 0px;
-        height: fit-content;
-        width: 75%;
-    }
+  #loginBox {
+    box-shadow: none;
+    padding: 0px;
+    height: auto;
+    width: 75%;
+  }
 
-    #loginLogo {
-        height: auto;
-        width: 80%;
-    }
+  #loginLogo {
+    height: auto;
+    width: 80%;
+  }
+
+  img {
+    max-width: 10%;
+    height: auto;
+    max-height: 100%;
+  } 
 }
 
-@media only screen and (max-width: 400px) {
-    #loginLogo {
-        width: 85%;
-    }
+/* for nest hub */
 
-    .loginLabel {
-        font-size: 12px;
-    }
-
-    #loginForgotPassword, .loginCreateAccount {
-        font-size: 11px;
-    }
+@media only screen and (max-width: 1024px) and (max-height: 600px){
+  #loginBox {
+    top: 7vh;
+  }
 }
 
-@media only screen and (max-height: 530px) {
-    #loginBox {
-        margin-top: 60vh;
-        box-shadow: none;
-        padding: 0px;
-        height: fit-content;
-        width: 75%;
-    }
+/* for nest hub max */
 
-    #loginLogo {
-        height: auto;
-        width: 80%;
-    }
-}
-
-@media only screen and (max-height: 445px) {
-    #loginBox {
-        margin-top: 70vh;
-    }
-}
-
-@media only screen and (max-height: 380px) {
-    #loginBox {
-        margin-top: 80vh;
-    }
-}
-
-@media only screen and (max-height: 330px) {
-    #loginBox {
-        margin-top: 90vh;
-    }
-}
-
-@media only screen and (max-height: 290px) {
-    #loginBox {
-        margin-top: 100vh;
-    }
+@media only screen and (min-width: 1280px) and (max-height: 800px){
+  #loginBox {
+    top: 15vh;
+  }
 }
