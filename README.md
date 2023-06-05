@@ -3,7 +3,7 @@
 </h1>
 <h4 align="center">
   A scheduling platform to help with donation pickups for the nonprofit Habitat for Humanity, San Luis Obispo.
-</h4>
+</h4> 
 
 ---
 
