@@ -108,9 +108,9 @@ function DonationHistory(): JSX.Element {
                   <TableRow
                     key={index}
                     // to={`DonationInfo/${d._id}`}
-                    // onClick={() => {
-                    //   navigate(`DonationInfo/${d._id}/`);
-                    // }}
+                    onClick={() => {
+                      navigate(`DonationInfo/${d._id}/`);
+                    }}
                     style={{ textDecoration: "none" }}
                     className="tableRow"
                   >

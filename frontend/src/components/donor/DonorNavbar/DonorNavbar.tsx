@@ -88,13 +88,10 @@ function DonatorNavbar(): JSX.Element {
         />
       </a>
       <div id="donatorNavbarHeaders">
-        {
-          // need to add links to pages
-        }
         {navBarHeaders?.map(
           (header: string, index: number): JSX.Element =>
             underline(header) ? (
-              <Box className="donatorNavbarLink">
+              <Box key={index} className="donatorNavbarLink">
                 <Link id="donatorNavbarUnderline" to={navlinkHandler(header)}>
                   {header}
                 </Link>

@@ -2,6 +2,7 @@ import React from "react";
 
 // React Router Imports
 import DonationHistory from "components/donor/DonationHistory/DonationHistory";
+import DonorDonationInfoPage from "components/donor/DonorDonationInfoPage/DonorDonationInfoPage";
 
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -84,7 +85,10 @@ render(
             {/* Donor History Page */}
             <Route path="History">
               <Route path="" element={<DonationHistory />} />
-
+              <Route
+                path="DonationInfo/:id"
+                element={<DonorDonationInfoPage />}
+              />
               {/* Profile Page catch all case -> History Error */}
               <Route
                 path="*"
