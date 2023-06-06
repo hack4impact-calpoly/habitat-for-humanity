@@ -1,4 +1,3 @@
-
 // import { ObjectId, Schema, Types } from 'mongoose';
 const mongoose = require("mongoose");
 const { itemConnection } = require("../connection");
@@ -19,20 +18,21 @@ const { itemConnection } = require("../connection");
 //     status: string;
 // }
 
-
 const itemSchema = new mongoose.Schema(
   {
-    name: {type: String, required: true },
+    name: { type: String, required: true },
     images: { type: [mongoose.Schema.ObjectId], required: true },
     size: { type: String, required: true },
-    address: {type: String, required: true },
+    address: { type: String, required: true },
     city: { type: String, required: true },
     zipCode: { type: String, required: true },
-    scheduling: {type: String, required: true},
-    timeAvailability: [{
-      start: {type: String, required: false},
-      end: {type: String, required: false}
-    }],
+    scheduling: { type: String, required: true },
+    timeAvailability: [
+      {
+        start: { type: String, required: false },
+        end: { type: String, required: false },
+      },
+    ],
     donorId: { type: String, required: true },
     timeSubmitted: { type: Date, required: true },
     timeApproved: { type: Date, required: false },
@@ -42,7 +42,7 @@ const itemSchema = new mongoose.Schema(
   },
   { collection: "Items" }
 );
-  
+
 const Item = itemConnection.model("Items", itemSchema);
 // export default Item;
 module.exports = Item;
