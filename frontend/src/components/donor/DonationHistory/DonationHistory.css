@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
+@import "config/colors.css";
+
+#DonHistoryPage {
+  padding: 1% 5%;
+}
+
+#DonHistoryHeader {
+  color: var(--orange);
+}
+
+.tableCell {
+  margin: 0;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.tableRow:hover {
+  background-color: var(--gray-light);
+  cursor: pointer;
+}
+
+.needApproval {
+  color: var(--orange);
+  margin: 0;
+  font-weight: 600;
+  text-decoration: none;
+  }
+
+.approved {
+  color: var(--secondary);
+  margin: 0;
+  font-weight: 600;
+  text-decoration: none;
+}

@@ -1,0 +1,74 @@
+@import "config/colors.css";
+@import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
+
+#DonInfoPage {
+  font-family: Rubik;
+  padding: 3% 8%;
+  padding-bottom: 70px;
+}
+
+#ActiveDonHeader {
+  font-family: Rubik;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+#DonInfoBox {
+  box-sizing: border-box;
+  background: var(--white-gray);
+  box-shadow: 0px 8px 21px var(--box-shadow);
+  padding: 62px 77px 68px 77px;
+}
+
+.IndividTabs {
+  font-size: 20px;
+  font-family: Rubik;
+  font-weight: bold;
+  text-transform: none;
+}
+
+#DonationInfoPage {
+  font-family: Rubik;
+  padding-bottom: 70px;
+}
+
+#DonInfoButtons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.backButton{
+  padding: 10px 45px;
+}
+
+.backButton {
+  color: var(--tertiary);
+  font-weight: bold;
+  background-color: var(--white);
+  border: 2px solid var(--tertiary);
+}
+
+.backButton:hover,
+
+#DayHours {
+  max-width: 1000px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+#EachDayHours {
+  border: 2px solid #acacac;
+  box-sizing: border-box;
+  width: 212px;
+  height: 49px;
+  display: flex;
+  padding-top: 13px;
+  justify-content: center;
+}
+
+.TimeAvailability {
+  margin-top: 3rem;
+  color: var(--orange);
+}

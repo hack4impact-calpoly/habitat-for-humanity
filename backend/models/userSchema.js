@@ -1,10 +1,6 @@
 // import { ObjectId, Schema } from 'mongoose';
-// const mongoose = require('mongoose');
-
-// import { userConnection } from "../connection";
-const { userConnection } = require("../connection");
-
 const mongoose = require("mongoose");
+const { userConnection } = require("../connection");
 
 // interface user {
 //     userType: string;

@@ -6,12 +6,23 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 require("./DonorNavbar.css");
 
-const navBarHeaders: string[] = ["Make a Donation", "Profile", "Sign Out"];
+const navBarHeaders: string[] = [
+  "Make a Donation",
+  "Donations",
+  "Profile",
+  "Sign Out",
+];
 
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
 const donatePath: string = "/Donor";
 const profilePath: string = "/Donor/Profile";
+const donationsPath: string = "/Donor/History";
+
+const MAKE_DONATION_INDEX = 0;
+const DONATIONS_INDEX = 1;
+const PROFILE_INDEX = 2;
+const SIGN_OUT_INDEX = 3;
 
 function DonatorNavbar(): JSX.Element {
   const navigate = useNavigate();
@@ -29,13 +40,23 @@ function DonatorNavbar(): JSX.Element {
 
   const underline = (header: string): boolean => {
     if (
-      header === navBarHeaders[0] &&
+      header === navBarHeaders[MAKE_DONATION_INDEX] &&
       (pagePath.includes(`${donatePath}/donate`) || pagePath === "/Donor")
     ) {
       // For different donation pages
       return true;
     }
-    if (header === navBarHeaders[1] && pagePath.includes(profilePath)) {
+    if (
+      header === navBarHeaders[DONATIONS_INDEX] &&
+      pagePath.includes(donationsPath)
+    ) {
+      // For different profile pages
+      return true;
+    }
+    if (
+      header === navBarHeaders[PROFILE_INDEX] &&
+      pagePath.includes(profilePath)
+    ) {
       // For different profile pages
       return true;
     }
@@ -43,10 +64,13 @@ function DonatorNavbar(): JSX.Element {
   };
 
   const navlinkHandler = (header: string): string => {
-    if (header === navBarHeaders[0]) {
+    if (header === navBarHeaders[MAKE_DONATION_INDEX]) {
       return donatePath;
     }
-    if (header === navBarHeaders[1]) {
+    if (header === navBarHeaders[DONATIONS_INDEX]) {
+      return donationsPath;
+    }
+    if (header === navBarHeaders[PROFILE_INDEX]) {
       return profilePath;
     }
     // Sign Out to be implemented, just route to main page for now (login)
@@ -64,13 +88,10 @@ function DonatorNavbar(): JSX.Element {
         />
       </a>
       <div id="donatorNavbarHeaders">
-        {
-          // need to add links to pages
-        }
         {navBarHeaders?.map(
           (header: string, index: number): JSX.Element =>
             underline(header) ? (
-              <Box className="donatorNavbarLink">
+              <Box key={index} className="donatorNavbarLink">
                 <Link id="donatorNavbarUnderline" to={navlinkHandler(header)}>
                   {header}
                 </Link>
