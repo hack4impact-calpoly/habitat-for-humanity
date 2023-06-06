@@ -20,7 +20,7 @@ import DonorNavbar from "../DonorNavbar/DonorNavbar";
 require("./DonationHistory.css");
 
 const header = [
-  "Donor",
+  "Donation Item",
   "Type",
   "Date/Time Received",
   "Date/Time Approved",
@@ -70,6 +70,13 @@ function DonationHistory(): JSX.Element {
   const convertTime = (time: Date) =>
     time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
 
+  const sortReceivedTime = (don1: any, don2: any) => {
+    if (don1.timeSubmitted > don2.timeSubmitted) {
+      return -1;
+    }
+    return 1;
+  };
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -79,8 +86,8 @@ function DonationHistory(): JSX.Element {
   return (
     <div>
       <DonorNavbar />
-      <div id="activeDonPage">
-        <h1 id="activeDonHeader">Donation History</h1>
+      <div id="DonHistoryPage">
+        <h1 id="DonHistoryHeader">Donation History</h1>
         <TableContainer>
           <Table>
             <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
@@ -94,25 +101,26 @@ function DonationHistory(): JSX.Element {
             </TableHead>
             <TableBody>
               {items
+                .sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
                   // TODO: wrap parent link to new page
                   <TableRow
                     key={index}
                     // to={`DonationInfo/${d._id}`}
-                    onClick={() => {
-                      navigate(`DonationInfo/${d._id}/`);
-                    }}
+                    // onClick={() => {
+                    //   navigate(`DonationInfo/${d._id}/`);
+                    // }}
                     style={{ textDecoration: "none" }}
                     className="tableRow"
                   >
-                    <TableCell scope="row">{getDonorName(d.donorId)}</TableCell>
+                    <TableCell scope="row">{d.name}</TableCell>
                     <TableCell>{d.scheduling}</TableCell>
                     <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
                     <TableCell>{convertTime(d.timeApproved)}</TableCell>
                     {d.status === "Approved and Scheduled" ? (
                       <TableCell>
-                        <p style={{ margin: 0 }}>{d.status}</p>
+                        <p className="approved">{d.status}</p>
                       </TableCell>
                     ) : (
                       <TableCell>

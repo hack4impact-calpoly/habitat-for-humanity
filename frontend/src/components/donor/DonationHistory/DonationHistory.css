@@ -1,11 +1,11 @@
 @import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
 @import "config/colors.css";
 
-#activeDonPage {
+#DonHistoryPage {
   padding: 1% 5%;
 }
 
-#activeDonHeader {
+#DonHistoryHeader {
   color: var(--orange);
 }
 
@@ -26,3 +26,10 @@
   font-weight: 600;
   text-decoration: none;
   }
+
+.approved {
+  color: var(--secondary);
+  margin: 0;
+  font-weight: 600;
+  text-decoration: none;
+}
