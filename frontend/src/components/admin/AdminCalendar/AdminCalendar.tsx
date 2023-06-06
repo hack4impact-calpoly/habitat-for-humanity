@@ -230,7 +230,7 @@ function AdminCalendar(): JSX.Element {
                   type="button"
                   style={viewDonnationButton}
                   onClick={() => {
-                    window.location.href = `/Admin/DonationInfo/${clickedEvent!.event.extendedProps.itemId}`;
+                    window.location.href = `/Admin/DonationInfo/${clickedEvent!.event.extendedProps.itemId}/`;
                   }}
                 >
                   View Donation
