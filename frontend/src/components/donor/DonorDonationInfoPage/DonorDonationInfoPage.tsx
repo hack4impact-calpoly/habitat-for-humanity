@@ -8,11 +8,6 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
-import { addEvent } from "api/event";
-import { Button } from "@mui/material";
-import { useSelector } from "react-redux";
-import { clearTimeSlots } from "redux/eventSlice";
-import { RootState } from "../../../redux/store";
 import DonorDonationInfoTab, { TimeSlot } from "./DonorDonationInfoTab";
 import DonorNavbar from "../DonorNavbar/DonorNavbar";
 import sofa1 from "../donation/images/sofa-01.png";
@@ -120,7 +115,6 @@ function DonorDonationInfoPage(): JSX.Element {
 
     if (e.currentTarget.value === "back") {
       navigate(backPath);
-      navigate(0); // Reload page after navigating back to fetch changes
     }
   };
 
