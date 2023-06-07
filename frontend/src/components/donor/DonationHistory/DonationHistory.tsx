@@ -101,7 +101,7 @@ function DonationHistory(): JSX.Element {
             </TableHead>
             <TableBody>
               {items
-                .sort((a, b) => sortReceivedTime(a, b))
+                ?.sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
                   // TODO: wrap parent link to new page
@@ -134,7 +134,7 @@ function DonationHistory(): JSX.Element {
           <TablePagination
             rowsPerPageOptions={[8, 10, 15]}
             component="div"
-            count={items.length}
+            count={items?.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

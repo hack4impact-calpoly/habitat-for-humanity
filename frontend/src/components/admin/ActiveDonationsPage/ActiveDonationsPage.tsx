@@ -79,7 +79,7 @@ function ActiveDonationPage(): JSX.Element {
             </TableHead>
             <TableBody>
               {items
-                .sort((a, b) => sortReceivedTime(a, b))
+                ?.sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
                   // TODO: wrap parent link to new page

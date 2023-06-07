@@ -25,6 +25,7 @@ export interface TimeSlot {
 }
 
 export function collectDates(timeSlots: TimeSlot[]) {
+  if (!timeSlots || timeSlots.length === 0) return [];
   const dates: string[] = [];
   if (timeSlots[0].eventStart === undefined) return dates;
   timeSlots.forEach((timeSlot) => {
