@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -102,11 +101,11 @@ const StyledButton = styled.button`
 function Donation(): JSX.Element {
   const storedDesc = useSelector((state: RootState) => state.donation.name);
   const storedContact = useSelector(
-    (state: RootState) => state.donation.personName);
+    (state: RootState) => state.donation.personName
+  );
   const storedDims = useSelector(
     (state: RootState) => state.donation.dimensions
   );
-
   const storedPhotos = useSelector((state: RootState) => state.donation.photos);
   const [itemDescription, setItemDescription] = useState<string[]>([]);
   const [name, setName] = useState(storedContact);
@@ -133,12 +132,12 @@ function Donation(): JSX.Element {
   };
 
   const validInput = () => {
-    let valid = true;
+    const valid = true;
     setDescError("");
     setDimError("");
     setLabelsError("");
 
-// if (!itemDescription?.match(/\S/)) {
+    // if (!itemDescription?.match(/\S/)) {
     //   setDescError("Please enter an item description");
     //   valid = false;
     // }
@@ -155,7 +154,9 @@ function Donation(): JSX.Element {
     dispatch(updatePhotos(photos));
   };
 
-  const [items, setItems] = useState([{ name: "", description: "", dimensions: "" }]);
+  const [items, setItems] = useState([
+    { name: "", description: "", dimensions: "" },
+  ]);
   const addNewItem = () => {
     setItems([...items, { name: "", description: "", dimensions: "" }]);
   };
@@ -165,24 +166,26 @@ function Donation(): JSX.Element {
     setPhotos,
   };
 
-  
-
   const handleAddLabel = () => {
-    setLabels([...labels, '']);
+    setLabels([...labels, ""]);
   };
 
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     const updatedDescription = [...itemDescription];
     updatedDescription[index] = event.target.value;
     setItemDescription(updatedDescription);
   };
-
-  const handleDimensionChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleDimensionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     const updatedDimensions = [...itemDimensions];
     updatedDimensions[index] = event.target.value;
     setItemDimensions(updatedDimensions);
   };
-
 
   return (
     <>
@@ -212,8 +215,8 @@ function Donation(): JSX.Element {
                 setEmail(event.target.value);
               }}
             />
-          </InputContainer> 
-          
+          </InputContainer>
+
           <InputContainer>
             <SubHeader>Phone Number</SubHeader>
             <StyledInput
@@ -225,63 +228,36 @@ function Donation(): JSX.Element {
             />
             <div className="inputError">{dimError}</div>
           </InputContainer>
-         
         </InputSectionContainer>
-        
-        {/* <ItemHeader> Item Information</ItemHeader>
-        <InputSectionContainer>
-          <InputContainer>
+        <ItemHeader>Item Information</ItemHeader>
+        {labels.map((label, index) => (
+          <InputSectionContainer key={index}>
+            <InputContainer>
               <SubHeader>Item Description/Name</SubHeader>
               <StyledInput
                 type="text"
-                value={itemDescription[0]}
-                onChange={(event) => handleDescriptionChange(event, 0)}
+                value={itemDescription[index]}
+                onChange={(event) => handleDescriptionChange(event, index)}
               />
-            <div className="inputError">{descError}</div>
-          </InputContainer>
-          <InputContainer>
-            <SubHeader>Item Dimensions</SubHeader>
-            <StyledInput
-              type="text"
-              value={itemDimensions}
-              onChange={(event) => {
-                setItemDimensions(event.target.value);
-              }}
-            />
-            <div className="inputError">{dimError}</div>
-          </InputContainer>
-        </InputSectionContainer> */}
-        <ItemHeader >Item Information</ItemHeader>
-        {labels.map((label, index) => (
-         <>
-         <InputSectionContainer key={index}>
-         <InputContainer>
-         <SubHeader>Item Description/Name</SubHeader>
-         <StyledInput
-            type="text"
-            value={itemDescription[index]}
-            onChange={(event) => handleDescriptionChange(event, index)} 
-          />
-          <div className="inputError">{descError}</div>
-          </InputContainer>
-          <InputContainer>
-          <SubHeader>Item Dimensions</SubHeader>
-          <StyledInput
-              type="text"
-              value={itemDimensions[index]}
-              onChange={(event) => handleDimensionChange(event, index)} 
-          />
-          <div className="inputError">{dimError}</div>
-          </InputContainer>
+              <div className="inputError">{descError}</div>
+            </InputContainer>
+            <InputContainer>
+              <SubHeader>Item Dimensions</SubHeader>
+              <StyledInput
+                type="text"
+                value={itemDimensions[index]}
+                onChange={(event) => handleDimensionChange(event, index)}
+              />
+              <div className="inputError">{dimError}</div>
+            </InputContainer>
           </InputSectionContainer>
-          </>
         ))}
-      <button onClick={handleAddLabel}>Add Another Item</button>
+        <button type="button" onClick={handleAddLabel}>Add Another Item</button>
         <UploadContainer>
           <SubHeader>Item Photos</SubHeader>
           <Dropzone {...dropzoneProps} />
         </UploadContainer>
-        
+
         <div id="donPickupButtons">
           <button
             type="button"
@@ -298,4 +274,3 @@ function Donation(): JSX.Element {
 }
 
 export default Donation;
-
