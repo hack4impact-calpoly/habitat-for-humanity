@@ -2,6 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
 export interface DonationState {
+  personName: string;
+  email: string;
+  phoneNumber: string;
   name: string;
   dimensions: string;
   photos: string[];
@@ -20,16 +23,19 @@ export interface Event {
 }
 
 const initialState: DonationState = {
+  personName: "",
+  email: "",
+  phoneNumber: "",
   name: "",
   dimensions: "",
   photos: [],
   address: "",
+  donorID: "",
   city: "",
   state: "",
   zipCode: 0,
   dropoff: true,
   pickupTimes: [],
-  donorID: "",
 };
 
 // state.donation.name
@@ -37,6 +43,15 @@ export const donationSlice = createSlice({
   name: "donation",
   initialState,
   reducers: {
+    updatepersonName: (state, action) => {
+      state.personName = action.payload;
+    },
+    updateEmail: (state, action) => {
+      state.email = action.payload;
+    },
+    updatephoneNumber: (state, action) => {
+      state.phoneNumber = action.payload;
+    },
     updateName: (state, action) => {
       state.name = action.payload;
     },
@@ -52,6 +67,9 @@ export const donationSlice = createSlice({
     updateCity: (state, action) => {
       state.city = action.payload;
     },
+    updateDonorID: (state, action) => {
+      state.donorID = action.payload;
+    },
     updateState: (state, action) => {
       state.state = action.payload;
     },
@@ -63,9 +81,6 @@ export const donationSlice = createSlice({
     },
     updatePickupTimes: (state, action) => {
       state.pickupTimes = action.payload;
-    },
-    updateDonorID: (state, action) => {
-      state.donorID = action.payload;
     },
     clearAll: () => {
       storage.removeItem("persist:donation");

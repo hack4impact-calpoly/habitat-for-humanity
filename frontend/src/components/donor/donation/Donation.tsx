@@ -100,16 +100,23 @@ const StyledButton = styled.button`
 
 function Donation(): JSX.Element {
   const storedDesc = useSelector((state: RootState) => state.donation.name);
+  const storedContact = useSelector(
+    (state: RootState) => state.donation.personName
+  );
   const storedDims = useSelector(
     (state: RootState) => state.donation.dimensions
   );
   const storedPhotos = useSelector((state: RootState) => state.donation.photos);
-  const [itemDescription, setItemDescription] = useState(storedDesc);
-  const [itemDimensions, setItemDimensions] = useState(storedDims);
+  const [itemDescription, setItemDescription] = useState<string[]>([]);
+  const [name, setName] = useState(storedContact);
+  const [phoneNumber, setNumber] = useState(storedContact);
+  const [email, setEmail] = useState(storedContact);
+  const [itemDimensions, setItemDimensions] = useState<string[]>([]);
   const [photos, setPhotos] = useState(storedPhotos);
   const [descError, setDescError] = useState("");
   const [dimError, setDimError] = useState("");
-
+  const [labels, setLabels] = useState<string[]>([""]);
+  const [labelError, setLabelsError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -124,25 +131,20 @@ function Donation(): JSX.Element {
     }
   };
 
-  const backButtonNavigation = (
-    e: React.MouseEvent<HTMLButtonElement>
-  ): void => {
-    const nextPath: string = "/Donor/Donate/Disclosure";
-    navigate(nextPath);
-  };
-
   const validInput = () => {
-    let valid = true;
+    const valid = true;
     setDescError("");
     setDimError("");
-    if (!itemDescription?.match(/\S/)) {
-      setDescError("Please enter an item description");
-      valid = false;
-    }
-    if (!itemDimensions?.match(/\S/)) {
-      setDimError("Please enter item dimensions");
-      valid = false;
-    }
+    setLabelsError("");
+
+    // if (!itemDescription?.match(/\S/)) {
+    //   setDescError("Please enter an item description");
+    //   valid = false;
+    // }
+    // if (!itemDimensions?.match(/\S/)) {
+    //   setDimError("Please enter item dimensions");
+    //   valid = false;
+    // }
     return valid;
   };
 
@@ -152,9 +154,37 @@ function Donation(): JSX.Element {
     dispatch(updatePhotos(photos));
   };
 
+  const [items, setItems] = useState([
+    { name: "", description: "", dimensions: "" },
+  ]);
+  const addNewItem = () => {
+    setItems([...items, { name: "", description: "", dimensions: "" }]);
+  };
+
   const dropzoneProps = {
     photos,
     setPhotos,
+  };
+
+  const handleAddLabel = () => {
+    setLabels([...labels, ""]);
+  };
+
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const updatedDescription = [...itemDescription];
+    updatedDescription[index] = event.target.value;
+    setItemDescription(updatedDescription);
+  };
+  const handleDimensionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const updatedDimensions = [...itemDimensions];
+    updatedDimensions[index] = event.target.value;
+    setItemDimensions(updatedDimensions);
   };
 
   return (
@@ -163,53 +193,72 @@ function Donation(): JSX.Element {
       <ContentContainer>
         <DonationHeader>Make a donation</DonationHeader>
         <ProgressBar activeStep={1} />
-        <ItemHeader>Item Information</ItemHeader>
+        <ItemHeader>Contact Information</ItemHeader>
         <InputSectionContainer>
           <InputContainer>
-            <SubHeader>Item Description/Name</SubHeader>
+            <SubHeader>Name</SubHeader>
             <StyledInput
               type="text"
-              value={itemDescription}
+              value={name}
               onChange={(event) => {
-                setItemDescription(event.target.value);
+                setName(event.target.value);
               }}
             />
             <div className="inputError">{descError}</div>
           </InputContainer>
           <InputContainer>
-            <SubHeader>Item Dimensions</SubHeader>
+            <SubHeader>Email</SubHeader>
             <StyledInput
               type="text"
-              value={itemDimensions}
+              value={email}
               onChange={(event) => {
-                setItemDimensions(event.target.value);
+                setEmail(event.target.value);
+              }}
+            />
+          </InputContainer>
+
+          <InputContainer>
+            <SubHeader>Phone Number</SubHeader>
+            <StyledInput
+              type="text"
+              value={phoneNumber}
+              onChange={(event) => {
+                setNumber(event.target.value);
               }}
             />
             <div className="inputError">{dimError}</div>
           </InputContainer>
         </InputSectionContainer>
+        <ItemHeader>Item Information</ItemHeader>
+        {labels.map((label, index) => (
+          <InputSectionContainer key={index}>
+            <InputContainer>
+              <SubHeader>Item Description/Name</SubHeader>
+              <StyledInput
+                type="text"
+                value={itemDescription[index]}
+                onChange={(event) => handleDescriptionChange(event, index)}
+              />
+              <div className="inputError">{descError}</div>
+            </InputContainer>
+            <InputContainer>
+              <SubHeader>Item Dimensions</SubHeader>
+              <StyledInput
+                type="text"
+                value={itemDimensions[index]}
+                onChange={(event) => handleDimensionChange(event, index)}
+              />
+              <div className="inputError">{dimError}</div>
+            </InputContainer>
+          </InputSectionContainer>
+        ))}
+        <button type="button" onClick={handleAddLabel}>Add Another Item</button>
         <UploadContainer>
           <SubHeader>Item Photos</SubHeader>
           <Dropzone {...dropzoneProps} />
         </UploadContainer>
-        <div
-          id="donPickupButtons"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: "30px",
-            marginTop: "30px",
-          }}
-        >
-          <button
-            type="button"
-            value="backButton"
-            className="donPickupButton backButton"
-            onClick={backButtonNavigation}
-          >
-            Back
-          </button>
+
+        <div id="donPickupButtons">
           <button
             type="button"
             value="nextButton"
