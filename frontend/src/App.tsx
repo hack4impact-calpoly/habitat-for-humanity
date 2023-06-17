@@ -6,7 +6,7 @@ import { Amplify } from "aws-amplify";
 import React from "react";
 
 // import DonorScheduleDropoffPickupPage from "components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoffPickupPage";
-// import ActiveDonationPage from "components/admin/ActiveDonationsPage/ActiveDonationsPage";
+import ActiveDonationPage from "components/admin/ActiveDonationsPage/ActiveDonationsPage";
 
 /* Authentication Screens */
 // import CreateAccountPage from './components/authentication/CreateAccountPage/CreateAccountPage';
@@ -51,7 +51,7 @@ Amplify.configure(awsExports);
 function App(): JSX.Element {
   return (
     // <SuccessPage />
-    <LoginPage />
+    // <LoginPage />
     // <DonatorHomePage />
     // <CreateAccountPage />
     // <DonorSchedulePickUp/>
@@ -66,7 +66,7 @@ function App(): JSX.Element {
     // <DonatorNextStepsPage />
     // <DonorScheduleDropoffPickupPage />
     // <DonationInfoPage />
-    // <ActiveDonationPage />
+    <ActiveDonationPage />
   );
 }
 
