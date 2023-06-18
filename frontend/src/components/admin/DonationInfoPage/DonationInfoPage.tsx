@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { getUserByID, User } from "api/user";
 import { getItemByID, Item, updateItem } from "api/item";
+import { Email, sendEmail, createParagraph, createListItem } from "api/email";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
@@ -128,6 +129,7 @@ function DonationInfoPage(): JSX.Element {
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
       sendUpdatedItemToDB("Rejected", false);
+      sendDonationStatusEmail(false);
       navigate(backPath);
       navigate(0); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
@@ -137,6 +139,7 @@ function DonationInfoPage(): JSX.Element {
         )) &&
         (await sendUpdatedItemToDB("Approved and Scheduled", true))
       ) {
+        sendDonationStatusEmail(true);
         console.log("Success submitting events!");
         clearTimeSlots(); // Clear time slots from redux
         navigate(nextPath);
@@ -179,7 +182,113 @@ function DonationInfoPage(): JSX.Element {
       // "There was an error updating the item. Please try again later."
       // TODO: add error message to user
     }
+    setItem(updatedItem); // Update state of current item
     return response;
+  };
+
+  const sendDonationStatusEmail = async (isApproved: boolean) => {
+    try {
+      const subject = isApproved
+        ? "Donation Request Approval"
+        : "Donation Request Rejection";
+
+      const status = isApproved ? "Approved" : "Rejected";
+
+      const container = document.createElement("div");
+
+      container.appendChild(
+        createParagraph(
+          isApproved
+            ? "Your donation request has been approved."
+            : "Your donation request has been rejected."
+        )
+      );
+      container.appendChild(
+        createParagraph("Here are the details of the item:")
+      );
+
+      const list = document.createElement("ul");
+      list.style.listStyleType = "none";
+      container.appendChild(list);
+
+      const stateValue = item.state || ""; // Check for undefined state
+
+      // TODO: Include time for pickup if
+      const listItems = [
+        { label: "Name: ", value: item.name },
+        { label: "Size: ", value: item.size },
+        { label: "Address: ", value: item.address },
+        { label: "City: ", value: item.city },
+        { label: "State: ", value: stateValue },
+        { label: "Zip Code: ", value: item.zipCode },
+        { label: "Scheduling: ", value: item.scheduling },
+      ];
+
+      listItems.forEach((item) => {
+        const listItem = createListItem(item.label, item.value);
+        list.appendChild(listItem);
+      });
+
+      // TODO: Include which time was approved
+      if (item.timeAvailability) {
+        const timeAvailability = document.createElement("li");
+        const strong = document.createElement("strong");
+        strong.style.fontFamily = "Rubik, sans-serif";
+        strong.innerText = "Time Availability: ";
+        timeAvailability.appendChild(strong);
+
+        const ul = document.createElement("ul");
+
+        item.timeAvailability.forEach((time, index) => {
+          const li = document.createElement("li");
+          const start = document.createElement("span");
+          start.innerText = `Start: ${new Date(time.start).toLocaleString(
+            "en-US",
+            {
+              timeZone: "America/Los_Angeles",
+            }
+          )}`;
+          li.appendChild(start);
+          li.appendChild(document.createElement("br"));
+          const end = document.createElement("span");
+          end.innerText = `End: ${new Date(time.end).toLocaleString("en-US", {
+            timeZone: "America/Los_Angeles",
+          })}`;
+          li.appendChild(end);
+          ul.appendChild(li);
+        });
+
+        timeAvailability.appendChild(ul);
+        list.appendChild(timeAvailability);
+      }
+
+      const stat = createListItem(
+        "Status: ",
+        isApproved ? "Approved" : "Rejected"
+      );
+      list.appendChild(stat);
+
+      container.appendChild(
+        createParagraph("Thank you for supporting our cause!")
+      );
+
+      const email = {
+        recipientEmail: donor.email,
+        subject,
+        body: container.outerHTML,
+        isHTML: true,
+      };
+
+      const response = await sendEmail(email);
+      if (!response) {
+        throw new Error("There was an error sending the donation email.");
+      }
+
+      return response;
+    } catch (error) {
+      console.error("Error sending donation email:", error);
+      throw error;
+    }
   };
 
   // Fetch and set item on load
