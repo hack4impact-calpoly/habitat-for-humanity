@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector, useDispatch } from "react-redux";
+import { getUserByID } from "api/user";
+import { Email, sendEmail, createParagraph, createListItem } from "api/email";
 import { Item, addItem } from "../../../api/item";
 import { addImages, getImages, getImageByID } from "../../../api/image";
 import { RootState } from "../../../redux/store";
@@ -143,6 +145,121 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     return response;
   };
 
+  const sendDonationRequestEmail = async () => {
+    try {
+      const donorUser = await getUserByID(storedDonation.donorID);
+
+      const container = document.createElement("div");
+      container.appendChild(
+        createParagraph(
+          "Thank you for submitting your donation request. Here are the details:"
+        )
+      );
+
+      const list = document.createElement("ul");
+      list.style.listStyleType = "none";
+      container.appendChild(list);
+
+      const listItems = [
+        { label: "Name: ", value: storedDonation.name },
+        { label: "Size: ", value: storedDonation.dimensions },
+        { label: "Address: ", value: storedDonation.address },
+        { label: "City: ", value: storedDonation.city },
+        { label: "State: ", value: storedDonation.state },
+        { label: "Zip Code: ", value: storedDonation.zipCode },
+        {
+          label: "Scheduling: ",
+          value: storedDonation.dropoff ? "Dropoff" : "Pickup",
+        },
+      ];
+
+      listItems.forEach((item) => {
+        const listItem = createListItem(item.label, item.value);
+        list.appendChild(listItem);
+      });
+
+      if (!storedDonation.dropoff) {
+        const timeAvailability = document.createElement("li");
+        const strong = document.createElement("strong");
+        strong.style.fontFamily = "Rubik, sans-serif";
+        strong.innerText = "Time Availability: ";
+        timeAvailability.appendChild(strong);
+
+        const ul = document.createElement("ul");
+
+        storedDonation.pickupTimes.forEach((time, index) => {
+          const li = document.createElement("li");
+          const start = document.createElement("span");
+          start.innerText = `Start: ${new Date(time.start).toLocaleString(
+            "en-US",
+            {
+              timeZone: "America/Los_Angeles",
+            }
+          )}`;
+          li.appendChild(start);
+          li.appendChild(document.createElement("br"));
+          const end = document.createElement("span");
+          end.innerText = `End: ${new Date(time.end).toLocaleString("en-US", {
+            timeZone: "America/Los_Angeles",
+          })}`;
+          li.appendChild(end);
+          ul.appendChild(li);
+        });
+
+        timeAvailability.appendChild(ul);
+        list.appendChild(timeAvailability);
+      }
+
+      const timeSubmitted = createListItem(
+        "Time Submitted: ",
+        new Date().toLocaleString("en-US", {
+          timeZone: "America/Los_Angeles",
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+          second: undefined,
+        })
+      );
+      list.appendChild(timeSubmitted);
+
+      const status = createListItem("Status: ", "Needs Approval");
+      list.appendChild(status);
+
+      container.appendChild(
+        createParagraph(
+          "We appreciate your generous donation. Our team will review your request and get back to you soon."
+        )
+      );
+      container.appendChild(
+        createParagraph("Thank you for supporting our cause!")
+      );
+
+      const body = container.outerHTML;
+
+      const email = {
+        recipientEmail: donorUser.email,
+        subject: "Donation Request Submission Confirmation",
+        body,
+        isHTML: true,
+      };
+
+      const response = await sendEmail(email);
+      if (!response) {
+        setServerError(
+          "There was an error sending your donation submission confirmation email. Your donation request has been tracked."
+        );
+      }
+      return response;
+    } catch (error) {
+      console.error("Error sending donation request email:", error);
+      throw error;
+    }
+  };
+
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>
   ): Promise<void> => {
@@ -152,7 +269,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     if (e.currentTarget.value === "backButton") {
       navigate(backPath);
     } else if (e.currentTarget.value === "nextButton") {
-      if (await sendToDB()) {
+      if ((await sendToDB()) && (await sendDonationRequestEmail())) {
         navigate(nextPath);
       }
     }
