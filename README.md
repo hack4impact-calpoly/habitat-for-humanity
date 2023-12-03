@@ -1,16 +1,14 @@
 <h1 align="center">
-  :houses: Habitat For Humanity
+  :earth_americas: Ecologistics: Calendar
 </h1>
 <h4 align="center">
-  A scheduling platform to help with donation pickups for the nonprofit Habitat for Humanity, San Luis Obispo.
+  A shared calendar system for Ecologistics
 </h4> 
 
 ---
 
 <h5 align="center">
-  <a href="https://hfhsloco.org/">About the Nonprofit</a> •
-  <a href="#computer-for-devs">For Developers</a> •
-  <a href="#plate_with_cutlery-boilerplate-react-app-readme">Boilerplate Readme</a>
+  <a href="https://hfhsloco.org/](https://ecologistics.org/">About the Nonprofit</a> •
 </h5>
 
 ---
@@ -63,10 +61,6 @@ npm start
 <br>
 <br>
 <br>
-
-## :plate_with_cutlery: Boilerplate React App Readme
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
