@@ -34,7 +34,7 @@ import React from "react";
 // import DonatorNextStepsPage from './components/donator/DonatorNextStepsPage/DonatorNextStepsPage';
 // import Donation from './components/donator/Donation/Donation';
 // import DonorSchedulePickUp from './components/donor/DonorScheduleDropoffPickupPage/DonorSchedulePickUp';
-import awsExports from "./aws-exports";
+// import awsExports from "./aws-exports";
 // import Amplify from '@aws-amplify/core';
 // import { Auth } from '@aws-amplify/auth';
 // import awsconfig from './aws-exports';
@@ -46,7 +46,7 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
 
-Amplify.configure(awsExports);
+// Amplify.configure(awsExports);
 
 function App(): JSX.Element {
   return (
