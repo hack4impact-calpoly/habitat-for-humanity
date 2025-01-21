@@ -38,6 +38,8 @@ import ActiveDonations from "./components/admin/ActiveDonationsPage/ActiveDonati
 import DonationInfo from "./components/admin/DonationInfoPage/DonationInfoPage";
 import AdminCalendar from "./components/admin/AdminCalendar/AdminCalendar";
 
+import MyButton from "./components/MyButton/MyButton";
+
 const rootElement = document.getElementById("root");
 const PGate = PersistGate as any;
 
@@ -47,12 +49,22 @@ render(
       <BrowserRouter>
         <Routes>
           {/* Authentication Routes */}
-          <Route path="/" element={<App />} /> {/* Login page */}
+          <Route
+              path="/"
+              element={
+                <>
+                  <App />
+                  <MyButton />
+                </>
+              }
+            />
+          <Route path="/button" element={<MyButton />} />
           <Route path="/CreateAccount" element={<CreateAccount />} />
           <Route path="/CreateAccount/Success" element={<SuccessPage />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/NewPassword" element={<NewPasswordPage />} />
           <Route path="/VerifyAccountPage" element={<VerifyAccountPage />} />
+
           {/* Admin Specific Routes */}
           <Route path="/Admin">
             {/* Admin Home */}

@@ -1,5 +1,15 @@
 {
   "dependencies": {
     "react-aws-s3": "^1.5.0"
-  }
+  },
+  "name": "habitat-for-humanity",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\">   :houses: Habitat For Humanity </h1> <h4 align=\"center\">   A scheduling platform to help with donation pickups for the nonprofit Habitat for Humanity, San Luis Obispo. </h4>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

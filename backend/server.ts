@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 // import User from './models/userSchema';
 const express = require("express") 
+const cors = require('cors');
 const app = express() 
 app.use(express.json())
+app.use(cors());
 
 const userEndpoints = require("./routes/userRoutes.ts")
 const itemEndpoints = require("./routes/itemRoutes.ts")
