@@ -1,0 +1,35 @@
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  width: 100vw;
+  background: linear-gradient(135deg, #1e3c72, #2a5298); 
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arial", sans-serif;
+}
+
+
+.myButton {
+  padding: 20px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(0, 123, 255, 0.8);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  white-space: pre-wrap; 
+}
+
+.myButton:hover {
+  background-color: rgba(0, 123, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
