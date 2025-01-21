@@ -38,6 +38,9 @@ import ActiveDonations from "./components/admin/ActiveDonationsPage/ActiveDonati
 import DonationInfo from "./components/admin/DonationInfoPage/DonationInfoPage";
 import AdminCalendar from "./components/admin/AdminCalendar/AdminCalendar";
 
+// ---------- MyButton Imports ---------//
+import MyButton from "./components/MyButton/MyButton";
+
 const rootElement = document.getElementById("root");
 const PGate = PersistGate as any;
 
@@ -120,7 +123,9 @@ render(
           </Route>
           {/* Universal Catch all -> back to log in */}
           <Route path="*" element={<App />} />
-        </Routes>
+
+          {/* Add MyButton Route */}
+          <Route path="/MyButton" element={<MyButton />} />        </Routes>
       </BrowserRouter>
     </PGate>
   </Provider>,
