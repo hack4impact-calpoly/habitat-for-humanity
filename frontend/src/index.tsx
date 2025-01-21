@@ -1,4 +1,5 @@
 import React from "react";
+import MyButton from "./components/MyButton/MyButton";
 
 // React Router Imports
 import DonationHistory from "components/donor/DonationHistory/DonationHistory";
@@ -53,6 +54,9 @@ render(
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/NewPassword" element={<NewPasswordPage />} />
           <Route path="/VerifyAccountPage" element={<VerifyAccountPage />} />
+          {/* Mybutton route */}
+          <Route path="/button" element={<MyButton />} />
+          <Route path="*" element={<App />} />
           {/* Admin Specific Routes */}
           <Route path="/Admin">
             {/* Admin Home */}
@@ -119,6 +123,7 @@ render(
             <Route path="*" element={<p>ERROR 404: Donor Page Not Found</p>} />
           </Route>
           {/* Universal Catch all -> back to log in */}
+          <Route path="/button" element={<MyButton />} />
           <Route path="*" element={<App />} />
         </Routes>
       </BrowserRouter>
