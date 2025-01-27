@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "mongodb": "^6.12.0",
     "react-aws-s3": "^1.5.0"
   },
   "name": "habitat-for-humanity",
