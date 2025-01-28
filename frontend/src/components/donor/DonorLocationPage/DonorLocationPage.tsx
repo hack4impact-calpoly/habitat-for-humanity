@@ -1,13 +1,13 @@
 import ProgressBar from "components/donor/donation/ProgressBar";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { updateAddress, updateCity, updateZip } from "redux/donationSlice";
 
 import { RootState, store } from "../../../redux/store";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
-require("./DonorLocationPage.css");
+require("../../../App.css");
 
 function DonatorLocationPage(): JSX.Element {
   const storedAddr = useSelector((state: RootState) => state.donation.address);
@@ -21,7 +21,7 @@ function DonatorLocationPage(): JSX.Element {
   const [cityError, setCityError] = useState<string>("");
   const [zipError, setZipError] = useState<string>("");
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -30,10 +30,10 @@ function DonatorLocationPage(): JSX.Element {
 
     updateStore();
     if (e.currentTarget.value === "backButton") {
-      navigate(backPath);
+      router.push(backPath);
     } else if (e.currentTarget.value === "nextButton") {
       if (validInput()) {
-        navigate(nextPath);
+        router.push(nextPath);
       }
     }
   };

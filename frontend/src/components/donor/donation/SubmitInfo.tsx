@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Auth } from "aws-amplify";
 import { updateDonorID } from "redux/donationSlice";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,7 +8,7 @@ import { Item, addItem } from "../../../api/item";
 import { addImages, getImages, getImageByID } from "../../../api/image";
 import { RootState } from "../../../redux/store";
 
-require("./SubmitInfo.css");
+require("../../../App.css");
 
 interface DummyComponentProps {
   name?: string;
@@ -33,7 +32,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
 
   const storedName = useSelector((state: RootState) => state.donation.name);
   const storedDimensions = useSelector(
-    (state: RootState) => state.donation.dimensions
+    (state: RootState) => state.donation.dimensions,
   );
   const statePhotos = useSelector((state: RootState) => state.donation.photos);
 
@@ -45,16 +44,16 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     return parts[parts.length - 1].split("?")[0];
   });
   const storedLocation = useSelector(
-    (state: RootState) => state.donation.address
+    (state: RootState) => state.donation.address,
   );
   const storedDropOff = useSelector(
-    (state: RootState) => state.donation.dropoff
+    (state: RootState) => state.donation.dropoff,
   );
   const storedDonorID = useSelector(
-    (state: RootState) => state.donation.donorID
+    (state: RootState) => state.donation.donorID,
   );
   const storedEvents = useSelector(
-    (state: RootState) => state.donation.pickupTimes
+    (state: RootState) => state.donation.pickupTimes,
   );
   const dispatch = useDispatch();
 
@@ -77,7 +76,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
 
   const [dropOffOption, setDropOffOption] = useState(dropOff);
   const [serverError, setServerError] = useState<string>("");
-  const navigate = useNavigate();
+  const router = useRouter();
 
   /* convert array of base64-encoded back into array of image files */
   // const convertToFiles = (photos: string[] | undefined): File[] => {
@@ -137,23 +136,23 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     // const imagesUploaded = await sendImagesToS3();
     if (!response) {
       setServerError(
-        "There was an error sending your donation. Please try again later."
+        "There was an error sending your donation. Please try again later.",
       );
     }
     return response;
   };
 
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     const backPath: string = "/Donor/Donate/ScheduleDropoffPickup";
     const nextPath: string = "/Donor/Donate/NextSteps";
 
     if (e.currentTarget.value === "backButton") {
-      navigate(backPath);
+      router.push(backPath);
     } else if (e.currentTarget.value === "nextButton") {
       if (await sendToDB()) {
-        navigate(nextPath);
+        router.push(nextPath);
       }
     }
   };

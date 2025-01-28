@@ -1,18 +1,18 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 
-require("./DonorNextStepsPage.css");
+require("../../../../App.css");
 
 function DonatorNextStepsPage(): JSX.Element {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const donePath: string = "/Donor";
 
     if (e.currentTarget.value === "doneButton") {
-      navigate(donePath);
+      router.push(donePath);
     }
   };
 

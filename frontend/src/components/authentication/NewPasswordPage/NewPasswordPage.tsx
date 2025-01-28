@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from 'next/router';
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
 import Input from "@mui/material/Input";
 import IconButton from "@mui/material/IconButton";
-import { Auth } from "aws-amplify";
 import { current } from "@reduxjs/toolkit";
+import { PropaneSharp } from "@mui/icons-material";
 
-require("./NewPasswordPage.css");
+require("../../../App.css");
 
 // Timer for resend button in seconds
 const RESEND_TIME = 60;
 let resendTimerInterval: NodeJS.Timeout | undefined;
 
-function NewPasswordPage(): JSX.Element {
+function NewPasswordPage(props): JSX.Element {
   const [verificationCode, setVerificationCode] = useState<string>("");
   const [password, setPassword] = useState({
     value: "",
@@ -22,7 +23,7 @@ function NewPasswordPage(): JSX.Element {
   });
   const [resendButtonTime, setResendButtonTime] = useState(RESEND_TIME);
 
-  const location = useLocation();
+  const location = props.router.query.resetEmail
   const state = location.state as { resetEmail: string };
   const { resetEmail } = state;
   const [email, setEmail] = useState<string>(resetEmail);
@@ -58,7 +59,7 @@ function NewPasswordPage(): JSX.Element {
       switch (code) {
         case "LimitExceededException":
           alert(
-            "Too many tries, please wait and try again in a couple minutes"
+            "Too many tries, please wait and try again in a couple minutes",
           );
           return false;
         default:
@@ -70,7 +71,7 @@ function NewPasswordPage(): JSX.Element {
     startResendTimer();
   };
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const mainScreenPath: string = "/"; // Main screen (login)
   const successPath: string = "/CreateAccount/Success";
 
@@ -82,7 +83,7 @@ function NewPasswordPage(): JSX.Element {
     const response = await Auth.forgotPasswordSubmit(
       email,
       verificationCode,
-      password.value
+      password.value,
     ).catch((error) => {
       const { code } = error;
       console.log(error);
@@ -108,11 +109,11 @@ function NewPasswordPage(): JSX.Element {
   };
 
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<any> => {
     const checkAWS = await awsNewPasswordSubmit();
     if (!checkAWS) return;
-    navigate(successPath);
+    router.push(successPath);
   };
 
   const getFormData = (): string => {
@@ -179,7 +180,7 @@ function NewPasswordPage(): JSX.Element {
     }
     if (password.value.length < MIN_PASSWORD_LENGTH) {
       alert(
-        `Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`
+        `Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`,
       );
       return false;
     }

@@ -3,7 +3,7 @@ import DonatorNavbar from "../../DonorNavbar/DonorNavbar";
 import SubmitInfo from "../SubmitInfo";
 import sofa1 from "../images/sofa-01.png";
 
-require("./SubmitPickUpPage.css");
+require("../../../../App.css");
 
 const imagesPool: string[] = [sofa1];
 

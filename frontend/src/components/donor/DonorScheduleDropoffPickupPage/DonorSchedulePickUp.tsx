@@ -4,7 +4,7 @@ import "@fullcalendar/react/dist/vdom";
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { Event, updatePickupTimes } from "redux/donationSlice";
 
 import { Calendar } from "@fullcalendar/core";
@@ -17,7 +17,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 import { RootState } from "../../../redux/store";
 
-require("./DonorSchedulePickUp.css");
+require("../../../App.css");
 
 const weekdays = [
   "Sunday",
@@ -66,17 +66,17 @@ const getHourIntervals = (curDay: string): { start: string; end: string }[] => {
 function DonatorSchedulePickUp(): JSX.Element {
   const today = new Date();
   const storedEvents = useSelector(
-    (state: RootState) => state.donation.pickupTimes
+    (state: RootState) => state.donation.pickupTimes,
   );
   const [header, setHeader] = useState<string>(
     `${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(
-      today.getDate()
-    )}`
+      today.getDate(),
+    )}`,
   );
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState<Event[]>(storedEvents);
   const [times, setTimes] = useState<Event[]>(
-    getHourIntervals(moment().toISOString())
+    getHourIntervals(moment().toISOString()),
   );
   const [pickupError, setPickupError] = useState<string>("");
 
@@ -88,7 +88,7 @@ function DonatorSchedulePickUp(): JSX.Element {
     setHeader(
       `${monthNames[startDate.getMonth()]}, ${
         weekdays[startDate.getDay()]
-      } ${String(startDate.getDate())}`
+      } ${String(startDate.getDate())}`,
     );
     // Re render checked boxes
     setTimes(getHourIntervals(startDate.toISOString()));
@@ -109,18 +109,18 @@ function DonatorSchedulePickUp(): JSX.Element {
     return valid;
   };
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const backPath: string = "/Donor/Donate/Location";
     const nextPath: string = "/Donor/Donate/Review";
 
     if (e.currentTarget.value === "backButton") {
-      navigate(backPath);
+      router.push(backPath);
     } else if (e.currentTarget.value === "nextButton") {
       if (validInput()) {
         updateStore();
-        navigate(nextPath);
+        router.push(nextPath);
       }
     }
   };
@@ -213,7 +213,7 @@ function DonatorSchedulePickUp(): JSX.Element {
                     }
                     checked={evaluateEventPresence(
                       availEvent.start,
-                      availEvent.end
+                      availEvent.end,
                     )}
                   />
                   {`${startTime} to ${endTime}`}

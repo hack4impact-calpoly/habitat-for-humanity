@@ -11,7 +11,7 @@ import logo from "./logo.png";
 // import PropTypes from "prop-types";
 // import Typography from "@mui/material/Typography";
 // import Box from "@mui/material/Box";
-require("./ReceiptPage.css");
+require("../../../../App.css");
 
 const exportPdf = (id: string) => {
   const input = document.getElementById(id);

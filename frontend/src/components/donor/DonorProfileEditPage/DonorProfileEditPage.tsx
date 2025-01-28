@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, useMediaQuery } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { Auth } from "aws-amplify";
+import { useRouter } from "next/router";
 import {
   getUserByID,
   updateUserFirstName,
@@ -11,7 +10,7 @@ import {
 } from "api/user";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
-require("./DonorProfileEditPage.css");
+require("../../../App.css");
 
 function DonatorProfileEditPage(): JSX.Element {
   const [firstName, setFirstName] = useState("");
@@ -40,17 +39,17 @@ function DonatorProfileEditPage(): JSX.Element {
     getUser();
   }, []);
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const backPath: string = "/Donor/Profile"; // Change once page is added
     const saveChangesPath: string = "/Donor/Profile";
     console.log("event", e.currentTarget.value);
     if (e.currentTarget.value === "backButton") {
-      navigate(backPath);
+      router.push(backPath);
     } else if (e.currentTarget.value === "saveChangesButton") {
       if (submitData()) {
-        navigate(saveChangesPath);
+        router.push(saveChangesPath);
       }
     }
   };
@@ -146,7 +145,7 @@ function DonatorProfileEditPage(): JSX.Element {
     } catch (error) {
       console.error(error);
       alert(
-        "Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX"
+        "Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX",
       );
       return false;
     }

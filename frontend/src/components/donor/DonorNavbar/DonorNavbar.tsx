@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import logo from "images/ReStoreLogo.png";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-require("./DonorNavbar.css");
+require("../../../App.css");
 
 const navBarHeaders: string[] = [
   "Make a Donation",
@@ -25,7 +26,7 @@ const PROFILE_INDEX = 2;
 const SIGN_OUT_INDEX = 3;
 
 function DonatorNavbar(): JSX.Element {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [anchor, setAnchor] = useState(null);
 
   const pagePath = window.location.pathname;
@@ -104,7 +105,7 @@ function DonatorNavbar(): JSX.Element {
               >
                 {header}
               </Link>
-            )
+            ),
         )}
       </div>
     </Box>
@@ -162,7 +163,7 @@ function DonatorNavbar(): JSX.Element {
       key={index}
       onClick={() => {
         handleCloseNavMenu();
-        navigate(navlinkHandler(item));
+        router.push(navlinkHandler(item));
       }}
     >
       <Box
@@ -181,7 +182,7 @@ function DonatorNavbar(): JSX.Element {
             borderBottom: underline(item) ? "1.5px solid #314d89" : "none",
           },
         ]}
-        onClick={() => navigate(navlinkHandler(item))}
+        onClick={() => router.push(navlinkHandler(item))}
       >
         {item}
       </Box>

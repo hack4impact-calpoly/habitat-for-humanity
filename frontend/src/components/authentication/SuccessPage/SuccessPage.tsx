@@ -1,15 +1,15 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import checkCircle from "../../../images/CheckCircle.png";
 
-require("./SuccessPage.css");
+require("../../../App.css");
 
 function SuccessPage(): JSX.Element {
-  const navigate = useNavigate();
+  const router = useRouter();
   const mainScreenPath: string = "/";
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    navigate(mainScreenPath);
+    router.push(mainScreenPath);
   };
 
   return (

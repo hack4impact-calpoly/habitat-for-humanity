@@ -2,7 +2,7 @@ import FullCalendar from "@fullcalendar/react";
 import React from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-require("./AdminCalendar.css");
+require("../../../App.css");
 
 interface SmallCalendarProps {
   address: string;

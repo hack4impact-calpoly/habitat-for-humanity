@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,14 +11,13 @@ import TablePagination from "@mui/material/TablePagination";
 import { User, getUserByID } from "api/user";
 import moment from "moment";
 import "moment-timezone";
-import { Auth } from "aws-amplify";
 import { useSelector, useDispatch } from "react-redux";
 import { updateDonorID } from "redux/donationSlice";
 import { RootState } from "../../../redux/store";
 import { Item, getItemsByDonorID } from "../../../api/item";
 import DonorNavbar from "../DonorNavbar/DonorNavbar";
 
-require("./DonationHistory.css");
+require("../../../App.css");
 
 const header = [
   "Donation Item",
@@ -33,10 +33,10 @@ function DonationHistory(): JSX.Element {
   const [items, setItems] = useState<Item[]>([]);
   const [donors, setDonors] = useState<User[]>([]);
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const storedDonorID = useSelector(
-    (state: RootState) => state.donation.donorID
+    (state: RootState) => state.donation.donorID,
   );
 
   const dispatch = useDispatch();
@@ -78,7 +78,7 @@ function DonationHistory(): JSX.Element {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -109,7 +109,7 @@ function DonationHistory(): JSX.Element {
                     key={index}
                     // to={`DonationInfo/${d._id}`}
                     onClick={() => {
-                      navigate(`DonationInfo/${d._id}/`);
+                      router.push(`DonationInfo/${d._id}/`);
                     }}
                     style={{ textDecoration: "none" }}
                     className="tableRow"

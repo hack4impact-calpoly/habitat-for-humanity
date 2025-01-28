@@ -1,20 +1,20 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import gift from "images/gift.png";
 import { useDispatch, useSelector } from "react-redux";
 import { clearAll } from "redux/donationSlice";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
-require("./DonorHomePage.css");
+require("../../../App.css");
 
 function DonatorHomePage(): JSX.Element {
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const routeChange = (): void => {
     const donateLocationPath = "/Donor/Donate/Disclosure";
     dispatch(clearAll());
-    navigate(donateLocationPath);
+    router.push(donateLocationPath);
   };
 
   return (

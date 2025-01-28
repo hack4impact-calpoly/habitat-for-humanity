@@ -10,7 +10,7 @@ import sofa6 from "../images/sofa-06.png";
 import sofa7 from "../images/sofa-07.png";
 import sofa8 from "../images/sofa-08.png";
 
-require("./SubmitPickUpMultiplePhotoPage.css");
+require("../../../../App.css");
 
 const imagesPool: string[] = [
   sofa1,

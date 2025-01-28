@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,7 +14,7 @@ import "moment-timezone";
 import { Item, getItems } from "../../../api/item";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 
-require("./ActiveDonationsPage.css");
+require("../../../App.css");
 
 const header = [
   "Donor",
@@ -29,7 +30,7 @@ function ActiveDonationPage(): JSX.Element {
   const [items, setItems] = useState<Item[]>([]);
   const [donors, setDonors] = useState<User[]>([]);
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     getItems().then((res) => setItems(res));
@@ -56,7 +57,7 @@ function ActiveDonationPage(): JSX.Element {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -87,7 +88,7 @@ function ActiveDonationPage(): JSX.Element {
                     key={index}
                     // to={`DonationInfo/${d._id}`}
                     onClick={() => {
-                      navigate(`DonationInfo/${d._id}/`);
+                      router.push(`DonationInfo/${d._id}/`);
                     }}
                     style={{ textDecoration: "none" }}
                     className="tableRow"

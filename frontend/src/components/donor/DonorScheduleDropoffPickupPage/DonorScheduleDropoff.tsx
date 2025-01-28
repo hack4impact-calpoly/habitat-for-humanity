@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 const weeklyHours = [
   { day: "Monday", hours: "Closed" },
@@ -12,16 +12,16 @@ const weeklyHours = [
 ];
 
 function DonatorScheduleDropoff(): JSX.Element {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const backPath: string = "/Donor/Donate/Location";
     const nextPath: string = "/Donor/Donate/Review";
 
     if (e.currentTarget.value === "backButton") {
-      navigate(backPath);
+      router.push(backPath);
     } else if (e.currentTarget.value === "nextButton") {
-      navigate(nextPath);
+      router.push(nextPath);
     }
   };
 

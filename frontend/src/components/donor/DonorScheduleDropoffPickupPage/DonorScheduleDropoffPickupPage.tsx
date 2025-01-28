@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+// import { useRouter } from 'next/router';
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useDispatch, useSelector } from "react-redux";
 import { updateDropoff } from "redux/donationSlice";
@@ -9,11 +9,11 @@ import DonatorSchedulePickUp from "./DonorSchedulePickUp";
 
 import { RootState } from "../../../redux/store";
 
-require("./DonorScheduleDropoffPickupPage.css");
+require("../../../App.css");
 
 function DonatorScheduleDropoffPage(): JSX.Element {
   const storedDropoff = useSelector(
-    (state: RootState) => state.donation.dropoff
+    (state: RootState) => state.donation.dropoff,
   );
   const [isDropoff, setIsDropoff] = useState<boolean>(storedDropoff);
   const dispatch = useDispatch();

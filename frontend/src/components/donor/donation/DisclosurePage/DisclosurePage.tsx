@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import "./DisclosurePage.css";
-import { useNavigate } from "react-router-dom";
+import "../../../../App.css";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { clearAll } from "redux/donationSlice";
 import DonatorNavbar from "../../DonorNavbar/DonorNavbar";
 import donationGuidelines from "./donationGuidelines.png";
 
 const DisclosurePage = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
@@ -29,14 +29,14 @@ const DisclosurePage = () => {
   const BackRouteChange = (): void => {
     const donateLocationPath = "/Donor";
     dispatch(clearAll());
-    navigate(donateLocationPath);
+    router.push(donateLocationPath);
   };
 
   const NextRouteChange = (): void => {
     if (checkboxChecked) {
       const donateLocationPath = "/Donor/Donate/ItemInfo";
       dispatch(clearAll());
-      navigate(donateLocationPath);
+      router.push(donateLocationPath);
     }
   };
 

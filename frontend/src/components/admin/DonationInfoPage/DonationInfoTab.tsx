@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Auth } from "aws-amplify";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 import { Grid, Radio, TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";

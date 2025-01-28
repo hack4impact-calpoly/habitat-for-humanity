@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Auth } from "aws-amplify";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { Box, useMediaQuery } from "@mui/material";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
@@ -16,7 +16,7 @@ import { addUser, User } from "api/user";
 import { BsBoxArrowInDown } from "react-icons/bs";
 // import { debug } from "console";
 
-require("./CreateAccountPage.css");
+require("../../../App.css");
 
 function CreateAccountPage(): JSX.Element {
   // const { uuid } = require('uuidv4');
@@ -39,12 +39,12 @@ function CreateAccountPage(): JSX.Element {
   const [passwordError, setPasswordError] = useState<string>("");
   let processedPhoneNumber: number; // Phone number converted from string
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const mainScreenPath: string = "/"; // Main screen (login)
   const successPath: string = "/VerifyAccountPage";
 
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<any> => {
     e.preventDefault();
     let checkAWS = false;
@@ -56,8 +56,9 @@ function CreateAccountPage(): JSX.Element {
       if (checkAWS) {
         const user = await getFormData();
         addUser(user);
-        navigate(successPath, {
-          state: {
+        router.push({
+          pathname: successPath,
+          query: {
             email,
           },
         });
@@ -73,6 +74,7 @@ function CreateAccountPage(): JSX.Element {
     // setID(userID);
     // console.log(userID)
     console.log(id);
+    // TODO: Replace with Clerk
     const response = await Auth.signUp({
       username,
       password: p,
@@ -237,7 +239,7 @@ function CreateAccountPage(): JSX.Element {
     }
     if (password.value.length < MIN_PASSWORD_LENGTH) {
       setPasswordError(
-        `Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`
+        `Please choose a password at least ${MIN_PASSWORD_LENGTH} characters long`,
       );
       return false;
     }
@@ -254,7 +256,7 @@ function CreateAccountPage(): JSX.Element {
       const processedString = phoneNumber.replace(/[^0-9]/g, "");
       if (!isMobilePhone(processedString, "en-US")) {
         setPhoneNumberError(
-          "Please enter your phone number in the form XXX-XXX-XXXX"
+          "Please enter your phone number in the form XXX-XXX-XXXX",
         );
         return false;
       }
@@ -262,7 +264,7 @@ function CreateAccountPage(): JSX.Element {
     } catch (error) {
       console.error(error);
       setPhoneNumberError(
-        "Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX"
+        "Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX",
       );
       return false;
     }

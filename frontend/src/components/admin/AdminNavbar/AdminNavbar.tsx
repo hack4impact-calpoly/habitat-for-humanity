@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import logo from "images/ReStoreLogo.png";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-require("./AdminNavbar.css");
+require("../../../App.css");
 
 const CALENDAR_HEADER = 0;
 const AVAILABILITY_HEADER = 1;
@@ -29,7 +30,7 @@ const calendarPath: string = "/Admin/Calendar";
 const donationInfoPath: string = "/Admin/DonationInfo";
 
 function AdminNavbar(): JSX.Element {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [anchor, setAnchor] = useState(null);
   const pagePath = window.location.pathname;
 
@@ -110,7 +111,7 @@ function AdminNavbar(): JSX.Element {
               >
                 {header}
               </Link>
-            )
+            ),
         )}
       </div>
     </Box>
@@ -168,7 +169,7 @@ function AdminNavbar(): JSX.Element {
       key={index}
       onClick={() => {
         handleCloseNavMenu();
-        navigate(navlinkHandler(item));
+        router.push(navlinkHandler(item));
       }}
     >
       <Box
@@ -187,7 +188,7 @@ function AdminNavbar(): JSX.Element {
             borderBottom: underline(item) ? "1.5px solid #314d89" : "none",
           },
         ]}
-        onClick={() => navigate(navlinkHandler(item))}
+        onClick={() => router.push(navlinkHandler(item))}
       >
         {item}
       </Box>

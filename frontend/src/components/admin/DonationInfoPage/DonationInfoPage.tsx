@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { getUserByID, User } from "api/user";
@@ -19,7 +20,7 @@ import ReceiptPage from "./ReceiptPage/ReceiptPage";
 import AdminSchedulePage from "./AdminSchedulePage";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
 
-require("./DonationInfoPage.css");
+require("../../../App.css");
 
 function a11yProps(index: number) {
   return {
@@ -114,33 +115,33 @@ function DonationInfoPage(): JSX.Element {
     useState<TimeSlot[]>(emptyTimeSlots);
   const { id } = useParams();
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     const backPath: string = "/Admin";
     const nextPath: string = "/Admin";
 
     if (e.currentTarget.value === "back") {
       sendUpdatedItemToDB(storedStatus, false);
-      navigate(backPath);
-      navigate(0); // Reload page after navigating back to fetch changes
+      router.push(backPath);
+      router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
       sendUpdatedItemToDB("Rejected", false);
-      navigate(backPath);
-      navigate(0); // Reload page after navigating back to fetch changes
+      router.push(backPath);
+      router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
       if (
         (await storedTimeSlots.map((timeSlot) =>
-          sendEventToDB(timeSlot, item)
+          sendEventToDB(timeSlot, item),
         )) &&
         (await sendUpdatedItemToDB("Approved and Scheduled", true))
       ) {
         console.log("Success submitting events!");
         clearTimeSlots(); // Clear time slots from redux
-        navigate(nextPath);
-        navigate(0); // Reload page after navigating back to fetch changes
+        router.push(nextPath);
+        router.refresh(); // Reload page after navigating back to fetch changes
       }
     }
   };
@@ -214,7 +215,7 @@ function DonationInfoPage(): JSX.Element {
           timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
           dayString: `${getDay(event.start)}`,
           volunteer: "",
-        })
+        }),
       );
       setAvailableTimes(newAvailableTimes);
     }
@@ -225,10 +226,10 @@ function DonationInfoPage(): JSX.Element {
   };
 
   const storedStatus = useSelector(
-    (state: RootState) => state.event.donationStatus
+    (state: RootState) => state.event.donationStatus,
   );
   const storedTimeSlots = useSelector(
-    (state: RootState) => state.event.timeSlots
+    (state: RootState) => state.event.timeSlots,
   );
 
   return (

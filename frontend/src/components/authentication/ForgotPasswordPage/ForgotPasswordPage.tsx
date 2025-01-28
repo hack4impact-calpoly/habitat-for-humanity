@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Auth } from "aws-amplify";
+import { useRouter } from "next/router";
 
-require("./ForgotPasswordPage.css");
+require("../../../App.css");
 
 function ForgotPasswordPage(): JSX.Element {
   const [email, setEmail] = useState<string>("");
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Function for calling Auth.forgotPassword, called in buttonNavigation
   const awsForgotPassword = async (): Promise<any> => {
@@ -20,7 +19,7 @@ function ForgotPasswordPage(): JSX.Element {
           return false;
         case "LimitExceededException":
           alert(
-            "Too many tries, please wait and try again in a couple minutes"
+            "Too many tries, please wait and try again in a couple minutes",
           );
           return false;
         default:
@@ -30,7 +29,7 @@ function ForgotPasswordPage(): JSX.Element {
     return response;
   };
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): Promise<void> => {
     const mainScreenPath: string = "/"; // Main screen (login)
     const successPath: string = "/NewPassword";
@@ -38,7 +37,10 @@ function ForgotPasswordPage(): JSX.Element {
     const target = e.target as HTMLTextAreaElement;
     if (target.value === "sendButton") {
       if (submitData() && checkAWS) {
-        navigate(successPath, { state: { resetEmail: email } });
+        router.push({
+          pathname: successPath, 
+          query: { resetEmail: email } 
+        });
       }
     }
   };

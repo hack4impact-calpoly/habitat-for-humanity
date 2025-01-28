@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { getUserByID, User } from "api/user";
@@ -12,7 +13,7 @@ import DonorDonationInfoTab, { TimeSlot } from "./DonorDonationInfoTab";
 import DonorNavbar from "../DonorNavbar/DonorNavbar";
 import sofa1 from "../donation/images/sofa-01.png";
 
-require("./DonorDonationInfoPage.css");
+require("../../../App.css");
 
 function a11yProps(index: number) {
   return {
@@ -107,14 +108,14 @@ function DonorDonationInfoPage(): JSX.Element {
     useState<TimeSlot[]>(emptyTimeSlots);
   const { id } = useParams();
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     const backPath: string = "/Donor/History";
 
     if (e.currentTarget.value === "back") {
-      navigate(backPath);
+      router.push(backPath);
     }
   };
 
@@ -150,7 +151,7 @@ function DonorDonationInfoPage(): JSX.Element {
           timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
           dayString: `${getDay(event.start)}`,
           volunteer: "",
-        })
+        }),
       );
       setAvailableTimes(newAvailableTimes);
     }

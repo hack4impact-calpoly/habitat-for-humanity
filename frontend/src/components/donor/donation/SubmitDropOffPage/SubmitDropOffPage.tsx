@@ -4,7 +4,7 @@ import DonatorNavbar from "../../DonorNavbar/DonorNavbar";
 import SubmitInfo from "../SubmitInfo";
 import sofa1 from "../images/sofa-01.png";
 
-require("./SubmitDropOffPage.css");
+require("../../../../App.css");
 
 const weeklyHours = [
   { day: "Monday", hours: "Closed" },

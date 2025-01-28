@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
 import pencil from "images/pencil.png";
-import { Auth } from "aws-amplify";
 import { getUserByID } from "api/user";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
-require("./DonorProfile.css");
+require("../../../App.css");
 
 function DonatorProfilePage(): JSX.Element {
   const [user, setUser] = useState<any>([]);

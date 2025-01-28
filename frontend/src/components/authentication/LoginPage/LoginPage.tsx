@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Auth } from "aws-amplify";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { CognitoUser } from "amazon-cognito-identity-js";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
@@ -11,7 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import isEmail from "validator/lib/isEmail";
 
 import logo from "images/logo.png";
-import "./LoginPage.css";
+import "../../../App.css";
 
 function LoginPage(): JSX.Element {
   const [email, setEmail] = useState<string>("");
@@ -21,7 +21,7 @@ function LoginPage(): JSX.Element {
   });
   const [emailError, setEmailError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const forgotPasswordPath = "/ForgotPassword";
   const createAccountPath = "/CreateAccount";
@@ -44,8 +44,9 @@ function LoginPage(): JSX.Element {
           case "UserNotConfirmedException": {
             // only checks email, i.e. wrong password w/correct (unconfirmed) email will still cause the exception
             const errorMessage = await awsSendNewCode();
-            navigate(verifyAccountPath, {
-              state: {
+            router.push({
+              pathname: verifyAccountPath,
+              query: {
                 email,
                 verificationError: errorMessage,
               },
@@ -57,7 +58,7 @@ function LoginPage(): JSX.Element {
             return false;
           }
         }
-      }
+      },
     );
     return response;
   };
@@ -79,22 +80,22 @@ function LoginPage(): JSX.Element {
   };
 
   const login = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<any> => {
     e.preventDefault();
     const valid = checkCredentials();
     if (valid) {
       const checkAWS = await awsLogin();
       if (checkAWS) {
-        navigate("/Donor");
+        router.push("/Donor");
       }
     }
     /*
         else if (valid && admin){
-            navigate("/Admin/Home");
+            router.push("/Admin/Home");
         }
         else if (valid && volunteer){
-            navigate("/Donator/Home");
+            router.push("/Donator/Home");
         }
         else{
             alert("Sorry an unexpected error occured while logging you in");

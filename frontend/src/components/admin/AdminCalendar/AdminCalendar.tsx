@@ -11,7 +11,7 @@ import moment from "moment";
 import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import SmallCalendar from "./SmallCalendar";
 
-require("./AdminCalendar.css");
+require("../../../App.css");
 
 interface DonationEvent {
   title: string;

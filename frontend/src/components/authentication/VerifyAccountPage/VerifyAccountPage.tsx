@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
 import Input from "@mui/material/Input";
 import IconButton from "@mui/material/IconButton";
-import { Auth } from "aws-amplify";
 import isEmail from "validator/lib/isEmail";
 import Button from "@mui/material/Button";
 
-require("./VerifyAccountPage.css");
+require("../../../App.css");
 
-function VerifyAccountPage(): JSX.Element {
+function VerifyAccountPage(props): JSX.Element {
   interface Location {
     state: {
       email: string;
       verificationError: string;
     }; // passed in from previous pages
   }
-  const location = useLocation() as Location;
+  const location = props.router.query;
 
   const [email, setEmail] = useState<string>(
-    location.state === null ? "" : location.state.email
+    location === null ? "" : location.email,
   );
   const [verificationCode, setVerificationCode] = useState<string>("");
   const [verificationError, setVerificationError] = useState<string>(
-    location.state === null ? "" : location.state.verificationError
+    location === null ? "" : location.verificationError,
   );
 
   const [sendNewCodeText, setSendNewCodeText] =
@@ -37,7 +36,7 @@ function VerifyAccountPage(): JSX.Element {
     return () => clearTimeout(timer);
   });
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const mainScreenPath: string = "/"; // Main screen (login)
   const successPath: string = "/CreateAccount/Success";
 
@@ -60,7 +59,7 @@ function VerifyAccountPage(): JSX.Element {
             break;
           case "InvalidParameterException":
             setVerificationError(
-              "Please make sure all inputs contain no spaces, tabs, etc."
+              "Please make sure all inputs contain no spaces, tabs, etc.",
             );
             break;
           default:
@@ -68,7 +67,7 @@ function VerifyAccountPage(): JSX.Element {
             break;
         }
         success = false;
-      }
+      },
     );
     return success;
   };
@@ -99,7 +98,7 @@ function VerifyAccountPage(): JSX.Element {
           break;
         case "LimitExceededException":
           setVerificationError(
-            "Too many tries, please try again in a couple minutes"
+            "Too many tries, please try again in a couple minutes",
           );
           break;
         case "UserNotFoundException":
@@ -143,12 +142,12 @@ function VerifyAccountPage(): JSX.Element {
   };
 
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     if (e.currentTarget.value === "submitButton") {
       const sucessfulSubmit = validateForm() && (await awsConfirmSignup());
       if (sucessfulSubmit) {
-        navigate(successPath);
+        router.push(successPath);
       }
     }
 
