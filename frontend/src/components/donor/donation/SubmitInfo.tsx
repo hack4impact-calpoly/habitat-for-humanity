@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
-import { updateDonorID } from "redux/donationSlice";
-import { useRouter } from "next/router";
+import { updateDonorID } from "../../../redux/donationSlice";
+import { useRouter } from "next/navigation";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector, useDispatch } from "react-redux";

@@ -1,10 +1,12 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import "../../../../App.css";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { clearAll } from "redux/donationSlice";
+import { clearAll } from "../../../../redux/donationSlice";
 import DonatorNavbar from "../../DonorNavbar/DonorNavbar";
-import donationGuidelines from "./donationGuidelines.png";
+// import donationGuidelines from "./donationGuidelines.png";
 
 const DisclosurePage = () => {
   const router = useRouter();
@@ -56,7 +58,7 @@ const DisclosurePage = () => {
         }}
       >
         <img
-          src={donationGuidelines}
+          src="/images/donationGuidelines.png"
           alt="donation-guidelines"
           style={{ width: isMobileScreen ? "100vw" : "65vw" }}
         />

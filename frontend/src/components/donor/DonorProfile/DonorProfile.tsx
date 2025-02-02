@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Box } from "@mui/material";
-import pencil from "images/pencil.png";
+// import pencil from "images/pencil.png";
 import { getUserByID } from "api/user";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
@@ -39,9 +41,9 @@ function DonatorProfilePage(): JSX.Element {
               <p id="profile">Profile</p>
             </div>
             <div id="editBox">
-              <img alt="pencil" id="pencil" src={pencil} />
+              <img alt="pencil" id="pencil" src="/images/pencil.png" />
               {/* Need to Implement Link to DonatorProfileEditPage */}
-              <Link to={donatorProfileEditPath} id="edit">
+              <Link href={donatorProfileEditPath} id="edit">
                 edit
               </Link>
             </div>

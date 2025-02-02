@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { CognitoUser } from "amazon-cognito-identity-js";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
@@ -10,7 +10,7 @@ import Input from "@mui/material/Input";
 import IconButton from "@mui/material/IconButton";
 import isEmail from "validator/lib/isEmail";
 
-import logo from "images/logo.png";
+// import logo from "images/logo.png";
 import "../../../App.css";
 
 function LoginPage(): JSX.Element {
@@ -26,7 +26,6 @@ function LoginPage(): JSX.Element {
   const forgotPasswordPath = "/ForgotPassword";
   const createAccountPath = "/CreateAccount";
   const verifyAccountPath: string = "/VerifyAccountPage";
-
   // Function for logging into AWS account, called in login function
   const awsLogin = async (): Promise<CognitoUser | any> => {
     const response = await Auth.signIn(email, password.value).catch(
@@ -125,7 +124,7 @@ function LoginPage(): JSX.Element {
 
   return (
     <div id="loginBox">
-      <img src={logo} alt="logo" id="loginLogo" />
+      <img src="/images/logo.png" alt="logo" id="loginLogo" />
       <form id="loginForm">
         <p className="loginLabel">Email</p>
         <input
@@ -138,7 +137,7 @@ function LoginPage(): JSX.Element {
         <div className="inputError">{emailError}</div>
         <div id="loginPassword">
           <p className="loginLabel">Password</p>
-          <Link to={forgotPasswordPath} id="loginForgotPassword">
+          <Link href={forgotPasswordPath} id="loginForgotPassword">
             Forgot Password?
           </Link>
         </div>
@@ -182,7 +181,7 @@ function LoginPage(): JSX.Element {
       <div style={styles.createAccountText}>
         <p className="loginCreateAccount">{`Don't have an account? `}</p>
         <Link
-          to={createAccountPath}
+          href={createAccountPath}
           className="loginCreateAccount"
           id="createAccountLink"
         >

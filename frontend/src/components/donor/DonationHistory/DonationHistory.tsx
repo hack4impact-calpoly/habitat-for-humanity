@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,7 +14,7 @@ import { User, getUserByID } from "api/user";
 import moment from "moment";
 import "moment-timezone";
 import { useSelector, useDispatch } from "react-redux";
-import { updateDonorID } from "redux/donationSlice";
+import { updateDonorID } from "../../../redux/donationSlice";
 import { RootState } from "../../../redux/store";
 import { Item, getItemsByDonorID } from "../../../api/item";
 import DonorNavbar from "../DonorNavbar/DonorNavbar";

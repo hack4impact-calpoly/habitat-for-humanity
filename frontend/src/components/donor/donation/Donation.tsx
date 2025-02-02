@@ -1,11 +1,13 @@
+"use client";
+
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updateDimensions,
   updateName,
   updatePhotos,
-} from "redux/donationSlice";
-import { useRouter } from "next/router";
+} from "../../../redux/donationSlice";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { RootState } from "../../../redux/store";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";

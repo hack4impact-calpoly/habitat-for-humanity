@@ -1,8 +1,10 @@
+"use client";
+
 import React, { useState } from "react";
 // import { useRouter } from 'next/router';
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useDispatch, useSelector } from "react-redux";
-import { updateDropoff } from "redux/donationSlice";
+import { updateDropoff } from "../../../redux/donationSlice";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 import DonatorScheduleDropoff from "./DonorScheduleDropoff";
 import DonatorSchedulePickUp from "./DonorSchedulePickUp";

@@ -1,11 +1,12 @@
+"use client";
 import "moment-timezone";
-import "@fullcalendar/react/dist/vdom";
+// import "@fullcalendar/react/dist/vdom";
 
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import { Event, updatePickupTimes } from "redux/donationSlice";
+import { useRouter } from "next/navigation";
+import { Event, updatePickupTimes } from "../../../redux/donationSlice";
 
 import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";

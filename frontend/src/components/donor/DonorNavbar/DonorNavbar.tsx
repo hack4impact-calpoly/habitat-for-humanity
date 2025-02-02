@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import logo from "images/ReStoreLogo.png";
+import { useRouter } from "next/navigation";
+// import logo from "images/ReStoreLogo.png";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -83,7 +83,7 @@ function DonatorNavbar(): JSX.Element {
       <a href="/Donor">
         <Box
           component="img"
-          src={logo}
+          src="/images/ReStoreLogo.png"
           alt="logo"
           sx={{ width: { md: "12rem" } }}
         />
@@ -93,7 +93,7 @@ function DonatorNavbar(): JSX.Element {
           (header: string, index: number): JSX.Element =>
             underline(header) ? (
               <Box key={index} className="donatorNavbarLink">
-                <Link id="donatorNavbarUnderline" to={navlinkHandler(header)}>
+                <Link id="donatorNavbarUnderline" href={navlinkHandler(header)}>
                   {header}
                 </Link>
               </Box>
@@ -101,7 +101,7 @@ function DonatorNavbar(): JSX.Element {
               <Link
                 key={index}
                 className="donatorNavbarLink"
-                to={navlinkHandler(header)}
+                href={navlinkHandler(header)}
               >
                 {header}
               </Link>
@@ -122,7 +122,7 @@ function DonatorNavbar(): JSX.Element {
       <a href="/Donor">
         <Box
           component="img"
-          src={logo}
+          src="/images/ReStoreLogo.png"
           alt="logo"
           sx={{ width: { xs: "10rem" } }}
         />
