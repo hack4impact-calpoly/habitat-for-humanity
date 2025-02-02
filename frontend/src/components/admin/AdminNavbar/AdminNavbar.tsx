@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import logo from "images/ReStoreLogo.png";
+// import logo from "images/ReStoreLogo.png";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -86,7 +86,7 @@ function AdminNavbar(): React.ReactNode {
       <a href="/Admin">
         <Box
           component="img"
-          src={logo}
+          src="images/ReStoreLogo.png"
           alt="logo"
           sx={{ width: { md: "12rem" } }}
         />
@@ -99,7 +99,7 @@ function AdminNavbar(): React.ReactNode {
           (header: string, index: number): React.ReactNode =>
             underline(header) ? (
               <Box className="adminNavbarLink">
-                <Link id="adminNavbarUnderline" to={navlinkHandler(header)}>
+                <Link id="adminNavbarUnderline" href={navlinkHandler(header)}>
                   {header}
                 </Link>
               </Box>
@@ -107,7 +107,7 @@ function AdminNavbar(): React.ReactNode {
               <Link
                 key={index}
                 className="adminNavbarLink"
-                to={navlinkHandler(header)}
+                href={navlinkHandler(header)}
               >
                 {header}
               </Link>

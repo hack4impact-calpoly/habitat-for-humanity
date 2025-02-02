@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import { Button } from "@mui/material";
 
 import { useDispatch } from "react-redux";
-import { clearAll, clearTimeSlots, updateTimeSlots } from "redux/eventSlice";
+import { clearAll, clearTimeSlots, updateTimeSlots } from "../../../redux/eventSlice";
 import { collectDates, TimeSlot } from "./DonationInfoTab";
 
 function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): React.ReactNode {

@@ -11,7 +11,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Item } from "api/item";
 import { User } from "api/user";
 import { useDispatch } from "react-redux";
-import { updateDonationStatus } from "redux/eventSlice";
+import { updateDonationStatus } from "../../../redux/eventSlice";
 
 interface InfoTabProps {
   item: Item;
