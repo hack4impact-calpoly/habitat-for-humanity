@@ -35,7 +35,7 @@ const avaiTimes = [
   },
 ];
 
-function SubmitPickUpPage(): JSX.Element {
+function SubmitPickUpPage(): React.ReactNode {
   return (
     <div>
       <DonatorNavbar />

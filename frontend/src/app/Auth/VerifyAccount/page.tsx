@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -10,21 +11,21 @@ import Button from "@mui/material/Button";
 
 require("../../../App.css");
 
-function VerifyAccountPage(props): React.ReactNode {
+function VerifyAccountPage(): React.ReactNode {
   interface Location {
     state: {
       email: string;
       verificationError: string;
     }; // passed in from previous pages
   }
-  const location = props.router.query;
+  const query = useSearchParams();
 
-  const [email, setEmail] = useState<string>(
-    location === null ? "" : location.email,
+  const [email, setEmail] = useState<string | null>(
+    query === null ? "" : query.get("email"),
   );
   const [verificationCode, setVerificationCode] = useState<string>("");
-  const [verificationError, setVerificationError] = useState<string>(
-    location === null ? "" : location.verificationError,
+  const [verificationError, setVerificationError] = useState<string | null>(
+    query === null ? "" : query.get("verificationError"),
   );
 
   const [sendNewCodeText, setSendNewCodeText] =

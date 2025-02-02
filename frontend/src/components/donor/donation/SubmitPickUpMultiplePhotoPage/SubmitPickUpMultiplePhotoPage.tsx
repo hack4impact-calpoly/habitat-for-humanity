@@ -51,7 +51,7 @@ const avaiTimes = [
   },
 ];
 
-function SubmitPickUpMultiplePhotoPage(): JSX.Element {
+function SubmitPickUpMultiplePhotoPage(): React.ReactNode {
   return (
     <div>
       <DonatorNavbar />

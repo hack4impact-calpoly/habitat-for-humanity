@@ -97,12 +97,12 @@ const compressImage = async (file: Blob, quality: number) => {
         resolve(blob);
       },
       "image/jpeg",
-      quality / 100
+      quality / 100,
     );
   });
 };
 
-function DropZone(props: any): JSX.Element {
+function DropZone(props: any): React.ReactNode {
   const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
 
   // props destructuring
@@ -132,7 +132,7 @@ function DropZone(props: any): JSX.Element {
         photos.map((photoUrl) => {
           const filename = photoUrl.split("/").pop();
           return deleteImage(filename);
-        })
+        }),
       );
     } catch (error) {
       console.error("(clearImages) Error: ", error);
@@ -144,7 +144,7 @@ function DropZone(props: any): JSX.Element {
   const getPresignedUrl = async (filename: string): Promise<string> => {
     /* Get presigned URL form backend (router.get('/presigned-url/:filename')) using fetch directly: */
     const response = await fetch(
-      `http://localhost:3001/api/images/presigned-url/${filename}`
+      `http://localhost:3001/api/images/presigned-url/${filename}`,
     );
 
     if (!response.ok) {
@@ -170,7 +170,7 @@ function DropZone(props: any): JSX.Element {
     try {
       console.log(
         "(sendImagesToS3) Uploading following images: ",
-        newUniqueFiles
+        newUniqueFiles,
       );
       await addImages(newUniqueFiles);
       console.log("(sendImagesToS3) Images uploaded successfully for state!");
@@ -186,7 +186,7 @@ function DropZone(props: any): JSX.Element {
       newUniqueFiles.map((file) => {
         const fileName = file.name;
         return getPresignedUrl(fileName);
-      })
+      }),
     );
 
     // const imageUrls = newUniqueFiles.map(
@@ -206,12 +206,12 @@ function DropZone(props: any): JSX.Element {
 
       // Check each file's size and return if it exceeds the limit
       const tooLargeFiles = filesRef.filter(
-        (file) => file.size > MAX_IMAGE_SIZE
+        (file) => file.size > MAX_IMAGE_SIZE,
       );
       if (tooLargeFiles.length) {
         console.log("Too Large Files:", tooLargeFiles);
         alert(
-          "Some files are too large. Please only upload files smaller than 5MB."
+          "Some files are too large. Please only upload files smaller than 5MB.",
         );
         return;
       }
@@ -228,17 +228,17 @@ function DropZone(props: any): JSX.Element {
           console.log("compressing file...");
           const compressedFile = await compressImage(
             file,
-            COMPRESSED_IMAGE_QUALITY
+            COMPRESSED_IMAGE_QUALITY,
           );
           return compressedFile;
-        })
+        }),
       )
         .then((compressedFiles) => {
           // Send the compressed image files to S3 and retrieve their URLs
           console.log("a file compression done.");
           console.log(
             "compressedFiles as file[] ready for sending: ",
-            compressedFiles as File[]
+            compressedFiles as File[],
           );
           console.log("starting sending to S3...");
           return sendImagesToS3(compressedFiles as File[]);

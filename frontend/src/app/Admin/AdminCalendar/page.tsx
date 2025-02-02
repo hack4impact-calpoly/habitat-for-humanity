@@ -8,8 +8,8 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { Modal, Box, Typography } from "@mui/material";
 import { Types } from "mongoose";
 import moment from "moment";
-import AdminNavbar from "../AdminNavbar/AdminNavbar";
-import SmallCalendar from "./SmallCalendar";
+import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
+import SmallCalendar from "../../../components/admin/AdminCalendar/SmallCalendar";
 
 require("../../../App.css");
 

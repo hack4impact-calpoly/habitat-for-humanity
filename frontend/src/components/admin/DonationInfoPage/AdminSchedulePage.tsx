@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { clearAll, clearTimeSlots, updateTimeSlots } from "redux/eventSlice";
 import { collectDates, TimeSlot } from "./DonationInfoTab";
 
-function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): JSX.Element {
+function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): React.ReactNode {
   const { timeSlots } = props;
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<TimeSlot[]>([]);
   const [timeSlotIds, setTimeSlotIds] = useState<string[]>([]);
@@ -33,7 +33,7 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): JSX.Element {
           return [...prevSelectedTimeSlots, timeSlot];
         }
         return prevSelectedTimeSlots.filter(
-          (ts) => ts.timeSlotString !== timeSlot.timeSlotString
+          (ts) => ts.timeSlotString !== timeSlot.timeSlotString,
         );
       });
     };

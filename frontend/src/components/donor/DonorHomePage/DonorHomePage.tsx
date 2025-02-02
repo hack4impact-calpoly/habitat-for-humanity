@@ -9,7 +9,7 @@ import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
 require("../../../App.css");
 
-function DonatorHomePage(): JSX.Element {
+function DonatorHomePage(): React.ReactNode {
   const router = useRouter();
   const dispatch = useDispatch();
 

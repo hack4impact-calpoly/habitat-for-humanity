@@ -35,7 +35,7 @@ interface ReceiptTabProps {
   donor: User;
 }
 
-function ReceiptPage(props: ReceiptTabProps): JSX.Element {
+function ReceiptPage(props: ReceiptTabProps): React.ReactNode {
   const { item, donor } = props;
   const fullName = `${donor?.firstName} ${donor?.lastName}`;
   const fullZip = `${item?.city}, California ${item?.zipCode}`;

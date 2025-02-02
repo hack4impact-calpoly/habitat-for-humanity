@@ -64,7 +64,7 @@ const getHourIntervals = (curDay: string): { start: string; end: string }[] => {
   return intervals;
 };
 
-function DonatorSchedulePickUp(): JSX.Element {
+function DonatorSchedulePickUp(): React.ReactNode {
   const today = new Date();
   const storedEvents = useSelector(
     (state: RootState) => state.donation.pickupTimes,

@@ -100,7 +100,7 @@ const StyledButton = styled.button`
   color: var(--white);
 `;
 
-function Donation(): JSX.Element {
+function Donation(): React.ReactNode {
   const storedDesc = useSelector((state: RootState) => state.donation.name);
   const storedDims = useSelector(
     (state: RootState) => state.donation.dimensions,

@@ -12,7 +12,7 @@ import { User, getDonors } from "api/user";
 import moment from "moment";
 import "moment-timezone";
 import { Item, getItems } from "../../../api/item";
-import AdminNavbar from "../AdminNavbar/AdminNavbar";
+import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
 
 require("../../../App.css");
 
@@ -24,7 +24,7 @@ const header = [
   "Status",
 ];
 
-function ActiveDonationPage(): React.ReactNode {
+export default function ActiveDonationPage(): React.ReactNode {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
@@ -124,5 +124,3 @@ function ActiveDonationPage(): React.ReactNode {
     </div>
   );
 }
-
-export default ActiveDonationPage;

@@ -29,7 +29,7 @@ const adminHomePath: string = "/Admin";
 const calendarPath: string = "/Admin/Calendar";
 const donationInfoPath: string = "/Admin/DonationInfo";
 
-function AdminNavbar(): JSX.Element {
+function AdminNavbar(): React.ReactNode {
   const router = useRouter();
   const [anchor, setAnchor] = useState(null);
   const pagePath = window.location.pathname;
@@ -96,7 +96,7 @@ function AdminNavbar(): JSX.Element {
           // need to add links to pages
         }
         {navBarHeaders?.map(
-          (header: string, index: number): JSX.Element =>
+          (header: string, index: number): React.ReactNode =>
             underline(header) ? (
               <Box className="adminNavbarLink">
                 <Link id="adminNavbarUnderline" to={navlinkHandler(header)}>

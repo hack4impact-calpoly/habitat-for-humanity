@@ -25,7 +25,7 @@ const DONATIONS_INDEX = 1;
 const PROFILE_INDEX = 2;
 const SIGN_OUT_INDEX = 3;
 
-function DonatorNavbar(): JSX.Element {
+function DonatorNavbar(): React.ReactNode {
   const router = useRouter();
   const [anchor, setAnchor] = useState(null);
 
@@ -90,7 +90,7 @@ function DonatorNavbar(): JSX.Element {
       </a>
       <div id="donatorNavbarHeaders">
         {navBarHeaders?.map(
-          (header: string, index: number): JSX.Element =>
+          (header: string, index: number): React.ReactNode =>
             underline(header) ? (
               <Box key={index} className="donatorNavbarLink">
                 <Link id="donatorNavbarUnderline" href={navlinkHandler(header)}>

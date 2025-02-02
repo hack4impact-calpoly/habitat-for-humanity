@@ -12,7 +12,7 @@ const weeklyHours = [
   { day: "Sunday", hours: "Closed" },
 ];
 
-function DonatorScheduleDropoff(): JSX.Element {
+function DonatorScheduleDropoff(): React.ReactNode {
   const router = useRouter();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {

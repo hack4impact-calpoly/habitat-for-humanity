@@ -14,7 +14,7 @@ import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
 require("../../../App.css");
 
-function DonatorProfileEditPage(): JSX.Element {
+function DonatorProfileEditPage(): React.ReactNode {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

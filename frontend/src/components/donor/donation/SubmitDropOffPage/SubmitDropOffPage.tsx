@@ -20,7 +20,7 @@ const address = "1 Grand Avenue \nSan Luis Obispo, CA 93407";
 
 const imagesPool: string[] = [sofa1];
 
-function SubmitDropOffPage(): JSX.Element {
+function SubmitDropOffPage(): React.ReactNode {
   return (
     <div>
       <DonatorNavbar />

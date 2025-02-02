@@ -13,10 +13,12 @@ import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { clearTimeSlots } from "redux/eventSlice";
 import { RootState } from "../../../redux/store";
-import DonationInfoTab, { TimeSlot } from "./DonationInfoTab";
-import AdminNavbar from "../AdminNavbar/AdminNavbar";
-import ReceiptPage from "./ReceiptPage/ReceiptPage";
-import AdminSchedulePage from "./AdminSchedulePage";
+import DonationInfoTab, {
+  TimeSlot,
+} from "../../../components/admin/DonationInfoPage/DonationInfoTab";
+import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
+import ReceiptPage from "../../../components/admin/DonationInfoPage/ReceiptPage/ReceiptPage";
+import AdminSchedulePage from "../../../components/admin/DonationInfoPage/AdminSchedulePage";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
 
 require("../../../App.css");

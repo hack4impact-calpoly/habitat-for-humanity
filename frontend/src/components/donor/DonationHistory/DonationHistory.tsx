@@ -29,7 +29,7 @@ const header = [
   "Status",
 ];
 
-function DonationHistory(): JSX.Element {
+function DonationHistory(): React.ReactNode {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);

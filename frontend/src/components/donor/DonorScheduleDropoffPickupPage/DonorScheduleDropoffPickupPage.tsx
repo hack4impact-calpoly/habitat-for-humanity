@@ -13,7 +13,7 @@ import { RootState } from "../../../redux/store";
 
 require("../../../App.css");
 
-function DonatorScheduleDropoffPage(): JSX.Element {
+function DonatorScheduleDropoffPage(): React.ReactNode {
   const storedDropoff = useSelector(
     (state: RootState) => state.donation.dropoff,
   );

@@ -38,7 +38,7 @@ import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import LoginPage from "./components/authentication/LoginPage/LoginPage";
 // import VerifyAccountPage from 'components/authentication/VerifyAccountPage/VerifyAccountPage';
 
-function App(): JSX.Element {
+function App(): React.ReactNode {
   return (
     // <SuccessPage />
     <LoginPage />

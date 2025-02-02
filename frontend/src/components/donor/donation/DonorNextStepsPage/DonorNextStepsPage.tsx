@@ -7,7 +7,7 @@ import ProgressBar from "components/donor/donation/ProgressBar";
 
 require("../../../../App.css");
 
-function DonatorNextStepsPage(): JSX.Element {
+function DonatorNextStepsPage(): React.ReactNode {
   const router = useRouter();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {

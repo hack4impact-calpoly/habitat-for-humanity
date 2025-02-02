@@ -100,7 +100,7 @@ const getDay = (time: string) =>
 const getDayShort = (time: string) =>
   time ? moment(time).format("dddd, MMMM Do YYYY") : "N/A";
 
-function DonorDonationInfoPage(): JSX.Element {
+function DonorDonationInfoPage(): React.ReactNode {
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
   const [donor, setDonor] = useState<User>(emptyUser);

@@ -4,14 +4,18 @@ import ProgressBar from "components/donor/donation/ProgressBar";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { updateAddress, updateCity, updateZip } from "../../../redux/donationSlice";
+import {
+  updateAddress,
+  updateCity,
+  updateZip,
+} from "../../../redux/donationSlice";
 
 import { RootState, store } from "../../../redux/store";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
 require("../../../App.css");
 
-function DonatorLocationPage(): JSX.Element {
+function DonatorLocationPage(): React.ReactNode {
   const storedAddr = useSelector((state: RootState) => state.donation.address);
   const storedCity = useSelector((state: RootState) => state.donation.city);
   const storedZip = useSelector((state: RootState) => state.donation.zipCode);

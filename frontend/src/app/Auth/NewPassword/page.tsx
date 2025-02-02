@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useSearchParams } from "next/navigation";
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -16,7 +15,7 @@ require("../../../App.css");
 const RESEND_TIME = 60;
 let resendTimerInterval: NodeJS.Timeout | undefined;
 
-function NewPasswordPage(): React.ReactNode {
+function NewPasswordPage(props): React.ReactNode {
   const [verificationCode, setVerificationCode] = useState<string>("");
   const [password, setPassword] = useState({
     value: "",
@@ -24,9 +23,8 @@ function NewPasswordPage(): React.ReactNode {
   });
   const [resendButtonTime, setResendButtonTime] = useState(RESEND_TIME);
 
-  const query = useSearchParams();
-  const query = query.get("resetEmail");
-  const state = location?.state as { resetEmail: string };
+  const location = props.router.query.resetEmail;
+  const state = location.state as { resetEmail: string };
   const { resetEmail } = state;
   const [email, setEmail] = useState<string>(resetEmail);
 

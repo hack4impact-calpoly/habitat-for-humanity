@@ -9,7 +9,7 @@ import DonatorNavbar from "../DonorNavbar/DonorNavbar";
 
 require("../../../App.css");
 
-function DonatorProfilePage(): JSX.Element {
+function DonatorProfilePage(): React.ReactNode {
   const [user, setUser] = useState<any>([]);
 
   useEffect(() => {
