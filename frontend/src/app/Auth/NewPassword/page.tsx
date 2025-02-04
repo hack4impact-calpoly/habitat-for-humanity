@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -17,7 +17,7 @@ require("../../../App.css");
 const RESEND_TIME = 60;
 let resendTimerInterval: NodeJS.Timeout | undefined;
 
-function NewPasswordPage(props): React.ReactNode {
+function NewPasswordPage(): React.ReactNode {
   const [verificationCode, setVerificationCode] = useState<string>("");
   const [password, setPassword] = useState({
     value: "",
@@ -25,10 +25,10 @@ function NewPasswordPage(props): React.ReactNode {
   });
   const [resendButtonTime, setResendButtonTime] = useState(RESEND_TIME);
 
-  const location = props.router.query.resetEmail;
-  const state = location.state as { resetEmail: string };
-  const { resetEmail } = state;
-  const [email, setEmail] = useState<string>(resetEmail);
+  const query = useSearchParams();
+  console.log(query);
+  const resetEmail = query.get("resetEmail");
+  const [email, setEmail] = useState<string>(resetEmail || "");
 
   // Timer algorithm is based on the article below
   // https://tech.goibibo.com/building-otp-verification-component-in-react-native-with-auto-read-from-sms-2a9a400015b0
@@ -205,8 +205,8 @@ function NewPasswordPage(props): React.ReactNode {
             <input
               className="inputBox"
               type="text"
-              placeholder={resetEmail}
-              defaultValue={resetEmail}
+              placeholder={resetEmail || ""}
+              defaultValue={resetEmail || ""}
               disabled
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(e.target.value)
@@ -285,7 +285,7 @@ function NewPasswordPage(props): React.ReactNode {
               Resend Code
             </button>
           )}
-          <Link id="useDifferentEmailLink" to="/ForgotPassword">
+          <Link id="useDifferentEmailLink" href="/ForgotPassword">
             Use a different email
           </Link>
         </div>

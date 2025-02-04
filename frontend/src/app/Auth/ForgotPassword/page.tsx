@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 require("../../../App.css");
 
@@ -39,10 +39,9 @@ function ForgotPasswordPage(): React.ReactNode {
     const target = e.target as HTMLTextAreaElement;
     if (target.value === "sendButton") {
       if (submitData() && checkAWS) {
-        router.push({
-          pathname: successPath,
-          query: { resetEmail: email },
-        });
+        router.push(
+          successPath + "?" + new URLSearchParams({ resetEmail: email }).toString(),
+        );
       }
     }
   };

@@ -166,8 +166,8 @@ function AdminCalendar(): React.ReactNode {
   };
 
   return (
-    <div>
-      {open ? (
+    <>
+      {open && (
         <Modal open={open} onClose={closeModalComponent}>
           <Box sx={style}>
             <Typography style={modalAddressStyle}>
@@ -239,8 +239,6 @@ function AdminCalendar(): React.ReactNode {
             </Typography>
           </Box>
         </Modal>
-      ) : (
-        console.log("no valid data")
       )}
 
       <AdminNavbar />
@@ -285,7 +283,7 @@ function AdminCalendar(): React.ReactNode {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 //  controls how the inside of an event cell looks

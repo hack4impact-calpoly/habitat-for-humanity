@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-// import logo from "images/ReStoreLogo.png";
+import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -32,7 +32,7 @@ const donationInfoPath: string = "/Admin/DonationInfo";
 function AdminNavbar(): React.ReactNode {
   const router = useRouter();
   const [anchor, setAnchor] = useState(null);
-  const pagePath = window.location.pathname;
+  const pagePath = usePathname();
 
   const handleOpenNavMenu = (event: any) => {
     setAnchor(event.currentTarget);
@@ -84,11 +84,11 @@ function AdminNavbar(): React.ReactNode {
   const renderDesktopNavbar = () => (
     <Box sx={styles.adminNavbar}>
       <a href="/Admin">
-        <Box
-          component="img"
-          src="images/ReStoreLogo.png"
+        <Image
+          src="/images/ReStoreLogo.png"
           alt="logo"
-          sx={{ width: { md: "12rem" } }}
+          width={140}
+          height={50}
         />
       </a>
       <div id="adminNavbarHeaders">
@@ -126,11 +126,12 @@ function AdminNavbar(): React.ReactNode {
       }}
     >
       <a href="/Admin">
-        <Box
-          component="img"
-          src={logo}
+        <Image
+          src="/images/ReStoreLogo.png"
           alt="logo"
-          sx={{ width: { xs: "10rem" } }}
+          width={140}
+          height={50}
+          style={{ width: "10rem" }}
         />
       </a>
       <IconButton

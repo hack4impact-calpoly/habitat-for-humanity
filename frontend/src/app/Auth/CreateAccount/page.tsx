@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Box, useMediaQuery } from "@mui/material";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
@@ -58,12 +58,9 @@ function CreateAccountPage(): React.ReactNode {
       if (checkAWS) {
         const user = await getFormData();
         addUser(user);
-        router.push({
-          pathname: successPath,
-          query: {
-            email,
-          },
-        });
+        router.push(
+          successPath + '?' + new URLSearchParams({ email: email }).toString(),
+        );
       }
     }
   };

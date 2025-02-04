@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 //import { CognitoUser } from "amazon-cognito-identity-js";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
@@ -46,13 +46,9 @@ function LoginPage(): React.ReactNode {
           case "UserNotConfirmedException": {
             // only checks email, i.e. wrong password w/correct (unconfirmed) email will still cause the exception
             const errorMessage = await awsSendNewCode();
-            router.push({
-              pathname: verifyAccountPath,
-              query: {
-                email,
-                verificationError: errorMessage,
-              },
-            });
+            router.push(
+              verifyAccountPath + "?" + new URLSearchParams({ email, verificationError: errorMessage }).toString(),
+            );
             return false;
           }
           default: {

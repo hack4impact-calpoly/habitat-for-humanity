@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, use } from "react";
-import { useRouter } from "next/router";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -188,7 +187,7 @@ function VerifyAccountPage(): React.ReactNode {
       setVerificationError("Email cannot be empty");
       return false;
     }
-    if (!isEmail(email)) {
+    if (!isEmail(email || "")) {
       setVerificationError("Please enter a valid email address");
       return false;
     }
@@ -213,7 +212,7 @@ function VerifyAccountPage(): React.ReactNode {
             <input
               className="inputBox"
               type="text"
-              defaultValue={email}
+              defaultValue={email || ""}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(e.target.value)
               }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { getUserByID, User } from "api/user";
@@ -14,13 +14,13 @@ import { addEvent } from "api/event";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { clearTimeSlots } from "redux/eventSlice";
-import { RootState } from "../../../redux/store";
+import { RootState } from "../../../../redux/store";
 import DonationInfoTab, {
   TimeSlot,
-} from "../../../components/admin/DonationInfoPage/DonationInfoTab";
-import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
-import ReceiptPage from "../../../components/admin/DonationInfoPage/ReceiptPage/ReceiptPage";
-import AdminSchedulePage from "../../../components/admin/DonationInfoPage/AdminSchedulePage";
+} from "../../../../components/admin/DonationInfoPage/DonationInfoTab";
+import AdminNavbar from "../../../../components/admin/AdminNavbar/AdminNavbar";
+import ReceiptPage from "../../../../components/admin/DonationInfoPage/ReceiptPage/ReceiptPage";
+import AdminSchedulePage from "../../../../components/admin/DonationInfoPage/AdminSchedulePage";
 import sofa1 from "../../donor/donation/images/sofa-01.png";
 
 require("../../../App.css");
@@ -110,13 +110,18 @@ const getDay = (time: string) =>
 const getDayShort = (time: string) =>
   time ? moment(time).format("dddd, MMMM Do YYYY") : "N/A";
 
-function DonationInfoPage(): React.ReactNode {
+async function DonationInfoPage({
+    params,
+}: {
+    params: Promise<{ slug?: string[] }>;
+}) {
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
   const [donor, setDonor] = useState<User>(emptyUser);
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
-  const { id } = useParams();
+  const slug = (await params).slug;
+  const id = slug ? slug[0] : "";
 
   const router = useRouter();
   const buttonNavigation = async (
