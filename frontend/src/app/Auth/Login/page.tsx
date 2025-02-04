@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { CognitoUser } from "amazon-cognito-identity-js";
+import { useRouter } from "next/router";
+//import { CognitoUser } from "amazon-cognito-identity-js";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";

@@ -1,7 +1,7 @@
-import FullCalendar, {
-  EventClickArg,
-  EventContentArg,
-} from "@fullcalendar/react";
+"use client";
+
+import FullCalendar from "@fullcalendar/react";
+import { EventClickArg, EventContentArg } from "@fullcalendar/core";
 import React, { useState, useEffect } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -113,7 +113,7 @@ const viewDonnationButton = {
   borderLeftWidth: "0px",
 };
 
-function AdminCalendar(): React.ReactNode {
+function AdminCalendar() {
   const [open, setOpen] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState<DonationEvent[]>([]);
   const [clickedEvent, setClickedEvent] = useState<EventClickArg>();
@@ -166,8 +166,8 @@ function AdminCalendar(): React.ReactNode {
   };
 
   return (
-    <div>
-      {open ? (
+    <>
+      {open && (
         <Modal open={open} onClose={closeModalComponent}>
           <Box sx={style}>
             <Typography style={modalAddressStyle}>
@@ -239,9 +239,7 @@ function AdminCalendar(): React.ReactNode {
             </Typography>
           </Box>
         </Modal>
-      ) : (
-        console.log("no valid data")
-      )}
+      )};
 
       <AdminNavbar />
 
@@ -285,7 +283,7 @@ function AdminCalendar(): React.ReactNode {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 //  controls how the inside of an event cell looks

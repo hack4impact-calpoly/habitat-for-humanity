@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -445,7 +447,7 @@ function CreateAccountPage(): React.ReactNode {
         <div className="logInBox">
           <p className="createAccountLogin">Already have an account?</p>
           <Link
-            to={mainScreenPath}
+            href={mainScreenPath}
             className="createAccountLogin"
             id="logInLink"
           >
