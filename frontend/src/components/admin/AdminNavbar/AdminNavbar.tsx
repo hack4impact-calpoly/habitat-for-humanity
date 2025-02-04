@@ -28,6 +28,7 @@ const signoutPath: string = "/";
 const adminHomePath: string = "/Admin";
 const calendarPath: string = "/Admin/Calendar";
 const donationInfoPath: string = "/Admin/DonationInfo";
+const activePath: string = "/Admin/ActiveDonations";
 
 function AdminNavbar(): React.ReactNode {
   const router = useRouter();
@@ -44,8 +45,15 @@ function AdminNavbar(): React.ReactNode {
 
   const underline = (header: string): boolean => {
     if (
+      header === navBarHeaders[0] &&
+      pagePath.includes(calendarPath)
+    ) {
+      return true;
+    }
+    
+    if (
       header === navBarHeaders[2] &&
-      pagePath.includes(donationApprovalsPath)
+      pagePath.includes(activePath)
     ) {
       // For different donation pages
       return true;
@@ -84,11 +92,11 @@ function AdminNavbar(): React.ReactNode {
   const renderDesktopNavbar = () => (
     <Box sx={styles.adminNavbar}>
       <a href="/Admin">
-        <Image
+        <Box
+          component="img"
           src="/images/ReStoreLogo.png"
           alt="logo"
-          width={140}
-          height={50}
+          sx={{ width: { md: "12rem" } }}
         />
       </a>
       <div id="adminNavbarHeaders">
@@ -98,7 +106,7 @@ function AdminNavbar(): React.ReactNode {
         {navBarHeaders?.map(
           (header: string, index: number): React.ReactNode =>
             underline(header) ? (
-              <Box className="adminNavbarLink">
+              <Box key={index} className="adminNavbarLink">
                 <Link id="adminNavbarUnderline" href={navlinkHandler(header)}>
                   {header}
                 </Link>
@@ -126,12 +134,11 @@ function AdminNavbar(): React.ReactNode {
       }}
     >
       <a href="/Admin">
-        <Image
+        <Box
+          component="img"
           src="/images/ReStoreLogo.png"
           alt="logo"
-          width={140}
-          height={50}
-          style={{ width: "10rem" }}
+          sx={{ width: { md: "12rem" } }}
         />
       </a>
       <IconButton
