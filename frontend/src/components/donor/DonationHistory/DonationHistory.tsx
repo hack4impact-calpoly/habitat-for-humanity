@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -17,35 +17,49 @@ import { RootState } from "../../../redux/store";
 import { Item, getItemsByDonorID } from "../../../api/item";
 import DonorNavbar from "../DonorNavbar/DonorNavbar";
 
+import Arrow from "../../../images/arrow.png";
+
 require("./DonationHistory.css");
 
 const header = [
-  "Donation Item",
-  "Type",
-  "Date/Time Received",
-  "Date/Time Approved",
-  "Status",
+  { label: "Donation Item", key: "name" },
+  { label: "Type", key: "scheduling" },
+  { label: "Date/Time Received", key: "timeSubmitted" },
+  { label: "Date/Time Approved", key: "timeApproved" },
+  { label: "Status", key: "status" },
 ];
 
 function DonationHistory(): JSX.Element {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
   const [items, setItems] = useState<Item[]>([]);
   const [donors, setDonors] = useState<User[]>([]);
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  }>({
+    key: "timeSubmitted",
+    direction: "desc",
+  });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const storedDonorID = useSelector(
     (state: RootState) => state.donation.donorID
   );
 
-  const dispatch = useDispatch();
-
   const setCurrentUserID = async () => {
-    Auth.currentUserInfo().then((user) => {
-      const { attributes = {} } = user;
-      dispatch(updateDonorID(attributes["custom:id"]));
-    });
+    try {
+      const user = await Auth.currentUserInfo();
+      if (user && user.attributes) {
+        dispatch(updateDonorID(user.attributes["custom:id"]));
+      } else {
+        console.error("User info not available");
+      }
+    } catch (error) {
+      console.error("Error fetching current user:", error);
+    }
   };
 
   useEffect(() => {
@@ -53,28 +67,25 @@ function DonationHistory(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    getItemsByDonorID(storedDonorID).then((res) => setItems(res));
-    getUserByID(storedDonorID).then((res) => setDonors([res]));
-  }, []);
+    if (storedDonorID) {
+      getItemsByDonorID(storedDonorID)
+        .then((res) => setItems(res || [])) // Ensure we always set an array
+        .catch((error) => {
+          console.error("Error fetching items:", error);
+          setItems([]); // Fallback to empty array on error
+        });
+
+      getUserByID(storedDonorID)
+        .then((res) => setDonors([res]))
+        .catch((error) => {
+          console.error("Error fetching donor:", error);
+          setDonors([]); // Fallback to empty array on error
+        });
+    }
+  }, [storedDonorID]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-  };
-
-  const getDonorName = (id: string) => {
-    console.log(id);
-    const donor = donors.find((d) => d.id === id);
-    return `${donor?.firstName} ${donor?.lastName}`;
-  };
-
-  const convertTime = (time: Date) =>
-    time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
-
-  const sortReceivedTime = (don1: any, don2: any) => {
-    if (don1.timeSubmitted > don2.timeSubmitted) {
-      return -1;
-    }
-    return 1;
   };
 
   const handleChangeRowsPerPage = (
@@ -83,6 +94,29 @@ function DonationHistory(): JSX.Element {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const convertTime = (time: Date) =>
+    time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
+
+  const handleSort = (key: string) => {
+    setSortConfig((prevSort) => ({
+      key,
+      direction:
+        prevSort.key === key && prevSort.direction === "asc" ? "desc" : "asc",
+    }));
+  };
+
+  const sortedItems = [...items].sort((a, b) => {
+    const key = sortConfig.key as keyof Item;
+
+    const valueA = a[key] ?? ""; // Default to empty string if undefined
+    const valueB = b[key] ?? ""; // Default to empty string if undefined
+
+    if (valueA < valueB) return sortConfig.direction === "asc" ? -1 : 1;
+    if (valueA > valueB) return sortConfig.direction === "asc" ? 1 : -1;
+    return 0;
+  });
+
   return (
     <div>
       <DonorNavbar />
@@ -90,45 +124,71 @@ function DonationHistory(): JSX.Element {
         <h1 id="DonHistoryHeader">Donation History</h1>
         <TableContainer>
           <Table>
-            <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead
+              sx={{ minWidth: 650 }}
+              aria-label="donation history table"
+            >
               <TableRow>
                 {header.map((h, index) => (
-                  <TableCell key={index}>
-                    <p className="tableCell">{h}</p>
+                  <TableCell
+                    key={index}
+                    onClick={() => handleSort(h.key)}
+                    style={{
+                      cursor: "pointer",
+                      backgroundColor:
+                        sortConfig.key === h.key ? "#f0f0f0" : "inherit", // Highlight sorted column
+                    }}
+                  >
+                    <p className="tableCell">
+                      {h.label}{" "}
+                      <img
+                        src={Arrow}
+                        alt="Sort Icon"
+                        style={{
+                          width: 12,
+                          marginLeft: 5,
+                          opacity: 0.6, // Make arrows slightly faded
+                        }}
+                      />
+                    </p>
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {items
-                ?.sort((a, b) => sortReceivedTime(a, b))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((d, index) => (
-                  // TODO: wrap parent link to new page
-                  <TableRow
-                    key={index}
-                    // to={`DonationInfo/${d._id}`}
-                    onClick={() => {
-                      navigate(`DonationInfo/${d._id}/`);
-                    }}
-                    style={{ textDecoration: "none" }}
-                    className="tableRow"
-                  >
-                    <TableCell scope="row">{d.name}</TableCell>
-                    <TableCell>{d.scheduling}</TableCell>
-                    <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
-                    <TableCell>{convertTime(d.timeApproved)}</TableCell>
-                    {d.status === "Approved and Scheduled" ? (
+              {sortedItems.length > 0 ? (
+                sortedItems
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((d, index) => (
+                    <TableRow
+                      key={index}
+                      onClick={() => navigate(`DonationInfo/${d._id}/`)}
+                      className="tableRow"
+                    >
+                      <TableCell>{d.name}</TableCell>
+                      <TableCell>{d.scheduling}</TableCell>
+                      <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
+                      <TableCell>{convertTime(d.timeApproved)}</TableCell>
                       <TableCell>
-                        <p className="approved">{d.status}</p>
+                        <p
+                          className={
+                            d.status === "Approved and Scheduled"
+                              ? "approved"
+                              : "needApproval"
+                          }
+                        >
+                          {d.status}
+                        </p>
                       </TableCell>
-                    ) : (
-                      <TableCell>
-                        <p className="needApproval">{d.status}</p>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                ))}
+                    </TableRow>
+                  ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    No items found.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
           <TablePagination
