@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router()
+const router = express.Router();
 var mongoose = require('mongoose');
 const Event = require('../models/eventSchema.js');
 const Item = require('../models/itemSchema.js');
@@ -128,5 +128,21 @@ router.put("/eventId/:eventId", async (req, res) => {
     console.log(`Error: ${errorMessage}`);
   }
 })
+
+router.delete("/eventId/:eventId", async (req, res) => {
+
+  try {
+     const event = await Event.findOneAndDelete({ _id: req.params.eventId });
+
+     if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+     }
+
+     res.status(200).json({ message: 'Event deleted successfully' });
+  } catch (error) {
+    console.error("Error deleting event: ", error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 module.exports = router

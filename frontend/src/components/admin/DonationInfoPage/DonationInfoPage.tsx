@@ -128,6 +128,13 @@ function DonationInfoPage(): JSX.Element {
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
       sendUpdatedItemToDB("Rejected", false);
+
+      // deletes the event associated with the donation
+      const eventIDToDelete = availableTimes[0]?.id;
+      if (eventIDToDelete) {
+        await deleteEvent(eventIDToDelete); // deletes event by the id
+      }
+
       navigate(backPath);
       navigate(0); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
@@ -144,6 +151,23 @@ function DonationInfoPage(): JSX.Element {
       }
     }
   };
+
+  const deleteEvent = async (eventId: string) => {
+    try {
+      const response = await fetch(`/api/events/${eventId}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Event deleted successfully: ", result);
+      } else {
+        const error = await response.json();
+        console.error("Error deleting event: ", error);
+      }
+    } catch (error) {
+      console.error("Error deleting the event: ", error);
+    }
+  }
 
   const sendEventToDB = (timeSlot: TimeSlot, item: Item) => {
     const event = {
