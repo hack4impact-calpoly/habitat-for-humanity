@@ -12,11 +12,15 @@ const AVAILABILITY_HEADER = 1;
 const DONATION_APPROVALS_HEADER = 2;
 const HISTORY_HEADER = 3;
 const PROFILE_HEADER = 4;
-const SIGN_OUT_HEADER = 5;
+const ACTIVE_DONATIONS_HEADER = 5;
+const SIGN_OUT_HEADER = 6;
 
 const navBarHeaders: string[] = [
   "Calendar",
   "Availablility",
+  "Donation Approvals",
+  "History",
+  "Profile",
   "Active Donations",
   "Sign Out",
 ];
@@ -24,7 +28,7 @@ const navBarHeaders: string[] = [
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
 const donationApprovalsPath: string = "/Admin/DonationApproval";
-const signoutPath: string = "/";
+const signoutPath: string = "/Auth/Login";
 const adminHomePath: string = "/Admin";
 const calendarPath: string = "/Admin/Calendar";
 const donationInfoPath: string = "/Admin/DonationInfo";
@@ -45,14 +49,14 @@ function AdminNavbar(): React.ReactNode {
 
   const underline = (header: string): boolean => {
     if (
-      header === navBarHeaders[0] &&
+      header === navBarHeaders[CALENDAR_HEADER] &&
       pagePath.includes(calendarPath)
     ) {
       return true;
     }
     
     if (
-      header === navBarHeaders[2] &&
+      header === navBarHeaders[ACTIVE_DONATIONS_HEADER] &&
       pagePath.includes(activePath)
     ) {
       // For different donation pages
