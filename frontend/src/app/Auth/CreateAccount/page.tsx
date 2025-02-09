@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";  
 import { Box, useMediaQuery } from "@mui/material";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
@@ -13,15 +13,23 @@ import IconButton from "@mui/material/IconButton";
 import isEmail from "validator/lib/isEmail";
 import isMobilePhone from "validator/lib/isMobilePhone";
 import { v4 as uuidv4 } from "uuid";
+
 /* Backend */
 import { addUser, User } from "api/user";
 import { BsBoxArrowInDown } from "react-icons/bs";
+
+import { useSignUp } from '@clerk/nextjs'
+
 // import { debug } from "console";
+
 
 require("../../../App.css");
 
 function CreateAccountPage(): React.ReactNode {
   // const { uuid } = require('uuidv4');
+  const {isLoaded, signUp, setActive} = useSignUp();
+  const [verifying, setVerifying] = useState(false);
+  const [code, setCode] = useState('');
   const [userType, setUserType] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -42,86 +50,8 @@ function CreateAccountPage(): React.ReactNode {
   let processedPhoneNumber: number; // Phone number converted from string
 
   const router = useRouter();
-  const mainScreenPath: string = "/"; // Main screen (login)
-  const successPath: string = "/VerifyAccountPage";
-
-  const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): Promise<any> => {
-    e.preventDefault();
-    let checkAWS = false;
-    const valid = validateForm();
-
-    if (valid) {
-      checkAWS = await awsSignUp();
-      console.log(checkAWS);
-      if (checkAWS) {
-        const user = await getFormData();
-        addUser(user);
-        router.push(
-          successPath + '?' + new URLSearchParams({ email: email }).toString(),
-        );
-      }
-    }
-  };
-
-  // awsSignUp to create an account for authentication, called in buttonNavigation
-  let awsSignUp = async (): Promise<any> => {
-    const username = email;
-    const p = password.value;
-    // let userID = ;
-    // setID(userID);
-    // console.log(userID)
-    console.log(id);
-    // TODO: Replace with Clerk
-    const response = await Auth.signUp({
-      username,
-      password: p,
-      attributes: {
-        "custom:id": id,
-      },
-      // const id = uuid.v4();
-      // let response = await Auth.signUp(email, password.value, id): Observable<any> {
-      //     const signUpParams: any = {
-      //         email,
-      //         password,
-      //         attributes: {
-      //             'custom:id': id,
-      //         }
-      //     };
-      // return fromPromise(Auth.signUp(
-      //     signUpParams
-      // )
-    }).catch((error) => {
-      const { code } = error;
-      setPasswordError(error.message);
-      return false;
-    });
-    return response;
-  };
-
-  async function getFormData() {
-    /*
-        Desc: Gets all form data and coverts it into JSON
-        Return: JSON string
-        */
-    // let userAuth = await Auth.currentUserInfo();
-    // console.log(userAuth);
-    // let userAuth2 = await Auth.currentAuthenticatedUser();
-    // console.log(userAuth2.username);
-    // console.log(id);
-
-    const accountData = {
-      userType,
-      firstName,
-      lastName,
-      email,
-      phone: phoneNumber, // number(int) in form: 8057562501
-      id,
-      // password: password.value
-    };
-    return accountData as User;
-  }
+  const mainScreenPath: string = "/Auth/Login"; // Main screen (login)
+  // const successPath: string = "/VerifyAccountPage";
 
   // Form Validation Functions
   const validateForm = (): boolean => {
@@ -259,7 +189,7 @@ function CreateAccountPage(): React.ReactNode {
         );
         return false;
       }
-      setPhoneNumber(processedString);
+      setPhoneNumber('+' + processedString);
     } catch (error) {
       console.error(error);
       setPhoneNumberError(
@@ -270,13 +200,79 @@ function CreateAccountPage(): React.ReactNode {
     return true;
   }
 
-  function checkError(type: string) {
-    validateForm();
-  }
   // checks if page is in mobile view
   const isMobile = useMediaQuery("(max-width: 640px)");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!isLoaded) return 
+    const valid = validateForm();
+    if (valid) {
+      try {
+        console.log(phoneNumber)
+        await signUp.create({
+          firstName,
+          lastName,
+          emailAddress: email,
+          password: password.value,
+        })
+
+        await signUp.prepareEmailAddressVerification({
+          strategy: 'email_code',
+        })
+
+        setVerifying(true)
+      } catch (err: any) {
+      console.error(JSON.stringify(err, null, 2))
+      }
+    }
+    
+  }
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!isLoaded) return
+
+    try {
+      // Use the code the user provided to attempt verification
+      const signUpAttempt = await signUp.attemptEmailAddressVerification({
+        code,
+      })
+
+      if (signUpAttempt.status === 'complete') {
+        await setActive({ session: signUpAttempt.createdSessionId })
+        router.push('/')
+      } else {
+        // If the status is not complete, check why. User may need to
+        // complete further steps.
+        console.error(JSON.stringify(signUpAttempt, null, 2))
+      }
+    } catch (err: any) {
+      // See https://clerk.com/docs/custom-flows/error-handling
+      // for more info on error handling
+      console.error('Error:', JSON.stringify(err, null, 2))
+    }
+  }
+
+  // Display the verification form to capture the OTP code
+  if (verifying) {
+    return (
+      <>
+        <h1>Verify your email</h1>
+        <form onSubmit={handleVerify}>
+          <label id="code">Enter your verification code</label>
+          <input value={code} id="code" name="code" onChange={(e) => setCode(e.target.value)} />
+          <button type="submit">Verify</button>
+        </form>
+      </>
+    )
+  }
+
   // HTML Body
   return (
+    <>
     <Box id="createAccountStyles" sx={styles.container}>
       <Box id="createAccountBox">
         <p id="createAccountText">Create an Account</p>
@@ -433,11 +429,12 @@ function CreateAccountPage(): React.ReactNode {
             <div className="inputError">{passwordError}</div>
           </div>
         </form>
+        <div id="clerk-captcha"></div>
         <button
           type="submit"
           value="signUpButton"
           id="signUpButton"
-          onClick={buttonNavigation}
+          onClick={handleSubmit}
         >
           Sign Up
         </button>
@@ -453,6 +450,7 @@ function CreateAccountPage(): React.ReactNode {
         </div>
       </Box>
     </Box>
+    </>
   );
 }
 
