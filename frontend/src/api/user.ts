@@ -1,4 +1,25 @@
 const userURL = "http://localhost:3001/api/users/";
+/* ----------------------Clerk User Requests---------------------------*/
+export const updateMetadata = async (role: string, userId: string | null) =>
+  fetch(`${userURL}/updateRole`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      role,
+      userId,
+    }),
+  })
+    .then(async (res) => {
+      const response = await res.json();
+      if (!res.ok) {
+        // check server response
+        throw new Error(`${res.status}-${res.statusText}`);
+      }
+      return response;
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error
 
 /* ------------------GET Requests-----------------*/
 
