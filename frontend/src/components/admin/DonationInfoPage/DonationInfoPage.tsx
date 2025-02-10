@@ -155,7 +155,7 @@ function DonationInfoPage(): JSX.Element {
   const deleteEvent = async (eventId: string) => {
     try {
       const response = await fetch(`/api/events/${eventId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
       if (response.ok) {
         const result = await response.json();
@@ -167,7 +167,7 @@ function DonationInfoPage(): JSX.Element {
     } catch (error) {
       console.error("Error deleting the event: ", error);
     }
-  }
+  };
 
   const sendEventToDB = (timeSlot: TimeSlot, item: Item) => {
     const event = {
