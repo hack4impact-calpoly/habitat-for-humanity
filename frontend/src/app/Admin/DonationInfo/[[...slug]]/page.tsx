@@ -13,17 +13,16 @@ import moment from "moment";
 import { addEvent } from "api/event";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
-import { clearTimeSlots } from "redux/eventSlice";
+import { clearTimeSlots } from "../../../../redux/eventSlice";
 import { RootState } from "../../../../redux/store";
 import DonationInfoTab, {
   TimeSlot,
 } from "../../../../components/admin/DonationInfoPage/DonationInfoTab";
 import AdminNavbar from "../../../../components/admin/AdminNavbar/AdminNavbar";
-import ReceiptPage from "../../../../components/admin/DonationInfoPage/ReceiptPage/ReceiptPage";
-import AdminSchedulePage from "../../../../components/admin/DonationInfoPage/AdminSchedulePage";
-import sofa1 from "../../donor/donation/images/sofa-01.png";
+import Receipt from "../../../../components/admin/DonationInfoPage/Receipt/Receipt";
+import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSchedule";
 
-require("../../../App.css");
+require("../../../../App.css");
 
 function a11yProps(index: number) {
   return {
@@ -61,7 +60,7 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-const imagesPool: string[] = [sofa1];
+//const imagesPool: string[] = [sofa1];
 
 const date = new Date();
 
@@ -132,12 +131,12 @@ async function DonationInfoPage({
 
     if (e.currentTarget.value === "back") {
       sendUpdatedItemToDB(storedStatus, false);
-      router.push(backPath);
+      await router.push(backPath);
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
       sendUpdatedItemToDB("Rejected", false);
-      router.push(backPath);
+      await router.push(backPath);
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
       if (
@@ -148,7 +147,7 @@ async function DonationInfoPage({
       ) {
         console.log("Success submitting events!");
         clearTimeSlots(); // Clear time slots from redux
-        router.push(nextPath);
+        await router.push(nextPath);
         router.refresh(); // Reload page after navigating back to fetch changes
       }
     }
@@ -281,10 +280,10 @@ async function DonationInfoPage({
             />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <AdminSchedulePage timeSlots={availableTimes} />
+            <AdminSchedule timeSlots={availableTimes} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <ReceiptPage item={item} donor={donor} />
+            <Receipt item={item} donor={donor} />
           </TabPanel>
         </div>
         <div id="DonInfoButtons">
