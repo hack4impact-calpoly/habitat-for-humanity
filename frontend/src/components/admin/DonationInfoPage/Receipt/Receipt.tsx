@@ -5,37 +5,30 @@ import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
 import moment from "moment";
 import logo from "./logo.png";
-
 // import Tabs from "@mui/material/Tabs";
 // import Tab from "@mui/material/Tab";
 // import PropTypes from "prop-types";
 // import Typography from "@mui/material/Typography";
 // import Box from "@mui/material/Box";
 require("../../../../App.css");
-
 const exportPdf = (id: string) => {
   const input = document.getElementById(id);
-
   html2canvas(input!, { scale: 5 }).then(
     (canvas: { toDataURL: (arg0: string) => any }) => {
       const imgData = canvas.toDataURL("image/jpeg");
       const pdfDOC = new JsPDF();
-
       const width = pdfDOC.internal.pageSize.getWidth();
       const height = pdfDOC.internal.pageSize.getHeight();
-
       pdfDOC.addImage(imgData, "JPEG", 0, height / 50, width, height * 0.75);
       pdfDOC.save("receipt.pdf");
     }
   );
 };
-
 interface ReceiptTabProps {
   item: Item;
   donor: User;
 }
-
-function ReceiptPage(props: ReceiptTabProps): React.ReactNode {
+function Receipt(props: ReceiptTabProps): React.ReactNode {
   const { item, donor } = props;
   const fullName = `${donor?.firstName} ${donor?.lastName}`;
   const fullZip = `${item?.city}, California ${item?.zipCode}`;
@@ -54,7 +47,6 @@ function ReceiptPage(props: ReceiptTabProps): React.ReactNode {
     signature: "",
     date: moment().format("MM/DD/YYYY"),
   });
-
   useEffect(() => {
     setContract((prevContract) => ({
       ...prevContract,
@@ -68,7 +60,6 @@ function ReceiptPage(props: ReceiptTabProps): React.ReactNode {
       donatedItems: item?.name ?? "",
     }));
   }, [props]);
-
   return (
     <div>
       <div id="receiptPage" style={{ padding: "5%" }}>
@@ -349,5 +340,4 @@ function ReceiptPage(props: ReceiptTabProps): React.ReactNode {
     </div>
   );
 }
-
-export default ReceiptPage;
+export default Receipt;

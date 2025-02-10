@@ -8,23 +8,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Button } from "@mui/material";
-
 import { useDispatch } from "react-redux";
 import { clearAll, clearTimeSlots, updateTimeSlots } from "../../../redux/eventSlice";
 import { collectDates, TimeSlot } from "./DonationInfoTab";
-
-function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): React.ReactNode {
+function AdminSchedule(props: { timeSlots: TimeSlot[] }): React.ReactNode {
   const { timeSlots } = props;
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<TimeSlot[]>([]);
   const [timeSlotIds, setTimeSlotIds] = useState<string[]>([]);
-
   const dates = collectDates(timeSlots);
-
   useEffect(() => {
     setTimeSlotIds(selectedTimeSlots.map((ts) => ts.id));
     updateStore();
   }, [selectedTimeSlots]);
-
   const handleCheckbox =
     (timeSlot: TimeSlot) => (event: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = event.target.checked;
@@ -37,7 +32,6 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): React.ReactNode {
         );
       });
     };
-
   const handleVolunteerInput =
     (timeSlot: TimeSlot) => (event: React.ChangeEvent<HTMLInputElement>) => {
       const newTimeSlots = selectedTimeSlots.map((ts) => {
@@ -51,13 +45,11 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): React.ReactNode {
       });
       setSelectedTimeSlots(newTimeSlots);
     };
-
   const dispatch = useDispatch();
   const updateStore = () => {
     clearTimeSlots();
     dispatch(updateTimeSlots(selectedTimeSlots));
   };
-
   return (
     <div id="DonInfo">
       {/* <Button onClick={() => console.log(selectedTimeSlots)}>
@@ -68,7 +60,6 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): React.ReactNode {
           <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
             Schedule Donation
           </h2>
-
           <div id="TimeTable" style={{ marginTop: "3rem" }}>
             {dates.map((date, index) => (
               <div style={{ marginTop: "3rem" }} key={index}>
@@ -139,5 +130,4 @@ function AdminSchedulePage(props: { timeSlots: TimeSlot[] }): React.ReactNode {
     </div>
   );
 }
-
-export default AdminSchedulePage;
+export default AdminSchedule;
