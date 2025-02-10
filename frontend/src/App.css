@@ -2356,6 +2356,10 @@ input[type="radio"] {
   width: 500px;
   margin: auto;
   margin-top: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 #donatePageGift {
@@ -2562,6 +2566,10 @@ input[type="radio"] {
   /* transform: translateY(-20px); */
   padding-bottom: 5px;
   border-bottom: 3px solid var(--primary);
+}
+
+.signOutButton {
+  cursor: pointer;
 }
 
 #donatorProfileBox {
