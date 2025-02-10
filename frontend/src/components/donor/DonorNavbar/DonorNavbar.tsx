@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 // import logo from "images/ReStoreLogo.png";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -29,7 +29,7 @@ function DonatorNavbar(): React.ReactNode {
   const router = useRouter();
   const [anchor, setAnchor] = useState(null);
 
-  const pagePath = window.location.pathname;
+  const pagePath = usePathname();
 
   const handleOpenNavMenu = (event: any) => {
     setAnchor(event.currentTarget);
