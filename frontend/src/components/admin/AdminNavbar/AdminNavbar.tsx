@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useClerk } from "@clerk/nextjs";
 
 require("../../../App.css");
 
@@ -22,7 +23,6 @@ const navBarHeaders: string[] = [
   "History",
   "Profile",
   "Active Donations",
-  "Sign Out",
 ];
 
 // paths might change depending on how application routes are made
@@ -36,6 +36,7 @@ const activePath: string = "/Admin/ActiveDonations";
 
 function AdminNavbar(): React.ReactNode {
   const router = useRouter();
+  const { signOut } = useClerk();
   const [anchor, setAnchor] = useState(null);
   const pagePath = usePathname();
 
@@ -54,7 +55,7 @@ function AdminNavbar(): React.ReactNode {
     ) {
       return true;
     }
-    
+
     if (
       header === navBarHeaders[ACTIVE_DONATIONS_HEADER] &&
       pagePath.includes(activePath)
@@ -125,6 +126,14 @@ function AdminNavbar(): React.ReactNode {
               </Link>
             ),
         )}
+        <Box className="donatorNavbarLink">
+          <button
+            onClick={() => signOut({ redirectUrl: "/" })}
+            className="signOutButton"
+          >
+            Sign Out
+          </button>
+        </Box>
       </div>
     </Box>
   );
