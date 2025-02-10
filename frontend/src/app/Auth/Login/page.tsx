@@ -14,8 +14,10 @@ import isEmail from "validator/lib/isEmail";
 
 // import logo from "images/logo.png";
 import "../../../App.css";
+import { useSignIn } from "@clerk/nextjs";
 
 function LoginPage(): React.ReactNode {
+  const { isLoaded, signIn, setActive } = useSignIn();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState({
     value: "",
@@ -29,66 +31,66 @@ function LoginPage(): React.ReactNode {
   const createAccountPath = "/CreateAccount";
   const verifyAccountPath: string = "/VerifyAccountPage";
   // Function for logging into AWS account, called in login function
-  const awsLogin = async (): Promise<CognitoUser | any> => {
-    // TODO: Set up cognito
-    const response = await Auth.signIn(email, password.value).catch(
-      async (error) => {
-        const { code } = error;
-        switch (code) {
-          case "NotAuthorizedException": {
-            setPasswordError("Please enter valid credentials");
-            return false;
-          }
-          case "UserNotFoundException": {
-            setPasswordError("User does not exist");
-            return false;
-          }
-          case "UserNotConfirmedException": {
-            // only checks email, i.e. wrong password w/correct (unconfirmed) email will still cause the exception
-            const errorMessage = await awsSendNewCode();
-            router.push(
-              verifyAccountPath + "?" + new URLSearchParams({ email, verificationError: errorMessage }).toString(),
-            );
-            return false;
-          }
-          default: {
-            setPasswordError(error);
-            return false;
-          }
-        }
-      },
-    );
-    return response;
-  };
+  // const   awsLogin = async (): Promise<CognitoUser | any> => {
+  //   // TODO: Set up cognito
+  //   const response = await Auth.signIn(email, password.value).catch(
+  //     async (error) => {
+  //       const { code } = error;
+  //       switch (code) {
+  //         case "NotAuthorizedException": {
+  //           setPasswordError("Please enter valid credentials");
+  //           return false;
+  //         }
+  //         case "UserNotFoundException": {
+  //           setPasswordError("User does not exist");
+  //           return false;
+  //         }
+  //         case "UserNotConfirmedException": {
+  //           // only checks email, i.e. wrong password w/correct (unconfirmed) email will still cause the exception
+  //           const errorMessage = await awsSendNewCode();
+  //           router.push(
+  //             verifyAccountPath + "?" + new URLSearchParams({ email, verificationError: errorMessage }).toString(),
+  //           );
+  //           return false;
+  //         }
+  //         default: {
+  //           setPasswordError(error);
+  //           return false;
+  //         }
+  //       }
+  //     },
+  //   );
+  //   return response;
+  // };
 
-  let awsSendNewCode = async (): Promise<any> => {
-    let errorMessage = "";
-    // TODO: Set up cognito
-    const response = await Auth.resendSignUp(email).catch((error) => {
-      const { code } = error;
-      console.log(error);
-      switch (code) {
-        case "LimitExceededException":
-          errorMessage = "Too many tries, please try again later";
-          break;
-        default:
-          errorMessage = error.message;
-      }
-    });
-    return errorMessage;
-  };
+  // let awsSendNewCode = async (): Promise<any> => {
+  //   let errorMessage = "";
+  //   // TODO: Set up cognito
+  //   const response = await Auth.resendSignUp(email).catch((error) => {
+  //     const { code } = error;
+  //     console.log(error);
+  //     switch (code) {
+  //       case "LimitExceededException":
+  //         errorMessage = "Too many tries, please try again later";
+  //         break;
+  //       default:
+  //         errorMessage = error.message;
+  //     }
+  //   });
+  //   return errorMessage;
+  // };
 
-  const login = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): Promise<any> => {
-    e.preventDefault();
-    const valid = checkCredentials();
-    if (valid) {
-      const checkAWS = await awsLogin();
-      if (checkAWS) {
-        router.push("/Donor");
-      }
-    }
+  // const login = async (
+  //   e: React.MouseEvent<HTMLButtonElement>,
+  // ): Promise<any> => {
+  //   e.preventDefault();
+  //   const valid = checkCredentials();
+  //   if (valid) {
+  //     const checkAWS = await awsLogin();
+  //     if (checkAWS) {
+  //       router.push("/Donor");
+  //     }
+  //   }
     /*
         else if (valid && admin){
             router.push("/Admin/Home");
@@ -100,7 +102,32 @@ function LoginPage(): React.ReactNode {
             alert("Sorry an unexpected error occured while logging you in");
         }
         */
-  };
+  // };
+
+  const login = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!isLoaded) return;
+    const valid = checkCredentials();
+    if (valid) {
+      try {
+        const signInAttempt = await signIn.create({
+          identifier: email,
+          password: password.value,
+        });
+  
+        if (signInAttempt.status === 'complete') {
+          await setActive({ session: signInAttempt.createdSessionId })
+          router.push('/')
+        } else {
+          console.error(JSON.stringify(signInAttempt, null, 2));
+        }
+      } catch (err: any) {
+        // See https://clerk.com/docs/custom-flows/error-handling
+        // for more info on error handling
+        console.error(JSON.stringify(err, null, 2))
+      }
+    }
+  }
   const checkCredentials = (): boolean => {
     // reset error messages
     setEmailError("");
