@@ -1,14 +1,10 @@
-"use client";
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+export default async function Page() {
+  const { userId, sessionClaims } = await auth();
+  if (!userId) return redirect("/Auth/Login");
 
-export default function RedirectPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace("/Auth/Login");
-  }, []);
-
-  return <></>;
+  const role = sessionClaims?.metadata.role || "Auth/Login";
+  redirect(`/${role}`);
 }

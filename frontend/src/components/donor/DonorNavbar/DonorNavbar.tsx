@@ -4,15 +4,11 @@ import { useRouter, usePathname } from "next/navigation";
 // import logo from "images/ReStoreLogo.png";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useClerk } from "@clerk/nextjs";
 
 require("../../../App.css");
 
-const navBarHeaders: string[] = [
-  "Make a Donation",
-  "Donations",
-  "Profile",
-  "Sign Out",
-];
+const navBarHeaders: string[] = ["Make a Donation", "Donations", "Profile"];
 
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
@@ -27,6 +23,7 @@ const SIGN_OUT_INDEX = 3;
 
 function DonatorNavbar(): React.ReactNode {
   const router = useRouter();
+  const { signOut } = useClerk();
   const [anchor, setAnchor] = useState(null);
 
   const pagePath = usePathname();
@@ -107,6 +104,14 @@ function DonatorNavbar(): React.ReactNode {
               </Link>
             ),
         )}
+        <Box className="donatorNavbarLink">
+          <button
+            onClick={() => signOut({ redirectUrl: "/" })}
+            className="signOutButton"
+          >
+            Sign Out
+          </button>
+        </Box>
       </div>
     </Box>
   );

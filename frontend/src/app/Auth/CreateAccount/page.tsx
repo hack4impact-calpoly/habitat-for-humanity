@@ -13,15 +13,22 @@ import IconButton from "@mui/material/IconButton";
 import isEmail from "validator/lib/isEmail";
 import isMobilePhone from "validator/lib/isMobilePhone";
 import { v4 as uuidv4 } from "uuid";
+
 /* Backend */
-import { addUser, User } from "api/user";
+import { addUser, updateMetadata, User } from "api/user";
 import { BsBoxArrowInDown } from "react-icons/bs";
+
+import { useSignUp } from "@clerk/nextjs";
+
 // import { debug } from "console";
 
 require("../../../App.css");
 
 function CreateAccountPage(): React.ReactNode {
   // const { uuid } = require('uuidv4');
+  const { isLoaded, signUp, setActive } = useSignUp();
+  const [verifying, setVerifying] = useState(false);
+  const [code, setCode] = useState("");
   const [userType, setUserType] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -42,86 +49,8 @@ function CreateAccountPage(): React.ReactNode {
   let processedPhoneNumber: number; // Phone number converted from string
 
   const router = useRouter();
-  const mainScreenPath: string = "/"; // Main screen (login)
-  const successPath: string = "/VerifyAccountPage";
-
-  const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): Promise<any> => {
-    e.preventDefault();
-    let checkAWS = false;
-    const valid = validateForm();
-
-    if (valid) {
-      checkAWS = await awsSignUp();
-      console.log(checkAWS);
-      if (checkAWS) {
-        const user = await getFormData();
-        addUser(user);
-        router.push(
-          successPath + '?' + new URLSearchParams({ email: email }).toString(),
-        );
-      }
-    }
-  };
-
-  // awsSignUp to create an account for authentication, called in buttonNavigation
-  let awsSignUp = async (): Promise<any> => {
-    const username = email;
-    const p = password.value;
-    // let userID = ;
-    // setID(userID);
-    // console.log(userID)
-    console.log(id);
-    // TODO: Replace with Clerk
-    const response = await Auth.signUp({
-      username,
-      password: p,
-      attributes: {
-        "custom:id": id,
-      },
-      // const id = uuid.v4();
-      // let response = await Auth.signUp(email, password.value, id): Observable<any> {
-      //     const signUpParams: any = {
-      //         email,
-      //         password,
-      //         attributes: {
-      //             'custom:id': id,
-      //         }
-      //     };
-      // return fromPromise(Auth.signUp(
-      //     signUpParams
-      // )
-    }).catch((error) => {
-      const { code } = error;
-      setPasswordError(error.message);
-      return false;
-    });
-    return response;
-  };
-
-  async function getFormData() {
-    /*
-        Desc: Gets all form data and coverts it into JSON
-        Return: JSON string
-        */
-    // let userAuth = await Auth.currentUserInfo();
-    // console.log(userAuth);
-    // let userAuth2 = await Auth.currentAuthenticatedUser();
-    // console.log(userAuth2.username);
-    // console.log(id);
-
-    const accountData = {
-      userType,
-      firstName,
-      lastName,
-      email,
-      phone: phoneNumber, // number(int) in form: 8057562501
-      id,
-      // password: password.value
-    };
-    return accountData as User;
-  }
+  const mainScreenPath: string = "/Auth/Login"; // Main screen (login)
+  // const successPath: string = "/VerifyAccountPage";
 
   // Form Validation Functions
   const validateForm = (): boolean => {
@@ -259,7 +188,7 @@ function CreateAccountPage(): React.ReactNode {
         );
         return false;
       }
-      setPhoneNumber(processedString);
+      setPhoneNumber("+" + processedString);
     } catch (error) {
       console.error(error);
       setPhoneNumberError(
@@ -270,189 +199,262 @@ function CreateAccountPage(): React.ReactNode {
     return true;
   }
 
-  function checkError(type: string) {
-    validateForm();
-  }
   // checks if page is in mobile view
   const isMobile = useMediaQuery("(max-width: 640px)");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isLoaded) return;
+    const valid = validateForm();
+    if (valid) {
+      try {
+        console.log(phoneNumber);
+        await signUp.create({
+          firstName,
+          lastName,
+          emailAddress: email,
+          password: password.value,
+        });
+
+        await signUp.prepareEmailAddressVerification({
+          strategy: "email_code",
+        });
+
+        setVerifying(true);
+      } catch (err: any) {
+        console.error(JSON.stringify(err, null, 2));
+      }
+    }
+  };
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isLoaded) return;
+
+    try {
+      // Use the code the user provided to attempt verification
+      const signUpAttempt = await signUp.attemptEmailAddressVerification({
+        code,
+      });
+
+      if (signUpAttempt.status === "complete") {
+        await updateMetadata(userType, signUpAttempt.createdUserId);
+        await setActive({ session: signUpAttempt.createdSessionId });
+        router.push("/");
+      } else {
+        // If the status is not complete, check why. User may need to
+        // complete further steps.
+        console.error(JSON.stringify(signUpAttempt, null, 2));
+      }
+    } catch (err: any) {
+      // See https://clerk.com/docs/custom-flows/error-handling
+      // for more info on error handling
+      console.error("Error:", JSON.stringify(err, null, 2));
+    }
+  };
+
+  // Display the verification form to capture the OTP code
+  if (verifying) {
+    return (
+      <>
+        <h1>Verify your email</h1>
+        <form onSubmit={handleVerify}>
+          <label id="code">Enter your verification code</label>
+          <input
+            value={code}
+            id="code"
+            name="code"
+            onChange={(e) => setCode(e.target.value)}
+          />
+          <button type="submit">Verify</button>
+        </form>
+      </>
+    );
+  }
+
   // HTML Body
   return (
-    <Box id="createAccountStyles" sx={styles.container}>
-      <Box id="createAccountBox">
-        <p id="createAccountText">Create an Account</p>
-        <form id="createAccountForm">
-          {/* Div for the user type section */}
-          <div id="accountTypeBox">
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                width: "100%",
-              }}
-            >
-              <Box sx={{ marginBottom: { xs: "10px", md: "0rem" } }}>
-                <p id="userTypeLabel"> I am a </p>
-              </Box>
+    <>
+      <Box id="createAccountStyles" sx={styles.container}>
+        <Box id="createAccountBox">
+          <p id="createAccountText">Create an Account</p>
+          <form id="createAccountForm">
+            {/* Div for the user type section */}
+            <div id="accountTypeBox">
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "left",
-                  gap: "0.5rem",
+                  flexDirection: { xs: "column", md: "row" },
                   width: "100%",
                 }}
               >
-                <Box className="radioContainer">
-                  <input
-                    type="radio"
-                    className="userTypeButton"
-                    value="donor" // Specifies the value for the useState
-                    name="userType" // connects all options under group "userType" -> only one can be selected at a time
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setUserType(e.target.value);
-                      validateUserType(e.target.value);
-                    }}
-                  />
-                  <span className="accountLabel">donor</span>
+                <Box sx={{ marginBottom: { xs: "10px", md: "0rem" } }}>
+                  <p id="userTypeLabel"> I am a </p>
                 </Box>
-                <Box className="radioContainer">
-                  <input
-                    type="radio"
-                    className="userTypeButton"
-                    value="volunteer"
-                    name="userType"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setUserType(e.target.value);
-                      validateUserType(e.target.value);
-                    }}
-                  />
-                  <span className="accountLabel">volunteer</span>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "left",
+                    gap: "0.5rem",
+                    width: "100%",
+                  }}
+                >
+                  <Box className="radioContainer">
+                    <input
+                      type="radio"
+                      className="userTypeButton"
+                      value="Donor" // Specifies the value for the useState
+                      name="userType" // connects all options under group "userType" -> only one can be selected at a time
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setUserType(e.target.value);
+                        validateUserType(e.target.value);
+                      }}
+                    />
+                    <span className="accountLabel">Donor</span>
+                  </Box>
+                  <Box className="radioContainer">
+                    <input
+                      type="radio"
+                      className="userTypeButton"
+                      value="Volunteer"
+                      name="userType"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setUserType(e.target.value);
+                        validateUserType(e.target.value);
+                      }}
+                    />
+                    <span className="accountLabel">Volunteer</span>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          </div>
+            </div>
 
-          <div className="inputError">{userTypeError}</div>
-          <div id="nameBox">
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: isMobile ? "column" : "row",
-                width: "100%",
-              }}
-            >
-              <div className="labelInputBox" id="firstNameBox">
-                <p className="formLabel">First Name</p>
-                <input
-                  className="inputBox"
-                  type="text"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setFirstName(e.target.value);
-                    validateFirstName(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="labelInputBox" id="lastNameBox">
-                <p className="formLabel">Last Name</p>
-                <input
-                  className="inputBox"
-                  type="text"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setLastName(e.target.value);
-                    validateLastName(e.target.value);
-                  }}
-                />
-              </div>
-            </Box>
-          </div>
-          <div className="inputError">{nameError}</div>
+            <div className="inputError">{userTypeError}</div>
+            <div id="nameBox">
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: isMobile ? "column" : "row",
+                  width: "100%",
+                }}
+              >
+                <div className="labelInputBox" id="firstNameBox">
+                  <p className="formLabel">First Name</p>
+                  <input
+                    className="inputBox"
+                    type="text"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setFirstName(e.target.value);
+                      validateFirstName(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="labelInputBox" id="lastNameBox">
+                  <p className="formLabel">Last Name</p>
+                  <input
+                    className="inputBox"
+                    type="text"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setLastName(e.target.value);
+                      validateLastName(e.target.value);
+                    }}
+                  />
+                </div>
+              </Box>
+            </div>
+            <div className="inputError">{nameError}</div>
 
-          <div className="labelInputBox">
-            <p className="formLabel">Email</p>
-            <input
-              className="inputBox"
-              type="text"
-              autoComplete="email"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setEmail(e.target.value);
-                validateEmail(e.target.value);
-              }}
-            />
-            <div className="inputError">{emailError}</div>
-          </div>
+            <div className="labelInputBox">
+              <p className="formLabel">Email</p>
+              <input
+                className="inputBox"
+                type="text"
+                autoComplete="email"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setEmail(e.target.value);
+                  validateEmail(e.target.value);
+                }}
+              />
+              <div className="inputError">{emailError}</div>
+            </div>
 
-          <div className="labelInputBox">
-            <p className="formLabel">Phone Number</p>
-            <input
-              className="inputBox"
-              type="text"
-              autoComplete="phone"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setPhoneNumber(e.target.value);
-                validatePhoneNumber(e.target.value);
-              }}
-            />
-            <div className="inputError">{phoneNumberError}</div>
-          </div>
+            <div className="labelInputBox">
+              <p className="formLabel">Phone Number</p>
+              <input
+                className="inputBox"
+                type="text"
+                autoComplete="phone"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setPhoneNumber(e.target.value);
+                  validatePhoneNumber(e.target.value);
+                }}
+              />
+              <div className="inputError">{phoneNumberError}</div>
+            </div>
 
-          <div className="labelInputBox">
-            <p className="formLabel">Password</p>
-            <Input
-              className="inputBox"
-              id="passwordBox"
-              value={password.value}
-              type={password.showPassword ? "text" : "password"}
-              disableUnderline
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setPassword({ ...password, value: e.target.value });
-                validatePassword({ ...password, value: e.target.value });
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() =>
-                      setPassword({
-                        ...password,
-                        showPassword: !password.showPassword,
-                      })
-                    }
-                    onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) =>
-                      e.preventDefault()
-                    }
-                    edge="end"
-                  >
-                    {password.showPassword ? (
-                      <VisibilityIcon className="passwordIcon" />
-                    ) : (
-                      <VisibilityOffIcon className="passwordIcon" />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            <div className="inputError">{passwordError}</div>
-          </div>
-        </form>
-        <button
-          type="submit"
-          value="signUpButton"
-          id="signUpButton"
-          onClick={buttonNavigation}
-        >
-          Sign Up
-        </button>
-        <div className="logInBox">
-          <p className="createAccountLogin">Already have an account?</p>
-          <Link
-            href={mainScreenPath}
-            className="createAccountLogin"
-            id="logInLink"
+            <div className="labelInputBox">
+              <p className="formLabel">Password</p>
+              <Input
+                className="inputBox"
+                id="passwordBox"
+                value={password.value}
+                type={password.showPassword ? "text" : "password"}
+                disableUnderline
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setPassword({ ...password, value: e.target.value });
+                  validatePassword({ ...password, value: e.target.value });
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() =>
+                        setPassword({
+                          ...password,
+                          showPassword: !password.showPassword,
+                        })
+                      }
+                      onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) =>
+                        e.preventDefault()
+                      }
+                      edge="end"
+                    >
+                      {password.showPassword ? (
+                        <VisibilityIcon className="passwordIcon" />
+                      ) : (
+                        <VisibilityOffIcon className="passwordIcon" />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <div className="inputError">{passwordError}</div>
+            </div>
+          </form>
+          <div id="clerk-captcha"></div>
+          <button
+            type="submit"
+            value="signUpButton"
+            id="signUpButton"
+            onClick={handleSubmit}
           >
-            Log In
-          </Link>
-        </div>
+            Sign Up
+          </button>
+          <div className="logInBox">
+            <p className="createAccountLogin">Already have an account?</p>
+            <Link
+              href={mainScreenPath}
+              className="createAccountLogin"
+              id="logInLink"
+            >
+              Log In
+            </Link>
+          </div>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }
 

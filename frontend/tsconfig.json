@@ -91,11 +91,7 @@
     // "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
     // Source: https://dev-yakuza.posstree.com/en/react/create-react-app/typescript/
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -117,12 +113,6 @@
       }
     ]
   },
-  "include": [
-    "src",
-    "src/aws-exports.js",
-    "./build/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src", "src/aws-exports.js", "./build/types/**/*.ts", "./types"],
+  "exclude": ["node_modules"]
 }
