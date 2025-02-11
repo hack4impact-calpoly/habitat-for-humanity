@@ -2,12 +2,12 @@ import FullCalendar from "@fullcalendar/react";
 import React from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-require("./AdminCalendar.css");
+require("../../../App.css");
 
 interface SmallCalendarProps {
   address: string;
 }
-function SmallCalendar({ address }: SmallCalendarProps): JSX.Element {
+function SmallCalendar({ address }: SmallCalendarProps): React.ReactNode {
   return (
     /* 
      <div id="smallCalendar" style={{ display: "flex", height: "100%" }}>   */

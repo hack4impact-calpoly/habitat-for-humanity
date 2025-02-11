@@ -1,0 +1,10 @@
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
+
+export default async function Page() {
+  const { userId, sessionClaims } = await auth();
+  if (!userId) return redirect("/Auth/Login");
+
+  const role = sessionClaims?.metadata.role || "Auth/Login";
+  redirect(`/${role}`);
+}

@@ -1,6 +1,6 @@
 import React from "react";
 
-require("./ContactInfo.css");
+require("../../../App.css");
 
 interface DummyComponentProps {
   name?: string;
