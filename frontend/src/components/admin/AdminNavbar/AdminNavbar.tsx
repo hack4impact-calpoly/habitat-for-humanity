@@ -1,21 +1,26 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import logo from "images/ReStoreLogo.png";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-require("./AdminNavbar.css");
+require("../../../App.css");
 
 const CALENDAR_HEADER = 0;
 const AVAILABILITY_HEADER = 1;
 const DONATION_APPROVALS_HEADER = 2;
 const HISTORY_HEADER = 3;
 const PROFILE_HEADER = 4;
-const SIGN_OUT_HEADER = 5;
+const ACTIVE_DONATIONS_HEADER = 5;
+const SIGN_OUT_HEADER = 6;
 
 const navBarHeaders: string[] = [
   "Calendar",
   "Availablility",
+  "Donation Approvals",
+  "History",
+  "Profile",
   "Active Donations",
   "Sign Out",
 ];
@@ -23,15 +28,16 @@ const navBarHeaders: string[] = [
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
 const donationApprovalsPath: string = "/Admin/DonationApproval";
-const signoutPath: string = "/";
+const signoutPath: string = "/Auth/Login";
 const adminHomePath: string = "/Admin";
 const calendarPath: string = "/Admin/Calendar";
 const donationInfoPath: string = "/Admin/DonationInfo";
+const activePath: string = "/Admin/ActiveDonations";
 
-function AdminNavbar(): JSX.Element {
-  const navigate = useNavigate();
+function AdminNavbar(): React.ReactNode {
+  const router = useRouter();
   const [anchor, setAnchor] = useState(null);
-  const pagePath = window.location.pathname;
+  const pagePath = usePathname();
 
   const handleOpenNavMenu = (event: any) => {
     setAnchor(event.currentTarget);
@@ -43,8 +49,15 @@ function AdminNavbar(): JSX.Element {
 
   const underline = (header: string): boolean => {
     if (
-      header === navBarHeaders[2] &&
-      pagePath.includes(donationApprovalsPath)
+      header === navBarHeaders[CALENDAR_HEADER] &&
+      pagePath.includes(calendarPath)
+    ) {
+      return true;
+    }
+    
+    if (
+      header === navBarHeaders[ACTIVE_DONATIONS_HEADER] &&
+      pagePath.includes(activePath)
     ) {
       // For different donation pages
       return true;
@@ -85,7 +98,7 @@ function AdminNavbar(): JSX.Element {
       <a href="/Admin">
         <Box
           component="img"
-          src={logo}
+          src="/images/ReStoreLogo.png"
           alt="logo"
           sx={{ width: { md: "12rem" } }}
         />
@@ -95,10 +108,10 @@ function AdminNavbar(): JSX.Element {
           // need to add links to pages
         }
         {navBarHeaders?.map(
-          (header: string, index: number): JSX.Element =>
+          (header: string, index: number): React.ReactNode =>
             underline(header) ? (
-              <Box className="adminNavbarLink">
-                <Link id="adminNavbarUnderline" to={navlinkHandler(header)}>
+              <Box key={index} className="adminNavbarLink">
+                <Link id="adminNavbarUnderline" href={navlinkHandler(header)}>
                   {header}
                 </Link>
               </Box>
@@ -106,11 +119,11 @@ function AdminNavbar(): JSX.Element {
               <Link
                 key={index}
                 className="adminNavbarLink"
-                to={navlinkHandler(header)}
+                href={navlinkHandler(header)}
               >
                 {header}
               </Link>
-            )
+            ),
         )}
       </div>
     </Box>
@@ -127,9 +140,9 @@ function AdminNavbar(): JSX.Element {
       <a href="/Admin">
         <Box
           component="img"
-          src={logo}
+          src="/images/ReStoreLogo.png"
           alt="logo"
-          sx={{ width: { xs: "10rem" } }}
+          sx={{ width: { md: "12rem" } }}
         />
       </a>
       <IconButton
@@ -168,7 +181,7 @@ function AdminNavbar(): JSX.Element {
       key={index}
       onClick={() => {
         handleCloseNavMenu();
-        navigate(navlinkHandler(item));
+        router.push(navlinkHandler(item));
       }}
     >
       <Box
@@ -187,7 +200,7 @@ function AdminNavbar(): JSX.Element {
             borderBottom: underline(item) ? "1.5px solid #314d89" : "none",
           },
         ]}
-        onClick={() => navigate(navlinkHandler(item))}
+        onClick={() => router.push(navlinkHandler(item))}
       >
         {item}
       </Box>

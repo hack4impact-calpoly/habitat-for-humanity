@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import logo from "images/ReStoreLogo.png";
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
+// import logo from "images/ReStoreLogo.png";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-require("./DonorNavbar.css");
+require("../../../App.css");
 
 const navBarHeaders: string[] = [
   "Make a Donation",
@@ -24,11 +25,11 @@ const DONATIONS_INDEX = 1;
 const PROFILE_INDEX = 2;
 const SIGN_OUT_INDEX = 3;
 
-function DonatorNavbar(): JSX.Element {
-  const navigate = useNavigate();
+function DonatorNavbar(): React.ReactNode {
+  const router = useRouter();
   const [anchor, setAnchor] = useState(null);
 
-  const pagePath = window.location.pathname;
+  const pagePath = usePathname();
 
   const handleOpenNavMenu = (event: any) => {
     setAnchor(event.currentTarget);
@@ -82,17 +83,17 @@ function DonatorNavbar(): JSX.Element {
       <a href="/Donor">
         <Box
           component="img"
-          src={logo}
+          src="/images/ReStoreLogo.png"
           alt="logo"
           sx={{ width: { md: "12rem" } }}
         />
       </a>
       <div id="donatorNavbarHeaders">
         {navBarHeaders?.map(
-          (header: string, index: number): JSX.Element =>
+          (header: string, index: number): React.ReactNode =>
             underline(header) ? (
               <Box key={index} className="donatorNavbarLink">
-                <Link id="donatorNavbarUnderline" to={navlinkHandler(header)}>
+                <Link id="donatorNavbarUnderline" href={navlinkHandler(header)}>
                   {header}
                 </Link>
               </Box>
@@ -100,11 +101,11 @@ function DonatorNavbar(): JSX.Element {
               <Link
                 key={index}
                 className="donatorNavbarLink"
-                to={navlinkHandler(header)}
+                href={navlinkHandler(header)}
               >
                 {header}
               </Link>
-            )
+            ),
         )}
       </div>
     </Box>
@@ -121,7 +122,7 @@ function DonatorNavbar(): JSX.Element {
       <a href="/Donor">
         <Box
           component="img"
-          src={logo}
+          src="/images/ReStoreLogo.png"
           alt="logo"
           sx={{ width: { xs: "10rem" } }}
         />
@@ -162,7 +163,7 @@ function DonatorNavbar(): JSX.Element {
       key={index}
       onClick={() => {
         handleCloseNavMenu();
-        navigate(navlinkHandler(item));
+        router.push(navlinkHandler(item));
       }}
     >
       <Box
@@ -181,7 +182,7 @@ function DonatorNavbar(): JSX.Element {
             borderBottom: underline(item) ? "1.5px solid #314d89" : "none",
           },
         ]}
-        onClick={() => navigate(navlinkHandler(item))}
+        onClick={() => router.push(navlinkHandler(item))}
       >
         {item}
       </Box>

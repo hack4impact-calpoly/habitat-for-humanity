@@ -72,3 +72,4 @@ function App(): JSX.Element {
 
 // export default withAuthenticator(App);
 export default App;
+

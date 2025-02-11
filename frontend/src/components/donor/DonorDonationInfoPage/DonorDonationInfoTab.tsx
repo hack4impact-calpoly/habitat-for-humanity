@@ -36,7 +36,7 @@ export function collectDates(timeSlots: TimeSlot[]) {
   return dates;
 }
 
-function DonorDonationInfoTab(props: InfoTabProps): JSX.Element {
+function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
   const { item, donor, timeSlots } = props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
