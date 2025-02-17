@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 require("../../../App.css");
 
-function ConfirmCodePage(): React.ReactNode {
+function ConfirmEmailPage(): React.ReactNode {
   const [email, setEmail] = useState<string>("");
 
   const router = useRouter();
@@ -108,4 +108,4 @@ function ConfirmCodePage(): React.ReactNode {
   );
 }
 
-export default ConfirmCodePage;
+export default ConfirmEmailPage;
