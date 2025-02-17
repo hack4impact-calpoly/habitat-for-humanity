@@ -1,5 +1,27 @@
 const userURL = "http://localhost:3001/api/users/";
+/* ----------------------Clerk User Requests---------------------------*/
+export const updateMetadata = async (role: string, userId: string | null) =>
+  fetch(`${userURL}/updateRole`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      role,
+      userId,
+    }),
+  })
+    .then(async (res) => {
+      const response = await res.json();
+      if (!res.ok) {
+        // check server response
+        throw new Error(`${res.status}-${res.statusText}`);
+      }
+      return response;
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error
 
+    
 /* ------------------GET Requests-----------------*/
 
 // Get ALL users
@@ -101,29 +123,19 @@ export const getAdmins = async () =>
 
 // User data model
 export interface User {
-  userType: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
   id: string;
+  phone: string;
 }
 
 // Add a new User to User DB
 export const addUser = async (user: User) =>
   fetch(userURL, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    method: "POST",
-    body: JSON.stringify({
-      userType: user.userType,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      phone: user.phone,
-      id: user.id,
-    }),
+    
+    body: JSON.stringify(user),
   })
     .then(async (res) => {
       const response = await res.json();

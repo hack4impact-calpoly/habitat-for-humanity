@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Auth } from "aws-amplify";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 import { Grid, Radio, TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
@@ -12,7 +11,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Item } from "api/item";
 import { User } from "api/user";
 import { useDispatch } from "react-redux";
-import { updateDonationStatus } from "redux/eventSlice";
+import { updateDonationStatus } from "../../../redux/eventSlice";
 
 interface InfoTabProps {
   item: Item;
@@ -40,7 +39,7 @@ export function collectDates(timeSlots: TimeSlot[]) {
   return dates;
 }
 
-function DonationInfoTab(props: InfoTabProps): JSX.Element {
+function DonationInfoTab(props: InfoTabProps): React.ReactNode {
   const { item, donor, timeSlots } = props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
