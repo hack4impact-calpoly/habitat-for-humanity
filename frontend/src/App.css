@@ -817,8 +817,6 @@ code {
   }
 }
 
-@import url("https://fonts.googleapis.com/css?family=Rubik&display=swap");
-
 #forgotPasswordBox {
   width: 550px !important;
   height: auto !important;
@@ -837,14 +835,14 @@ code {
 }
 
 #forgotPasswordText {
-  font-family: Rubik;
+  font-family: 'Rubik', sans-serif;
+  font-style: normal;
   font-weight: 600;
-  font-size: 36px;
-  line-height: 40px;
+  font-size: 40px;
+  line-height: 47px;
   margin: 0px 0px 34px 0px;
   text-align: left;
-
-  color: var(--black);
+  color: #011338;
 }
 
 .forgotPasswordMessage {
@@ -853,29 +851,28 @@ code {
   line-height: 25px;
   margin: 0px 0px 34px 0px;
   text-align: left;
-
+  font-family: Rubik, sans-serif;
   color: var(--black);
 }
 
 .emailInput {
-  font-family: Rubik;
+  font-family: Rubik, sans-serif;
   font-weight: bold;
   font-size: 16px;
   line-height: 25px;
   margin: 0px 0px 5px 0px;
   text-align: left;
-
   color: var(--black);
 }
 
 #sendButton {
   background: var(--primary);
   border: none;
-  font-family: Rubik;
+  font-family: Rubik, sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 17px;
-  line-height: 21px;
+  font-size: 20px;
+  line-height: 24px;
   margin: 26px 0px 12px 0px;
   height: 51px !important;
   width: 100%;
@@ -885,21 +882,26 @@ code {
 #sendButton:hover {
   cursor: pointer;
   border: 3px solid rgba(2, 5, 12, 0.15);
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  background-color: #93aada; 
 }
 
 .inputBox {
-  font-family: Rubik;
+  font-family: Rubik, sans-serif;
   box-sizing: border-box;
   padding: 0px;
   font-size: 13px;
   font-weight: 500;
-  box-sizing: border-box;
   height: 48px !important;
   font-size: 13.5px !important;
   width: 100%;
   border: 1.5px solid var(--input-box) !important;
   padding: 2% !important;
+  border-radius: 20; 
 }
+
 .forgotPasswordMessage {
   font-weight: 400;
   font-size: 17px;
