@@ -229,7 +229,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             </div>
           </div>
           <div id="ReStoreHours">
-            <h2 id="ReStore">ReStore Drop Off Hours</h2>
+            <h2 id="ReStore">Paso Robles ReStore Drop Off Hours</h2>
             <div id="ReStoreHoursTable">
               <div className="ReStoreHoursTableItem">
                 <p>Monday</p>
@@ -237,7 +237,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               </div>
               <div className="ReStoreHoursTableItem">
                 <p>Tuesday</p>
-                <p>10:00 AM to 5:00 PM</p>
+                <p>11:00 AM to 4:00 PM</p>
               </div>
               <div className="ReStoreHoursTableItem">
                 <p>Wednesday</p>
@@ -245,21 +245,70 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               </div>
               <div className="ReStoreHoursTableItem">
                 <p>Thursday</p>
-                <p>10:00 AM to 5:00 PM</p>
+                <p>11:00 AM to 4:00 PM</p>
               </div>
               <div className="ReStoreHoursTableItem">
                 <p>Friday</p>
-                <p>10:00 AM to 5:00 PM</p>
+                <p>11:00 AM to 4:00 PM</p>
               </div>
               <div className="ReStoreHoursTableItem">
                 <p>Saturday</p>
-                <p>10:00 AM to 5:00 PM</p>
+                <p>11:00 AM to 4:00 PM</p>
               </div>
               <div className="ReStoreHoursTableItem">
                 <p>Sunday</p>
                 <p>Closed</p>
               </div>
             </div>
+          </div>
+          <div id="ReStoreHours">
+            <h2 id="ReStore">SLO ReStore Drop Off Hours</h2>
+            <div id="ReStoreHoursTable">
+              <div className="ReStoreHoursTableItem">
+                <p>Monday</p>
+                <p>Closed</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Tuesday</p>
+                <p>11:00 AM to 4:00 PM</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Wednesday</p>
+                <p>11:00 AM to 4:00 PM</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Thursday</p>
+                <p>Closed</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Friday</p>
+                <p>11:00 AM to 4:00 PM</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Saturday</p>
+                <p>11:00 AM to 4:00 PM</p>
+              </div>
+              <div className="ReStoreHoursTableItem">
+                <p>Sunday</p>
+                <p>Closed</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p>
+              <strong>Please note:</strong> Our stores may occasionally close
+              for holidays, staff training, or other reasons. We encourage you
+              to visit our website or follow us on social media for the most
+              up-to-date information regarding store hours. For updates, follow
+              us on Instagram at{" "}
+              <a
+                href="https://www.instagram.com/habitatslorestores/"
+                target="_blank"
+              >
+                @habitatslorestores
+              </a>
+              .
+            </p>
           </div>
           <div className="inputError">{serverError}</div>
           {!component && (
