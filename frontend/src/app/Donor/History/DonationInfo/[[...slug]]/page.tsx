@@ -180,6 +180,11 @@ async function DonationInfoPage({
         ...updatedItem,
         timeApproved: new Date(),
       };
+    } else {
+      updatedItem = {
+        ...updatedItem,
+        timeApproved: undefined,
+      };
     }
     const response = await updateItem(updatedItem);
     if (!response) {

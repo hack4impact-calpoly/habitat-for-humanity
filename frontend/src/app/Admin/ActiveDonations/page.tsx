@@ -48,7 +48,7 @@ export default function ActiveDonationPage(): React.ReactNode {
     return `${donor?.firstName} ${donor?.lastName}`;
   };
 
-  const convertTime = (time: Date) =>
+  const convertTime = (time: Date | undefined): string =>
     time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
 
   const sortReceivedTime = (don1: any, don2: any) => {

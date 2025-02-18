@@ -116,7 +116,7 @@ export interface Item {
   donorId: string;
   // type: mongoose.Schema.Types.ObjectId
   timeSubmitted: Date;
-  timeApproved: Date;
+  timeApproved?: Date;
   status: string; // approved or needs approval
   // notes: string
   // timeAccepted: Date
