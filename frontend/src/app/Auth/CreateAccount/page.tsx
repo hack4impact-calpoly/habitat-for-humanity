@@ -258,19 +258,19 @@ function CreateAccountPage(): React.ReactNode {
   // Display the verification form to capture the OTP code
   if (verifying) {
     return (
-      <>
-        <h1>Verify your email</h1>
+      <div id="forgotPasswordBox">
+        <p id="forgotPasswordText">Confirm Email</p>
+        <p className="forgotPasswordMessage">Please enter the confirmation code that has been sent to your email.</p>
         <form onSubmit={handleVerify}>
-          <label id="code">Enter your verification code</label>
           <input
             value={code}
-            id="code"
+            className="inputBox"
             name="code"
             onChange={(e) => setCode(e.target.value)}
           />
-          <button type="submit">Verify</button>
+          <button type="submit" id="sendButton">Verify</button>
         </form>
-      </>
+      </div>
     );
   }
 
