@@ -75,9 +75,9 @@ input[type="radio"] {
 
 .backButton {
   padding: 10px 45px;
-} 
+}
 
-@media only screen and (max-width: 640px){
+@media only screen and (max-width: 640px) {
   .backButton {
     padding: 10px 45px;
   }

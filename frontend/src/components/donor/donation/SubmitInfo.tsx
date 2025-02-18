@@ -6,7 +6,6 @@ import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../api/item";
-import { addImages, getImages, getImageByID } from "../../../api/image";
 import { RootState } from "../../../redux/store";
 
 require("./SubmitInfo.css");
@@ -20,7 +19,65 @@ interface DummyComponentProps {
   component?: boolean;
 }
 
-// TODO: eventually use DonorScheduleDropoff/Pickup pages instead of this component
+/**
+ * Custom interface to represent an event with a start date string.
+ * Adjust the fields to match your actual event structure.
+ */
+interface ScheduledEvent {
+  start: string;
+  // Add other properties as needed, e.g.: title?: string;
+}
+
+/**
+ * Validates the donor's scheduled pickup times.
+ * Accepts an array of either strings or ScheduledEvent objects.
+ * For ScheduledEvent objects, it assumes there is a 'start' property that is a valid date string.
+ * @param pickupTimes - An array of scheduled times (string | ScheduledEvent).
+ * @returns true if the times are valid, false otherwise.
+ */
+const checkScheduledTimes = (
+  pickupTimes: Array<string | ScheduledEvent> | undefined
+): boolean => {
+  if (!pickupTimes) {
+    console.error("Pickup times are undefined.");
+    return false;
+  }
+  if (!Array.isArray(pickupTimes)) {
+    console.error("Pickup times are not stored as an array.");
+    return false;
+  }
+  if (pickupTimes.length === 0) {
+    console.error("No pickup times have been selected.");
+    return false;
+  }
+
+  let isValid = true;
+  pickupTimes.forEach((time) => {
+    let date: Date;
+
+    if (typeof time === "string") {
+      // Directly parse the string as a Date
+      date = new Date(time);
+    } else if (typeof time === "object" && time !== null && "start" in time) {
+      // If it's a ScheduledEvent with a 'start' property
+      date = new Date((time as ScheduledEvent).start);
+    } else {
+      // Fallback: safely convert 'time' to a string before creating a new Date
+      const fallbackStr = String(time);
+      date = new Date(fallbackStr);
+    }
+
+    if (Number.isNaN(date.getTime())) {
+      console.error(
+        `Invalid date format for pickup time: ${JSON.stringify(time)}`
+      );
+      isValid = false;
+    }
+  });
+
+  return isValid;
+};
+
 const SubmitInfo: React.FC<DummyComponentProps> = ({
   name,
   dimensions,
@@ -36,14 +93,11 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     (state: RootState) => state.donation.dimensions
   );
   const statePhotos = useSelector((state: RootState) => state.donation.photos);
-
-  // storedPhotos is an array of images names,
-  // if access is needed, images name can be used
-  // to generate presigned urls.
   const storedPhotos = statePhotos.map((url) => {
     const parts = url.split("/");
     return parts[parts.length - 1].split("?")[0];
   });
+
   const storedLocation = useSelector(
     (state: RootState) => state.donation.address
   );
@@ -53,22 +107,18 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const storedDonorID = useSelector(
     (state: RootState) => state.donation.donorID
   );
-  const storedEvents = useSelector(
-    (state: RootState) => state.donation.pickupTimes
-  );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const setCurrentUserID = async () => {
-    Auth.currentUserInfo().then((user) => {
-      const { attributes = {} } = user;
-      dispatch(updateDonorID(attributes["custom:id"]));
-    });
-  };
+  // If you need to set donorID from Auth on every render, uncomment useEffect
+  // useEffect(() => {
+  //   Auth.currentUserInfo().then((user) => {
+  //     const { attributes = {} } = user;
+  //     dispatch(updateDonorID(attributes['custom:id']));
+  //   });
+  // }, [dispatch]);
 
-  useEffect(() => {
-    setCurrentUserID();
-  }, []);
-
+  // Override props with stored values from Redux
   name = storedName;
   dimensions = storedDimensions;
   photos = storedPhotos;
@@ -77,46 +127,16 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
 
   const [dropOffOption, setDropOffOption] = useState(dropOff);
   const [serverError, setServerError] = useState<string>("");
-  const navigate = useNavigate();
-
-  /* convert array of base64-encoded back into array of image files */
-  // const convertToFiles = (photos: string[] | undefined): File[] => {
-  //   const files: File[] = [];
-  //   const timestamp = new Date().getTime(); // Get the current timestamp
-  //   photos?.forEach((photo, index) => {
-  //     const byteString = atob(photo.split(",")[1]);
-  //     const mimeString = photo.split(",")[0].split(":")[1].split(";")[0];
-  //     const ab = new ArrayBuffer(byteString.length);
-  //     const ia = new Uint8Array(ab);
-  //     for (let i = 0; i < byteString.length; i++) {
-  //       ia[i] = byteString.charCodeAt(i);
-  //     }
-  //     const blob = new Blob([ab], { type: mimeString });
-  //     // Create a file object with a unique name
-  //     const fileName = `image-${timestamp}-${index}.${
-  //       mimeString.split("/")[1]
-  //     }`;
-  //     const file = new File([blob], fileName, { type: mimeString });
-  //     files.push(file);
-  //   });
-  //   return files;
-  // };
-
-  /* Send image files array to S3 */
-  // const sendImagesToS3 = async (): Promise<boolean> => {
-  //   const files = convertToFiles(photos);
-  //   console.log("Converted back to Files: ", files);
-  //   try {
-  //     await addImages(files);
-  //     console.log("Images uploaded successfully!");
-  //     return true;
-  //   } catch (error) {
-  //     console.error("Error: ", error);
-  //     return false;
-  //   }
-  // };
 
   const sendToDB = async () => {
+    // Validate scheduled times before sending
+    if (!checkScheduledTimes(storedDonation.pickupTimes)) {
+      setServerError(
+        "Invalid scheduled times. Please select valid pickup times before submitting."
+      );
+      return false;
+    }
+
     const donation: Item = {
       name: storedDonation.name,
       size: storedDonation.dimensions,
@@ -128,31 +148,35 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
       donorId: storedDonation.donorID,
       timeApproved: new Date(),
       scheduling: storedDonation.dropoff ? "Dropoff" : "Pickup",
-      timeAvailability: storedDonation.pickupTimes, // TODO
+      timeAvailability: storedDonation.pickupTimes, // Validated times
       timeSubmitted: new Date(),
       status: "Needs Approval",
     };
+
     const response = await addItem(donation);
     console.log("To be sent to DB:", donation);
-    // const imagesUploaded = await sendImagesToS3();
+
     if (!response) {
       setServerError(
         "There was an error sending your donation. Please try again later."
       );
+      return false;
     }
-    return response;
+
+    return true;
   };
 
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>
   ): Promise<void> => {
-    const backPath: string = "/Donor/Donate/ScheduleDropoffPickup";
-    const nextPath: string = "/Donor/Donate/NextSteps";
+    const backPath = "/Donor/Donate/ScheduleDropoffPickup";
+    const nextPath = "/Donor/Donate/NextSteps";
 
     if (e.currentTarget.value === "backButton") {
       navigate(backPath);
     } else if (e.currentTarget.value === "nextButton") {
-      if (await sendToDB()) {
+      const success = await sendToDB();
+      if (success) {
         navigate(nextPath);
       }
     }
@@ -168,6 +192,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             {!component && <ProgressBar activeStep={4} />}
             <h2 id="Review">Review</h2>
             <p>Please review your donation information before you submit.</p>
+
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
               <b>Item Name:</b> {name}
@@ -179,8 +204,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p id="itemPhotos">
               <b>Item Photos</b>
             </p>
+
             <div id="ProductImages">
-              {statePhotos.map((imagePresignedUrl: any, i: any) => (
+              {statePhotos.map((imagePresignedUrl: string, i: number) => (
                 <img
                   src={imagePresignedUrl}
                   alt="uploaded"
@@ -189,12 +215,16 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                 />
               ))}
             </div>
+
             <h2 id="Location">Location</h2>
             <h4 id="Address">
-              {storedDonation.address} <br /> {storedDonation.city},{" "}
-              {storedDonation.state} {storedDonation.zipCode}
+              {storedDonation.address}
+              <br />
+              {storedDonation.city}, {storedDonation.state}{" "}
+              {storedDonation.zipCode}
             </h4>
           </div>
+
           <div id="SchedulingInfo">
             <h2 id="Scheduling">Scheduling</h2>
             <h4 id="SchdulingDesc">
@@ -202,6 +232,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               our ReStore?
             </h4>
           </div>
+
           <div id="donPDOptions">
             <div>
               <input
@@ -227,6 +258,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               </p>
             </div>
           </div>
+
           <div id="ReStoreHours">
             <h2 id="ReStore">ReStore Drop Off Hours</h2>
             <div id="ReStoreHoursTable">
@@ -260,7 +292,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               </div>
             </div>
           </div>
+
           <div className="inputError">{serverError}</div>
+
           {!component && (
             <div
               id="donPickupButtons"

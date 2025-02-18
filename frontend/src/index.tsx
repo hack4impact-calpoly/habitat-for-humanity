@@ -1,5 +1,4 @@
 import React from "react";
-import MyButton from "./components/MyButton/MyButton";
 
 // React Router Imports
 import DonationHistory from "components/donor/DonationHistory/DonationHistory";
@@ -48,7 +47,6 @@ render(
       <BrowserRouter>
         <Routes>
           {/* Authentication Routes */}
-          <Route path="/" element={<><App /><MyButton /></>} />
           <Route path="/CreateAccount" element={<CreateAccount />} />
           <Route path="/CreateAccount/Success" element={<SuccessPage />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />

@@ -1,7 +1,7 @@
 #donLocPage {
   height: fit-content;
   width: 60%;
-  margin-top: 5%; 
+  margin-top: 5%;
   margin-left: 20%;
   margin-right: 20%;
 }
@@ -98,20 +98,21 @@
 @media only screen and (max-width: 640px) {
   #donLocPage {
     width: 80%;
-    margin-top: 5%; 
+    margin-top: 5%;
     margin-left: 10%;
     margin-right: 10%;
-  
+
     background: var(--white-gray);
   }
   #donLocTopInputs {
     display: contents;
     justify-content: space-between;
-    }
+  }
   .donLocInput {
     width: 80vw;
   }
-  .backButton, .nextButton {
+  .backButton,
+  .nextButton {
     padding: 10px 30px;
   }
   .inputLabel {
@@ -125,5 +126,4 @@
     border-radius: 0;
     margin-bottom: 10vh;
   }
-
 }

@@ -44,21 +44,37 @@ const monthNames = [
   "December",
 ];
 
-// returns hour intervals for calendarEdit given an ISO 8601 string
 const getHourIntervals = (curDay: string): { start: string; end: string }[] => {
-  const startDate = moment(curDay).tz("UTC").startOf("day").add(18, "hours");
-  const fourPM = moment(startDate).add(-18, "hours").toISOString();
-  const threePM = moment(startDate).add(5, "hours").toISOString();
+  // Set the base time so that 9:00 AM PST (i.e. 17:00 UTC) is our starting point.
+  const base = moment(curDay).tz("UTC").startOf("day").add(17, "hours");
   const intervals: { start: string; end: string }[] = [];
-  for (let i = 0; i < 5; i++) {
-    const start = moment(startDate).add(i, "hours").toISOString();
-    const end = moment(startDate)
-      .add(i + 1, "hours")
+
+  // First block: two intervals (9:00-10:30 AM and 10:30-12:00 PM)
+  for (let i = 0; i < 2; i++) {
+    const start = base
+      .clone()
+      .add(i * 1.5, "hours")
+      .toISOString();
+    const end = base
+      .clone()
+      .add((i + 1) * 1.5, "hours")
       .toISOString();
     intervals.push({ start, end });
   }
 
-  intervals.push({ start: threePM, end: fourPM });
+  // Second block: start after a 1-hour gap (i.e. 1:00 PM PST is 21:00 UTC)
+  const secondBlockBase = base.clone().add(4, "hours"); // 17:00 + 4 hours = 21:00 UTC
+  for (let i = 0; i < 2; i++) {
+    const start = secondBlockBase
+      .clone()
+      .add(i * 1.5, "hours")
+      .toISOString();
+    const end = secondBlockBase
+      .clone()
+      .add((i + 1) * 1.5, "hours")
+      .toISOString();
+    intervals.push({ start, end });
+  }
 
   return intervals;
 };
@@ -66,7 +82,7 @@ const getHourIntervals = (curDay: string): { start: string; end: string }[] => {
 function DonatorSchedulePickUp(): JSX.Element {
   const today = new Date();
   const storedEvents = useSelector(
-    (state: RootState) => state.donation.pickupTimes
+    (state: RootState) => state.donation.pickupTimes || []
   );
   const [header, setHeader] = useState<string>(
     `${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(
@@ -81,6 +97,7 @@ function DonatorSchedulePickUp(): JSX.Element {
   const [pickupError, setPickupError] = useState<string>("");
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onClickCalendar = (info: DateSelectArg): void => {
     const startDate = info?.start;
@@ -90,7 +107,7 @@ function DonatorSchedulePickUp(): JSX.Element {
         weekdays[startDate.getDay()]
       } ${String(startDate.getDate())}`
     );
-    // Re render checked boxes
+    // Re-render available times for the newly selected date
     setTimes(getHourIntervals(startDate.toISOString()));
   };
 
@@ -98,18 +115,17 @@ function DonatorSchedulePickUp(): JSX.Element {
     dispatch(updatePickupTimes(events));
   };
 
+  // Modified validInput: now requires at least two selected time frames.
   const validInput = () => {
     let valid = true;
     setPickupError("");
 
-    if (events.length === 0) {
-      setPickupError("Please select at least one pickup time");
+    if (events.length < 2) {
+      setPickupError("Please select at least two pickup times");
       valid = false;
     }
     return valid;
   };
-
-  const navigate = useNavigate();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const backPath: string = "/Donor/Donate/Location";
@@ -129,7 +145,7 @@ function DonatorSchedulePickUp(): JSX.Element {
     const date: string = selectedDate.toISOString().split("T")[0];
     const startTime: string = `${date}T${start.split("T")[1]}`;
     const endTime: string = `${date}T${end.split("T")[1]}`;
-    // only add if events doesn't already contain the time
+    // Only add if events don't already contain the time
     if (
       events.filter((e) => e.start === startTime && e.end === endTime)
         .length === 0
@@ -144,7 +160,7 @@ function DonatorSchedulePickUp(): JSX.Element {
     }
   };
 
-  // removes all events from events with given start and end
+  // Removes an event with the given start and end times
   const removeEvent = (start: string, end: string) => {
     const date: string = selectedDate.toISOString().split("T")[0];
     const startTime: string = `${date}T${start.split("T")[1]}`;
@@ -152,7 +168,7 @@ function DonatorSchedulePickUp(): JSX.Element {
     setEvents(events.filter((e) => e.start !== startTime && e.end !== endTime));
   };
 
-  // evaluates event's presence in a list of events.
+  // Checks if an event with the given start and end times is in the events list.
   const evaluateEventPresence = (startTime: string, endTime: string): boolean =>
     events.some((event) => event.start === startTime && event.end === endTime);
 
@@ -202,7 +218,7 @@ function DonatorSchedulePickUp(): JSX.Element {
                 .format("hh:mm A")
                 .replace(/^(?:00:)?0?/, "");
               return (
-                <div className="donatorPickUpTime">
+                <div className="donatorPickUpTime" key={availEvent.start}>
                   <Checkbox
                     icon={<RadioButtonUncheckedIcon />}
                     checkedIcon={<CheckCircleIcon />}

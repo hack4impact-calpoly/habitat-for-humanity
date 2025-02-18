@@ -38,7 +38,7 @@
   justify-content: space-between;
 }
 
-.backButton{
+.backButton {
   padding: 10px 45px;
 }
 
@@ -50,7 +50,6 @@
 }
 
 .backButton:hover,
-
 #DayHours {
   max-width: 1000px;
   display: flex;

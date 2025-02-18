@@ -1,21 +1,21 @@
 .disclosureNextButton {
-    background-color: var(--tertiary);
-    font-weight: bold;
-    color: var(--white);
-    border: 2px solid var(--tertiary);
+  background-color: var(--tertiary);
+  font-weight: bold;
+  color: var(--white);
+  border: 2px solid var(--tertiary);
 }
 
 .disclosureBackButton {
-    color: var(--tertiary);
-    font-weight: bold;
-    background-color: var(--white);
-    border: 2px solid var(--tertiary);
+  color: var(--tertiary);
+  font-weight: bold;
+  background-color: var(--white);
+  border: 2px solid var(--tertiary);
 }
 
-.buttonContainer{
-    margin-top: 70px;
-    display: flex;
-    justify-content: space-between;
+.buttonContainer {
+  margin-top: 70px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .disclosureNextButton:hover,

@@ -1,8 +1,8 @@
 import React from "react";
 
-//gonna make this the data farm
+// gonna make this the data farm
 
-//event
+// event
 {
   [
     {
@@ -30,7 +30,7 @@ import React from "react";
   ];
 }
 
-//"2022-05-07T00:09:00"
+// "2022-05-07T00:09:00"
 
 /* {
                 textColor: "black",
