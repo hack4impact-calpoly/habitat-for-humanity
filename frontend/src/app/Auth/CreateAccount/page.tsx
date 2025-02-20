@@ -188,7 +188,7 @@ function CreateAccountPage(): React.ReactNode {
         );
         return false;
       }
-      setPhoneNumber("+" + processedString);
+      setPhoneNumber(processedString);
     } catch (error) {
       console.error(error);
       setPhoneNumberError(
@@ -242,7 +242,18 @@ function CreateAccountPage(): React.ReactNode {
       if (signUpAttempt.status === "complete") {
         await updateMetadata(userType, signUpAttempt.createdUserId);
         await setActive({ session: signUpAttempt.createdSessionId });
-        router.push("/");
+
+        if (signUpAttempt.createdUserId != null) {
+          const userData = {
+            id: signUpAttempt.createdUserId,
+            phone: phoneNumber,
+          };
+          await addUser(userData);
+          console.log("User data added successfully");
+          router.push("/");
+        } else {
+          console.error("Error userId not created.");
+        }
       } else {
         // If the status is not complete, check why. User may need to
         // complete further steps.
@@ -260,7 +271,9 @@ function CreateAccountPage(): React.ReactNode {
     return (
       <div id="forgotPasswordBox">
         <p id="forgotPasswordText">Confirm Email</p>
-        <p className="forgotPasswordMessage">Please enter the confirmation code that has been sent to your email.</p>
+        <p className="forgotPasswordMessage">
+          Please enter the confirmation code that has been sent to your email.
+        </p>
         <form onSubmit={handleVerify}>
           <input
             value={code}
@@ -268,7 +281,9 @@ function CreateAccountPage(): React.ReactNode {
             name="code"
             onChange={(e) => setCode(e.target.value)}
           />
-          <button type="submit" id="sendButton">Verify</button>
+          <button type="submit" id="sendButton">
+            Verify
+          </button>
         </form>
       </div>
     );
