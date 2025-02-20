@@ -83,11 +83,7 @@ const emptyItem: Item = {
 
 const emptyUser: User = {
   id: "",
-  firstName: "",
-  lastName: "",
-  email: "",
   phone: "",
-  userType: "",
 };
 
 const emptyTimeSlots: TimeSlot[] = [
