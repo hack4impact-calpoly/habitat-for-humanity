@@ -119,17 +119,16 @@ function DonationInfoPage() {
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
-    const backPath: string = "/Admin";
     const nextPath: string = "/Admin";
 
     if (e.currentTarget.value === "back") {
       sendUpdatedItemToDB(storedStatus, false);
-      await router.push(backPath);
+      await router.back();
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
       sendUpdatedItemToDB("Rejected", false);
-      await router.push(backPath);
+      await router.back();  
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
       if (

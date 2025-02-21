@@ -10,6 +10,7 @@ import { Types } from "mongoose";
 import moment from "moment";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
 import SmallCalendar from "../../../components/admin/AdminCalendar/SmallCalendar";
+import { useRouter } from "next/navigation";
 
 require("../../../App.css");
 
@@ -117,6 +118,7 @@ function AdminCalendar() {
   const [open, setOpen] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState<DonationEvent[]>([]);
   const [clickedEvent, setClickedEvent] = useState<EventClickArg>();
+  const router = useRouter()
 
   //  right now we are using an endpoint that does not filter by date
 
@@ -230,7 +232,10 @@ function AdminCalendar() {
                   type="button"
                   style={viewDonnationButton}
                   onClick={() => {
-                    window.location.href = `/Admin/DonationInfo/${clickedEvent!.event.extendedProps.itemId}/`;
+                    router.push(
+                      `/Admin/DonationInfo/${clickedEvent!.event.extendedProps.itemId}/`,
+                    );
+                    
                   }}
                 >
                   View Donation
