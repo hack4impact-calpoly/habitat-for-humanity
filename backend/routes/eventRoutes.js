@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   }
 })
 
-//get event by eventId
+// get event by eventId
 router.get("/eventId/:eventId", async (req, res) => {
   try {
     console.log("look here", req.params.eventId)
@@ -26,6 +26,16 @@ router.get("/eventId/:eventId", async (req, res) => {
     console.log('Got event with id %s', req.params.eventId)
     console.log(event)
   } catch (error) {
+    res.status(400).send(error);
+  }
+})
+
+// get event by itemID
+router.get("/itemId/:itemId", async (req, res) => {
+  try {
+    const event = await Event.findOne({itemId: req.params.itemId})
+    res.status(200).send(event);
+  } catch {
     res.status(400).send(error);
   }
 })
@@ -117,6 +127,23 @@ router.put("/eventId/:eventId", async (req, res) => {
   
     await event.save();
     res.send({msg: `Updated event ${req.params.eventId} to: ${event}`});
+  } catch(error) {
+    let errorMessage;
+    if (error instanceof Error) { 
+      errorMessage = error.message; 
+    } else { 
+      errorMessage = String(errorMessage); 
+    }
+    res.status(400).send(errorMessage);
+    console.log(`Error: ${errorMessage}`);
+  }
+})
+
+//
+router.delete("/itemId/:itemId", async (req, res) => {
+  try {
+    await Event.findOneAndDelete({ itemId: req.params.itemId });
+    res.status(200).send("Successfully deleted event");
   } catch(error) {
     let errorMessage;
     if (error instanceof Error) { 
