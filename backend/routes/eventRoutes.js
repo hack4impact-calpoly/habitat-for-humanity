@@ -129,4 +129,19 @@ router.put("/eventId/:eventId", async (req, res) => {
   }
 })
 
+router.delete("/itemId/:itemId", async (req, res) => {
+  try {
+    await Event.findOneAndDelete({ itemId: req.params.itemId });
+    res.status(200).send("Successfully deleted event");
+  } catch(error) {
+    let errorMessage;
+    if (error instanceof Error) { 
+      errorMessage = error.message; 
+    } else { 
+      errorMessage = String(errorMessage); 
+    }
+    res.status(400).send(errorMessage);
+    console.log(`Error: ${errorMessage}`);
+  }
+})
 module.exports = router

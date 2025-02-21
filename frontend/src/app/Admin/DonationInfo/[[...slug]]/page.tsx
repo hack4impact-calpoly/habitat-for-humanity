@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { getUserByID, User } from "api/user";
 import { getItemByID, Item, updateItem } from "api/item";
+import { deleteEventByItemId, Event } from "api/event";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
@@ -128,6 +129,7 @@ function DonationInfoPage() {
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
       sendUpdatedItemToDB("Rejected", false);
+      deleteEventByItemId(id);
       await router.back();  
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
