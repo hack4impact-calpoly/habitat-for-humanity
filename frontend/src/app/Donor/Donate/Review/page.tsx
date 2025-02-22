@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../../api/item";
 import { addImages, getImages, getImageByID } from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
-// import DonatorScheduleDropoff from "components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoff";
+import { useUser, RedirectToSignIn } from "@clerk/nextjs";
 
 require("../../../../App.css");
 
@@ -33,7 +33,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
 }) => {
   const { userId } = useAuth();
   const storedDonation = useSelector((state: RootState) => state.donation);
-
+  const { user, isLoaded, isSignedIn } = useUser();
   const storedName = useSelector((state: RootState) => state.donation.name);
   const storedDimensions = useSelector(
     (state: RootState) => state.donation.dimensions,
@@ -53,17 +53,21 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const storedDropOff = useSelector(
     (state: RootState) => state.donation.dropoff,
   );
-  const storedDonorID = useSelector(
-    (state: RootState) => state.donation.donorID,
-  );
   const storedEvents = useSelector(
     (state: RootState) => state.donation.pickupTimes,
   );
   const dispatch = useDispatch();
 
+  const setCurrentUserID = async () => {
+    Auth.currentUserInfo().then((user) => {
+      const { attributes = {} } = user;
+      dispatch(updateDonorID(attributes["custom:id"]));
+    });
+  };
+
   useEffect(() => {
-    dispatch(updateDonorID(userId));
-  }, [userId]);
+    setCurrentUserID();
+  }, []);
 
   name = storedName;
   dimensions = storedDimensions;
@@ -112,6 +116,11 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   //   }
   // };
 
+  if (!isSignedIn) {
+    // If the user is not signed in, redirect to the login page
+    return <RedirectToSignIn />;
+  }
+
   const sendToDB = async () => {
     const donation: Item = {
       name: storedDonation.name,
@@ -133,14 +142,14 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     // const imagesUploaded = await sendImagesToS3();
     if (!response) {
       setServerError(
-        "There was an error sending your donation. Please try again later.",
+        "There was an error sending your donation. Please try again later."
       );
     }
     return response;
   };
 
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>,
+    e: React.MouseEvent<HTMLButtonElement>
   ): Promise<void> => {
     const backPath: string = "/Donor/Donate/ScheduleDropoffPickup";
     const nextPath: string = "/Donor/Donate/NextSteps";
@@ -157,13 +166,18 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   return (
     <div>
       {!component && <DonatorNavbar />}
-      {console.log(storedDonation.pickupTimes)}
       <div id={!component ? "MainContainer" : ""}>
         <div id="SubmitInfoPage">
           <div id="information">
             {!component && <ProgressBar activeStep={4} />}
             <h2 id="Review">Review</h2>
             <p>Please review your donation information before you submit.</p>
+            <h2 id="ItemInfo">Contact Information</h2>
+            <p id="itemName">
+              <b>Name:</b> {user.firstName} {user.lastName}
+            </p>
+            <p id="itemDimensions"><b>Email: </b> {user.emailAddresses[0].emailAddress}</p>
+            <p id="itemPhotos"><b>Phone Number: </b> N/A </p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
               <b>Item Name:</b> {name}
