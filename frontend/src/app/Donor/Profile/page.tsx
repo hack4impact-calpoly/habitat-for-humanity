@@ -4,24 +4,13 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Box } from "@mui/material";
 // import pencil from "images/pencil.png";
-import { getUserByID } from "api/user";
+import { useUser, RedirectToSignIn } from "@clerk/nextjs";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 
 require("../../../App.css");
 
 function DonatorProfilePage(): React.ReactNode {
-  const [user, setUser] = useState<any>([]);
-
-  useEffect(() => {
-    async function getUser() {
-      const userAuth = await Auth.currentUserInfo();
-      const uid = userAuth.attributes["custom:id"];
-      const user = await getUserByID(uid);
-      console.log(user);
-      setUser(user);
-    }
-    getUser();
-  }, []);
+  const { user } = useUser();
 
   const donatorProfileEditPath = "/Donor/Profile/Edit";
 
@@ -67,7 +56,7 @@ function DonatorProfilePage(): React.ReactNode {
             </div>
             <div className="infoBox">
               {/* Need to implement displaying user data from backend */}
-              <p id="email">{user?.email}</p>
+              <p id="email">{user?.emailAddresses[0].emailAddress}</p>
             </div>
           </div>
           <div id="phoneBox">
@@ -76,7 +65,7 @@ function DonatorProfilePage(): React.ReactNode {
             </div>
             <div className="infoBox">
               {/* Need to implement displaying user data from backend */}
-              <p id="phone">{user?.phone}</p>
+              <p id="phone">N/A</p>
             </div>
           </div>
         </div>
