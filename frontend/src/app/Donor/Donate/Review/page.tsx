@@ -116,11 +116,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   //   }
   // };
 
-  if (!isSignedIn) {
-    // If the user is not signed in, redirect to the login page
-    return <RedirectToSignIn />;
-  }
-
   const sendToDB = async () => {
     const donation: Item = {
       name: storedDonation.name,
