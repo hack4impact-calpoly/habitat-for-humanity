@@ -20,9 +20,21 @@ const { itemConnection } = require("../connection");
 
 const itemSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { 
+      type: [String], 
+      required: true 
+    },
     images: { type: [mongoose.Schema.ObjectId], required: true },
-    size: { type: String, required: true },
+    size: { 
+      type: [String], 
+      required: true,
+      validate: {
+        validator: function(v) {
+          return v.length === this.name.length;
+        },
+        message: 'Size array must have the same number of elements as the name array'
+      }
+    },
     address: { type: String, required: true },
     city: { type: String, required: true },
     zipCode: { type: String, required: true },
@@ -44,5 +56,4 @@ const itemSchema = new mongoose.Schema(
 );
 
 const Item = itemConnection.model("Items", itemSchema);
-// export default Item;
 module.exports = Item;
