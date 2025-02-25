@@ -100,17 +100,8 @@ const StyledButton = styled.button`
 
 function Donation(): JSX.Element {
   const storedDesc = useSelector((state: RootState) => state.donation.name);
-  const storedContact = useSelector(
-    (state: RootState) => state.donation.personName
-  );
-  const storedDims = useSelector(
-    (state: RootState) => state.donation.dimensions
-  );
   const storedPhotos = useSelector((state: RootState) => state.donation.photos);
   const [itemDescription, setItemDescription] = useState<string[]>([]);
-  const [name, setName] = useState(storedContact);
-  const [phoneNumber, setNumber] = useState(storedContact);
-  const [email, setEmail] = useState(storedContact);
   const [itemDimensions, setItemDimensions] = useState<string[]>([]);
   const [photos, setPhotos] = useState(storedPhotos);
   const [descError, setDescError] = useState("");
@@ -137,14 +128,6 @@ function Donation(): JSX.Element {
     setDimError("");
     setLabelsError("");
 
-    // if (!itemDescription?.match(/\S/)) {
-    //   setDescError("Please enter an item description");
-    //   valid = false;
-    // }
-    // if (!itemDimensions?.match(/\S/)) {
-    //   setDimError("Please enter item dimensions");
-    //   valid = false;
-    // }
     return valid;
   };
 
@@ -193,42 +176,6 @@ function Donation(): JSX.Element {
       <ContentContainer>
         <DonationHeader>Make a donation</DonationHeader>
         <ProgressBar activeStep={1} />
-        <ItemHeader>Contact Information</ItemHeader>
-        <InputSectionContainer>
-          <InputContainer>
-            <SubHeader>Name</SubHeader>
-            <StyledInput
-              type="text"
-              value={name}
-              onChange={(event) => {
-                setName(event.target.value);
-              }}
-            />
-            <div className="inputError">{descError}</div>
-          </InputContainer>
-          <InputContainer>
-            <SubHeader>Email</SubHeader>
-            <StyledInput
-              type="text"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-            />
-          </InputContainer>
-
-          <InputContainer>
-            <SubHeader>Phone Number</SubHeader>
-            <StyledInput
-              type="text"
-              value={phoneNumber}
-              onChange={(event) => {
-                setNumber(event.target.value);
-              }}
-            />
-            <div className="inputError">{dimError}</div>
-          </InputContainer>
-        </InputSectionContainer>
         <ItemHeader>Item Information</ItemHeader>
         {labels.map((label, index) => (
           <InputSectionContainer key={index}>
@@ -252,7 +199,9 @@ function Donation(): JSX.Element {
             </InputContainer>
           </InputSectionContainer>
         ))}
-        <button type="button" onClick={handleAddLabel}>Add Another Item</button>
+        <button type="button" onClick={handleAddLabel}>
+          Add Another Item
+        </button>
         <UploadContainer>
           <SubHeader>Item Photos</SubHeader>
           <Dropzone {...dropzoneProps} />
