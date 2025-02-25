@@ -33,7 +33,7 @@ function DonatorProfileEditPage(): React.ReactNode {
       console.error("User not found");
       return;
     }
-    updateUserInfoAPI(user.id, newUserInfo)
+    updateUserInfoAPI(user.id, newUserInfo);
   };
 
   const capitalizeFirstLetter = (s: string) => {
