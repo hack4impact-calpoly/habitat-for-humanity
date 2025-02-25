@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../../api/item";
 import { addImages, getImages, getImageByID } from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
+import { useAuth } from "@clerk/nextjs";
 
 require("../../../../App.css");
 
@@ -30,6 +31,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   dropOff,
   component,
 }) => {
+  const { userId } = useAuth();
   const storedDonation = useSelector((state: RootState) => state.donation);
 
   const storedName = useSelector((state: RootState) => state.donation.name);
@@ -59,16 +61,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   );
   const dispatch = useDispatch();
 
-  const setCurrentUserID = async () => {
-    Auth.currentUserInfo().then((user) => {
-      const { attributes = {} } = user;
-      dispatch(updateDonorID(attributes["custom:id"]));
-    });
-  };
-
   useEffect(() => {
-    setCurrentUserID();
-  }, []);
+    dispatch(updateDonorID(userId));
+  }, [userId]);
 
   name = storedName;
   dimensions = storedDimensions;
