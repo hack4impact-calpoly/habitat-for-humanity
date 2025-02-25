@@ -51,7 +51,7 @@ router.get("/location/:city/:address", async (req, res) => {
 //get all items with donorId
 router.get("/donorId/:donorId", async (req, res) => {
   try {
-    const items = await Item.find({ donor_id: req.params.donorId})
+    const items = await Item.find({ donorId: req.params.donorId})
     res.send(items)
     console.log('Got all items with donorId %s', req.params.donorId)
   } catch (error) {

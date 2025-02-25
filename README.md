@@ -3,7 +3,7 @@
 </h1>
 <h4 align="center">
   A scheduling platform to help with donation pickups for the nonprofit Habitat for Humanity, San Luis Obispo.
-</h4>
+</h4> 
 
 ---
 
@@ -130,6 +130,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 ### Deployment
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+TEST COMMIT
 
 ### `npm run build` fails to minify
 

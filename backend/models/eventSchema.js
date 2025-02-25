@@ -2,15 +2,14 @@
 const { eventConnection } = require("../connection");
 const mongoose = require("mongoose");
 
-
 // interface event {
 //     title: string;
 //     pickupAvailability: Types.Array<Types.Array<String>>
 //     location: string;
 // }
-  
+
 const eventSchema = new mongoose.Schema(
-  { 
+  {
     title: { type: String, required: true },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
@@ -26,11 +25,11 @@ const eventSchema = new mongoose.Schema(
     itemName: { type: String, required: true },
     phone: { type: String, required: true },
     pickupAvailability: { type: [[String]], required: true },
-    location: { type: String, required: false }
+    location: { type: String, required: false },
   },
   { collection: "Events" }
 );
-  
+
 const Event = eventConnection.model("Events", eventSchema);
 // export default Event;
 module.exports = Event;
