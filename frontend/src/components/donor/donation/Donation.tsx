@@ -1,11 +1,13 @@
+"use client";
+
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updateDimensions,
   updateName,
   updatePhotos,
-} from "redux/donationSlice";
-import { useNavigate } from "react-router-dom";
+} from "../../../redux/donationSlice";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { RootState } from "../../../redux/store";
 import DonatorNavbar from "../DonorNavbar/DonorNavbar";
@@ -98,10 +100,10 @@ const StyledButton = styled.button`
   color: var(--white);
 `;
 
-function Donation(): JSX.Element {
+function Donation(): React.ReactNode {
   const storedDesc = useSelector((state: RootState) => state.donation.name);
   const storedDims = useSelector(
-    (state: RootState) => state.donation.dimensions
+    (state: RootState) => state.donation.dimensions,
   );
   const storedPhotos = useSelector((state: RootState) => state.donation.photos);
   const [itemDescription, setItemDescription] = useState(storedDesc);
@@ -110,7 +112,7 @@ function Donation(): JSX.Element {
   const [descError, setDescError] = useState("");
   const [dimError, setDimError] = useState("");
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -119,16 +121,16 @@ function Donation(): JSX.Element {
     if (e.currentTarget.value === "nextButton") {
       if (validInput()) {
         updateStore();
-        navigate(nextPath);
+        router.push(nextPath);
       }
     }
   };
 
   const backButtonNavigation = (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): void => {
     const nextPath: string = "/Donor/Donate/Disclosure";
-    navigate(nextPath);
+    router.push(nextPath);
   };
 
   const validInput = () => {

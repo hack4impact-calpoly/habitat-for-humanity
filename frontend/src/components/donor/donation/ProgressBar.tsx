@@ -48,7 +48,7 @@ const PIcon = styled(BsCheckLg)`
   margin-top: 7px;
 `;
 
-function ProgressBar({ activeStep }: ProgressBarProps): JSX.Element {
+function ProgressBar({ activeStep }: ProgressBarProps): React.ReactNode {
   const screenSize = useScreenSize();
   const changeColor = (currentStep: number) =>
     currentStep <= activeStep ? "var(--primary)" : "var(--gray-dark)";
