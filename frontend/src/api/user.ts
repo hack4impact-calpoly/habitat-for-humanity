@@ -1,4 +1,8 @@
-import axios from "axios";
+import { createClerkClient } from "@clerk/backend";
+
+const clerkClient = createClerkClient({
+  secretKey: process.env.CLERK_SECRET_KEY,
+});
 
 const userURL = "http://localhost:3001/api/users/";
 /* ----------------------Clerk User Requests---------------------------*/
@@ -146,64 +150,31 @@ export const addUser = async (user: User) =>
       }
       return response;
     })
-    .catch((error) => console.error("Error: ", error)); // handle error
+    .catch((error) => {
+      console.error("Error in addUser:", error);
+      throw error;
+    });
 
-// Update User "firstName" (given userID)
-export const updateUserFirstName = async (userID: string, firstName: string) =>
-  fetch(`${userURL}firstName/${userID}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "PUT",
-    body: JSON.stringify({
-      firstName,
-    }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        // check server response
-        throw new Error(`${res.status}-${res.statusText}`);
-      }
-    })
-    .catch((error) => console.error("Error: ", error)); // handle error
+// Update user info using Clerk API
+export const updateUserInfoAPI = async (
+  userId: string,
+  params: { firstName?: string; lastName?: string; email?: string },
+) => {
+  console.log(process.env.CLERK_SECRET_KEY)
+  console.log("Current environment:", process.env.NODE_ENV);
+  console.log("CLERK_SECRET_KEY:", process.env.CLERK_SECRET_KEY);
 
-// Update User "lastName" (given userID)
-export const updateUserLastName = async (userID: string, lastName: string) =>
-  fetch(`${userURL}lastName/${userID}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "PUT",
-    body: JSON.stringify({
-      lastName,
-    }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        // check server response
-        throw new Error(`${res.status}-${res.statusText}`);
-      }
-    })
-    .catch((error) => console.error("Error: ", error)); // handle error
-
-// Update User "email" (given userID)
-export const updateUserEmail = async (userID: string, email: string) =>
-  fetch(`${userURL}email/${userID}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "PUT",
-    body: JSON.stringify({
-      email,
-    }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        // check server response
-        throw new Error(`${res.status}-${res.statusText}`);
-      }
-    })
-    .catch((error) => console.error("Error: ", error)); // handle error
+  try {
+    return await clerkClient.users.updateUser(userId, params);
+  } catch (error) {
+    console.error("Error in updateUserInfoAPI:", error);
+    throw new Error(
+      "Failed to update user info: " + error
+        ? error.toString().message
+        : "unable to update info",
+    );
+  }
+};
 
 // Update User "phone" (given userID)
 export const updateUserPhone = async (userID: string, phone: string) =>
