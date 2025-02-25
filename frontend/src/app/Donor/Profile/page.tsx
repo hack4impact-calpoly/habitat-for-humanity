@@ -56,7 +56,7 @@ function DonatorProfilePage(): React.ReactNode {
             </div>
             <div className="infoBox">
               {/* Need to implement displaying user data from backend */}
-              <p id="email">{user?.emailAddresses[0].emailAddress}</p>
+              <p id="email">{user && user?.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : "Email not found."}</p>
             </div>
           </div>
           <div id="phoneBox">
