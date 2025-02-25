@@ -156,9 +156,9 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p>Please review your donation information before you submit.</p>
             <h2 id="ItemInfo">Contact Information</h2>
             <p id="itemName">
-              <b>Name:</b> {user.firstName} {user.lastName}
+              <b>Name:</b> {user && user.firstName && user.lastName ? user.firstName + " " + user.lastName: "Name not found"}
             </p>
-            <p id="itemDimensions"><b>Email: </b> {user.emailAddresses[0].emailAddress}</p>
+            <p id="itemDimensions"><b>Email: </b> {user && user.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : "Email not found"}</p>
             <p id="itemPhotos"><b>Phone Number: </b> N/A </p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
