@@ -18,6 +18,7 @@ import { updateDonorID } from "../../../redux/donationSlice";
 import { RootState } from "../../../redux/store";
 import { Item, getItemsByDonorID } from "../../../api/item";
 import DonorNavbar from "components/donor/DonorNavbar/DonorNavbar";
+import { useAuth } from "@clerk/clerk-react";
 
 require("../../../App.css");
 
@@ -30,6 +31,7 @@ const header = [
 ];
 
 function DonationHistory(): React.ReactNode {
+  const { userId } = useAuth();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
@@ -43,16 +45,9 @@ function DonationHistory(): React.ReactNode {
 
   const dispatch = useDispatch();
 
-  const setCurrentUserID = async () => {
-    Auth.currentUserInfo().then((user) => {
-      const { attributes = {} } = user;
-      dispatch(updateDonorID(attributes["custom:id"]));
-    });
-  };
-
   useEffect(() => {
-    setCurrentUserID();
-  }, []);
+    dispatch(updateDonorID(userId));
+  }, [userId]);
 
   useEffect(() => {
     getItemsByDonorID(storedDonorID).then((res) => setItems(res));

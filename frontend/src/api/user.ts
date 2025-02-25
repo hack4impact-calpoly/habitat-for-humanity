@@ -122,10 +122,6 @@ export const getAdmins = async () =>
 
 // User data model
 export interface User {
-  userType: string;
-  firstName: string;
-  lastName: string;
-  email: string;
   phone: string;
   id: string;
 }
@@ -138,10 +134,6 @@ export const addUser = async (user: User) =>
     },
     method: "POST",
     body: JSON.stringify({
-      userType: user.userType,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
       phone: user.phone,
       id: user.id,
     }),

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { getUserByID, User } from "api/user";
@@ -83,11 +83,7 @@ const emptyItem: Item = {
 
 const emptyUser: User = {
   id: "",
-  firstName: "",
-  lastName: "",
-  email: "",
   phone: "",
-  userType: "",
 };
 
 const emptyTimeSlots: TimeSlot[] = [
@@ -109,34 +105,30 @@ const getDay = (time: string) =>
 const getDayShort = (time: string) =>
   time ? moment(time).format("dddd, MMMM Do YYYY") : "N/A";
 
-async function DonationInfoPage({
-    params,
-}: {
-    params: Promise<{ slug?: string[] }>;
-}) {
+function DonationInfoPage() {
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
   const [donor, setDonor] = useState<User>(emptyUser);
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
-  const slug = (await params).slug;
+  const params = useParams();
+  const slug = (params).slug;
   const id = slug ? slug[0] : "";
 
   const router = useRouter();
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
-    const backPath: string = "/Admin";
     const nextPath: string = "/Admin";
 
     if (e.currentTarget.value === "back") {
       sendUpdatedItemToDB(storedStatus, false);
-      await router.push(backPath);
+      await router.back();
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
       sendUpdatedItemToDB("Rejected", false);
-      await router.push(backPath);
+      await router.back();  
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
       if (
