@@ -1,9 +1,3 @@
-import { createClerkClient } from "@clerk/backend";
-
-const clerkClient = createClerkClient({
-  secretKey: process.env.CLERK_SECRET_KEY,
-});
-
 const userURL = "http://localhost:3001/api/users/";
 /* ----------------------Clerk User Requests---------------------------*/
 export const updateMetadata = async (role: string, userId: string | null) =>
@@ -155,26 +149,30 @@ export const addUser = async (user: User) =>
       throw error;
     });
 
-// Update user info using Clerk API
-export const updateUserInfoAPI = async (
-  userId: string,
-  params: { firstName?: string; lastName?: string; email?: string },
-) => {
-  console.log(process.env.CLERK_SECRET_KEY)
-  console.log("Current environment:", process.env.NODE_ENV);
-  console.log("CLERK_SECRET_KEY:", process.env.CLERK_SECRET_KEY);
-
-  try {
-    return await clerkClient.users.updateUser(userId, params);
-  } catch (error) {
-    console.error("Error in updateUserInfoAPI:", error);
-    throw new Error(
-      "Failed to update user info: " + error
-        ? error.toString().message
-        : "unable to update info",
-    );
-  }
-};
+    export const updateUserInfoAPI = async (
+      userId: string,
+      params: { firstName?: string; lastName?: string; email?: string },
+    ) => {
+      console.log("Current environment:", process.env.NODE_ENV);
+    
+      // Assuming the backend route is '/api/updateUserInfo/:userId' and you want to send a PUT request
+      const response = await fetch(`${userURL}updateUserInfo/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(params), // Send user info as the body
+      });
+    
+      // Check for a successful response
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Failed to update user info: ${errorMessage}`);
+      }
+    
+      const updatedUser = await response.json();
+      return updatedUser;
+    };    
 
 // Update User "phone" (given userID)
 export const updateUserPhone = async (userID: string, phone: string) =>

@@ -93,26 +93,26 @@ router.post("/", async (req, res) => {
   }
 });
 
-//update user firstName
-router.put("/firstName/:userId", async (req, res) => {
+//update user info
+router.put("/updateUserInfo/:userId", async (req, res) => {
   try {
-    let user = await User.findOne({ id: req.params.userId });
-    user.firstName = req.body.firstName;
+    // Extract userId from route params and user info from the request body
+    const { userId } = req.params;
+    const userInfo = req.body; // This is the dictionary containing user info (firstName, lastName, email)
 
-    await user.save();
+    // Update user info using Clerk's API
+    const updatedUser = await clerkClient.users.updateUser(userId, userInfo);
 
     res.send({
-      msg: `Updated user "${req.params.userId}" with new firstName: "${req.body.firstName}"`,
+      msg: `Updated user "${userId}" with new info:`,
+      updatedUser, 
     });
   } catch (error) {
-    let errorMessage;
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    } else {
-      errorMessage = String(errorMessage);
-    }
-    res.status(400).send(errorMessage);
-    console.log(`Error: ${errorMessage}`);
+    console.error("Error updating user info:", error);
+    res.status(500).send({
+      msg: "Failed to update user info",
+      error: error.message,
+    });
   }
 });
 
