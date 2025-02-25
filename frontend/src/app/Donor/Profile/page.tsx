@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Box } from "@mui/material";
 // import pencil from "images/pencil.png";
-import { useUser, RedirectToSignIn } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 
 require("../../../App.css");
