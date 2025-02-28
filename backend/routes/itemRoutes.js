@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router()
 const Item = require('../models/itemSchema');
 router.use(express.json());
-
+const mongoose = require("mongoose");
 
 //get all items
 router.get("/", async (req, res) => {
@@ -11,20 +11,32 @@ router.get("/", async (req, res) => {
     res.send(items)
     console.log("Got all items")
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({
+      error: error.message || String(error),
+    });
   }
 })
 
 //get item by itemId
 router.get("/itemId/:itemId", async (req, res) => {
   try {
-    const item = await Item.findOne({ _id: req.params.itemId})
-    res.send(item)
-    console.log('Got item with id %s', req.params.itemId)
+    // Validate ID format
+    if (!mongoose.Types.ObjectId.isValid(req.params.itemId)) {
+      return res.status(400).send({ error: "Invalid item ID format" });
+    }
+
+    const item = await Item.findOne({ _id: req.params.itemId });
+
+    if (!item) {
+      return res.status(404).send({ error: "Item not found" });
+    }
+
+    res.send(item);
+    console.log("Got item with id %s", req.params.itemId);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error: error.message });
   }
-})
+});
 
 //get all items with name
 router.get("/name/:name", async (req, res) => {
@@ -33,7 +45,9 @@ router.get("/name/:name", async (req, res) => {
     res.send(items)
     console.log('Got all items with name %s', req.params.name)
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({
+      error: error.message || String(error),
+    });
   }
 })
 
@@ -44,7 +58,9 @@ router.get("/location/:city/:address", async (req, res) => {
     res.send(items)
     console.log('Got all items with at address %s in %s', req.params.address, req.params.city)
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({
+      error: error.message || String(error),
+    });
   }
 })
 
@@ -55,7 +71,9 @@ router.get("/donorId/:donorId", async (req, res) => {
     res.send(items)
     console.log('Got all items with donorId %s', req.params.donorId)
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({
+      error: error.message || String(error),
+    });
   }
 });
 
@@ -138,56 +156,56 @@ router.put("/itemId/:itemId", async (req, res) => {
     if (error instanceof Error) { 
       errorMessage = error.message; 
     } else { 
-      errorMessage = String(errorMessage); 
+      errorMessage = String(error); 
     }
-    res.status(400).send(errorMessage);
+    res.status(400).send({error : errorMessage});
     console.log(`Error: ${errorMessage}`);
   }
 })
 
 //add new Item to ItemDB
-router.post("/", async (req, res) => {
-  try {  
-    const { 
-      name,
-      email,
-      phone,
-      images,
-      size,
-      address,
-      city,
-      zipCode,
-      donorId,
-      notes,
-      timeSubmitted,
-      status
-    } = req.body;
-    const newItem = new Item({
-      name,
-      email,
-      phone,
-      images,
-      size,
-      address,
-      city,
-      zipCode,
-      donorId,
-      notes,
-      timeSubmitted,
-      status
-    });
-    await newItem.save();
-    res.send({msg: `${name} added to the ItemDB`});
-  } catch (error) {
-    let errorMessage;
-    if (error instanceof Error) { 
-      errorMessage = error.message; 
-    } else { 
-      errorMessage = String(errorMessage); 
-    }
-    res.status(400).send(errorMessage);
-    console.log(`Error: ${errorMessage}`);
-  }
-})
+// router.post("/", async (req, res) => {
+//   try {  
+//     const { 
+//       name,
+//       email,
+//       phone,
+//       images,
+//       size,
+//       address,
+//       city,
+//       zipCode,
+//       donorId,
+//       notes,
+//       timeSubmitted,
+//       status
+//     } = req.body;
+//     const newItem = new Item({
+//       name,
+//       email,
+//       phone,
+//       images,
+//       size,
+//       address,
+//       city,
+//       zipCode,
+//       donorId,
+//       notes,
+//       timeSubmitted,
+//       status
+//     });
+//     await newItem.save();
+//     res.send({msg: `${name} added to the ItemDB`});
+//   } catch (error) {
+//     let errorMessage;
+//     if (error instanceof Error) { 
+//       errorMessage = error.message; 
+//     } else { 
+//       errorMessage = String(errorMessage); 
+//     }
+//     res.status(400).send(errorMessage);
+//     console.log(`Error: ${errorMessage}`);
+//   }
+// })
 
 module.exports = router

@@ -49,7 +49,8 @@
     "path": "^0.12.7"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage --forceExit",
+    "test:watch": "jest --watch",
     "dev": "nodemon server.js dev",
     "lint-check": "eslint --ext .js,.ts --ignore-path .gitignore . && prettier --check .",
     "lint-write": "npx lint-staged",
