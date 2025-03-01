@@ -9,7 +9,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../../api/item";
 import { addImages, getImages, getImageByID } from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
-import { useUser, RedirectToSignIn } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/clerk-react";
+
 
 require("../../../../App.css");
 
