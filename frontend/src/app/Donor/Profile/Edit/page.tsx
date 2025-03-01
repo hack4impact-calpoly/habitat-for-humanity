@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { updateUserInfoAPI } from "api/user";
@@ -17,16 +17,24 @@ export type UserInfo = {
 };
 
 function DonatorProfileEditPage(): React.ReactNode {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const initialFirstName = user?.firstName;
   const initialLastName = user?.lastName;
-  const initialEmail = user?.emailAddresses[0].emailAddress;
+  const initialEmail = user?.primaryEmailAddress?.emailAddress;
 
-  const [firstName, setFirstName] = useState(initialFirstName);
-  const [lastName, setLastName] = useState(initialLastName);
-  const [email, setEmail] = useState(initialEmail);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   let processedPhoneNumber: number; // Phone number converted from string
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      setFirstName(user.firstName || "");
+      setLastName(user.lastName || "");
+      setEmail(user.primaryEmailAddress?.emailAddress || "");
+    }
+  }, [isLoaded, user]);
 
   const updateUserInfo = async (newUserInfo: UserInfo) => {
     if (!user) {
