@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@clerk/clerk-react": "^5.24.0",
     "@clerk/elements": "^0.22.20",
     "@clerk/nextjs": "^6.11.1",
     "@emotion/react": "^11.14.0",
@@ -29,7 +30,7 @@
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.46",
     "mongoose": "^8.9.5",
-    "next": "^15.1.6",
+    "next": "^15.2.0",
     "npm": "^11.0.0",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",

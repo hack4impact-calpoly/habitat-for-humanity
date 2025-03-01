@@ -1,112 +1,156 @@
 "use client";
-
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth, useSignIn, useClerk } from "@clerk/nextjs"; // Added useClerk
 import { useRouter } from "next/navigation";
 
-require("../../../App.css");
-
-function ForgotPasswordPage(): React.ReactNode {
-  const [email, setEmail] = useState<string>("");
+const ForgotPasswordPage = () => {
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [resetCode, setResetCode] = useState("");
+  const [activeStep, setActiveStep] = useState<"initiate" | "reset">("initiate");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+  const { isSignedIn } = useAuth();
+  const { isLoaded, signIn } = useSignIn();
+  const { signOut } = useClerk(); // Added signOut
 
-  // Function for calling Auth.forgotPassword, called in buttonNavigation
-  const awsForgotPassword = async (): Promise<any> => {
-    const response = await Auth.forgotPassword(email).catch((error) => {
-      const { code } = error;
-      console.log(error);
-      switch (code) {
-        case "UserNotFoundException":
-          alert("Email does not exist in our system");
-          return false;
-        case "LimitExceededException":
-          alert(
-            "Too many tries, please wait and try again in a couple minutes",
-          );
-          return false;
-        default:
-          return true;
+  useEffect(() => {
+    if (isSignedIn) router.push("/");
+  }, [isSignedIn, router]);
+
+  const initiatePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      if (!signIn) throw new Error("Authentication system not ready");
+
+      const passwordReset = await signIn.create({
+        strategy: "reset_password_email_code",
+        identifier: email,
+      });
+
+      if (passwordReset.status === "needs_first_factor") {
+        setActiveStep("reset");
       }
-    });
-    return response;
+    } catch (err: any) {
+      setError(err.errors?.[0]?.message || "Failed to initiate password reset");
+    } finally {
+      setIsLoading(false);
+    }
   };
-  const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ): Promise<void> => {
-    const mainScreenPath: string = "/"; // Main screen (login)
-    const successPath: string = "/NewPassword";
-    const checkAWS = await awsForgotPassword();
-    const target = e.target as HTMLTextAreaElement;
-    if (target.value === "sendButton") {
-      if (submitData() && checkAWS) {
-        router.push(
-          successPath + "?" + new URLSearchParams({ resetEmail: email }).toString(),
-        );
+
+  const completePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      if (!signIn) throw new Error("Authentication system not ready");
+
+      const result = await signIn.attemptFirstFactor({
+        strategy: "reset_password_email_code",
+        code: resetCode,
+        password: newPassword,
+      });
+
+      if (result.status === "complete") {
+        // Sign out before redirecting to prevent session conflict
+        await signOut();
+        router.push("/Auth/Login");
       }
+    } catch (err: any) {
+      setError(err.errors?.[0]?.message || "Password reset failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const submitData = (): boolean => {
-    if (validateEmail()) {
-      const JSONstring = getFormData();
-      console.log(JSONstring);
-      // connect to backend code
-      return true;
-    }
-    return false;
-  };
+  if (!isLoaded) return null;
 
-  const getFormData = (): string => {
-    const forgotEmail = {
-      email,
-    };
-    return JSON.stringify(forgotEmail);
-  };
-
-  const validateEmail = (): boolean => {
-    /*
-        Desc: Validates email
-        Return: boolean (true if valid, false if not)
-        */
-    if (email === "") {
-      alert("Please add email");
-      return false;
-    }
-    if (!email.includes("@")) {
-      alert("Please enter a valid email address");
-      return false;
-    }
-    return true;
-  };
-
-  // HTML Body
   return (
-    <div>
-      <div id="forgotPasswordBox">
-        <p id="forgotPasswordText">Forgot Password</p>
-        <p className="forgotPasswordMessage">
-          Please enter the email associated with your account to receive a
-          confirmation code.
-        </p>
-        <p className="emailInput">Email</p>
-        <input
-          className="inputBox"
-          type="text"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setEmail(e?.target?.value)
-          }
-        />
-        <button
-          value="sendButton"
-          id="sendButton"
-          onClick={buttonNavigation}
-          type="submit"
-        >
-          Send
-        </button>
-      </div>
+    <div className="max-w-md mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6">Password Reset</h1>
+
+      <form
+        onSubmit={
+          activeStep === "initiate"
+            ? initiatePasswordReset
+            : completePasswordReset
+        }
+      >
+        {activeStep === "initiate" ? (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Email address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-2 border rounded-md"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+              disabled={isLoading}
+            >
+              {isLoading ? "Sending..." : "Send Reset Code"}
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Reset Code
+              </label>
+              <input
+                type="text"
+                value={resetCode}
+                onChange={(e) => setResetCode(e.target.value)}
+                className="w-full p-2 border rounded-md"
+                placeholder="Enter code from email"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                New Password
+              </label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full p-2 border rounded-md"
+                placeholder="Enter new password"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+              disabled={isLoading}
+            >
+              {isLoading ? "Resetting..." : "Reset Password"}
+            </button>
+          </div>
+        )}
+
+        {error && (
+          <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md">
+            {error}
+          </div>
+        )}
+      </form>
     </div>
   );
-}
+};
 
 export default ForgotPasswordPage;
