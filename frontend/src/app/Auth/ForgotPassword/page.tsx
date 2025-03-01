@@ -1,20 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useAuth, useSignIn, useClerk } from "@clerk/nextjs"; // Added useClerk
+import { useAuth, useSignIn, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [resetCode, setResetCode] = useState("");
-  const [activeStep, setActiveStep] = useState<"initiate" | "reset">("initiate");
+  const [activeStep, setActiveStep] = useState<"initiate" | "reset">(
+    "initiate",
+  );
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const { isSignedIn } = useAuth();
   const { isLoaded, signIn } = useSignIn();
-  const { signOut } = useClerk(); // Added signOut
+  const { signOut } = useClerk();
 
   useEffect(() => {
     if (isSignedIn) router.push("/");
@@ -58,7 +60,6 @@ const ForgotPasswordPage = () => {
       });
 
       if (result.status === "complete") {
-        // Sign out before redirecting to prevent session conflict
         await signOut();
         router.push("/Auth/Login");
       }
