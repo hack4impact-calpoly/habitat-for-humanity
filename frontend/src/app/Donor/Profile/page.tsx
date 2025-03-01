@@ -34,7 +34,7 @@ function DonatorProfilePage(): React.ReactNode {
   
       fetchData();  // Fetch user data whenever the component is re-entered
     }
-  }, [user?.id]); // Run when `user.id` changes, ensuring it gets updated
+  }, [user]); 
   
   const donatorProfileEditPath = "/Donor/Profile/Edit";
 
