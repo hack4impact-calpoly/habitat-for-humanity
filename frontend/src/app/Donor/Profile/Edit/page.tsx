@@ -3,10 +3,17 @@
 import React, { useState, useEffect } from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { updateUserInfoAPI } from "api/user";
+import { updateUserInfoAPI, updateUserPhone } from "api/user";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import { useUser } from "@clerk/nextjs";
 import { z } from "zod";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberFromString,
+} from "libphonenumber-js";
+import { getUserByID } from "api/user";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 require("../../../../App.css");
 
@@ -17,24 +24,36 @@ export type UserInfo = {
 };
 
 function DonatorProfileEditPage(): React.ReactNode {
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
   const initialFirstName = user?.firstName;
   const initialLastName = user?.lastName;
   const initialEmail = user?.primaryEmailAddress?.emailAddress;
+  let initialPhone: string | undefined = undefined;
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  let processedPhoneNumber: number; // Phone number converted from string
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [isPhoneValid, setIsPhoneValid] = useState<boolean>(true);
 
   useEffect(() => {
-    if (isLoaded && user) {
-      setFirstName(user.firstName || "");
-      setLastName(user.lastName || "");
-      setEmail(user.primaryEmailAddress?.emailAddress || "");
+    if (user?.id) {
+      const fetchData = async () => {
+        const response = await getUserByID(user.id);
+        const formattedPhone = response.phone
+          ? parsePhoneNumberFromString(response.phone, "US")?.format("E.164") ||
+            ""
+          : "";
+        setPhone(formattedPhone);
+      };
+
+      setFirstName(user.firstName || "First Name Not Found");
+      setLastName(user.lastName || "Last Name Not Found");
+      setEmail(user.primaryEmailAddress?.emailAddress || "Email Not Found");
+
+      fetchData();
     }
-  }, [isLoaded, user]);
+  }, [user?.id]);
 
   const updateUserInfo = async (newUserInfo: UserInfo) => {
     if (!user) {
@@ -45,16 +64,15 @@ function DonatorProfileEditPage(): React.ReactNode {
   };
 
   const capitalizeFirstLetter = (s: string) => {
-    if (!s) return ""; // Handle empty or falsy strings
+    if (!s) return "";
     return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
   };
 
   const router = useRouter();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    const backPath: string = "/Donor/Profile"; // Change once page is added
+    const backPath: string = "/Donor/Profile";
     const saveChangesPath: string = "/Donor/Profile";
-    console.log("event", e.currentTarget.value);
     if (e.currentTarget.value === "backButton") {
       router.push(backPath);
     } else if (e.currentTarget.value === "saveChangesButton") {
@@ -65,32 +83,27 @@ function DonatorProfileEditPage(): React.ReactNode {
   };
 
   const submitData = () => {
-    // Email validation schema
     const emailSchema = z.string().email({ message: "Invalid email address" });
 
-    // Store alerts in an array and display all at once to avoid multiple alert pop-ups
     const alerts: string[] = [];
 
-    // Check for empty fields and collect appropriate error messages
     if (!firstName) alerts.push("First name can not be empty");
     if (!lastName) alerts.push("Last name can not be empty");
     if (!email) alerts.push("Email can not be empty");
+    if (!isPhoneValid) alerts.push("Phone must be of valid format");
 
-    // Email validation
     try {
       emailSchema.parse(email);
     } catch (error: any) {
       alerts.push(error.message);
     }
 
-    // If any alerts were collected, show them at once
     if (alerts.length > 0) {
       alerts.forEach((alertMessage) => alert(alertMessage));
-      return false; // Prevent further execution if validation fails
+      return false;
     }
 
     let newUserInfo: UserInfo = {};
-    // Update fields only if they have changed and are different from the initial values
     if (firstName && firstName !== initialFirstName) {
       newUserInfo.firstName = capitalizeFirstLetter(firstName);
     }
@@ -100,32 +113,20 @@ function DonatorProfileEditPage(): React.ReactNode {
     if (email && email !== initialEmail) {
       newUserInfo.email = email;
     }
-    // If phone needs to be handled:
-    // if (phone && phone !== initialPhone) {
-    //   handleChangePhone(phone);
-    // }
+    if (phone && phone !== initialPhone) {
+      if (user) {
+        updateUserPhone(user.id, phone);
+      }
+    }
     updateUserInfo(newUserInfo);
 
-    return true; // Return true if everything is successful
+    return true;
   };
 
-  function processPhoneNumber(): boolean {
-    /*
-        Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
-        Return: boolean (true if number successfuly processed, false if not)
-        */
-    try {
-      const processedString = phoneNumber.replace(/[^0-9]/g, "");
-      processedPhoneNumber = parseInt(processedString, 2);
-    } catch (error) {
-      console.error(error);
-      alert(
-        "Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX",
-      );
-      return false;
-    }
-    return true;
-  }
+  const handlePhoneChange = (value: string | undefined) => {
+    setPhone(value || ""); // Always update state first
+    setIsPhoneValid(value ? isValidPhoneNumber(value) : false); // Validate separately
+  };
 
   const isMobile = useMediaQuery("(max-width: 640px)");
 
@@ -136,18 +137,9 @@ function DonatorProfileEditPage(): React.ReactNode {
         <p id="editProfileText">Edit Profile</p>
         <form id="form">
           <div id="DonorNameBox">
-            <Box
-              sx={{
-                display: isMobile ? "" : "flex",
-                width: "80vw",
-              }}
-            >
+            <Box sx={{ display: isMobile ? "" : "flex", width: "80vw" }}>
               <div className="labelInputBox" id="firstNameBox">
-                <Box
-                  sx={{
-                    width: isMobile ? "80vw" : "200px",
-                  }}
-                >
+                <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
                   <p className="formLabel">First Name</p>
                   <input
                     className="inputBox"
@@ -160,11 +152,7 @@ function DonatorProfileEditPage(): React.ReactNode {
                 </Box>
               </div>
               <div className="labelInputBox" id="lastNameBox">
-                <Box
-                  sx={{
-                    width: isMobile ? "80vw" : "200px",
-                  }}
-                >
+                <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
                   <p className="formLabel">Last Name</p>
                   <input
                     className="inputBox"
@@ -191,13 +179,11 @@ function DonatorProfileEditPage(): React.ReactNode {
           </div>
           <div className="labelInputBox">
             <p className="formLabel">Phone Number</p>
-            <input
+            <PhoneInput
               className="inputBox"
-              value={phoneNumber}
-              type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPhoneNumber(e.target.value)
-              }
+              value={phone || ""}
+              onChange={handlePhoneChange}
+              defaultCountry="US"
             />
           </div>
         </form>

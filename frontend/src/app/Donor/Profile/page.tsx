@@ -6,13 +6,39 @@ import { Box } from "@mui/material";
 // import pencil from "images/pencil.png";
 import { useUser } from "@clerk/nextjs";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
+import { getUserByID } from "api/user";
+
 
 require("../../../App.css");
 
 function DonatorProfilePage(): React.ReactNode {
   const { user } = useUser();
-
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  });
+  
+  useEffect(() => {
+    if (user?.id) {  // Check if user.id is defined
+      const fetchData = async () => {
+        const response = await getUserByID(user.id);
+        setUserData({
+          firstName: user.firstName || "First Name Not Found",
+          lastName: user.lastName || "Last Name Not Found",
+          email: user.primaryEmailAddress?.emailAddress || "Email Not Found",
+          phone: response.phone || "Phone Not Found",
+        });
+      };
+  
+      fetchData();  // Fetch user data whenever the component is re-entered
+    }
+  }, [user?.id]); // Run when `user.id` changes, ensuring it gets updated
+  
   const donatorProfileEditPath = "/Donor/Profile/Edit";
+
+  
 
   return (
     <div>
@@ -44,9 +70,7 @@ function DonatorProfilePage(): React.ReactNode {
             <div className="infoBox">
               {/* Need to implement displaying user data from backend */}
               <p id="name">
-                {user?.firstName && user?.lastName
-                  ? `${user.firstName} ${user.lastName}`
-                  : ""}
+                {userData.firstName} {userData.lastName}
               </p>
             </div>
           </div>
@@ -56,7 +80,7 @@ function DonatorProfilePage(): React.ReactNode {
             </div>
             <div className="infoBox">
               {/* Need to implement displaying user data from backend */}
-              <p id="email">{user && user?.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : "Email not found."}</p>
+              <p id="email">{userData.email}</p>
             </div>
           </div>
           <div id="phoneBox">
@@ -65,7 +89,7 @@ function DonatorProfilePage(): React.ReactNode {
             </div>
             <div className="infoBox">
               {/* Need to implement displaying user data from backend */}
-              <p id="phone">N/A</p>
+              <p id="phone">{userData.phone}</p>
             </div>
           </div>
         </div>
