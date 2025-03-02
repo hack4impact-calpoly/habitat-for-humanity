@@ -13,6 +13,7 @@ require("../../../App.css");
 
 function DonatorProfilePage(): React.ReactNode {
   const { user } = useUser();
+  user?.reload();
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
