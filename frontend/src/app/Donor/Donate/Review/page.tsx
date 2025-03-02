@@ -11,7 +11,7 @@ import { addImages, getImages, getImageByID } from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
 import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@clerk/clerk-react";
-
+import { getUserByID } from "api/user";
 
 require("../../../../App.css");
 
@@ -33,9 +33,16 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   dropOff,
   component,
 }) => {
-  const { userId } = useAuth();
+
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  });
+  
   const storedDonation = useSelector((state: RootState) => state.donation);
-  const { user, isLoaded, isSignedIn } = useUser();
+  const { user } = useUser();
   const storedName = useSelector((state: RootState) => state.donation.name);
   const storedDimensions = useSelector(
     (state: RootState) => state.donation.dimensions,
@@ -58,12 +65,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const storedEvents = useSelector(
     (state: RootState) => state.donation.pickupTimes,
   );
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(updateDonorID(userId));
-  }, [userId]);
 
   name = storedName;
   dimensions = storedDimensions;
@@ -139,6 +140,23 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     return response;
   };
 
+  useEffect(() => {
+    if (user?.id) {  // Check if user.id is defined
+      const fetchData = async () => {
+        const response = await getUserByID(user.id);
+        setUserData({
+          firstName: user.firstName || "First Name Not Found",
+          lastName: user.lastName || "Last Name Not Found",
+          email: user.primaryEmailAddress?.emailAddress || "Email Not Found",
+          phone: response.phone || "Phone Not Found",
+        });
+        storedDonation.donorID = user.id;
+      };
+  
+      fetchData();  // Fetch user data whenever the component is re-entered
+    }
+  }, [user]); 
+
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>
   ): Promise<void> => {
@@ -165,10 +183,10 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p>Please review your donation information before you submit.</p>
             <h2 id="ItemInfo">Contact Information</h2>
             <p id="itemName">
-              <b>Name:</b> {user && user.firstName && user.lastName ? user.firstName + " " + user.lastName: "Name not found"}
+              <b>Name:</b> {userData.firstName} {userData.lastName}
             </p>
-            <p id="itemDimensions"><b>Email: </b> {user && user.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : "Email not found"}</p>
-            <p id="itemPhotos"><b>Phone Number: </b> N/A </p>
+            <p id="itemDimensions"><b>Email: </b> {userData.email}</p>
+            <p id="itemPhotos"><b>Phone Number: </b> {userData.phone} </p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
               <b>Item Name:</b> {name}
