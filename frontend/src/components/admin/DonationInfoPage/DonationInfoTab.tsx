@@ -30,7 +30,9 @@ export interface TimeSlot {
 
 export function collectDates(timeSlots: TimeSlot[]) {
   const dates: string[] = [];
-  if (timeSlots[0].eventStart === undefined) return dates;
+  if (!timeSlots || timeSlots.length === 0 || !timeSlots[0]?.eventStart) {
+    return dates;
+  }
   timeSlots.forEach((timeSlot) => {
     if (!dates.includes(timeSlot.dayString)) {
       dates.push(timeSlot.dayString);
@@ -71,7 +73,7 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
         <FormControl sx={{ width: { sm: "80%", lg: "50%" } }}>
           <Select
             value={donationStatus}
-            onChange={handleChange}
+            //onChange={handleChange}
             displayEmpty
             // inputProps={{ "aria-label": "Without label" }}
           >

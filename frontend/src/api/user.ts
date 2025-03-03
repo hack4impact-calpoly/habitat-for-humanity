@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const userURL = "http://localhost:3001/api/users/";
 /* ----------------------Clerk User Requests---------------------------*/
 export const updateMetadata = async (role: string, userId: string | null) =>
@@ -43,24 +45,18 @@ export const getUsers = async () =>
     .catch((error) => console.error("Error: ", error)); // handle error
 
 // Get A user by "userID"
-export const getUserByID = async (userID: string) =>
-  fetch(`${userURL}id/${userID}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then(async (res) => {
-      const user = await res.json();
-      if (!res.ok) {
-        // check server response
-        throw new Error(`${res.status}-${res.statusText}`);
-      }
-      // console.log(user)
-      return user;
-    })
-    .catch((error) => console.error("Error: ", error)); // handle error
-
+export const getUserByID = async (userID: string) => {
+  try {
+    const response = await fetch(`${userURL}id/${userID}`);
+    if (!response.ok) {
+      throw new Error(`${response.status}-${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+};
 // Get ALL volunteers
 export const getVolunteers = async () =>
   fetch(`${userURL}volunteers`, {
@@ -122,7 +118,11 @@ export const getAdmins = async () =>
 
 // User data model
 export interface User {
+  firstName: string;
+  lastName: string;
   phone: string;
+  email: string;
+  userType: string;
   id: string;
 }
 
