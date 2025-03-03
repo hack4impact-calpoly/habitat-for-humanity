@@ -1,6 +1,4 @@
-import axios from "axios";
-
-const userURL = "http://localhost:3001/api/users/";
+const userURL = "http://localhost:3001/api/users";
 /* ----------------------Clerk User Requests---------------------------*/
 export const updateMetadata = async (role: string, userId: string | null) =>
   fetch(`${userURL}/updateRole`, {
@@ -47,7 +45,7 @@ export const getUsers = async () =>
 // Get A user by "userID"
 export const getUserByID = async (userID: string) => {
   try {
-    const response = await fetch(`${userURL}id/${userID}`);
+    const response = await fetch(`${userURL}/id/${userID}`);
     if (!response.ok) {
       throw new Error(`${response.status}-${response.statusText}`);
     }
@@ -59,7 +57,7 @@ export const getUserByID = async (userID: string) => {
 };
 // Get ALL volunteers
 export const getVolunteers = async () =>
-  fetch(`${userURL}volunteers`, {
+  fetch(`${userURL}/volunteers`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -78,7 +76,7 @@ export const getVolunteers = async () =>
 
 // Get ALL donors
 export const getDonors = async () =>
-  fetch(`${userURL}donors`, {
+  fetch(`${userURL}/donors`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -97,7 +95,7 @@ export const getDonors = async () =>
 
 // Get ALL admins
 export const getAdmins = async () =>
-  fetch(`${userURL}admins`, {
+  fetch(`${userURL}/admins`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -158,7 +156,7 @@ export const addUser = async (user: User) =>
       console.log("Current environment:", process.env.NODE_ENV);
     
       // Assuming the backend route is '/api/updateUserInfo/:userId' and you want to send a PUT request
-      const response = await fetch(`${userURL}updateUserInfo/${userId}`, {
+      const response = await fetch(`${userURL}/updateUserInfo/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -178,7 +176,7 @@ export const addUser = async (user: User) =>
 
 // Update User "phone" (given userID)
 export const updateUserPhone = async (userID: string, phone: string) =>
-  fetch(`${userURL}phone/${userID}`, {
+  fetch(`${userURL}/phone/${userID}`, {
     headers: {
       "Content-Type": "application/json",
     },
