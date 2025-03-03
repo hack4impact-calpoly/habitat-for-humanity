@@ -30,7 +30,9 @@ export interface TimeSlot {
 
 export function collectDates(timeSlots: TimeSlot[]) {
   const dates: string[] = [];
-  if (timeSlots[0].eventStart === undefined) return dates;
+  if (!timeSlots || timeSlots.length === 0 || !timeSlots[0]?.eventStart) {
+    return dates;
+  }
   timeSlots.forEach((timeSlot) => {
     if (!dates.includes(timeSlot.dayString)) {
       dates.push(timeSlot.dayString);
@@ -68,43 +70,12 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
         <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
           Donation Status
         </h2>
-        <FormControl sx={{ width: { sm: "80%", lg: "50%" } }}>
-          <Select
-            value={donationStatus}
-            onChange={handleChange}
-            displayEmpty
-            // inputProps={{ "aria-label": "Without label" }}
-          >
-            <MenuItem value="Needs Approval" sx={{ color: "var(--orange)" }}>
-              <em>
-                <b>Needs Approval</b>
-              </em>
-            </MenuItem>
-            <MenuItem value="Approved and Scheduled">
-              Approved and Scheduled
-            </MenuItem>
-            <MenuItem value="Send Receipt" sx={{ color: "var(--orange)" }}>
-              <em>
-                <b>Send Receipt</b>
-              </em>
-            </MenuItem>
-            <MenuItem value="Completed">Completed</MenuItem>
-            <MenuItem value="Rejected">Rejected</MenuItem>
-            <MenuItem value="Soft Rejection">Soft Rejection</MenuItem>
-          </Select>
-        </FormControl>
+        <h4>{item.status}</h4>
       </Grid>
       <Grid item xs={12} sm={6}>
         {/* TODO: Implement notes functionality */}
         <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>Notes</h2>
-        <TextField
-          id="outlined-multiline-static"
-          label=""
-          multiline
-          rows={4}
-          defaultValue=""
-          fullWidth
-        />
+        <h4>{item.notes || "N/A"}</h4>
       </Grid>
       <Grid item xs={12}>
         <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
