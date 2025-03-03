@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../../api/item";
 import { addImages, getImages, getImageByID } from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
+// import DonatorScheduleDropoff from "components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoff";
 import { useAuth } from "@clerk/nextjs";
 
 require("../../../../App.css");
@@ -191,7 +192,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               {storedDonation.state} {storedDonation.zipCode}
             </h4>
           </div>
-          <div id="SchedulingInfo">
+          {/* <div id="SchedulingInfo">
             <h2 id="Scheduling">Scheduling</h2>
             <h4 id="SchdulingDesc">
               Does the donation need to be picked up or can you drop it off at
@@ -223,39 +224,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               </p>
             </div>
           </div>
-          <div id="ReStoreHours">
-            <h2 id="ReStore">ReStore Drop Off Hours</h2>
-            <div id="ReStoreHoursTable">
-              <div className="ReStoreHoursTableItem">
-                <p>Monday</p>
-                <p>Closed</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Tuesday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Wednesday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Thursday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Friday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Saturday</p>
-                <p>10:00 AM to 5:00 PM</p>
-              </div>
-              <div className="ReStoreHoursTableItem">
-                <p>Sunday</p>
-                <p>Closed</p>
-              </div>
-            </div>
-          </div>
+          {dropOffOption ? <DonatorScheduleDropoff /> : <></>} */}
           <div className="inputError">{serverError}</div>
           {!component && (
             <div
