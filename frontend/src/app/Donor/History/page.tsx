@@ -106,7 +106,7 @@ function DonationHistory(): React.ReactNode {
                     key={index}
                     // to={`DonationInfo/${d._id}`}
                     onClick={() => {
-                      router.push(`DonationInfo/${d._id}/`);
+                      router.push(`/Donor/History/DonationInfo/${d._id}/`);
                     }}
                     style={{ textDecoration: "none" }}
                     className="tableRow"

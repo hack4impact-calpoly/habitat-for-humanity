@@ -11,15 +11,17 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
 import { addEvent } from "api/event";
-import { Button } from "@mui/material";
+import { Button, dividerClasses } from "@mui/material";
 import { useSelector } from "react-redux";
 import { clearTimeSlots } from "../../../../../redux/eventSlice";
 import { RootState } from "../../../../../redux/store";
-import DonationInfoTab, { TimeSlot } from "components/admin/DonationInfoPage/DonationInfoTab";;
-import AdminNavbar from "components/admin/AdminNavbar/AdminNavbar";
-import ReceiptPage from "components/admin/DonationInfoPage/ReceiptPage/ReceiptPage";
-import AdminSchedulePage from "components/admin/DonationInfoPage/AdminSchedulePage";
+import DonationInfoTab, {
+  TimeSlot,
+} from "components/admin/DonationInfoPage/DonationInfoTab";
+import DonorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import sofa1 from "components/donor/donation/images/sofa-01.png";
+import { useUser } from "@clerk/nextjs";
+import { RedirectToSignIn, useAuth } from "@clerk/clerk-react";
 
 require("../../../../../App.css");
 
@@ -108,17 +110,14 @@ const getDay = (time: string) =>
 const getDayShort = (time: string) =>
   time ? moment(time).format("dddd, MMMM Do YYYY") : "N/A";
 
-async function DonationInfoPage({
-    params,
-}: {
-    params: Promise<{ slug?: string[] }>;
-}) {
+function DonationInfoPage() {
+  const { user } = useUser();
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
-  const [donor, setDonor] = useState<User>(emptyUser);
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
-  const slug = (await params).slug;
+  const params = useParams();
+  const slug = params.slug;
   const id = slug ? slug[0] : "";
 
   const router = useRouter();
@@ -138,35 +137,45 @@ async function DonationInfoPage({
       router.push(backPath);
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
-      if (
-        (await storedTimeSlots.map((timeSlot) =>
-          sendEventToDB(timeSlot, item),
-        )) &&
-        (await sendUpdatedItemToDB("Approved and Scheduled", true))
-      ) {
-        console.log("Success submitting events!");
-        clearTimeSlots(); // Clear time slots from redux
-        router.push(nextPath);
-        router.refresh(); // Reload page after navigating back to fetch changes
+      try {
+        const eventResults = await Promise.all(
+          storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item)),
+        );
+
+        if (eventResults.every((res) => res)) {
+          const updateSuccess = await sendUpdatedItemToDB(
+            "Approved and Scheduled",
+            true,
+          );
+          if (!updateSuccess) throw new Error("Item update failed");
+          console.log("Success submitting events!");
+          clearTimeSlots();
+          router.push(nextPath);
+        }
+      } catch (error) {
+        console.error("Approval failed:", error);
       }
     }
   };
 
-  const sendEventToDB = (timeSlot: TimeSlot, item: Item) => {
-    const event = {
-      title: `${item.name} ${item.scheduling}`,
-      startTime: new Date(timeSlot.eventStart),
-      endTime: new Date(timeSlot.eventEnd),
-      volunteerId: "dd9b6616-6353-438a-8bb8-a0b022c32b5e", // TODO add correct volunteer id
-      itemId: item._id === undefined ? "" : item._id,
-    };
-    console.log(event);
-    const response = addEvent(event);
-    if (!response) {
-      // "There was an error saving the events. Please try again later."
-      // TODO: add error message to user
+  const sendEventToDB = async (timeSlot: TimeSlot, item: Item) => {
+    try {
+      const event = {
+        title: `${item.name} ${item.scheduling}`,
+        startTime: new Date(timeSlot.eventStart),
+        endTime: new Date(timeSlot.eventEnd),
+        volunteerId: "dd9b6616-6353-438a-8bb8-a0b022c32b5e", // TODO add correct volunteer id
+        itemId: item._id === undefined ? "" : item._id,
+      };
+      const response = await addEvent(event);
+      if (!response) {
+        // "There was an error saving the events. Please try again later."
+        // TODO: add error message to user
+      }
+      return response;
+    } catch {
+      console.log(":'(");
     }
-    return response;
   };
 
   // Update item status in DB TODO: add other statuses
@@ -196,40 +205,40 @@ async function DonationInfoPage({
 
   // Fetch and set item on load
   useEffect(() => {
-    const fetchedItem =
-      typeof id === "string"
-        ? getItemByID(id)
-            .then((item) => setItem(item))
-            .catch((err) => {
-              console.log(err);
-              setItem(emptyItem);
-            })
-        : setItem(emptyItem);
-  }, []);
+    const fetchItem = async () => {
+      if (typeof id === "string") {
+        try {
+          const fetchedItem = await getItemByID(id);
+          setItem(fetchedItem);
+        } catch (err) {
+          console.error(err);
+          setItem(emptyItem);
+        }
+      } else {
+        setItem(emptyItem);
+      }
+    };
+    fetchItem();
+  }, [id]);
 
   // Fetch and set donor and available times on item change
   useEffect(() => {
-    if (item.donorId !== "") {
-      const fetchedDonor = getUserByID(item.donorId)
-        .then((donor) => setDonor(donor))
-        .catch((err) => {
-          console.log(err);
-          setDonor(emptyUser);
-        });
-    }
-    if (item.timeAvailability) {
-      const newAvailableTimes: TimeSlot[] = item.timeAvailability.map(
-        (event) => ({
-          id: `${event.start},${event.end}`,
-          eventStart: event.start,
-          eventEnd: event.end,
-          timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
-          dayString: `${getDay(event.start)}`,
-          volunteer: "",
-        }),
-      );
-      setAvailableTimes(newAvailableTimes);
-    }
+    const fetchData = async () => {
+      if (item.timeAvailability) {
+        const newAvailableTimes: TimeSlot[] = item.timeAvailability?.length
+          ? item.timeAvailability.map((event) => ({
+              id: `${event.start},${event.end}`,
+              eventStart: event.start,
+              eventEnd: event.end,
+              timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
+              dayString: `${getDay(event.start)}`,
+              volunteer: "",
+            }))
+          : emptyTimeSlots;
+        setAvailableTimes(newAvailableTimes);
+      }
+    };
+    fetchData();
   }, [item]);
 
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
@@ -242,11 +251,11 @@ async function DonationInfoPage({
   const storedTimeSlots = useSelector(
     (state: RootState) => state.event.timeSlots,
   );
-
+  console.log(availableTimes);
   return (
     <div>
       {/* <Button onClick={() => console.log(storedStatus)}>Check status</Button> */}
-      <AdminNavbar />
+      <DonorNavbar />
       <div id="DonInfoPage">
         <div id="ActiveDonHeader">
           <h1>Donation Approval</h1>
@@ -265,29 +274,22 @@ async function DonationInfoPage({
                   label={<span className="IndividTabs">Donation Info</span>}
                   {...a11yProps(0)}
                 />
-                <Tab
-                  label={<span className="IndividTabs">Scheduling</span>}
-                  {...a11yProps(1)}
-                />
-                <Tab
-                  label={<span className="IndividTabs">Receipt</span>}
-                  {...a11yProps(2)}
-                />
               </Tabs>
             </Box>
           </div>
           <TabPanel value={value} index={0} component="span">
             <DonationInfoTab
               item={item}
-              donor={donor}
+              donor={{
+                id: user?.id || "",
+                firstName: user?.firstName || "Unknown",
+                lastName: user?.lastName || "user",
+                email: user?.emailAddresses[0]?.emailAddress || "",
+                phone: user?.phoneNumbers[0]?.phoneNumber || "",
+                userType: "donor",
+              }}
               timeSlots={availableTimes}
             />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <AdminSchedulePage timeSlots={availableTimes} />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <ReceiptPage item={item} donor={donor} />
           </TabPanel>
         </div>
         <div id="DonInfoButtons">
@@ -299,24 +301,6 @@ async function DonationInfoPage({
           >
             Back
           </button>
-          <div id="NextButtons">
-            <button
-              type="button"
-              className="rejectButton"
-              value="reject"
-              onClick={buttonNavigation}
-            >
-              Reject Donation
-            </button>
-            <button
-              type="button"
-              className="approveButton"
-              value="approve"
-              onClick={buttonNavigation}
-            >
-              Approve and Schedule
-            </button>
-          </div>
         </div>
       </div>
     </div>
