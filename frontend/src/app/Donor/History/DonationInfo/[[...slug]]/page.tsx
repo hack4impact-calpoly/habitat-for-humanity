@@ -79,6 +79,7 @@ const emptyItem: Item = {
   timeSubmitted: new Date(),
   timeApproved: new Date(),
   status: "",
+  notes: "",
   photos: [""],
 };
 
@@ -112,6 +113,7 @@ const getDayShort = (time: string) =>
 
 function DonationInfoPage() {
   const { user } = useUser();
+  const [phone, setPhone] = useState("");
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
   const [availableTimes, setAvailableTimes] =
@@ -124,57 +126,9 @@ function DonationInfoPage() {
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
-    const backPath: string = "/Admin";
-    const nextPath: string = "/Admin";
-
     if (e.currentTarget.value === "back") {
       sendUpdatedItemToDB(storedStatus, false);
-      router.push(backPath);
-      router.refresh(); // Reload page after navigating back to fetch changes
-    } else if (e.currentTarget.value === "reject") {
-      updateItem({ ...item, status: "Rejected" });
-      sendUpdatedItemToDB("Rejected", false);
-      router.push(backPath);
-      router.refresh(); // Reload page after navigating back to fetch changes
-    } else if (e.currentTarget.value === "approve") {
-      try {
-        const eventResults = await Promise.all(
-          storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item)),
-        );
-
-        if (eventResults.every((res) => res)) {
-          const updateSuccess = await sendUpdatedItemToDB(
-            "Approved and Scheduled",
-            true,
-          );
-          if (!updateSuccess) throw new Error("Item update failed");
-          console.log("Success submitting events!");
-          clearTimeSlots();
-          router.push(nextPath);
-        }
-      } catch (error) {
-        console.error("Approval failed:", error);
-      }
-    }
-  };
-
-  const sendEventToDB = async (timeSlot: TimeSlot, item: Item) => {
-    try {
-      const event = {
-        title: `${item.name} ${item.scheduling}`,
-        startTime: new Date(timeSlot.eventStart),
-        endTime: new Date(timeSlot.eventEnd),
-        volunteerId: "dd9b6616-6353-438a-8bb8-a0b022c32b5e", // TODO add correct volunteer id
-        itemId: item._id === undefined ? "" : item._id,
-      };
-      const response = await addEvent(event);
-      if (!response) {
-        // "There was an error saving the events. Please try again later."
-        // TODO: add error message to user
-      }
-      return response;
-    } catch {
-      console.log(":'(");
+      router.back();
     }
   };
 
@@ -237,9 +191,13 @@ function DonationInfoPage() {
           : emptyTimeSlots;
         setAvailableTimes(newAvailableTimes);
       }
+      if (user?.id) {
+        const response = await getUserByID(user.id);
+        setPhone(response.phone || "Phone not found");
+      }
     };
     fetchData();
-  }, [item]);
+  }, [item, user]);
 
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue);
@@ -284,8 +242,8 @@ function DonationInfoPage() {
                 id: user?.id || "",
                 firstName: user?.firstName || "Unknown",
                 lastName: user?.lastName || "user",
-                email: user?.emailAddresses[0]?.emailAddress || "",
-                phone: user?.phoneNumbers[0]?.phoneNumber || "",
+                email: user?.primaryEmailAddress?.emailAddress || "",
+                phone: phone,
                 userType: "donor",
               }}
               timeSlots={availableTimes}
