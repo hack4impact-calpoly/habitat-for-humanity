@@ -107,7 +107,7 @@ function Donation(): React.ReactNode {
   );
   const storedPhotos = useSelector((state: RootState) => state.donation.photos);
   const [itemDescription, setItemDescription] = useState(storedDesc);
-  const [itemDimensions, setItemDimensions] = useState(storedDims ?? "");
+  const [itemDimensions, setItemDimensions] = useState(storedDims);
   const [photos, setPhotos] = useState(storedPhotos);
   const [descError, setDescError] = useState("");
   const [dimError, setDimError] = useState("");
