@@ -15,11 +15,10 @@ import { Button, dividerClasses } from "@mui/material";
 import { useSelector } from "react-redux";
 import { clearTimeSlots } from "../../../../../redux/eventSlice";
 import { RootState } from "../../../../../redux/store";
-import DonationInfoTab, {
+import DonorDonationInfoTab, {
   TimeSlot,
-} from "components/admin/DonationInfoPage/DonationInfoTab";
+} from "components/donor/DonorDonationInfoPage/DonorDonationInfoTab";
 import DonorNavbar from "components/donor/DonorNavbar/DonorNavbar";
-import sofa1 from "components/donor/donation/images/sofa-01.png";
 import { useUser } from "@clerk/nextjs";
 import { RedirectToSignIn, useAuth } from "@clerk/clerk-react";
 
@@ -60,8 +59,6 @@ TabPanel.propTypes = {
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
 };
-
-const imagesPool: string[] = [sofa1];
 
 const date = new Date();
 
@@ -236,7 +233,7 @@ function DonationInfoPage() {
             </Box>
           </div>
           <TabPanel value={value} index={0} component="span">
-            <DonationInfoTab
+            <DonorDonationInfoTab
               item={item}
               donor={{
                 id: user?.id || "",
