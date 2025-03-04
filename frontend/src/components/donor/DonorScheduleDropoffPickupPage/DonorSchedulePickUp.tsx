@@ -11,7 +11,8 @@ import { Event, updatePickupTimes } from "../../../redux/donationSlice";
 import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
+import { DateSelectArg } from "@fullcalendar/core";
+import FullCalendar from "@fullcalendar/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import Checkbox from "@mui/material/Checkbox";
@@ -85,6 +86,13 @@ function DonatorSchedulePickUp(): React.ReactNode {
 
   const onClickCalendar = (info: DateSelectArg): void => {
     const startDate = info?.start;
+    const startDay = startDate.getDay();
+
+    // Habitat only picks up donations on Tuesdays and Wednesdays
+    if (weekdays[startDay] != "Tuesday" && weekdays[startDay] != "Wednesday") {
+      return
+    }
+
     setSelectedDate(startDate);
     setHeader(
       `${monthNames[startDate.getMonth()]}, ${
@@ -174,11 +182,18 @@ function DonatorSchedulePickUp(): React.ReactNode {
             select={onClickCalendar}
             validRange={(now) => {
               const copyNow = new Date();
+              // Get the earliest tuesday or wednesday
+              while (now.getDay() != 2 && now.getDay() != 3) {
+                now.setDate(now.getDate() + 1);
+              }
               const endDate = new Date(copyNow.setMonth(now.getMonth() + 1));
               return {
                 start: now,
                 end: endDate,
               };
+            }}
+            businessHours={{
+              daysOfWeek: [2, 3],
             }}
             windowResizeDelay={0}
           />
@@ -203,7 +218,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
                 .format("hh:mm A")
                 .replace(/^(?:00:)?0?/, "");
               return (
-                <div className="donatorPickUpTime">
+                <div className="donatorPickUpTime" key={index}>
                   <Checkbox
                     key={index}
                     icon={<RadioButtonUncheckedIcon />}
