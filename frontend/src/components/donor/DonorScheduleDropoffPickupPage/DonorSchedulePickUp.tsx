@@ -191,7 +191,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
             staff will choose from your availability.
           </p>
           <div id="donatorPickupEvents">
-            {times.map((availEvent) => {
+            {times.map((availEvent, index) => {
               const startTime = moment
                 .utc(availEvent.start)
                 .local()
@@ -205,6 +205,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
               return (
                 <div className="donatorPickUpTime">
                   <Checkbox
+                    key={index}
                     icon={<RadioButtonUncheckedIcon />}
                     checkedIcon={<CheckCircleIcon />}
                     onChange={(e) =>
