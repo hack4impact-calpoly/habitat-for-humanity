@@ -1,7 +1,5 @@
 "use client";
 import "moment-timezone";
-// import "@fullcalendar/react/dist/vdom";
-
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,21 +43,38 @@ const monthNames = [
   "December",
 ];
 
-// returns hour intervals for calendarEdit given an ISO 8601 string
+// Updated getHourIntervals function using the new logic.
 const getHourIntervals = (curDay: string): { start: string; end: string }[] => {
-  const startDate = moment(curDay).tz("UTC").startOf("day").add(18, "hours");
-  const fourPM = moment(startDate).add(-18, "hours").toISOString();
-  const threePM = moment(startDate).add(5, "hours").toISOString();
+  // Set the base time so that 9:00 AM PST (i.e. 17:00 UTC) is our starting point.
+  const base = moment(curDay).tz("UTC").startOf("day").add(17, "hours");
   const intervals: { start: string; end: string }[] = [];
-  for (let i = 0; i < 5; i++) {
-    const start = moment(startDate).add(i, "hours").toISOString();
-    const end = moment(startDate)
-      .add(i + 1, "hours")
+
+  // First block: two intervals (9:00-10:30 AM and 10:30-12:00 PM)
+  for (let i = 0; i < 2; i++) {
+    const start = base
+      .clone()
+      .add(i * 1.5, "hours")
+      .toISOString();
+    const end = base
+      .clone()
+      .add((i + 1) * 1.5, "hours")
       .toISOString();
     intervals.push({ start, end });
   }
 
-  intervals.push({ start: threePM, end: fourPM });
+  // Second block: start after a 1-hour gap (i.e. 1:00 PM PST is 21:00 UTC)
+  const secondBlockBase = base.clone().add(4, "hours"); // 17:00 + 4 hours = 21:00 UTC
+  for (let i = 0; i < 2; i++) {
+    const start = secondBlockBase
+      .clone()
+      .add(i * 1.5, "hours")
+      .toISOString();
+    const end = secondBlockBase
+      .clone()
+      .add((i + 1) * 1.5, "hours")
+      .toISOString();
+    intervals.push({ start, end });
+  }
 
   return intervals;
 };
@@ -91,7 +106,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
         weekdays[startDate.getDay()]
       } ${String(startDate.getDate())}`,
     );
-    // Re render checked boxes
+    // Re-render the available time intervals for the newly selected date
     setTimes(getHourIntervals(startDate.toISOString()));
   };
 
@@ -99,12 +114,13 @@ function DonatorSchedulePickUp(): React.ReactNode {
     dispatch(updatePickupTimes(events));
   };
 
+  // Updated validation to require at least two time selections.
   const validInput = () => {
     let valid = true;
     setPickupError("");
 
-    if (events.length === 0) {
-      setPickupError("Please select at least one pickup time");
+    if (events.length < 2) {
+      setPickupError("Please select at least two pickup times");
       valid = false;
     }
     return valid;
@@ -130,7 +146,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
     const date: string = selectedDate.toISOString().split("T")[0];
     const startTime: string = `${date}T${start.split("T")[1]}`;
     const endTime: string = `${date}T${end.split("T")[1]}`;
-    // only add if events doesn't already contain the time
+    // only add if events doesn't already contain the time slot
     if (
       events.filter((e) => e.start === startTime && e.end === endTime)
         .length === 0
@@ -145,7 +161,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
     }
   };
 
-  // removes all events from events with given start and end
+  // removes an event matching the provided start and end times
   const removeEvent = (start: string, end: string) => {
     const date: string = selectedDate.toISOString().split("T")[0];
     const startTime: string = `${date}T${start.split("T")[1]}`;
@@ -153,7 +169,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
     setEvents(events.filter((e) => e.start !== startTime && e.end !== endTime));
   };
 
-  // evaluates event's presence in a list of events.
+  // Checks if a given time slot is already selected
   const evaluateEventPresence = (startTime: string, endTime: string): boolean =>
     events.some((event) => event.start === startTime && event.end === endTime);
 
@@ -203,7 +219,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
                 .format("hh:mm A")
                 .replace(/^(?:00:)?0?/, "");
               return (
-                <div className="donatorPickUpTime">
+                <div className="donatorPickUpTime" key={availEvent.start}>
                   <Checkbox
                     icon={<RadioButtonUncheckedIcon />}
                     checkedIcon={<CheckCircleIcon />}
