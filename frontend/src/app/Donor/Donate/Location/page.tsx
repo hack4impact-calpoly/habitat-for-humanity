@@ -103,7 +103,7 @@ function DonatorLocationPage(): React.ReactNode {
           <input
             className="donLocInput"
             type="number"
-            value={zip === 0 ? undefined : zip}
+            value={zip === 0 ? "" : zip}
             onChange={(event) =>
               setZip(Number(event?.target?.value.slice(0, 5)))
             }

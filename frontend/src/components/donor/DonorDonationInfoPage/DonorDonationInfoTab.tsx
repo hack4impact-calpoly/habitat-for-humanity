@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { Grid, Radio, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -7,7 +6,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import "moment-timezone";
 import { Item } from "api/item";
 import { User } from "api/user";
-import { updateDonationStatus } from "redux/eventSlice";
+import { updateDonationStatus } from "../../../redux/eventSlice";
 
 interface InfoTabProps {
   item: Item;
