@@ -12,11 +12,14 @@ import { Item } from "api/item";
 import { User } from "api/user";
 import { useDispatch } from "react-redux";
 import { updateDonationStatus } from "../../../redux/eventSlice";
+import { updateNotes } from "../../../redux/donationSlice";
 
 interface InfoTabProps {
   item: Item;
   donor: User;
   timeSlots: TimeSlot[];
+  notes: string;
+  setNotes: (notes: string) => void;
 }
 
 export interface TimeSlot {
@@ -30,7 +33,9 @@ export interface TimeSlot {
 
 export function collectDates(timeSlots: TimeSlot[]) {
   const dates: string[] = [];
-  if (timeSlots[0].eventStart === undefined) return dates;
+  if (!timeSlots || timeSlots.length === 0 || timeSlots[0].eventStart === undefined) {
+    return dates;
+  }
   timeSlots.forEach((timeSlot) => {
     if (!dates.includes(timeSlot.dayString)) {
       dates.push(timeSlot.dayString);
@@ -40,27 +45,39 @@ export function collectDates(timeSlots: TimeSlot[]) {
 }
 
 function DonationInfoTab(props: InfoTabProps): React.ReactNode {
-  const { item, donor, timeSlots } = props;
+  const { item, donor, timeSlots, notes, setNotes }= props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
 
+  const dispatch = useDispatch();
+  
   useEffect(() => {
-    setDonationStatus(item.status);
+    setDonationStatus(donationStatus);
     updateDonationStatus(donationStatus);
     setPickup(item.scheduling === "Pickup");
-  }, [item]);
+    setNotes(notes);
+    updateNotes(notes);
+  }, [item, notes]);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setDonationStatus(event.target.value);
-    updateStoredStatus(event.target.value);
+
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   setDonationStatus(event.target.value);
+  //   updateStoredStatus(event.target.value);
+  // }
+
+  const handleStatusChange = (event: SelectChangeEvent) => {
+    const newStatus = event.target.value;
+    setDonationStatus(newStatus);
+    dispatch(updateDonationStatus(newStatus));
+  };
+
+  const handleNotesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newNotes = event.target.value;
+    setNotes(newNotes);
+    dispatch(updateNotes(newNotes));
   };
 
   const dates = collectDates(timeSlots);
-
-  const dispatch = useDispatch();
-  const updateStoredStatus = (status: string) => {
-    dispatch(updateDonationStatus(status));
-  };
 
   return (
     <Grid container>
@@ -71,7 +88,7 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
         <FormControl sx={{ width: { sm: "80%", lg: "50%" } }}>
           <Select
             value={donationStatus}
-            onChange={handleChange}
+            onChange={handleStatusChange}
             displayEmpty
             // inputProps={{ "aria-label": "Without label" }}
           >
@@ -102,8 +119,9 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
           label=""
           multiline
           rows={4}
-          defaultValue=""
           fullWidth
+          value={notes}
+          onChange={handleNotesChange}
         />
       </Grid>
       <Grid item xs={12}>

@@ -116,11 +116,7 @@ export const getAdmins = async () =>
 
 // User data model
 export interface User {
-  firstName: string;
-  lastName: string;
   phone: string;
-  email: string;
-  userType: string;
   id: string;
 }
 

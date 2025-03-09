@@ -78,6 +78,7 @@ const emptyItem: Item = {
   timeSubmitted: new Date(),
   timeApproved: new Date(),
   status: "",
+  notes: "",
   photos: [""],
 };
 
@@ -111,26 +112,30 @@ function DonationInfoPage() {
   const [donor, setDonor] = useState<User>(emptyUser);
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
+  const [notes, setNotes] = useState<string>("");
   const params = useParams();
   const slug = (params).slug;
   const id = slug ? slug[0] : "";
 
   const router = useRouter();
+
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     const nextPath: string = "/Admin";
 
     if (e.currentTarget.value === "back") {
-      sendUpdatedItemToDB(storedStatus, false);
+      // sendUpdatedItemToDB(storedStatus, false, item.notes || "");
+      sendUpdatedItemToDB(status, false);
       await router.back();
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "reject") {
-      updateItem({ ...item, status: "Rejected" });
-      sendUpdatedItemToDB("Rejected", false);
+      updateItem({ ...item, status:storedStatus, notes: storedNotes });
+      await sendUpdatedItemToDB("Rejected", false);
       await router.back();  
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
+      updateItem({ ...item, status: storedStatus, notes: storedNotes });
       if (
         (await storedTimeSlots.map((timeSlot) =>
           sendEventToDB(timeSlot, item),
@@ -192,13 +197,16 @@ function DonationInfoPage() {
     const fetchedItem =
       typeof id === "string"
         ? getItemByID(id)
-            .then((item) => setItem(item))
+            .then((item) =>  {
+              setItem(item);
+              setNotes(notes || "");
+            })
             .catch((err) => {
               console.log(err);
               setItem(emptyItem);
             })
         : setItem(emptyItem);
-  }, []);
+  }, [id]);
 
   // Fetch and set donor and available times on item change
   useEffect(() => {
@@ -235,10 +243,12 @@ function DonationInfoPage() {
   const storedTimeSlots = useSelector(
     (state: RootState) => state.event.timeSlots,
   );
+  const storedNotes = useSelector(
+    (state: RootState) => state.donation.notes,
+  )
 
   return (
     <div>
-      {/* <Button onClick={() => console.log(storedStatus)}>Check status</Button> */}
       <AdminNavbar />
       <div id="DonInfoPage">
         <div id="ActiveDonHeader">
@@ -274,6 +284,8 @@ function DonationInfoPage() {
               item={item}
               donor={donor}
               timeSlots={availableTimes}
+              notes={storedNotes}
+              setNotes={setNotes}
             />
           </TabPanel>
           <TabPanel value={value} index={1}>
