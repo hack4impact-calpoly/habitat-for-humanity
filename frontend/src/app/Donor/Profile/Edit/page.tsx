@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { updateUserInfoAPI, updateUserPhone, getUserByID } from "api/user";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import { useUser } from "@clerk/nextjs";
-import { ClerkAPIError } from "@clerk/types";
+import { ClerkAPIError, EmailAddressResource } from "@clerk/types";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { z } from "zod";
 import PhoneInput from "react-phone-number-input";
@@ -38,7 +38,7 @@ function DonatorProfileEditPage(): React.ReactNode {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [isPhoneValid, setIsPhoneValid] = useState(true);
-  let emailObject: any = undefined;
+  const [emailObject, setEmailObject] = useState<EmailAddressResource>();
 
   useEffect(() => {
     if (user?.id) {
@@ -71,15 +71,18 @@ function DonatorProfileEditPage(): React.ReactNode {
     }
 
     try {
-      emailObject = await user.createEmailAddress({
-        email: newEmail,
-      });
-      console.log("Temporary email created:", emailObject.emailAddress);
-
-      await emailObject.prepareVerification({ strategy: "email_code" });
-      console.log("Verification email sent.");
+      await user
+        .createEmailAddress({
+          email: newEmail,
+        })
+        .then(async (results) =>{
+          setEmailObject(results);
+          console.log("Temporary email created:", results.emailAddress);
+          await results?.prepareVerification({ strategy: "email_code" });
+          console.log("Verification email sent.");
+        });
     } catch (err) {
-      return err
+      return err;
     }
   };
 
@@ -108,7 +111,6 @@ function DonatorProfileEditPage(): React.ReactNode {
         );
         if (oldEmail) {
           await oldEmail.destroy();
-          console.log("Old email deleted:", oldEmail.emailAddress);
         }
         submitData(); // Proceed with saving user data after verification
       } else {
@@ -158,10 +160,10 @@ function DonatorProfileEditPage(): React.ReactNode {
       newUserInfo.lastName = capitalizeFirstLetter(lastName);
     }
     if (email && email !== initialEmail) {
-      try{
-      handleEmailVerificationSend(email);}
-      catch(err){
-        alert(err)
+      try {
+        handleEmailVerificationSend(email);
+      } catch (err) {
+        alert(err);
         return;
       }
       setVerifying(true);
@@ -196,7 +198,7 @@ function DonatorProfileEditPage(): React.ReactNode {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleEmailUpdate(email, code);
+            handleEmailUpdate(code);
           }}
         >
           <input
