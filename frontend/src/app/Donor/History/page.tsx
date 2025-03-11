@@ -35,33 +35,17 @@ function DonationHistory(): React.ReactNode {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
-  const [donors, setDonors] = useState<User[]>([]);
 
   const router = useRouter();
-
-  const storedDonorID = useSelector(
-    (state: RootState) => state.donation.donorID,
-  );
-
-  const dispatch = useDispatch();
-
+  
   useEffect(() => {
-    dispatch(updateDonorID(userId));
+    if (userId) {
+      getItemsByDonorID(userId).then((res) => setItems(res));
+    }  
   }, [userId]);
-
-  useEffect(() => {
-    getItemsByDonorID(storedDonorID).then((res) => setItems(res));
-    getUserByID(storedDonorID).then((res) => setDonors([res]));
-  }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-  };
-
-  const getDonorName = (id: string) => {
-    console.log(id);
-    const donor = donors.find((d) => d.id === id);
-    return `${donor?.firstName} ${donor?.lastName}`;
   };
 
   const convertTime = (time: Date | undefined) =>
@@ -106,7 +90,7 @@ function DonationHistory(): React.ReactNode {
                     key={index}
                     // to={`DonationInfo/${d._id}`}
                     onClick={() => {
-                      router.push(`DonationInfo/${d._id}/`);
+                      router.push(`/Donor/History/DonationInfo/${d._id}/`);
                     }}
                     style={{ textDecoration: "none" }}
                     className="tableRow"

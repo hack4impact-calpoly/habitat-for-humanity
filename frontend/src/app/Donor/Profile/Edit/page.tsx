@@ -3,50 +3,76 @@
 import React, { useState, useEffect } from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
-import {
-  getUserByID,
-  updateUserFirstName,
-  updateUserLastName,
-  updateUserEmail,
-  updateUserPhone,
-} from "api/user";
+import { updateUserInfoAPI, updateUserPhone } from "api/user";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
+import { useUser } from "@clerk/nextjs";
+import { z } from "zod";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberFromString,
+} from "libphonenumber-js";
+import { getUserByID } from "api/user";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 require("../../../../App.css");
 
-function DonatorProfileEditPage(): React.ReactNode {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  let processedPhoneNumber: number; // Phone number converted from string
+export type UserInfo = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+};
 
-  const [user, setUser] = useState<any>([]);
+function DonatorProfileEditPage(): React.ReactNode {
+  const { user } = useUser();
+  const initialFirstName = user?.firstName;
+  const initialLastName = user?.lastName;
+  const initialEmail = user?.primaryEmailAddress?.emailAddress;
+  let initialPhone: string | undefined = undefined;
+
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [isPhoneValid, setIsPhoneValid] = useState<boolean>(true);
 
   useEffect(() => {
-    async function getUser() {
-      const userAuth = await Auth.currentUserInfo();
-      const uid = userAuth.attributes["custom:id"];
-      const user = await getUserByID(uid);
-      if (user) {
-        setUser(user);
-        setFirstName(user.firstName);
-        setLastName(user.lastName);
-        setEmail(user.email);
-        setPhoneNumber(user.phone);
-      } else {
-        alert("User not found in database.");
-      }
+    if (user?.id) {
+      const fetchData = async () => {
+        const response = await getUserByID(user.id);
+        const formattedPhone = response.phone
+          ? parsePhoneNumberFromString(response.phone, "US")?.format("E.164") ||
+            ""
+          : "";
+        setPhone(formattedPhone);
+      };
+
+      setFirstName(user.firstName || "First Name Not Found");
+      setLastName(user.lastName || "Last Name Not Found");
+      setEmail(user.primaryEmailAddress?.emailAddress || "Email Not Found");
+
+      fetchData();
     }
-    getUser();
-  }, []);
+  }, [user?.id]);
+
+  const updateUserInfo = async (newUserInfo: UserInfo) => {
+    if (!user) {
+      console.error("User not found");
+      return;
+    }
+    updateUserInfoAPI(user.id, newUserInfo);
+  };
+
+  const capitalizeFirstLetter = (s: string) => {
+    if (!s) return "";
+    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+  };
 
   const router = useRouter();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    const backPath: string = "/Donor/Profile"; // Change once page is added
+    const backPath: string = "/Donor/Profile";
     const saveChangesPath: string = "/Donor/Profile";
-    console.log("event", e.currentTarget.value);
     if (e.currentTarget.value === "backButton") {
       router.push(backPath);
     } else if (e.currentTarget.value === "saveChangesButton") {
@@ -56,103 +82,51 @@ function DonatorProfileEditPage(): React.ReactNode {
     }
   };
 
-  /* ---------------Form Data Handling---------------------------*/
-  // const getProfileData = () => {
-  //     //backend code to get profile data
-  // }
-
-  // const displayProfileData = (profileData: Object) => {
-  //     //set state variables with profile data, asynchronous
-  // }
-
   const submitData = () => {
-    const validData = validateForm();
-    if (validData) {
-      // PUT request(modify only, not create new) to backend code
-      console.log("uid", user.id);
-      updateUserFirstName(user.id, firstName);
-      updateUserLastName(user.id, lastName);
-      updateUserEmail(user.id, email);
-      // processPhoneNumber();
-      updateUserPhone(user.id, phoneNumber);
-      return true;
-    }
-    return false;
-  };
+    const emailSchema = z.string().email({ message: "Invalid email address" });
 
-  /* -----------------------Form Validation-------------------------------*/
-  const validateForm = (): boolean => {
-    /*
-        Desc: Validates all the form fields
-        Return: boolean (true if all are valid, false if one is not)
-        */
-    const valid: boolean =
-      validateName() &&
-      validateEmail() &&
-      validatePhoneNumber() &&
-      processPhoneNumber();
-    return valid;
-  };
+    const alerts: string[] = [];
 
-  const validateName = (): boolean => {
-    /*
-        Desc: Validates firstName and lastName
-        Return: boolean (true if valid, false if not)
-        */
-    if (firstName === "" || lastName === "") {
-      alert("Please add your first and last name");
-      return false;
-    }
-    return true;
-  };
+    if (!firstName) alerts.push("First name can not be empty");
+    if (!lastName) alerts.push("Last name can not be empty");
+    if (!email) alerts.push("Email can not be empty");
+    if (!isPhoneValid) alerts.push("Phone must be of valid format");
 
-  const validateEmail = (): boolean => {
-    /*
-        Desc: Validates email
-        Return: boolean (true if valid, false if not)
-        */
-    if (email === "") {
-      alert("Please add email");
-      return false;
-    }
-    if (!email.includes("@")) {
-      alert("Please enter a valid email address");
-      return false;
-    }
-    // else if (check if email already exists)
-    // alert("Account with this email already exists")
-    return true;
-  };
-
-  const validatePhoneNumber = (): boolean => {
-    /*
-        Desc: Validates phone number
-        Return: boolean (true if valid, false if not)
-        */
-    if (phoneNumber === "") {
-      alert("Please add a phone number");
-      return false;
-    }
-    return true;
-  };
-
-  function processPhoneNumber(): boolean {
-    /*
-        Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
-        Return: boolean (true if number successfuly processed, false if not)
-        */
     try {
-      const processedString = phoneNumber.replace(/[^0-9]/g, "");
-      processedPhoneNumber = parseInt(processedString, 2);
-    } catch (error) {
-      console.error(error);
-      alert(
-        "Sorry there was an error processing your phone number. Please enter it in the form XXX-XXX-XXXX",
-      );
+      emailSchema.parse(email);
+    } catch (error: any) {
+      alerts.push(error.message);
+    }
+
+    if (alerts.length > 0) {
+      alerts.forEach((alertMessage) => alert(alertMessage));
       return false;
     }
+
+    let newUserInfo: UserInfo = {};
+    if (firstName && firstName !== initialFirstName) {
+      newUserInfo.firstName = capitalizeFirstLetter(firstName);
+    }
+    if (lastName && lastName !== initialLastName) {
+      newUserInfo.lastName = capitalizeFirstLetter(lastName);
+    }
+    if (email && email !== initialEmail) {
+      newUserInfo.email = email;
+    }
+    if (phone && phone !== initialPhone) {
+      if (user) {
+        updateUserPhone(user.id, phone);
+      }
+    }
+    updateUserInfo(newUserInfo);
+
     return true;
-  }
+  };
+
+  const handlePhoneChange = (value: string | undefined) => {
+    setPhone(value || ""); // Always update state first
+    setIsPhoneValid(value ? isValidPhoneNumber(value) : false); // Validate separately
+  };
 
   const isMobile = useMediaQuery("(max-width: 640px)");
 
@@ -163,18 +137,9 @@ function DonatorProfileEditPage(): React.ReactNode {
         <p id="editProfileText">Edit Profile</p>
         <form id="form">
           <div id="DonorNameBox">
-            <Box
-              sx={{
-                display: isMobile ? "" : "flex",
-                width: "80vw",
-              }}
-            >
+            <Box sx={{ display: isMobile ? "" : "flex", width: "80vw" }}>
               <div className="labelInputBox" id="firstNameBox">
-                <Box
-                  sx={{
-                    width: isMobile ? "80vw" : "200px",
-                  }}
-                >
+                <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
                   <p className="formLabel">First Name</p>
                   <input
                     className="inputBox"
@@ -187,11 +152,7 @@ function DonatorProfileEditPage(): React.ReactNode {
                 </Box>
               </div>
               <div className="labelInputBox" id="lastNameBox">
-                <Box
-                  sx={{
-                    width: isMobile ? "80vw" : "200px",
-                  }}
-                >
+                <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
                   <p className="formLabel">Last Name</p>
                   <input
                     className="inputBox"
@@ -218,13 +179,11 @@ function DonatorProfileEditPage(): React.ReactNode {
           </div>
           <div className="labelInputBox">
             <p className="formLabel">Phone Number</p>
-            <input
+            <PhoneInput
               className="inputBox"
-              value={phoneNumber}
-              type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPhoneNumber(e.target.value)
-              }
+              value={phone || ""}
+              onChange={handlePhoneChange}
+              defaultCountry="US"
             />
           </div>
         </form>
