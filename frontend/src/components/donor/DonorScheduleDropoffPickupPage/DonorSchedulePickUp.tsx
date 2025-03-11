@@ -46,6 +46,14 @@ const monthNames = [
   "December",
 ];
 
+const firstValidDate = (date: Date): Date => {
+  let copyDate = new Date(date);
+  while (copyDate.getDay() != 3 && copyDate.getDay() != 4) {
+    copyDate.setDate(copyDate.getDate() + 1);
+  }
+  return copyDate;
+};
+
 // returns hour intervals for calendarEdit given an ISO 8601 string
 const getHourIntervals = (curDay: string): { start: string; end: string }[] => {
   const startDate = moment(curDay).tz("UTC").startOf("day").add(18, "hours");
@@ -71,8 +79,8 @@ function DonatorSchedulePickUp(): React.ReactNode {
     (state: RootState) => state.donation.pickupTimes,
   );
   const [header, setHeader] = useState<string>(
-    `${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(
-      today.getDate(),
+    `${monthNames[firstValidDate(today).getMonth()]}, ${weekdays[firstValidDate(today).getDay()]} ${String(
+      firstValidDate(today).getDate(),
     )}`,
   );
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -86,12 +94,6 @@ function DonatorSchedulePickUp(): React.ReactNode {
 
   const onClickCalendar = (info: DateSelectArg): void => {
     const startDate = info?.start;
-    const startDay = startDate.getDay();
-
-    // Habitat only picks up donations on Tuesdays and Wednesdays
-    if (weekdays[startDay] != "Tuesday" && weekdays[startDay] != "Wednesday") {
-      return
-    }
 
     setSelectedDate(startDate);
     setHeader(
@@ -177,23 +179,24 @@ function DonatorSchedulePickUp(): React.ReactNode {
             slotMinTime="10:00:00"
             slotMaxTime="18:00:00"
             selectable
+            selectConstraint={{
+              daysOfWeek: [3, 4],
+            }}
             unselectAuto={false}
             longPressDelay={1}
             select={onClickCalendar}
             validRange={(now) => {
-              const copyNow = new Date();
-              // Get the earliest tuesday or wednesday
-              while (now.getDay() != 2 && now.getDay() != 3) {
-                now.setDate(now.getDate() + 1);
-              }
-              const endDate = new Date(copyNow.setMonth(now.getMonth() + 1));
+              let copyNow = new Date();
+              // Get the earliest Wednesday or Thursday
+              const startDate = firstValidDate(copyNow);
+              const endDate = new Date(now.setMonth(copyNow.getMonth() + 1));
               return {
-                start: now,
+                start: startDate,
                 end: endDate,
               };
             }}
             businessHours={{
-              daysOfWeek: [2, 3],
+              daysOfWeek: [3, 4],
             }}
             windowResizeDelay={0}
           />
@@ -201,6 +204,15 @@ function DonatorSchedulePickUp(): React.ReactNode {
         </div>
         <div id="calendarEdit">
           <h1 id="donatorPickupHeader">{header}</h1>
+          <h2 className="font-bold">
+            For donation pickups located in{" "}
+            <span className="underline">North County,</span> please select times
+            on <span className="underline">Wednesday.</span>
+            <br/>
+            For donation pickups located in{" "}
+            <span className="underline">South County,</span> please select times
+            on <span className="underline">Thursday.</span>
+          </h2>
           <p id="donatorPickupDesc">
             Please select multiple dates and times you are available, and our
             staff will choose from your availability.
