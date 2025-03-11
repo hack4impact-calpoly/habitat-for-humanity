@@ -1,4 +1,4 @@
-const userURL = "http://localhost:3001/api/users";
+const userURL = "http://localhost:3001/api/users/";
 /* ----------------------Clerk User Requests---------------------------*/
 export const updateMetadata = async (role: string, userId: string | null) =>
   fetch(`${userURL}/updateRole`, {
@@ -43,21 +43,27 @@ export const getUsers = async () =>
     .catch((error) => console.error("Error: ", error)); // handle error
 
 // Get A user by "userID"
-export const getUserByID = async (userID: string) => {
-  try {
-    const response = await fetch(`${userURL}/id/${userID}`);
-    if (!response.ok) {
-      throw new Error(`${response.status}-${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    throw error;
-  }
-};
+export const getUserByID = async (userID: string) =>
+  fetch(`${userURL}id/${userID}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then(async (res) => {
+      const user = await res.json();
+      if (!res.ok) {
+        // check server response
+        throw new Error(`${res.status}-${res.statusText}`);
+      }
+      // console.log(user)
+      return user;
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error
+
 // Get ALL volunteers
 export const getVolunteers = async () =>
-  fetch(`${userURL}/volunteers`, {
+  fetch(`${userURL}volunteers`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -76,7 +82,7 @@ export const getVolunteers = async () =>
 
 // Get ALL donors
 export const getDonors = async () =>
-  fetch(`${userURL}/donors`, {
+  fetch(`${userURL}donors`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -95,7 +101,7 @@ export const getDonors = async () =>
 
 // Get ALL admins
 export const getAdmins = async () =>
-  fetch(`${userURL}/admins`, {
+  fetch(`${userURL}admins`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -116,11 +122,7 @@ export const getAdmins = async () =>
 
 // User data model
 export interface User {
-  firstName: string;
-  lastName: string;
   phone: string;
-  email: string;
-  userType: string;
   id: string;
 }
 
@@ -144,39 +146,68 @@ export const addUser = async (user: User) =>
       }
       return response;
     })
-    .catch((error) => {
-      console.error("Error in addUser:", error);
-      throw error;
-    });
+    .catch((error) => console.error("Error: ", error)); // handle error
 
-    export const updateUserInfoAPI = async (
-      userId: string,
-      params: { firstName?: string; lastName?: string; email?: string },
-    ) => {
-      console.log("Current environment:", process.env.NODE_ENV);
-    
-      // Assuming the backend route is '/api/updateUserInfo/:userId' and you want to send a PUT request
-      const response = await fetch(`${userURL}/updateUserInfo/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(params), // Send user info as the body
-      });
-    
-      // Check for a successful response
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Failed to update user info: ${errorMessage}`);
+// Update User "firstName" (given userID)
+export const updateUserFirstName = async (userID: string, firstName: string) =>
+  fetch(`${userURL}firstName/${userID}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify({
+      firstName,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        // check server response
+        throw new Error(`${res.status}-${res.statusText}`);
       }
-    
-      const updatedUser = await response.json();
-      return updatedUser;
-    };    
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error
+
+// Update User "lastName" (given userID)
+export const updateUserLastName = async (userID: string, lastName: string) =>
+  fetch(`${userURL}lastName/${userID}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify({
+      lastName,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        // check server response
+        throw new Error(`${res.status}-${res.statusText}`);
+      }
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error
+
+// Update User "email" (given userID)
+export const updateUserEmail = async (userID: string, email: string) =>
+  fetch(`${userURL}email/${userID}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify({
+      email,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        // check server response
+        throw new Error(`${res.status}-${res.statusText}`);
+      }
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error
 
 // Update User "phone" (given userID)
 export const updateUserPhone = async (userID: string, phone: string) =>
-  fetch(`${userURL}/phone/${userID}`, {
+  fetch(`${userURL}phone/${userID}`, {
     headers: {
       "Content-Type": "application/json",
     },

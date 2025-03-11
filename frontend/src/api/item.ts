@@ -118,7 +118,7 @@ export interface Item {
   timeSubmitted: Date;
   timeApproved?: Date;
   status: string; // approved or needs approval
-  notes: string;
+  // notes: string
   // timeAccepted: Date
 }
 

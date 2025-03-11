@@ -11,16 +11,15 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
 import { addEvent } from "api/event";
-import { Button, dividerClasses } from "@mui/material";
+import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { clearTimeSlots } from "../../../../../redux/eventSlice";
 import { RootState } from "../../../../../redux/store";
-import DonorDonationInfoTab, {
-  TimeSlot,
-} from "components/donor/DonorDonationInfoPage/DonorDonationInfoTab";
-import DonorNavbar from "components/donor/DonorNavbar/DonorNavbar";
-import { useUser } from "@clerk/nextjs";
-import { RedirectToSignIn, useAuth } from "@clerk/clerk-react";
+import DonationInfoTab, { TimeSlot } from "components/admin/DonationInfoPage/DonationInfoTab";;
+import AdminNavbar from "components/admin/AdminNavbar/AdminNavbar";
+import ReceiptPage from "components/admin/DonationInfoPage/ReceiptPage/ReceiptPage";
+import AdminSchedulePage from "components/admin/DonationInfoPage/AdminSchedulePage";
+import sofa1 from "components/donor/donation/images/sofa-01.png";
 
 require("../../../../../App.css");
 
@@ -60,6 +59,8 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
+const imagesPool: string[] = [sofa1];
+
 const date = new Date();
 
 const emptyItem: Item = {
@@ -76,7 +77,6 @@ const emptyItem: Item = {
   timeSubmitted: new Date(),
   timeApproved: new Date(),
   status: "",
-  notes: "",
   photos: [""],
 };
 
@@ -108,25 +108,65 @@ const getDay = (time: string) =>
 const getDayShort = (time: string) =>
   time ? moment(time).format("dddd, MMMM Do YYYY") : "N/A";
 
-function DonationInfoPage() {
-  const { user } = useUser();
-  const [phone, setPhone] = useState("");
+async function DonationInfoPage({
+    params,
+}: {
+    params: Promise<{ slug?: string[] }>;
+}) {
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
+  const [donor, setDonor] = useState<User>(emptyUser);
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
-  const params = useParams();
-  const slug = params.slug;
+  const slug = (await params).slug;
   const id = slug ? slug[0] : "";
 
   const router = useRouter();
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
+    const backPath: string = "/Admin";
+    const nextPath: string = "/Admin";
+
     if (e.currentTarget.value === "back") {
       sendUpdatedItemToDB(storedStatus, false);
-      router.back();
+      router.push(backPath);
+      router.refresh(); // Reload page after navigating back to fetch changes
+    } else if (e.currentTarget.value === "reject") {
+      updateItem({ ...item, status: "Rejected" });
+      sendUpdatedItemToDB("Rejected", false);
+      router.push(backPath);
+      router.refresh(); // Reload page after navigating back to fetch changes
+    } else if (e.currentTarget.value === "approve") {
+      if (
+        (await storedTimeSlots.map((timeSlot) =>
+          sendEventToDB(timeSlot, item),
+        )) &&
+        (await sendUpdatedItemToDB("Approved and Scheduled", true))
+      ) {
+        console.log("Success submitting events!");
+        clearTimeSlots(); // Clear time slots from redux
+        router.push(nextPath);
+        router.refresh(); // Reload page after navigating back to fetch changes
+      }
     }
+  };
+
+  const sendEventToDB = (timeSlot: TimeSlot, item: Item) => {
+    const event = {
+      title: `${item.name} ${item.scheduling}`,
+      startTime: new Date(timeSlot.eventStart),
+      endTime: new Date(timeSlot.eventEnd),
+      volunteerId: "dd9b6616-6353-438a-8bb8-a0b022c32b5e", // TODO add correct volunteer id
+      itemId: item._id === undefined ? "" : item._id,
+    };
+    console.log(event);
+    const response = addEvent(event);
+    if (!response) {
+      // "There was an error saving the events. Please try again later."
+      // TODO: add error message to user
+    }
+    return response;
   };
 
   // Update item status in DB TODO: add other statuses
@@ -156,45 +196,41 @@ function DonationInfoPage() {
 
   // Fetch and set item on load
   useEffect(() => {
-    const fetchItem = async () => {
-      if (typeof id === "string") {
-        try {
-          const fetchedItem = await getItemByID(id);
-          setItem(fetchedItem);
-        } catch (err) {
-          console.error(err);
-          setItem(emptyItem);
-        }
-      } else {
-        setItem(emptyItem);
-      }
-    };
-    fetchItem();
-  }, [id]);
+    const fetchedItem =
+      typeof id === "string"
+        ? getItemByID(id)
+            .then((item) => setItem(item))
+            .catch((err) => {
+              console.log(err);
+              setItem(emptyItem);
+            })
+        : setItem(emptyItem);
+  }, []);
 
   // Fetch and set donor and available times on item change
   useEffect(() => {
-    const fetchData = async () => {
-      if (item.timeAvailability) {
-        const newAvailableTimes: TimeSlot[] = item.timeAvailability?.length
-          ? item.timeAvailability.map((event) => ({
-              id: `${event.start},${event.end}`,
-              eventStart: event.start,
-              eventEnd: event.end,
-              timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
-              dayString: `${getDay(event.start)}`,
-              volunteer: "",
-            }))
-          : emptyTimeSlots;
-        setAvailableTimes(newAvailableTimes);
-      }
-      if (user?.id) {
-        const response = await getUserByID(user.id);
-        setPhone(response.phone || "Phone not found");
-      }
-    };
-    fetchData();
-  }, [item, user]);
+    if (item.donorId !== "") {
+      const fetchedDonor = getUserByID(item.donorId)
+        .then((donor) => setDonor(donor))
+        .catch((err) => {
+          console.log(err);
+          setDonor(emptyUser);
+        });
+    }
+    if (item.timeAvailability) {
+      const newAvailableTimes: TimeSlot[] = item.timeAvailability.map(
+        (event) => ({
+          id: `${event.start},${event.end}`,
+          eventStart: event.start,
+          eventEnd: event.end,
+          timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
+          dayString: `${getDay(event.start)}`,
+          volunteer: "",
+        }),
+      );
+      setAvailableTimes(newAvailableTimes);
+    }
+  }, [item]);
 
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue);
@@ -206,11 +242,11 @@ function DonationInfoPage() {
   const storedTimeSlots = useSelector(
     (state: RootState) => state.event.timeSlots,
   );
-  console.log(availableTimes);
+
   return (
     <div>
       {/* <Button onClick={() => console.log(storedStatus)}>Check status</Button> */}
-      <DonorNavbar />
+      <AdminNavbar />
       <div id="DonInfoPage">
         <div id="ActiveDonHeader">
           <h1>Donation Approval</h1>
@@ -229,22 +265,29 @@ function DonationInfoPage() {
                   label={<span className="IndividTabs">Donation Info</span>}
                   {...a11yProps(0)}
                 />
+                <Tab
+                  label={<span className="IndividTabs">Scheduling</span>}
+                  {...a11yProps(1)}
+                />
+                <Tab
+                  label={<span className="IndividTabs">Receipt</span>}
+                  {...a11yProps(2)}
+                />
               </Tabs>
             </Box>
           </div>
           <TabPanel value={value} index={0} component="span">
-            <DonorDonationInfoTab
+            <DonationInfoTab
               item={item}
-              donor={{
-                id: user?.id || "",
-                firstName: user?.firstName || "Unknown",
-                lastName: user?.lastName || "user",
-                email: user?.primaryEmailAddress?.emailAddress || "",
-                phone: phone,
-                userType: "donor",
-              }}
+              donor={donor}
               timeSlots={availableTimes}
             />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <AdminSchedulePage timeSlots={availableTimes} />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <ReceiptPage item={item} donor={donor} />
           </TabPanel>
         </div>
         <div id="DonInfoButtons">
@@ -256,6 +299,24 @@ function DonationInfoPage() {
           >
             Back
           </button>
+          <div id="NextButtons">
+            <button
+              type="button"
+              className="rejectButton"
+              value="reject"
+              onClick={buttonNavigation}
+            >
+              Reject Donation
+            </button>
+            <button
+              type="button"
+              className="approveButton"
+              value="approve"
+              onClick={buttonNavigation}
+            >
+              Approve and Schedule
+            </button>
+          </div>
         </div>
       </div>
     </div>
