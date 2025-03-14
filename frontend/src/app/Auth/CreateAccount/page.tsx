@@ -227,6 +227,8 @@ function CreateAccountPage(): React.ReactNode {
           setEmailError('Email is taken, please try another.')
         } else if (err.errors?.some((e: any) => e.code === 'form_password_length_too_short')) {
           setEmailError('Password must be at least 8 characters or more.');
+        } else if (err.errors?.som((e: any) => e.code === 'form_password_pwned')) {
+          setPasswordError('Password has been found in an online data breach. For account safety, please use a different password.')
         }
         console.error(JSON.stringify(err, null, 2));
       }
