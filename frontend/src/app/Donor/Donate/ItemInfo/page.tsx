@@ -10,9 +10,9 @@ import {
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { RootState } from "../../../../redux/store";
-import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
-import Dropzone from "components/donor/donation/Dropzone";
-import ProgressBar from "components/donor/donation/ProgressBar";
+import DonatorNavbar from "../../../../components/donor/DonorNavbar/DonorNavbar";
+import Dropzone from "../../../../components/donor/donation/Dropzone";
+import ProgressBar from "../../../../components/donor/donation/ProgressBar";
 
 const ContentContainer = styled.div`
   margin-left: 20%;
@@ -106,12 +106,13 @@ function Donation(): React.ReactNode {
     (state: RootState) => state.donation.dimensions,
   );
   const storedPhotos = useSelector((state: RootState) => state.donation.photos);
-  const [itemDescription, setItemDescription] = useState(storedDesc);
-  const [itemDimensions, setItemDimensions] = useState(storedDims);
+  const [items, setItems] = useState([{ description: "", dimensions: "" }]);
+  //const [itemDescription, setItemDescription] = useState<string[]>([]);
+  //const [itemDimensions, setItemDimensions] = useState<string[]>([]);
   const [photos, setPhotos] = useState(storedPhotos);
   const [descError, setDescError] = useState("");
   const [dimError, setDimError] = useState("");
-
+  //const [labels, setLabels] = useState<string[]>([""]);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -126,29 +127,44 @@ function Donation(): React.ReactNode {
     }
   };
 
-  const backButtonNavigation = (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): void => {
-    const nextPath: string = "/Donor/Donate/Disclosure";
-    router.push(nextPath);
-  };
-
   const validInput = () => {
     let valid = true;
     setDescError("");
     setDimError("");
-    if (!itemDescription?.match(/\S/)) {
-      setDescError("Please enter an item description");
-      valid = false;
+
+    for (let i = 0; i < items.length; i++) {
+
+      if (!items[i].description.match(/\S/)) {
+        setDescError("Please enter an item description");
+        valid = false;
+      }
+      if (!items[i].dimensions.match(/\S/)) {
+        setDimError("Please enter item dimensions");
+        valid = false
+      }
     }
-    if (!itemDimensions?.match(/\S/)) {
-      setDimError("Please enter item dimensions");
-      valid = false;
-    }
+
+    // itemDescription?.forEach((item) => {
+    //   if (!item.match(/\S/)) {
+    //     setDescError("Please enter an item description");
+    //     valid = false
+    //   }
+    // });
+
+    // itemDimensions?.forEach((item) => {
+    //   if (!item.match(/\S/)) {
+    //     setDimError("Please enter item dimensions");
+    //     valid = false
+    //   }
+    // });
+
     return valid;
   };
 
   const updateStore = () => {
+    const itemDescription = items.map((item) => item.description);
+    const itemDimensions = items.map((item) => item.dimensions);
+
     dispatch(updateName(itemDescription));
     dispatch(updateDimensions(itemDimensions));
     dispatch(updatePhotos(photos));
@@ -159,6 +175,34 @@ function Donation(): React.ReactNode {
     setPhotos,
   };
 
+  const handleAddItem = () => {
+    setItems([...items, { description: "", dimensions: "" }]);
+  };
+
+  const handleRemoveItem = (index: number) => {
+    const newItems = [...items];
+    newItems.splice(index, 1);
+    setItems(newItems);
+  };
+
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const updatedItems = [...items];
+    updatedItems[index].description = event.target.value;
+    setItems(updatedItems);
+  };
+
+  const handleDimensionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const updatedItems = [...items];
+    updatedItems[index].dimensions = event.target.value;
+    setItems(updatedItems);
+  };
+
   return (
     <>
       <DonatorNavbar />
@@ -166,52 +210,48 @@ function Donation(): React.ReactNode {
         <DonationHeader>Make a donation</DonationHeader>
         <ProgressBar activeStep={1} />
         <ItemHeader>Item Information</ItemHeader>
-        <InputSectionContainer>
-          <InputContainer>
-            <SubHeader>Item Description/Name</SubHeader>
-            <StyledInput
-              type="text"
-              value={itemDescription}
-              onChange={(event) => {
-                setItemDescription(event.target.value);
-              }}
-            />
-            <div className="inputError">{descError}</div>
-          </InputContainer>
-          <InputContainer>
-            <SubHeader>Item Dimensions</SubHeader>
-            <StyledInput
-              type="text"
-              value={itemDimensions}
-              onChange={(event) => {
-                setItemDimensions(event.target.value);
-              }}
-            />
-            <div className="inputError">{dimError}</div>
-          </InputContainer>
-        </InputSectionContainer>
+        {items.map((item, index) => (
+          <InputSectionContainer key={index}>
+            <InputContainer>
+              <SubHeader>Item Description/Name</SubHeader>
+              <StyledInput
+                type="text"
+                value={items[index].description}
+                onChange={(event) => handleDescriptionChange(event, index)}
+              />
+              <div className="inputError">{descError}</div>
+            </InputContainer>
+            <InputContainer>
+              <SubHeader>Item Dimensions</SubHeader>
+              <StyledInput
+                type="text"
+                value={items[index].dimensions}
+                onChange={(event) => handleDimensionChange(event, index)}
+              />
+              <div className="inputError">{dimError}</div>
+            </InputContainer>
+            <button
+              type="button"
+              className="donPickupButton nextButton"
+              onClick={() => handleRemoveItem(index)}
+            >
+              Remove Item
+            </button>
+          </InputSectionContainer>
+        ))}
+        <button
+          type="button"
+          className="donPickupButton nextButton"
+          onClick={handleAddItem}
+        >
+          Add Another Item
+        </button>
         <UploadContainer>
           <SubHeader>Item Photos</SubHeader>
           <Dropzone {...dropzoneProps} />
         </UploadContainer>
-        <div
-          id="donPickupButtons"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: "30px",
-            marginTop: "30px",
-          }}
-        >
-          <button
-            type="button"
-            value="backButton"
-            className="donPickupButton backButton"
-            onClick={backButtonNavigation}
-          >
-            Back
-          </button>
+
+        <div id="donPickupButtons">
           <button
             type="button"
             value="nextButton"
