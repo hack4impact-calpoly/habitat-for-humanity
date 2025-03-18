@@ -71,17 +71,33 @@ function DonatorProfileEditPage(): React.ReactNode {
     }
 
     try {
-      await user
-        .createEmailAddress({
-          email: newEmail,
-        })
-        .then(async (results) => {
-          setEmailObject(results);
-          console.log("Temporary email created:", results.emailAddress);
-          await results?.prepareVerification({ strategy: "email_code" });
-          console.log("Verification email sent.");
-        });
+      // Step 1: Check if the email already exists and delete it
+      const existing = user.emailAddresses.find(
+        (ea) => ea.emailAddress === newEmail,
+      );
+
+      if (existing) {
+        setEmailObject(existing);
+
+        try {
+          await existing.prepareVerification({ strategy: "email_code" });
+          console.log("Verification email resent.");
+        } catch (err) {
+          console.error("Failed to resend verification email:", err);
+        }
+
+        return;
+      }
+
+      // Step 2: Create and send verification
+      const createdEmail = await user.createEmailAddress({ email: newEmail });
+      setEmailObject(createdEmail);
+      console.log("Temporary email created:", createdEmail.emailAddress);
+
+      await createdEmail.prepareVerification({ strategy: "email_code" });
+      console.log("Verification email sent.");
     } catch (err) {
+      console.error("Failed to send verification email:", err);
       return err;
     }
   };
@@ -106,17 +122,21 @@ function DonatorProfileEditPage(): React.ReactNode {
         console.log("Email successfully verified:", verifiedEmail.emailAddress);
         setEmailVerified(true);
 
-        const oldEmail = user.emailAddresses.find(
-          (email) => email.id !== verifiedEmail.id,
-        );
-        if (oldEmail) {
-          await oldEmail.destroy();
+        for (const email of user.emailAddresses) {
+          if (email.id !== verifiedEmail.id) {
+            try {
+              await email.destroy(); // Delete each old email
+              console.log("Deleted old email:", email.emailAddress);
+            } catch (err) {
+              console.error("Error deleting old email:", err);
+            }
+          }
         }
-        submitData(); // Proceed with saving user data after verification
       } else {
         console.warn("Email verification failed. Not adding to the account.");
         await emailObject.destroy(); // Delete the unverified email
       }
+      router.push("/Donor/Profile");
     } catch (err) {
       console.error("Error updating email:", err);
     }
