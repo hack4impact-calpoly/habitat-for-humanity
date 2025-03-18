@@ -92,10 +92,8 @@ function DonatorProfileEditPage(): React.ReactNode {
       // Step 2: Create and send verification
       const createdEmail = await user.createEmailAddress({ email: newEmail });
       setEmailObject(createdEmail);
-      console.log("Temporary email created:", createdEmail.emailAddress);
 
       await createdEmail.prepareVerification({ strategy: "email_code" });
-      console.log("Verification email sent.");
     } catch (err) {
       console.error("Failed to send verification email:", err);
       return err;
@@ -119,21 +117,19 @@ function DonatorProfileEditPage(): React.ReactNode {
       });
 
       if (verifiedEmail.verification.status === "verified") {
-        console.log("Email successfully verified:", verifiedEmail.emailAddress);
         setEmailVerified(true);
 
         for (const email of user.emailAddresses) {
           if (email.id !== verifiedEmail.id) {
             try {
-              await email.destroy(); // Delete each old email
-              console.log("Deleted old email:", email.emailAddress);
+              await email.destroy(); 
             } catch (err) {
               console.error("Error deleting old email:", err);
             }
           }
         }
       } else {
-        console.warn("Email verification failed. Not adding to the account.");
+        console.error("Email verification failed. Not adding to the account.");
         await emailObject.destroy(); // Delete the unverified email
       }
       router.push("/Donor/Profile");
@@ -168,7 +164,7 @@ function DonatorProfileEditPage(): React.ReactNode {
     }
 
     if (alerts.length > 0) {
-      alerts.forEach((alert) => console.warn(alert));
+      alerts.forEach((alert) => console.error(alert));
       return;
     }
 
