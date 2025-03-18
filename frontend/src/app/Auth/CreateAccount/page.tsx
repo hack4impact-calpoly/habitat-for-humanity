@@ -13,10 +13,16 @@ import IconButton from "@mui/material/IconButton";
 import isEmail from "validator/lib/isEmail";
 import isMobilePhone from "validator/lib/isMobilePhone";
 import { v4 as uuidv4 } from "uuid";
+import PhoneInput from "react-phone-number-input";
+import 'react-phone-number-input/style.css'
+import {
+  CountryCode,
+  isValidPhoneNumber,
+  parsePhoneNumberFromString,
+} from "libphonenumber-js";
 
 /* Backend */
 import { addUser, updateMetadata, User } from "api/user";
-import { BsBoxArrowInDown } from "react-icons/bs";
 
 import { useSignUp } from "@clerk/nextjs";
 
@@ -38,6 +44,7 @@ function CreateAccountPage(): React.ReactNode {
     value: "",
     showPassword: false,
   });
+  const [selectedCountry, setSelectedCountry] = useState<CountryCode>("US");
   const [id, setID] = useState<string>(uuidv4());
 
   // error messages
@@ -122,16 +129,15 @@ function CreateAccountPage(): React.ReactNode {
     return true;
   };
 
-  const validatePhoneNumber = (phoneNumber: string): boolean => {
+  const validatePhoneNumber = (phoneNumber: string | undefined): boolean => {
     /*
         Desc: Validates phone number
         Return: boolean (true if valid, false if not)
         */
-    if (phoneNumber === "") {
+    if (!phoneNumber || phoneNumber === "") {
       setPhoneNumberError("Please enter a phone number");
       return false;
-    }
-    if (!processPhoneNumber(phoneNumber)) {
+    } else if (!processPhoneNumber(phoneNumber)) {
       return false;
     }
     setPhoneNumberError("");
@@ -266,6 +272,24 @@ function CreateAccountPage(): React.ReactNode {
     }
   };
 
+  const handlePhoneChange = (value: string | undefined) => {
+    if (value && isValidPhoneNumber(value)) {
+      // Parse the phone number for the specified country (e.g., 'US')
+      const parsedPhone = parsePhoneNumberFromString(value, selectedCountry);
+      if (parsedPhone) {
+        // Set the formatted phone number (E.164 format)
+        setPhoneNumber(parsedPhone.format("E.164"));
+        setPhoneNumberError(""); // Clear any previous error
+      } else {
+        setPhoneNumberError("Please enter a valid phone number");
+      }
+    } else {
+      setPhoneNumberError("Please enter a valid phone number");
+    }
+  };  
+  
+  
+
   // Display the verification form to capture the OTP code
   if (verifying) {
     return (
@@ -356,7 +380,7 @@ function CreateAccountPage(): React.ReactNode {
                   width: "100%",
                 }}
               >
-                <div className="labelInputBox" id="firstNameBox">
+                <Box className="labelInputBox" id="firstNameBox">
                   <p className="formLabel">First Name</p>
                   <input
                     className="inputBox"
@@ -366,8 +390,8 @@ function CreateAccountPage(): React.ReactNode {
                       validateFirstName(e.target.value);
                     }}
                   />
-                </div>
-                <div className="labelInputBox" id="lastNameBox">
+                </Box>
+                <Box className="labelInputBox" id="lastNameBox">
                   <p className="formLabel">Last Name</p>
                   <input
                     className="inputBox"
@@ -377,12 +401,12 @@ function CreateAccountPage(): React.ReactNode {
                       validateLastName(e.target.value);
                     }}
                   />
-                </div>
+                </Box>
               </Box>
             </div>
             <div className="inputError">{nameError}</div>
 
-            <div className="labelInputBox">
+            <Box className="labelInputBox">
               <p className="formLabel">Email</p>
               <input
                 className="inputBox"
@@ -394,23 +418,21 @@ function CreateAccountPage(): React.ReactNode {
                 }}
               />
               <div className="inputError">{emailError}</div>
-            </div>
+            </Box>
 
-            <div className="labelInputBox">
-              <p className="formLabel">Phone Number</p>
-              <input
-                className="inputBox"
-                type="text"
-                autoComplete="phone"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setPhoneNumber(e.target.value);
-                  validatePhoneNumber(e.target.value);
-                }}
-              />
-              <div className="inputError">{phoneNumberError}</div>
-            </div>
+            <Box className="labelInputBox">
+            <p className="formLabel">Phone Number</p>
+            <PhoneInput
+              className="inputBox"
+              value={phoneNumber || ""}
+              onChange={handlePhoneChange}
+              defaultCountry="US"
+              international={false}
+              onCountryChange={(country) => setSelectedCountry(country || "US")} 
+            />
+          </Box>
 
-            <div className="labelInputBox">
+            <Box className="labelInputBox">
               <p className="formLabel">Password</p>
               <Input
                 className="inputBox"
@@ -446,7 +468,7 @@ function CreateAccountPage(): React.ReactNode {
                 }
               />
               <div className="inputError">{passwordError}</div>
-            </div>
+            </Box>
           </form>
           <div id="clerk-captcha"></div>
           <button
