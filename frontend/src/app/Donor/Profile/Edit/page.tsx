@@ -75,7 +75,7 @@ function DonatorProfileEditPage(): React.ReactNode {
         .createEmailAddress({
           email: newEmail,
         })
-        .then(async (results) =>{
+        .then(async (results) => {
           setEmailObject(results);
           console.log("Temporary email created:", results.emailAddress);
           await results?.prepareVerification({ strategy: "email_code" });
@@ -159,17 +159,6 @@ function DonatorProfileEditPage(): React.ReactNode {
     if (lastName && lastName !== initialLastName) {
       newUserInfo.lastName = capitalizeFirstLetter(lastName);
     }
-    if (email && email !== initialEmail) {
-      try {
-        handleEmailVerificationSend(email);
-      } catch (err) {
-        alert(err);
-        return;
-      }
-      setVerifying(true);
-      return;
-    }
-
     if (phone && phone !== initialPhone) {
       if (user) {
         updateUserPhone(user.id, phone);
@@ -178,7 +167,17 @@ function DonatorProfileEditPage(): React.ReactNode {
     if (user) {
       updateUserInfoAPI(user.id, newUserInfo);
     }
-    router.push("/Donor/Profile");
+    if (email && email !== initialEmail) {
+      try {
+        setVerifying(true);
+        handleEmailVerificationSend(email);
+      } catch (err) {
+        setVerifying(false);
+        alert(err);
+      }
+    } else {
+      router.push("/Donor/Profile");
+    }
   };
 
   const handlePhoneChange = (value: string | undefined) => {
