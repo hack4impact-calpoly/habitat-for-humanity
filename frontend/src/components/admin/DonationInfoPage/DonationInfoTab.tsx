@@ -19,7 +19,7 @@ interface InfoTabProps {
   donor: User;
   timeSlots: TimeSlot[];
   notes: string;
-  setNotes: (notes: string) => void;
+  onNotesChange: (notes: string) => void;
 }
 
 export interface TimeSlot {
@@ -45,25 +45,16 @@ export function collectDates(timeSlots: TimeSlot[]) {
 }
 
 function DonationInfoTab(props: InfoTabProps): React.ReactNode {
-  const { item, donor, timeSlots, notes, setNotes }= props;
+  const { item, donor, timeSlots, notes }= props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
 
   const dispatch = useDispatch();
   
   useEffect(() => {
-    setDonationStatus(donationStatus);
-    updateDonationStatus(donationStatus);
+    setDonationStatus(item.status);
     setPickup(item.scheduling === "Pickup");
-    setNotes(notes);
-    updateNotes(notes);
-  }, [item, notes]);
-
-
-  // const handleChange = (event: SelectChangeEvent) => {
-  //   setDonationStatus(event.target.value);
-  //   updateStoredStatus(event.target.value);
-  // }
+  }, [item]);
 
   const handleStatusChange = (event: SelectChangeEvent) => {
     const newStatus = event.target.value;
@@ -73,8 +64,7 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
 
   const handleNotesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newNotes = event.target.value;
-    setNotes(newNotes);
-    dispatch(updateNotes(newNotes));
+    props.onNotesChange(newNotes);
   };
 
   const dates = collectDates(timeSlots);
@@ -120,7 +110,7 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
           multiline
           rows={4}
           fullWidth
-          value={notes}
+          value={props.notes}
           onChange={handleNotesChange}
         />
       </Grid>

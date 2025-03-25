@@ -21,6 +21,8 @@ import DonationInfoTab, {
 import AdminNavbar from "../../../../components/admin/AdminNavbar/AdminNavbar";
 import Receipt from "../../../../components/admin/DonationInfoPage/Receipt/Receipt";
 import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSchedule";
+import { updateNotes } from "../../../../redux/donationSlice";
+
 
 require("../../../../App.css");
 
@@ -130,12 +132,12 @@ function DonationInfoPage() {
       await router.back();
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "reject") {
-      updateItem({ ...item, status:storedStatus, notes: storedNotes });
+      updateItem({ ...item, status: storedStatus, notes });
       await sendUpdatedItemToDB("Rejected", false);
       await router.back();  
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
-      updateItem({ ...item, status: storedStatus, notes: storedNotes });
+      updateItem({ ...item, status: storedStatus, notes });
       if (
         (await storedTimeSlots.map((timeSlot) =>
           sendEventToDB(timeSlot, item),
@@ -172,6 +174,7 @@ function DonationInfoPage() {
     let updatedItem: Item = {
       ...item,
       status,
+      notes: notes,
     };
     if (newApproval) {
       updatedItem = {
@@ -192,18 +195,18 @@ function DonationInfoPage() {
     return response;
   };
 
-  // Fetch and set item on load
   useEffect(() => {
     const fetchedItem =
       typeof id === "string"
         ? getItemByID(id)
             .then((item) =>  {
               setItem(item);
-              setNotes(notes || "");
+              setNotes(item.notes || "");
             })
             .catch((err) => {
               console.log(err);
               setItem(emptyItem);
+              setNotes("");
             })
         : setItem(emptyItem);
   }, [id]);
@@ -237,15 +240,17 @@ function DonationInfoPage() {
     setValue(newValue);
   };
 
+  const handleNotesChange = (newNotes: string) => {
+    setNotes(newNotes); // This will accept empty strings
+  };
+  
+
   const storedStatus = useSelector(
     (state: RootState) => state.event.donationStatus,
   );
   const storedTimeSlots = useSelector(
     (state: RootState) => state.event.timeSlots,
   );
-  const storedNotes = useSelector(
-    (state: RootState) => state.donation.notes,
-  )
 
   return (
     <div>
@@ -284,8 +289,8 @@ function DonationInfoPage() {
               item={item}
               donor={donor}
               timeSlots={availableTimes}
-              notes={storedNotes}
-              setNotes={setNotes}
+              notes={notes || ""}
+              onNotesChange={handleNotesChange}
             />
           </TabPanel>
           <TabPanel value={value} index={1}>
