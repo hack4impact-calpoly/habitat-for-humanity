@@ -112,7 +112,7 @@ function DonationInfoPage() {
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
   const params = useParams();
-  const slug = (params).slug;
+  const slug = params.slug;
   const id = slug ? slug[0] : "";
 
   const router = useRouter();
@@ -128,7 +128,7 @@ function DonationInfoPage() {
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: "Rejected" });
       sendUpdatedItemToDB("Rejected", false);
-      await router.back();  
+      await router.back();
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
       if (
@@ -301,14 +301,24 @@ function DonationInfoPage() {
             >
               Reject Donation
             </button>
-            <button
-              type="button"
-              className="approveButton"
-              value="approve"
-              onClick={buttonNavigation}
-            >
-              Approve and Schedule
-            </button>
+            {value === 0 ? (
+              <button
+                type="button"
+                className="approveButton"
+                onClick={() => setValue(1)}
+              >
+                Schedule Pick Up
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="approveButton"
+                value="approve"
+                onClick={buttonNavigation}
+              >
+                Approve and Schedule
+              </button>
+            )}
           </div>
         </div>
       </div>

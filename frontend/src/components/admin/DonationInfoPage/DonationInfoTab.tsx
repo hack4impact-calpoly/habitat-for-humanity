@@ -30,12 +30,17 @@ export interface TimeSlot {
 
 export function collectDates(timeSlots: TimeSlot[]) {
   const dates: string[] = [];
-  if (timeSlots[0].eventStart === undefined) return dates;
+
+  if (!timeSlots || timeSlots.length === 0 || !timeSlots[0].eventStart) {
+    return dates;
+  }
+
   timeSlots.forEach((timeSlot) => {
     if (!dates.includes(timeSlot.dayString)) {
       dates.push(timeSlot.dayString);
     }
   });
+
   return dates;
 }
 
