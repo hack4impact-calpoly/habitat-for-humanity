@@ -21,7 +21,7 @@ const { itemConnection } = require("../connection");
 const itemSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    images: { type: [mongoose.Schema.ObjectId], required: true },
+    images: { type: [String], required: true },
     size: { type: String, required: true },
     address: { type: String, required: true },
     city: { type: String, required: true },

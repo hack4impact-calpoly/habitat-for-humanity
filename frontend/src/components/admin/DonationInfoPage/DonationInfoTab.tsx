@@ -138,9 +138,22 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
           {/* TODO: Add photos */}
           {/* {photos?.map((imgSrc, index) => (
             <div key={index} id="SingleImages">
-              <img src={imgSrc.src} alt="n" />
+              <img src={item.images[0]} alt="Item Image" />
+              />
             </div>
           ))} */}
+
+          {/* ------------------------------------------------- */}
+          
+          {/* {item.images && item.images.length > 0 ? (
+            item.images.map((image, index) => (
+              <div key={index} id="SingleImages">
+                <img src={image} alt={`Item Image ${index + 1}`} />
+              </div>
+            ))
+          ) : (
+            <p>No images available</p> // If no images, display a fallback message
+          )} */}
         </div>
       </Grid>
       <Grid item xs={12}>

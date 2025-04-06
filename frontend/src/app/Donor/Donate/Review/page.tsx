@@ -69,7 +69,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
 
   name = storedName;
   dimensions = storedDimensions;
-  photos = storedPhotos;
+  photos = statePhotos;
   location = storedLocation;
   dropOff = storedDropOff;
 
@@ -118,7 +118,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     const donation: Item = {
       name: storedDonation.name,
       size: storedDonation.dimensions,
-      photos: storedPhotos,
+      photos: storedDonation.photos,
       address: storedDonation.address,
       city: storedDonation.city,
       state: storedDonation.state,

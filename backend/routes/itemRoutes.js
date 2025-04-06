@@ -19,8 +19,11 @@ router.get("/", async (req, res) => {
 router.get("/itemId/:itemId", async (req, res) => {
   try {
     const item = await Item.findOne({ _id: req.params.itemId})
-    res.send(item)
-    console.log('Got item with id %s', req.params.itemId)
+    if (!item) {
+      return res.status(404).send({ error: "Item not found" });
+    }
+    console.log('Got item with id %s', req.params.itemId);
+    res.send(item);
   } catch (error) {
     res.status(400).send(error);
   }
@@ -64,7 +67,7 @@ router.post("/", async (req, res) => {
   try {  
     const { 
       name,
-      images,
+      photos,
       size,
       address,
       city,
@@ -73,11 +76,17 @@ router.post("/", async (req, res) => {
       timeAvailability,
       donorId,
       timeSubmitted,
-      status
+      status,
     } = req.body;
+
+    // const uploadImageToS3 = async (image) => {
+
+    // }
+    // const imageUrl = await uploadImageToS3(image[0]);
+
     const newItem = new Item({
       name,
-      images,
+      images: photos,
       size,
       address,
       city,

@@ -21,20 +21,23 @@ export const getImages = async () =>
     .catch((error) => console.error("Error: ", error)); // handle error
 
 // Get image by id
-export const getImageByID = async (imageID: string) =>
-  fetch(`${imageURL}/${imageID}`, {
+export const getImageByID = async (imageID: string) => {
+  return fetch(`http://localhost:3001/api/images/${imageID}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   })
     .then(async (res) => {
+      const image = await res.json();
       if (!res.ok) {
         throw new Error(`${res.status}-${res.statusText}`);
       }
-      return res.blob();
+      // return res.blob();
+      return image;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
+  }
 
 // Get image by name
 export const getImageByName = async (imageName: string) =>
@@ -70,6 +73,7 @@ export const addImages = async (images: File[]): Promise<boolean> => {
 
   try {
     const results = await Promise.all(promises);
+    let links = [];
     results.forEach((res) => {
       if (!res.ok) {
         console.error(`Error: ${res.status} ${res.statusText}`);
