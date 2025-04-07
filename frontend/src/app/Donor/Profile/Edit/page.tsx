@@ -71,30 +71,15 @@ function DonatorProfileEditPage(): React.ReactNode {
     }
 
     try {
-      // Step 1: Check if the email already exists and delete it
-      const existing = user.emailAddresses.find(
-        (ea) => ea.emailAddress === newEmail,
-      );
-
-      if (existing) {
-        setEmailObject(existing);
-
-        try {
-          await existing.prepareVerification({ strategy: "email_code" });
-          console.log("Verification email resent.");
-        } catch (err) {
-          console.error("Failed to resend verification email:", err);
-        }
-
-        return;
-      }
-
-      // Step 2: Create and send verification
+      // Create and send verification
       const createdEmail = await user.createEmailAddress({ email: newEmail });
       setEmailObject(createdEmail);
 
       await createdEmail.prepareVerification({ strategy: "email_code" });
+      setVerifying(true);
     } catch (err) {
+      setVerifying(false);
+      alert(`Failed to send verification email: ${err.message || err}`);
       console.error("Failed to send verification email:", err);
       return err;
     }
@@ -122,7 +107,7 @@ function DonatorProfileEditPage(): React.ReactNode {
         for (const email of user.emailAddresses) {
           if (email.id !== verifiedEmail.id) {
             try {
-              await email.destroy(); 
+              await email.destroy();
             } catch (err) {
               console.error("Error deleting old email:", err);
             }
@@ -185,7 +170,6 @@ function DonatorProfileEditPage(): React.ReactNode {
     }
     if (email && email !== initialEmail) {
       try {
-        setVerifying(true);
         handleEmailVerificationSend(email);
       } catch (err) {
         setVerifying(false);
