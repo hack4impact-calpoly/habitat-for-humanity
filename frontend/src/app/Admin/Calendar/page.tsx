@@ -248,7 +248,7 @@ function AdminCalendar() {
 
       <AdminNavbar />
 
-      <div id="smallCalendar" style={{ display: "flex", height: "100%" }}>
+      <div id="smallCalendar">
         {/* im not sure if i would need to pass props in the future
             so i created filler props */}
         <SmallCalendar address="xd" />
