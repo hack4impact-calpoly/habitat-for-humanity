@@ -118,7 +118,6 @@ code {
   }
 }
 
-
 .mainCalendarContainer .fc-timegrid-event-harness-inset .fc-timegrid-event,
 .mainCalendarContainer .fc-timegrid-event.fc-event-mirror,
 .mainCalendarContainer .fc-timegrid-more-link {
@@ -242,12 +241,12 @@ code {
 
 #smallCalendar {
   display: flex;
-  height: 100% 
+  height: 100%;
 }
 
 @media (max-width: 768px) {
   #smallCalendar {
-    display: block
+    display: block;
   }
 }
 
@@ -474,10 +473,22 @@ code {
   justify-content: space-between;
 }
 
+#NextButtons {
+  display: flex;
+}
+
 .backButton,
 .rejectButton,
 .approveButton {
   padding: 10px 45px;
+}
+
+@media (max-width: 768px) {
+  .backButton,
+  .rejectButton,
+  .approveButton {
+    padding: 0px;
+  }
 }
 
 .backButton {
@@ -494,6 +505,12 @@ code {
   color: var(--red);
   border: 2px solid var(--red);
   margin-right: 12px;
+}
+
+@media (max-width: 768px) {
+  .rejectButton {
+    margin-left: 12px;
+  }
 }
 
 .approveButton {
@@ -861,7 +878,7 @@ code {
 }
 
 #forgotPasswordText {
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 40px;
@@ -908,10 +925,10 @@ code {
 #sendButton:hover {
   cursor: pointer;
   border: 3px solid rgba(2, 5, 12, 0.15);
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 500;
   font-style: normal;
-  background-color: #93aada; 
+  background-color: #93aada;
 }
 
 .inputBox {
@@ -925,7 +942,7 @@ code {
   width: 100%;
   border: 1.5px solid var(--input-box) !important;
   padding: 2% !important;
-  border-radius: 20; 
+  border-radius: 20;
 }
 
 .forgotPasswordMessage {
@@ -1896,7 +1913,7 @@ p {
   }
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 768px) {
   #donPDOptions {
     display: block;
   }
@@ -2323,6 +2340,12 @@ input[type="radio"] {
   padding: 62px 77px 68px 77px;
 }
 
+@media (max-width: 768px) {
+  #DonInfoBox {
+    padding: 0
+  }
+}
+
 .IndividTabs {
   font-size: 20px;
   font-family: Rubik;
@@ -2747,6 +2770,12 @@ input[type="radio"] {
   margin: 0px 0px 5px 0px;
 
   color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  #SchedulingRadio {
+    max-width: 100vw;
+  }
 }
 
 #DonorNameBox {
