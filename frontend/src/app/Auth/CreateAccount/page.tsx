@@ -249,6 +249,18 @@ function CreateAccountPage(): React.ReactNode {
       if (signUpAttempt.status === "complete") {
         await updateMetadata(userType, signUpAttempt.createdUserId);
         await setActive({ session: signUpAttempt.createdSessionId });
+        
+        if (signUpAttempt.createdUserId != null) {
+          const userData = {
+            id: signUpAttempt.createdUserId,
+            phone: phoneNumber,
+          };
+          await addUser(userData);
+          console.log("User data added successfully");
+          router.push("/");
+        } else {
+          console.error("Error userId not created.");
+        }
         router.push("/");
       } else {
         // If the status is not complete, check why. User may need to
@@ -265,18 +277,28 @@ function CreateAccountPage(): React.ReactNode {
   // Display the verification form to capture the OTP code
   if (verifying) {
     return (
+      <div id="forgotPasswordBox">
+        <p id="forgotPasswordText">Confirm Email</p>
+        <p className="forgotPasswordMessage">
+          Please enter the confirmation code that has been sent to your email.
+        </p>
       <>
         <h1>Verify your email</h1>
         <form onSubmit={handleVerify}>
           <label id="code">Enter your verification code</label>
           <input
             value={code}
+            className="inputBox"
             id="code"
             name="code"
             onChange={(e) => setCode(e.target.value)}
           />
+          <button type="submit" id="sendButton">
+            Verify
+          </button>
           <button type="submit">Verify</button>
         </form>
+        </div>
       </>
     );
   }
