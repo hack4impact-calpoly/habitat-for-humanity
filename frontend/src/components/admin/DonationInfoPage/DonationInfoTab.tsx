@@ -165,7 +165,7 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
           Does the donation need to be picked up or can you drop it off at our
           ReStore?
         </h4>
-        <Grid item xs={6}>
+        <Grid item xs={6} id="SchedulingRadio">
           <FormControl component="fieldset">
             <RadioGroup aria-label="gender" name="gender1" value={pickup} row>
               <FormControlLabel
