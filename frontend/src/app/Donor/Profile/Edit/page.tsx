@@ -3,38 +3,42 @@
 import React, { useState, useEffect } from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { updateUserInfoAPI, updateUserPhone } from "api/user";
+import { updateUserInfoAPI, updateUserPhone, getUserByID } from "api/user";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import { useUser } from "@clerk/nextjs";
+import { ClerkAPIError, EmailAddressResource } from "@clerk/types";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { z } from "zod";
+import PhoneInput from "react-phone-number-input";
 import {
   isValidPhoneNumber,
   parsePhoneNumberFromString,
 } from "libphonenumber-js";
-import { getUserByID } from "api/user";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
-
 require("../../../../App.css");
 
 export type UserInfo = {
   firstName?: string;
   lastName?: string;
-  email?: string;
 };
 
 function DonatorProfileEditPage(): React.ReactNode {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+
+  const [verifying, setVerifying] = useState(false);
+  const [code, setCode] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
   const initialFirstName = user?.firstName;
   const initialLastName = user?.lastName;
   const initialEmail = user?.primaryEmailAddress?.emailAddress;
   let initialPhone: string | undefined = undefined;
-
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [isPhoneValid, setIsPhoneValid] = useState<boolean>(true);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
+  const [emailObject, setEmailObject] = useState<EmailAddressResource>();
 
   useEffect(() => {
     if (user?.id) {
@@ -55,42 +59,88 @@ function DonatorProfileEditPage(): React.ReactNode {
     }
   }, [user?.id]);
 
-  const updateUserInfo = async (newUserInfo: UserInfo) => {
-    if (!user) {
-      console.error("User not found");
-      return;
-    }
-    updateUserInfoAPI(user.id, newUserInfo);
-  };
-
   const capitalizeFirstLetter = (s: string) => {
     if (!s) return "";
     return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
   };
 
-  const router = useRouter();
+  const handleEmailVerificationSend = async (newEmail: string) => {
+    if (!user || !isLoaded) {
+      console.error("User data is not loaded yet.");
+      return;
+    }
 
-  const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    const backPath: string = "/Donor/Profile";
-    const saveChangesPath: string = "/Donor/Profile";
-    if (e.currentTarget.value === "backButton") {
-      router.push(backPath);
-    } else if (e.currentTarget.value === "saveChangesButton") {
-      if (submitData()) {
-        router.push(saveChangesPath);
-      }
+    try {
+      // Create and send verification
+      const createdEmail = await user.createEmailAddress({ email: newEmail });
+      setEmailObject(createdEmail);
+
+      await createdEmail.prepareVerification({ strategy: "email_code" });
+      setVerifying(true);
+    } catch (err) {
+      setVerifying(false);
+      alert(`Failed to send verification email: ${err.message || err}`);
+      console.error("Failed to send verification email:", err);
+      return err;
     }
   };
 
-  const submitData = () => {
-    const emailSchema = z.string().email({ message: "Invalid email address" });
+  const handleEmailUpdate = async (verificationCode: string) => {
+    if (!user || !isLoaded) {
+      console.error("User data is not loaded yet.");
+      return;
+    }
 
+    if (!emailObject) {
+      console.error("Email object is not initialized.");
+      return;
+    }
+
+    try {
+      const verifiedEmail = await emailObject.attemptVerification({
+        code: verificationCode,
+      });
+
+      if (verifiedEmail.verification.status === "verified") {
+        setEmailVerified(true);
+
+        for (const email of user.emailAddresses) {
+          if (email.id !== verifiedEmail.id) {
+            try {
+              await email.destroy();
+            } catch (err) {
+              console.error("Error deleting old email:", err);
+            }
+          }
+        }
+      } else {
+        console.error("Email verification failed. Not adding to the account.");
+        await emailObject.destroy(); // Delete the unverified email
+      }
+      router.push("/Donor/Profile");
+    } catch (err) {
+      console.error("Error updating email:", err);
+    }
+  };
+
+  const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (e.currentTarget.value === "backButton") {
+      router.push("/Donor/Profile");
+    } else if (e.currentTarget.value === "saveChangesButton") {
+      submitData();
+    }
+  };
+
+  const submitData = async () => {
+    const emailSchema = z.string().email({ message: "Invalid email address" });
     const alerts: string[] = [];
 
-    if (!firstName) alerts.push("First name can not be empty");
-    if (!lastName) alerts.push("Last name can not be empty");
-    if (!email) alerts.push("Email can not be empty");
-    if (!isPhoneValid) alerts.push("Phone must be of valid format");
+    if (!firstName) alerts.push("First name cannot be empty");
+    if (!lastName) alerts.push("Last name cannot be empty");
+    if (!email) alerts.push("Email cannot be empty");
+    if (!isPhoneValid) alerts.push("Phone number is invalid");
 
     try {
       emailSchema.parse(email);
@@ -99,28 +149,35 @@ function DonatorProfileEditPage(): React.ReactNode {
     }
 
     if (alerts.length > 0) {
-      alerts.forEach((alertMessage) => alert(alertMessage));
-      return false;
+      alerts.forEach((alert) => console.error(alert));
+      return;
     }
 
-    let newUserInfo: UserInfo = {};
+    const newUserInfo: UserInfo = {};
     if (firstName && firstName !== initialFirstName) {
       newUserInfo.firstName = capitalizeFirstLetter(firstName);
     }
     if (lastName && lastName !== initialLastName) {
       newUserInfo.lastName = capitalizeFirstLetter(lastName);
     }
-    if (email && email !== initialEmail) {
-      newUserInfo.email = email;
-    }
     if (phone && phone !== initialPhone) {
       if (user) {
         updateUserPhone(user.id, phone);
       }
     }
-    updateUserInfo(newUserInfo);
-
-    return true;
+    if (user) {
+      updateUserInfoAPI(user.id, newUserInfo);
+    }
+    if (email && email !== initialEmail) {
+      try {
+        handleEmailVerificationSend(email);
+      } catch (err) {
+        setVerifying(false);
+        alert(err);
+      }
+    } else {
+      router.push("/Donor/Profile");
+    }
   };
 
   const handlePhoneChange = (value: string | undefined) => {
@@ -129,6 +186,32 @@ function DonatorProfileEditPage(): React.ReactNode {
   };
 
   const isMobile = useMediaQuery("(max-width: 640px)");
+
+  if (verifying && !emailVerified) {
+    return (
+      <div id="forgotPasswordBox">
+        <p id="forgotPasswordText">Confirm Email</p>
+        <p className="forgotPasswordMessage">
+          Please enter the confirmation code sent to your email.
+        </p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleEmailUpdate(code);
+          }}
+        >
+          <input
+            value={code}
+            className="inputBox"
+            onChange={(e) => setCode(e.target.value)}
+          />
+          <button type="submit" id="sendButton">
+            Verify
+          </button>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <div id="donatorProfileEditPage">
@@ -166,18 +249,16 @@ function DonatorProfileEditPage(): React.ReactNode {
               </div>
             </Box>
           </div>
-          <div className="labelInputBox">
+          <Box className="labelInputBox">
             <p className="formLabel">Email</p>
             <input
               className="inputBox"
               value={email}
               type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e) => setEmail(e.target.value)}
             />
-          </div>
-          <div className="labelInputBox">
+          </Box>
+          <Box>
             <p className="formLabel">Phone Number</p>
             <PhoneInput
               className="inputBox"
@@ -185,7 +266,7 @@ function DonatorProfileEditPage(): React.ReactNode {
               onChange={handlePhoneChange}
               defaultCountry="US"
             />
-          </div>
+          </Box>
         </form>
         <div id="buttonBox">
           <button
