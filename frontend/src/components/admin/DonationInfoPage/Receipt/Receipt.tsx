@@ -8,17 +8,6 @@ require("../../../../App.css");
 
 const logo = "/images/logo.png";
 
-const generatePdf = async (id: string): Promise<Blob> => {
-  const input = document.getElementById(id);
-  const canvas = await html2canvas(input!, { scale: 5 });
-  const imgData = canvas.toDataURL("image/jpeg");
-  const pdf = new JsPDF();
-  const width = pdf.internal.pageSize.getWidth();
-  const height = pdf.internal.pageSize.getHeight();
-  pdf.addImage(imgData, "JPEG", 0, height / 50, width, height * 0.75);
-  return pdf.output("blob");
-};
-
 const exportPdf = async (id: string): Promise<void> => {
   const input = document.getElementById(id);
   if (!input) return;
@@ -36,8 +25,10 @@ interface ReceiptTabProps {
   donor: User;
 }
 
-//mock/filler value for volunteer name
-const volunteerName = "John"; 
+// filler values for volunteer
+const volunteerName = "Jane";
+const volunteerEmail = "jane@gmail.com";
+
 const habitatContact = {
   phone: "(805) 546-8699",
   email: "restoreslo@habitatslo.org",
@@ -97,43 +88,71 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
 
       const pdfBase64 = pdf.output("datauristring").split(",")[1];
 
-      const response = await fetch(
-        "http://localhost:3001/api/email/sendgrid-attachment",
-        {
+      const bodyForDonor = `Hi ${contract.firstName}, <br />
+    
+     <br />Your donation has been approved.<br />
+    
+     <ul>
+     <li><strong>Date:</strong> ${contract.date}</li>
+     <li><strong>Time:</strong> ${contract.pickupTime}</li>
+     <li><strong>Location:</strong> ${contract.address}, ${contract.cityStateZipcode}</li>
+     <li><strong>Volunteer:</strong> ${volunteerName}</li>
+     </ul>
+    
+     <p><strong>Digital Receipt</strong> is attached to this email.</p>
+    
+     <h3>Habitat for Humanity Contact</h3>
+
+     <ul>
+     <li><strong>Phone:</strong> ${habitatContact.phone}</li>
+     <li><strong>Email:</strong> ${habitatContact.email}</li>
+     <li><strong>Location:</strong> ${habitatContact.location}</li>
+     <li><strong>Hours:</strong> ${habitatContact.hours}</li>
+     <li><strong>Website:</strong> ${habitatContact.website}</li>
+     </ul>`;
+
+      const bodyForVolunteer = `Hi ${volunteerName}, <br />
+     <br />You are scheduled to assist with a donation pickup.<br />
+    
+     <ul>
+     <li><strong>Donor:</strong> ${contract.firstName} ${contract.lastName}</li>
+     <li><strong>Phone:</strong> ${contract.phone}</li>
+     <li><strong>Date:</strong> ${contract.date}</li>
+     <li><strong>Time:</strong> ${contract.pickupTime}</li>
+     <li><strong>Address:</strong> ${contract.address}, ${contract.cityStateZipcode}</li>
+    
+     </ul>
+    
+     <p><strong>Digital Receipt</strong> is attached to this email.</p>
+    
+     <h3>Habitat for Humanity Contact</h3>
+
+     <ul>
+     <li><strong>Phone:</strong> ${habitatContact.phone}</li>
+     <li><strong>Email:</strong> ${habitatContact.email}</li>
+     <li><strong>Location:</strong> ${habitatContact.location}</li>
+     <li><strong>Hours:</strong> ${habitatContact.hours}</li>
+     <li><strong>Website:</strong> ${habitatContact.website}</li>
+     </ul>`;
+
+      const sendEmail = async (recipientEmail: string, body: string) => {
+        await fetch("http://localhost:3001/api/email/sendgrid-attachment", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            recipientEmail: contract.email,
+            recipientEmail,
             subject: "Donation Receipt",
-            body: `Hi ${contract.firstName},
-
-            <br />Your donation has been approved.<br />
-
-            <ul>
-            <li><strong>Date:</strong> ${contract.date}</li>
-            <li><strong>Time:</strong> ${contract.pickupTime}</li>
-            <li><strong>Location:</strong> ${contract.address}, ${contract.cityStateZipcode} </li>
-            <li><strong>Volunteer:</strong> ${volunteerName}</li>
-            </ul>
-
-            <p>Visit us at ${habitatContact.website}</p>
-            <p>Phone: ${habitatContact.phone}</p>
-            <p>Email: ${habitatContact.email}</p>
-            <p>Location: ${habitatContact.location}</p>
-            <p>Hours: ${habitatContact.hours}</p>`,
+            body,
             pdfBase64,
             filename: "receipt.pdf",
           }),
-        },
-      );
+        });
+      };
 
-      if (!response.ok) {
-        throw new Error("Failed to send email via SendGrid");
-      }
+      await sendEmail(contract.email, bodyForDonor);
+      await sendEmail(volunteerEmail, bodyForVolunteer);
 
-      alert("Receipt email with PDF sent successfully via SendGrid!");
+      alert("Emails sent to donor and volunteer with PDF attachment.");
     } catch (error) {
       console.error("SendGrid email error:", error);
       alert("Failed to send email.");
