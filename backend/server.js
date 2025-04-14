@@ -3,14 +3,18 @@
 // import User from './models/userSchema';
 // import cors from 'cors';
 // import express from 'express';
-const cors = require('cors')
+const cors = require("cors")
 const express = require("express")
 // import userEndpoints from './routes/userRoutes.js';
 // import itemEndpoints from './routes/itemRoutes.js';
 // import eventEndpoints from './routes/eventRoutes.js';
+require("dotenv").config();
 
 const app = express() 
-app.use(express.json())
+// app.use(express.json())
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ limit: "20mb", extended: true }));
+
 app.use(cors())
 
 const userEndpoints = require("./routes/userRoutes.js")
