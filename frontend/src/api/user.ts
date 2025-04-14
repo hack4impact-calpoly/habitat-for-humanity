@@ -115,10 +115,18 @@ export const getAdmins = async () =>
 /* ----------------------POST/PUT Requests---------------------------*/
 
 // User data model
+// export interface User {
+//   phone: string;
+//   id: string;
+// }
 export interface User {
-  phone: string;
   id: string;
+  phone: string;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
+
 
 // Add a new User to User DB
 export const addUser = async (user: User) =>
