@@ -4,34 +4,54 @@ import { User } from "api/user";
 import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
 import moment from "moment";
-import logo from "./logo.png";
-// import Tabs from "@mui/material/Tabs";
-// import Tab from "@mui/material/Tab";
-// import PropTypes from "prop-types";
-// import Typography from "@mui/material/Typography";
-// import Box from "@mui/material/Box";
 require("../../../../App.css");
-const exportPdf = (id: string) => {
+
+const logo = "/images/logo.png";
+
+const generatePdf = async (id: string): Promise<Blob> => {
   const input = document.getElementById(id);
-  html2canvas(input!, { scale: 5 }).then(
-    (canvas: { toDataURL: (arg0: string) => any }) => {
-      const imgData = canvas.toDataURL("image/jpeg");
-      const pdfDOC = new JsPDF();
-      const width = pdfDOC.internal.pageSize.getWidth();
-      const height = pdfDOC.internal.pageSize.getHeight();
-      pdfDOC.addImage(imgData, "JPEG", 0, height / 50, width, height * 0.75);
-      pdfDOC.save("receipt.pdf");
-    }
-  );
+  const canvas = await html2canvas(input!, { scale: 5 });
+  const imgData = canvas.toDataURL("image/jpeg");
+  const pdf = new JsPDF();
+  const width = pdf.internal.pageSize.getWidth();
+  const height = pdf.internal.pageSize.getHeight();
+  pdf.addImage(imgData, "JPEG", 0, height / 50, width, height * 0.75);
+  return pdf.output("blob");
 };
+
+const exportPdf = async (id: string): Promise<void> => {
+  const input = document.getElementById(id);
+  if (!input) return;
+  const canvas = await html2canvas(input, { scale: 5 });
+  const imgData = canvas.toDataURL("image/jpeg");
+  const pdfDOC = new JsPDF();
+  const width = pdfDOC.internal.pageSize.getWidth();
+  const height = pdfDOC.internal.pageSize.getHeight();
+  pdfDOC.addImage(imgData, "JPEG", 0, height / 50, width, height * 0.75);
+  pdfDOC.save("receipt.pdf");
+};
+
 interface ReceiptTabProps {
   item: Item;
   donor: User;
 }
+
+//mock/filler value for volunteer name
+const volunteerName = "John"; 
+const habitatContact = {
+  phone: "(805) 546-8699",
+  email: "restoreslo@habitatslo.org",
+  location: "2790 Broad St, San Luis Obispo, CA 93401",
+  hours: "Tuesday-Saturday 10AM-5PM",
+  website: "https://www.habitatslo.org/",
+};
+
 function Receipt(props: ReceiptTabProps): React.ReactNode {
   const { item, donor } = props;
-  const fullName = `${donor?.firstName} ${donor?.lastName}`;
-  const fullZip = `${item?.city}, California ${item?.zipCode}`;
+
+  const fullName = `${donor?.firstName ?? ""} ${donor?.lastName ?? ""}`;
+  const fullZip = `${item?.city ?? ""}, California ${item?.zipCode ?? ""}`;
+
   const [contract, setContract] = useState({
     donationFor: fullName ?? "",
     firstName: donor?.firstName ?? "",
@@ -46,7 +66,9 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
     value: "",
     signature: "",
     date: moment().format("MM/DD/YYYY"),
+    pickupTime: moment().format("h:mm A"),
   });
+
   useEffect(() => {
     setContract((prevContract) => ({
       ...prevContract,
@@ -60,6 +82,64 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
       donatedItems: item?.name ?? "",
     }));
   }, [props]);
+
+  const sendEmailReceipt = async () => {
+    try {
+      const input = document.getElementById("receiptPage");
+      if (!input) return;
+
+      const canvas = await html2canvas(input, { scale: 5 });
+      const imgData = canvas.toDataURL("image/jpeg");
+      const pdf = new JsPDF();
+      const width = pdf.internal.pageSize.getWidth();
+      const height = pdf.internal.pageSize.getHeight();
+      pdf.addImage(imgData, "JPEG", 0, height / 50, width, height * 0.75);
+
+      const pdfBase64 = pdf.output("datauristring").split(",")[1];
+
+      const response = await fetch(
+        "http://localhost:3001/api/email/sendgrid-attachment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            recipientEmail: contract.email,
+            subject: "Donation Receipt",
+            body: `Hi ${contract.firstName},
+
+            <br />Your donation has been approved.<br />
+
+            <ul>
+            <li><strong>Date:</strong> ${contract.date}</li>
+            <li><strong>Time:</strong> ${contract.pickupTime}</li>
+            <li><strong>Location:</strong> ${contract.address}, ${contract.cityStateZipcode} </li>
+            <li><strong>Volunteer:</strong> ${volunteerName}</li>
+            </ul>
+
+            <p>Visit us at ${habitatContact.website}</p>
+            <p>Phone: ${habitatContact.phone}</p>
+            <p>Email: ${habitatContact.email}</p>
+            <p>Location: ${habitatContact.location}</p>
+            <p>Hours: ${habitatContact.hours}</p>`,
+            pdfBase64,
+            filename: "receipt.pdf",
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to send email via SendGrid");
+      }
+
+      alert("Receipt email with PDF sent successfully via SendGrid!");
+    } catch (error) {
+      console.error("SendGrid email error:", error);
+      alert("Failed to send email.");
+    }
+  };
+
   return (
     <div>
       <div id="receiptPage" style={{ padding: "5%" }}>
@@ -321,6 +401,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
         >
           Save Receipt PDF
         </button>
+
         <button
           style={{
             color: "#FFFFFF",
@@ -333,6 +414,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
             cursor: "pointer",
           }}
           type="button"
+          onClick={sendEmailReceipt}
         >
           Send Email Receipt
         </button>
@@ -340,4 +422,5 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
     </div>
   );
 }
+
 export default Receipt;
