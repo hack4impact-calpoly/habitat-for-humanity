@@ -151,6 +151,7 @@ function Donation(): React.ReactNode {
   const updateStore = () => {
     dispatch(updateName(itemDescription));
     dispatch(updateDimensions(itemDimensions));
+    console.log(photos);
     dispatch(updatePhotos(photos));
   };
 

@@ -15,6 +15,8 @@ import moment from "moment";
 import "moment-timezone";
 import { Item, getItems } from "../../../api/item";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
+import { useDispatch } from "react-redux";
+import { clearAll } from "../../../redux/eventSlice";
 
 require("../../../App.css");
 
@@ -31,6 +33,11 @@ export default function ActiveDonationPage(): React.ReactNode {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
   const [donors, setDonors] = useState<User[]>([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearAll());
+  }, [dispatch]);
 
   const router = useRouter();
 

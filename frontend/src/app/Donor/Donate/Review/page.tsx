@@ -7,7 +7,12 @@ import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../../api/item";
-import { addImages, getImages, getImageByID } from "../../../../api/image";
+import {
+  addImages,
+  getImages,
+  getImageByID,
+  getPresignedImage,
+} from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
 // import DonatorScheduleDropoff from "components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoff";
 import { useAuth } from "@clerk/nextjs";
@@ -34,29 +39,34 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   dropOff,
   component,
 }) => {
-
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
   });
-  
+
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
   const storedDonation = useSelector((state: RootState) => state.donation);
   const { user } = useUser();
   const storedName = useSelector((state: RootState) => state.donation.name);
   const storedDimensions = useSelector(
     (state: RootState) => state.donation.dimensions,
   );
-  const statePhotos = useSelector((state: RootState) => state.donation.photos);
+  const storedPhotos = useSelector((state: RootState) => state.donation.photos);
 
-  // storedPhotos is an array of images names,
-  // if access is needed, images name can be used
-  // to generate presigned urls.
-  const storedPhotos = statePhotos.map((url) => {
-    const parts = url.split("/");
-    return parts[parts.length - 1].split("?")[0];
-  });
+  useEffect(() => {
+    const fetchUrls = async () => {
+      const urls = await Promise.all(
+        storedPhotos.map((imageName) => getPresignedImage(imageName)),
+      );
+      setImageUrls(urls);
+    };
+
+    fetchUrls();
+  }, [storedPhotos]);
+
   const storedLocation = useSelector(
     (state: RootState) => state.donation.address,
   );
@@ -69,7 +79,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
 
   name = storedName;
   dimensions = storedDimensions;
-  photos = statePhotos;
+  photos = storedPhotos;
   location = storedLocation;
   dropOff = storedDropOff;
 
@@ -118,7 +128,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     const donation: Item = {
       name: storedDonation.name,
       size: storedDonation.dimensions,
-      photos: storedDonation.photos,
+      images: storedDonation.photos,
       address: storedDonation.address,
       city: storedDonation.city,
       state: storedDonation.state,
@@ -135,14 +145,15 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     // const imagesUploaded = await sendImagesToS3();
     if (!response) {
       setServerError(
-        "There was an error sending your donation. Please try again later."
+        "There was an error sending your donation. Please try again later.",
       );
     }
     return response;
   };
 
   useEffect(() => {
-    if (user?.id) {  // Check if user.id is defined
+    if (user?.id) {
+      // Check if user.id is defined
       const fetchData = async () => {
         const response = await getUserByID(user.id);
         setUserData({
@@ -153,13 +164,13 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
         });
         storedDonation.donorID = user.id;
       };
-  
-      fetchData();  // Fetch user data whenever the component is re-entered
+
+      fetchData(); // Fetch user data whenever the component is re-entered
     }
-  }, [user]); 
+  }, [user]);
 
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     const backPath: string = "/Donor/Donate/ScheduleDropoffPickup";
     const nextPath: string = "/Donor/Donate/NextSteps";
@@ -186,8 +197,12 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p id="itemName">
               <b>Name:</b> {userData.firstName} {userData.lastName}
             </p>
-            <p id="itemDimensions"><b>Email: </b> {userData.email}</p>
-            <p id="itemPhotos"><b>Phone Number: </b> {userData.phone} </p>
+            <p id="itemDimensions">
+              <b>Email: </b> {userData.email}
+            </p>
+            <p id="itemPhotos">
+              <b>Phone Number: </b> {userData.phone}{" "}
+            </p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
               <b>Item Name:</b> {name}
@@ -200,7 +215,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <b>Item Photos</b>
             </p>
             <div id="ProductImages">
-              {statePhotos.map((imagePresignedUrl: any, i: any) => (
+              {imageUrls.map((imagePresignedUrl: any, i: any) => (
                 <img
                   src={imagePresignedUrl}
                   alt="uploaded"

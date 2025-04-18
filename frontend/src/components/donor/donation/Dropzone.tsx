@@ -108,6 +108,8 @@ function DropZone(props: any): React.ReactNode {
   // props destructuring
   const { photos, setPhotos } = props;
 
+  const [dropPhotos, setDropPhotos] = useState<string[]>([]);
+
   // Set the maximum image size limit
   const MAX_IMAGE_SIZE = 5000000; // 5 MB
   // Set the maximum number of images to be uploaded
@@ -172,7 +174,8 @@ function DropZone(props: any): React.ReactNode {
         "(sendImagesToS3) Uploading following images: ",
         newUniqueFiles,
       );
-      await addImages(newUniqueFiles);
+      const images = await addImages(newUniqueFiles);
+      setPhotos(images)
       console.log("(sendImagesToS3) Images uploaded successfully for state!");
     } catch (error) {
       console.error("Error: ", error);
@@ -245,7 +248,7 @@ function DropZone(props: any): React.ReactNode {
         })
         .then((imageUrls) => {
           console.log("imageUrls retrieved... setting state...");
-          setPhotos(imageUrls);
+          setDropPhotos(imageUrls);
           console.log("New file state:", imageUrls);
         })
         .catch((error) => {
@@ -258,13 +261,13 @@ function DropZone(props: any): React.ReactNode {
   return (
     // prints out the images if props.photos is not empty, else drop container
     <div>
-      {photos.length > 0 ? (
+      {dropPhotos.length > 0 ? (
         <div>
-          <ClearMessage onClick={() => clearImages(photos)}>
+          <ClearMessage onClick={() => clearImages(dropPhotos)}>
             Clear Images
           </ClearMessage>
           <ImageContainer>
-            {photos.map((url: any, i: any) => (
+            {dropPhotos.map((url: any, i: any) => (
               <img
                 src={url}
                 alt="uploaded"

@@ -12,6 +12,7 @@ import { Item } from "api/item";
 import { User } from "api/user";
 import { useDispatch } from "react-redux";
 import { updateDonationStatus } from "../../../redux/eventSlice";
+import { getPresignedImage } from "api/image";
 
 interface InfoTabProps {
   item: Item;
@@ -30,7 +31,8 @@ export interface TimeSlot {
 
 export function collectDates(timeSlots: TimeSlot[]) {
   const dates: string[] = [];
-  if (timeSlots[0].eventStart === undefined) return dates;
+  if (timeSlots.length === 0 || timeSlots[0].eventStart === undefined)
+    return dates;
   timeSlots.forEach((timeSlot) => {
     if (!dates.includes(timeSlot.dayString)) {
       dates.push(timeSlot.dayString);
@@ -43,11 +45,21 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
   const { item, donor, timeSlots } = props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     setDonationStatus(item.status);
     updateDonationStatus(donationStatus);
     setPickup(item.scheduling === "Pickup");
+    const fetchUrls = async () => {
+      const urls = await Promise.all(
+        item.images.map((imageName: string) => getPresignedImage(imageName)),
+      );
+      setImages(urls);
+    };
+    if (item && item.images) {
+      fetchUrls();
+    }
   }, [item]);
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -135,25 +147,15 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
           <b>Item Photos</b>
         </p>
         <div id="ProductImages">
-          {/* TODO: Add photos */}
-          {/* {photos?.map((imgSrc, index) => (
-            <div key={index} id="SingleImages">
-              <img src={item.images[0]} alt="Item Image" />
-              />
-            </div>
-          ))} */}
-
-          {/* ------------------------------------------------- */}
-          
-          {/* {item.images && item.images.length > 0 ? (
-            item.images.map((image, index) => (
-              <div key={index} id="SingleImages">
-                <img src={image} alt={`Item Image ${index + 1}`} />
+          {images && images.length > 0 ? (
+            images.map((image, index) => (
+              <div key={index} id="ProductImage">
+                <img src={image || undefined} alt={`Item Image ${index + 1}`} />
               </div>
             ))
           ) : (
             <p>No images available</p> // If no images, display a fallback message
-          )} */}
+          )}
         </div>
       </Grid>
       <Grid item xs={12}>

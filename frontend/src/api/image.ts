@@ -22,7 +22,7 @@ export const getImages = async () =>
 
 // Get image by id
 export const getImageByID = async (imageID: string) => {
-  return fetch(`http://localhost:3001/api/images/${imageID}`, {
+  return fetch(`${imageURL}/${imageID}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -55,10 +55,26 @@ export const getImageByName = async (imageName: string) =>
     })
     .catch((error) => console.error("Error: ", error)); // handle error
 
+  export const getPresignedImage = async (imageName: string) =>
+    fetch(`${imageURL}/presigned-url/${imageName}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(async (res) => {
+      if (!res.ok) {
+        throw new Error(`${res.status}-${res.statusText}`);
+      }
+      const body = await res.json()
+      return body.url;
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error
+
 /* ----------------------POST/PUT Requests---------------------------*/
 
 // Add images to S3
-export const addImages = async (images: File[]): Promise<boolean> => {
+export const addImages = async (images: File[]): Promise<String[]> => {
   const promises = images.map((image) => {
     const formData = new FormData();
     formData.append("productImage", image);
@@ -73,18 +89,21 @@ export const addImages = async (images: File[]): Promise<boolean> => {
 
   try {
     const results = await Promise.all(promises);
-    let links = [];
-    results.forEach((res) => {
+    let images: String[] = [];
+    results.forEach(async (res) => {
       if (!res.ok) {
         console.error(`Error: ${res.status} ${res.statusText}`);
         throw new Error(`Error: ${res.status} ${res.statusText}`);
+      } else {
+        const body = await res.json()
+        images.push(body.key)
       }
     });
     console.log("(addImages) Images uploaded successfully");
-    return true;
+    return images;
   } catch (error) {
     console.error("Error: ", error);
-    return false;
+    return [];
   }
 };
 
