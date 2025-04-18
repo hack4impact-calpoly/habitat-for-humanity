@@ -25,6 +25,7 @@ app.use("/api/items", itemEndpoints)
 app.use("/api/events", eventEndpoints)
 app.use("/api/images", imageEndpoints)
 app.use("/api/email", emailEndpoints)
+app.use('/api/clerk', require('./routes/clerkRoutes'));
 
 
 app.use((req, res, next) => {
