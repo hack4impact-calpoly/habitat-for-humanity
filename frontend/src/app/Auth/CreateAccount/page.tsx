@@ -282,10 +282,7 @@ function CreateAccountPage(): React.ReactNode {
         <p className="forgotPasswordMessage">
           Please enter the confirmation code that has been sent to your email.
         </p>
-      <>
-        <h1>Verify your email</h1>
         <form onSubmit={handleVerify}>
-          <label id="code">Enter your verification code</label>
           <input
             value={code}
             className="inputBox"
@@ -296,10 +293,8 @@ function CreateAccountPage(): React.ReactNode {
           <button type="submit" id="sendButton">
             Verify
           </button>
-          <button type="submit">Verify</button>
         </form>
         </div>
-      </>
     );
   }
 
