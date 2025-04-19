@@ -20,28 +20,8 @@ export const getImages = async () =>
     })
     .catch((error) => console.error("Error: ", error)); // handle error
 
-// Get image by id
-export const getImageByID = async (imageID: string) => {
-  return fetch(`${imageURL}/${imageID}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then(async (res) => {
-      const image = await res.json();
-      if (!res.ok) {
-        throw new Error(`${res.status}-${res.statusText}`);
-      }
-      // return res.blob();
-      return image;
-    })
-    .catch((error) => console.error("Error: ", error)); // handle error
-  }
-
-// Get image by name
-export const getImageByName = async (imageName: string) =>
-  fetch(`${imageURL}?name=${imageName}`, {
+export const getPresignedImage = async (imageName: string) =>
+  fetch(`${imageURL}presigned-url/${imageName}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -51,22 +31,7 @@ export const getImageByName = async (imageName: string) =>
       if (!res.ok) {
         throw new Error(`${res.status}-${res.statusText}`);
       }
-      return res.blob();
-    })
-    .catch((error) => console.error("Error: ", error)); // handle error
-
-  export const getPresignedImage = async (imageName: string) =>
-    fetch(`${imageURL}/presigned-url/${imageName}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then(async (res) => {
-      if (!res.ok) {
-        throw new Error(`${res.status}-${res.statusText}`);
-      }
-      const body = await res.json()
+      const body = await res.json();
       return body.url;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
@@ -89,18 +54,18 @@ export const addImages = async (images: File[]): Promise<String[]> => {
 
   try {
     const results = await Promise.all(promises);
-    let images: String[] = [];
+    let imageNames: String[] = [];
     results.forEach(async (res) => {
       if (!res.ok) {
         console.error(`Error: ${res.status} ${res.statusText}`);
         throw new Error(`Error: ${res.status} ${res.statusText}`);
       } else {
-        const body = await res.json()
-        images.push(body.key)
+        const body = await res.json();
+        imageNames.push(body.name);
       }
     });
     console.log("(addImages) Images uploaded successfully");
-    return images;
+    return imageNames;
   } catch (error) {
     console.error("Error: ", error);
     return [];

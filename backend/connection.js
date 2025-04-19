@@ -27,8 +27,7 @@ function makeNewConnection(url) {
 const userConnection = makeNewConnection(process.env.userDB)
 const itemConnection = makeNewConnection(process.env.itemDB)
 const eventConnection = makeNewConnection(process.env.eventDB)
-const imageConnection = makeNewConnection(process.env.imageDB)
 
 
 
-module.exports = { userConnection, itemConnection, eventConnection, imageConnection };
+module.exports = { userConnection, itemConnection, eventConnection };

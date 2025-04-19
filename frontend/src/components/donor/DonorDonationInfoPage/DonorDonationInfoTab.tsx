@@ -52,7 +52,9 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
       );
       setImages(urls);
     };
-    fetchUrls();
+    if (item && item.images) {
+      fetchUrls();
+    }
   }, [item]);
 
   const dates = collectDates(timeSlots);

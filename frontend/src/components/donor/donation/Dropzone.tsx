@@ -2,7 +2,7 @@ import React, { MutableRefObject, useCallback, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
 import styled from "styled-components";
-import { addImages, deleteImage, getImageByName } from "../../../api/image";
+import { addImages, deleteImage } from "../../../api/image";
 
 const DropContainer = styled.div`
   height: 275px;

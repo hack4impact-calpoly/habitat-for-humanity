@@ -5,7 +5,6 @@ const router = express.Router();
 const multer = require("multer"); // multer will be used to handle the form data.
 const Aws = require("aws-sdk"); // aws-sdk library will used to upload image to s3 bucket.
 Aws.config.update({ region: "us-west-1" });
-const Image = require("../models/imageSchema.js"); // our product model.
 require("dotenv/config"); // for using the environment variables that store the confidential information.
 
 // creating the storage variable to upload the file and providing the destination folder,
@@ -68,19 +67,7 @@ router.post("/", upload.single("productImage"), async (req, res) => {
     const Location =
       data.Location || `https://${Bucket}.s3.amazonaws.com/${Key}`;
 
-    let newImage = new Image({
-      _id: mongoose.Types.ObjectId(),
-      key: Key,
-      name: name,
-      link: Location,
-    });
-
-    try {
-      await newImage.save();
-      res.send(newImage);
-    } catch (error) {
-      res.status(400).send(error);
-    }
+    res.send({ name });
   });
 });
 
@@ -102,55 +89,6 @@ router.get("/", async (req, res) => {
     });
   } catch (err) {
     res.send({ message: err, m: "not working" });
-  }
-});
-
-const getFileStream = (fileKey) => {
-  const downloadParams = {
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: fileKey,
-  };
-  return s3.getObject(downloadParams).createReadStream();
-}
-
-// Get image by id from AWS S3 bucket
-router.get("/:imageId", async (req, res) => {
-  try {
-    const image = await Image.findOne({ _id: req.params.imageId });
-
-    if (!image) {
-      return res.status(404).send({ error: "Image not found in the database" });
-    }
-
-    // Set the appropriate content type based on the image file extension
-    const contentType = getContentType(image.key);
-    res.setHeader('Content-Type', contentType);
-    
-    // Create and pipe the stream
-    const readStream = getFileStream(image.key);
-    readStream.pipe(res);
-
-    const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: image.key,
-    };
-
-    s3.getObject(params, (error, data) => {
-      if (error) {
-        console.error("S3 Error:", error);
-        return res.status(500).send({ error: "Failed to fetch image from S3" });
-      }
-
-      const readStream = getFileStream(image.key);
-      res.setHeader("Content-Type", "image/jpeg");
-      readStream.pipe(res);
-      readStream.on("error", (error) => {
-        console.error("Error fetching image from s3", error);
-        res.status(500).send({ error: "Failed to fetch image from S3" });
-      });
-    });
-  } catch (error) {
-    res.status(400).send(error);
   }
 });
 
@@ -202,9 +140,6 @@ router.delete("/:filename", async (req, res) => {
 
     // delete image from S3 bucket
     await s3.deleteObject(params).promise();
-
-    // delete image from MongoDB
-    await Image.deleteOne({ key: filename });
 
     res.send({ message: "Image deleted successfully" });
   } catch (error) {

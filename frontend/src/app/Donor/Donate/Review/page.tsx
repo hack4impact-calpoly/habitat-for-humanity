@@ -8,14 +8,9 @@ import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../../api/item";
 import {
-  addImages,
-  getImages,
-  getImageByID,
   getPresignedImage,
 } from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
-// import DonatorScheduleDropoff from "components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoff";
-import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@clerk/clerk-react";
 import { getUserByID } from "api/user";
 

@@ -75,7 +75,7 @@ const emptyItem: Item = {
   timeApproved: new Date(),
   status: "",
   notes: "",
-  images: [""],
+  images: [],
 };
 
 const emptyUser: User = {
