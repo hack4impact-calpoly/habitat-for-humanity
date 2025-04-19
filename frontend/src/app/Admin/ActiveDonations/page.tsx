@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,13 +9,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
-import { User, getDonors } from "api/user";
 import moment from "moment";
 import "moment-timezone";
 import { Item, getItems } from "../../../api/item";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
+import "../../../App.css";
 
-require("../../../App.css");
+// Clerk API call to get donor info
+const getClerkUser = async (userId: string) => {
+  const res = await fetch(`/api/users/clerk/${userId}`);
+  if (!res.ok) throw new Error("Failed to fetch Clerk user");
+  return res.json();
+};
 
 const header = [
   "Donor",
@@ -27,35 +31,60 @@ const header = [
 ];
 
 export default function ActiveDonationPage(): React.ReactNode {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
   const [items, setItems] = useState<Item[]>([]);
-  const [donors, setDonors] = useState<User[]>([]);
+  const [donorInfoMap, setDonorInfoMap] = useState<
+    Record<string, { firstName: string; lastName: string }>
+  >({});
 
   const router = useRouter();
 
   useEffect(() => {
     getItems().then((res) => setItems(res));
-    getDonors().then((res) => setDonors(res));
   }, []);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+  useEffect(() => {
+    const fetchDonorNames = async () => {
+      const uniqueDonorIds = Array.from(
+        new Set(items.map((item) => item.donorId)),
+      );
+      const map: Record<string, any> = { ...donorInfoMap };
+
+      await Promise.all(
+        uniqueDonorIds.map(async (id) => {
+          if (!map[id]) {
+            try {
+              const donor = await getClerkUser(id);
+              map[id] = donor;
+            } catch (e) {
+              console.error("Failed to fetch donor for id:", id);
+            }
+          }
+        }),
+      );
+
+      setDonorInfoMap(map);
+    };
+
+    if (items.length > 0) {
+      fetchDonorNames();
+    }
+  }, [items]);
 
   const getDonorName = (id: string) => {
-    const donor = donors.find((d) => d.id === id);
-    return `${donor?.firstName} ${donor?.lastName}`;
+    const donor = donorInfoMap[id];
+    return donor ? `${donor.firstName} ${donor.lastName}` : "Loading...";
   };
 
   const convertTime = (time: Date | undefined): string =>
     time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
 
-  const sortReceivedTime = (don1: any, don2: any) => {
-    if (don1.timeSubmitted > don2.timeSubmitted) {
-      return -1;
-    }
-    return 1;
+  const sortReceivedTime = (don1: any, don2: any) =>
+    don1.timeSubmitted > don2.timeSubmitted ? -1 : 1;
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
@@ -64,6 +93,7 @@ export default function ActiveDonationPage(): React.ReactNode {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
   return (
     <div>
       <AdminNavbar />
@@ -85,10 +115,8 @@ export default function ActiveDonationPage(): React.ReactNode {
                 ?.sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
-                  // TODO: wrap parent link to new page
                   <TableRow
                     key={index}
-                    // to={`DonationInfo/${d._id}`}
                     onClick={() => {
                       router.push(`DonationInfo/${d._id}/`);
                     }}
