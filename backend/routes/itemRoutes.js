@@ -132,45 +132,20 @@ router.put("/itemId/:itemId", async (req, res) => {
   try {
     let item = await Item.findOne({ _id: req.params.itemId });
 
-    if (req.body.name) {
-      item.name = req.body.name;
-    }
-    if (req.body.images) {
-      item.images = req.body.images;
-    }
-    if (req.body.size) {
-      item.size = req.body.size;
-    }
-    if (req.body.address) {
-      item.address = req.body.address;
-    }
-    if (req.body.city) {
-      item.city = req.body.city;
-    }
-    if (req.body.address) {
-      item.address = req.body.address;
-    }
-    if (req.body.zipCode) {
-      item.zipCode = req.body.zipCode;
-    }
-    if (req.body.scheduling) {
-      item.scheduling = req.body.scheduling;
-    }
-    if (req.body.timeAvailability) {
-      item.timeAvailability = req.body.timeAvailability;
-    }
-    if (req.body.donorId) {
-      item.donorId = req.body.donorId;
-    }
-    if (req.body.timeSubmitted) {
-      item.timeSubmitted = req.body.timeSubmitted;
-    }
-    if (req.body.timeApproved) {
-      item.timeApproved = req.body.timeApproved;
-    }
-    if (req.body.status) {
-      item.status = req.body.status;
-    }
+    if (req.body.name) {item.name = req.body.name;}
+    if (req.body.images) {item.images = req.body.images;}
+    if (req.body.size) {item.size = req.body.size;}
+    if (req.body.address) {item.address = req.body.address;}
+    if (req.body.city) {item.city = req.body.city;}
+    if (req.body.address) {item.address = req.body.address;}
+    if (req.body.zipCode) {item.zipCode = req.body.zipCode;}
+    if (req.body.scheduling) {item.scheduling = req.body.scheduling;}
+    if (req.body.timeAvailability) {item.timeAvailability = req.body.timeAvailability;}
+    if (req.body.donorId) {item.donorId = req.body.donorId;}
+    if (req.body.timeSubmitted) {item.timeSubmitted = req.body.timeSubmitted;}
+    if (req.body.timeApproved) {item.timeApproved = req.body.timeApproved;}
+    if (req.body.status) {item.status = req.body.status;}
+    if (req.body.notes) {item.notes = req.body.notes;}
 
     await item.save();
     res.send({ msg: `Updated item ${req.params.itemId} to: ${item}` });
