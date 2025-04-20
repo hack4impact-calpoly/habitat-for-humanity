@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updateDimensions,
@@ -13,6 +13,8 @@ import { RootState } from "../../../../redux/store";
 import DonatorNavbar from "../../../../components/donor/DonorNavbar/DonorNavbar";
 import Dropzone from "../../../../components/donor/donation/Dropzone";
 import ProgressBar from "../../../../components/donor/donation/ProgressBar";
+import { Close } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 
 const ContentContainer = styled.div`
   margin-left: 20%;
@@ -59,6 +61,14 @@ const InputSectionContainer = styled.div`
     gap: 0px;
     justify-content: flex-start;
     flex-wrap: wrap;
+  }
+`;
+const StyledLabel = styled.label`
+  font-size: 20px;
+  margin-bottom: 0.5em;
+  @media only screen and (max-width: 640px) {
+    margin-bottom: 0em;
+    margin-top: 0em;
   }
 `;
 const StyledInput = styled.input`
@@ -116,6 +126,19 @@ function Donation(): React.ReactNode {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  // Auto-fill the input fields with stored values if they exist
+  useEffect(() => {
+    if (Array.isArray(storedDesc) && Array.isArray(storedDims)) {
+      const autofilledItems = storedDesc.map(
+        (description: string, index: number) => ({
+          description,
+          dimensions: storedDims[index] || "",
+        }),
+      );
+      setItems(autofilledItems);
+    }
+  }, [storedDesc, storedDims]);
+
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const nextPath: string = "/Donor/Donate/Location";
 
@@ -133,30 +156,15 @@ function Donation(): React.ReactNode {
     setDimError("");
 
     for (let i = 0; i < items.length; i++) {
-
       if (!items[i].description.match(/\S/)) {
         setDescError("Please enter an item description");
         valid = false;
       }
       if (!items[i].dimensions.match(/\S/)) {
         setDimError("Please enter item dimensions");
-        valid = false
+        valid = false;
       }
     }
-
-    // itemDescription?.forEach((item) => {
-    //   if (!item.match(/\S/)) {
-    //     setDescError("Please enter an item description");
-    //     valid = false
-    //   }
-    // });
-
-    // itemDimensions?.forEach((item) => {
-    //   if (!item.match(/\S/)) {
-    //     setDimError("Please enter item dimensions");
-    //     valid = false
-    //   }
-    // });
 
     return valid;
   };
@@ -164,7 +172,6 @@ function Donation(): React.ReactNode {
   const updateStore = () => {
     const itemDescription = items.map((item) => item.description);
     const itemDimensions = items.map((item) => item.dimensions);
-
     dispatch(updateName(itemDescription));
     dispatch(updateDimensions(itemDimensions));
     dispatch(updatePhotos(photos));
@@ -180,9 +187,11 @@ function Donation(): React.ReactNode {
   };
 
   const handleRemoveItem = (index: number) => {
-    const newItems = [...items];
-    newItems.splice(index, 1);
-    setItems(newItems);
+    if (items.length > 1) {
+      const newItems = [...items];
+      newItems.splice(index, 1);
+      setItems(newItems);
+    }
   };
 
   const handleDescriptionChange = (
@@ -213,30 +222,32 @@ function Donation(): React.ReactNode {
         {items.map((item, index) => (
           <InputSectionContainer key={index}>
             <InputContainer>
-              <SubHeader>Item Description/Name</SubHeader>
+              <StyledLabel htmlFor={`item-description-${index}`}>
+                Item Description/Name
+              </StyledLabel>
               <StyledInput
                 type="text"
+                id={`item-description-${index}`}
                 value={items[index].description}
                 onChange={(event) => handleDescriptionChange(event, index)}
               />
               <div className="inputError">{descError}</div>
             </InputContainer>
             <InputContainer>
-              <SubHeader>Item Dimensions</SubHeader>
+              <StyledLabel htmlFor={`item-dimension-${index}`}>
+                Item Dimensions
+              </StyledLabel>
               <StyledInput
                 type="text"
+                id={`item-dimension-${index}`}
                 value={items[index].dimensions}
                 onChange={(event) => handleDimensionChange(event, index)}
               />
               <div className="inputError">{dimError}</div>
             </InputContainer>
-            <button
-              type="button"
-              className="donPickupButton nextButton"
-              onClick={() => handleRemoveItem(index)}
-            >
-              Remove Item
-            </button>
+            <IconButton onClick={() => handleRemoveItem(index)}>
+              <Close />
+            </IconButton>
           </InputSectionContainer>
         ))}
         <button

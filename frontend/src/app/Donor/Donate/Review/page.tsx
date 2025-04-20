@@ -157,7 +157,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   return (
     <div>
       {!component && <DonatorNavbar />}
-      {console.log(storedDonation.pickupTimes)}
       <div id={!component ? "MainContainer" : ""}>
         <div id="SubmitInfoPage">
           <div id="information">
@@ -166,11 +165,12 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p>Please review your donation information before you submit.</p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
-              <b>Item Name:</b> {name}
+              <b>Item Name(s):</b>{" "}
+              {Array.isArray(name) ? name.join(", ") : name}
             </p>
             <p id="itemDimensions">
-              <b>Item Dimensions: </b>
-              {dimensions}
+              <b>Item Dimension(s): </b>
+              {Array.isArray(dimensions) ? dimensions.join(", ") : dimensions}
             </p>
             <p id="itemPhotos">
               <b>Item Photos</b>
