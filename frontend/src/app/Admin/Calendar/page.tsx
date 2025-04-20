@@ -118,7 +118,7 @@ function AdminCalendar() {
   const [open, setOpen] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState<DonationEvent[]>([]);
   const [clickedEvent, setClickedEvent] = useState<EventClickArg>();
-  const router = useRouter()
+  const router = useRouter();
 
   //  right now we are using an endpoint that does not filter by date
 
@@ -244,8 +244,8 @@ function AdminCalendar() {
             </Typography>
           </Box>
         </Modal>
-      )};
-
+      )}
+      ;
       <AdminNavbar />
 
       <div id="smallCalendar" style={{ display: "flex", height: "100%" }}>
@@ -285,6 +285,7 @@ function AdminCalendar() {
               end: "prev,next",
             }}
             events={[...calendarEvents]}
+            slotEventOverlap={false}
           />
         </div>
       </div>
