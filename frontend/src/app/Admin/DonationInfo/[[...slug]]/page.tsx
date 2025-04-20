@@ -21,6 +21,8 @@ import DonationInfoTab, {
 import AdminNavbar from "../../../../components/admin/AdminNavbar/AdminNavbar";
 import Receipt from "../../../../components/admin/DonationInfoPage/Receipt/Receipt";
 import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSchedule";
+import { updateNotes } from "../../../../redux/donationSlice";
+
 
 require("../../../../App.css");
 
@@ -78,6 +80,7 @@ const emptyItem: Item = {
   timeSubmitted: new Date(),
   timeApproved: new Date(),
   status: "",
+  notes: "",
   photos: [""],
 };
 
@@ -111,26 +114,30 @@ function DonationInfoPage() {
   const [donor, setDonor] = useState<User>(emptyUser);
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
+  const [notes, setNotes] = useState<string>("");
   const params = useParams();
   const slug = params.slug;
   const id = slug ? slug[0] : "";
 
   const router = useRouter();
+
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     const nextPath: string = "/Admin";
 
     if (e.currentTarget.value === "back") {
-      sendUpdatedItemToDB(storedStatus, false);
+      // sendUpdatedItemToDB(storedStatus, false, item.notes || "");
+      sendUpdatedItemToDB(status, false);
       await router.back();
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "reject") {
-      updateItem({ ...item, status: "Rejected" });
-      sendUpdatedItemToDB("Rejected", false);
-      await router.back();
+      updateItem({ ...item, status: storedStatus, notes });
+      await sendUpdatedItemToDB("Rejected", false);
+      await router.back();  
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
+      updateItem({ ...item, status: storedStatus, notes });
       if (
         (await storedTimeSlots.map((timeSlot) =>
           sendEventToDB(timeSlot, item),
@@ -167,6 +174,7 @@ function DonationInfoPage() {
     let updatedItem: Item = {
       ...item,
       status,
+      notes: notes,
     };
     if (newApproval) {
       updatedItem = {
@@ -187,18 +195,21 @@ function DonationInfoPage() {
     return response;
   };
 
-  // Fetch and set item on load
   useEffect(() => {
     const fetchedItem =
       typeof id === "string"
         ? getItemByID(id)
-            .then((item) => setItem(item))
+            .then((item) =>  {
+              setItem(item);
+              setNotes(item.notes || "");
+            })
             .catch((err) => {
               console.log(err);
               setItem(emptyItem);
+              setNotes("");
             })
         : setItem(emptyItem);
-  }, []);
+  }, [id]);
 
   // Fetch and set donor and available times on item change
   useEffect(() => {
@@ -229,6 +240,11 @@ function DonationInfoPage() {
     setValue(newValue);
   };
 
+  const handleNotesChange = (newNotes: string) => {
+    setNotes(newNotes); // This will accept empty strings
+  };
+  
+
   const storedStatus = useSelector(
     (state: RootState) => state.event.donationStatus,
   );
@@ -238,7 +254,6 @@ function DonationInfoPage() {
 
   return (
     <div>
-      {/* <Button onClick={() => console.log(storedStatus)}>Check status</Button> */}
       <AdminNavbar />
       <div id="DonInfoPage">
         <div id="ActiveDonHeader">
@@ -274,6 +289,8 @@ function DonationInfoPage() {
               item={item}
               donor={donor}
               timeSlots={availableTimes}
+              notes={notes || ""}
+              onNotesChange={handleNotesChange}
             />
           </TabPanel>
           <TabPanel value={value} index={1}>
