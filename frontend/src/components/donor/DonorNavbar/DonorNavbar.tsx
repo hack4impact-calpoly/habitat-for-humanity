@@ -159,6 +159,24 @@ function DonatorNavbar(): React.ReactNode {
         TransitionProps={{ timeout: 0 }}
       >
         {navBarHeaders?.map((page, index) => navItem(page, index))}
+        <MenuItem
+          key="signout"
+          onClick={() => {
+            handleCloseNavMenu();
+            signOut({ redirectUrl: "/" });
+          }}
+        >
+          <Box
+            textAlign="center"
+            sx={{
+              color: "red",
+              fontWeight: "bold",
+              width: "100%",
+            }}
+          >
+            Sign Out
+          </Box>
+        </MenuItem>
       </Menu>
     </Box>
   );
