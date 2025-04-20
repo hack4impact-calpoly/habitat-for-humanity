@@ -169,9 +169,12 @@ function DonatorNavbar(): React.ReactNode {
           <Box
             textAlign="center"
             sx={{
-              color: "red",
+              m: 0,
+              textDecoration: "none",
+              color: "#314d89",
+              fontSize: "17px",
               fontWeight: "bold",
-              width: "100%",
+              paddingBottom: "2px",
             }}
           >
             Sign Out
