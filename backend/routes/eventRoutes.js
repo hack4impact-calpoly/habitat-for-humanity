@@ -57,12 +57,10 @@ router.get("/location/:city/:address", async (req, res) => {
  * @param {string} title          title of the new Event
  * @param {Date} startTime        starting time represented as a Date object
  * @param {Date} endTime          ending time represented as a Date object
- * @param {string} volunteerId  volunteer assigned to event
  * @param {ObjectId} itemId       item to be picked up
 */
 router.post('/', async (req, res) => { //TODO add error handling
-  const { title, startTime, endTime, volunteerId, itemId } = req.body;
-  const volunteer = await User.findOne({ id: volunteerId})
+  const { title, startTime, endTime, itemId } = req.body;
   const item = await Item.findOne({ _id: itemId })
   const donor = await User.findOne({ id: item.donorId })
 
@@ -70,13 +68,10 @@ router.post('/', async (req, res) => { //TODO add error handling
     "title": title,
     "startTime": startTime,
     "endTime": endTime,
-    "volunteerId": volunteerId,
     "itemId": itemId,
     "address": item.address,
     "city": item.city,
     "zipCode": item.zipCode,
-    "volunteerFirstName": volunteer.firstName,
-    "volunteerLastName": volunteer.lastName,
     "donorFirstName": donor.firstName,
     "donorLastName": donor.lastName,
     "itemName": item.name,
@@ -103,13 +98,10 @@ router.put("/eventId/:eventId", async (req, res) => {
     if (req.body.title) {event.title = req.body.title}
     if (req.body.startTime) {event.startTime = req.body.startTime;}
     if (req.body.endTime) {event.endTime = req.body.endTime;}
-    if (req.body.volunteerId) {event.volunteerId = req.body.volunteerId;}
     if (req.body.itemId) {event.itemId = req.body.itemId;}
     if (req.body.address) {event.address = req.body.address;}
     if (req.body.city) {event.city = req.body.city;}
     if (req.body.zipCode) {event.zipCode = req.body.zipCode;}
-    if (req.body.volunteerFirstName) {event.volunteerFirstName = req.body.volunteerFirstName;}
-    if (req.body.volunteerLastName) {event.volunteerLastName = req.body.volunteerLastName;}
     if (req.body.donorFirstName) {event.donorFirstName = req.body.donorFirstName;}
     if (req.body.donorLastName) {event.donorLastName = req.body.donorLastName;}
     if (req.body.itemName) {event.itemName = req.body.itemName;}
