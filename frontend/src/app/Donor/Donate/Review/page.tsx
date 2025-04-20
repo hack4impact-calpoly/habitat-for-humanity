@@ -14,8 +14,8 @@ import { useAuth } from "@clerk/nextjs";
 require("../../../../App.css");
 
 interface DummyComponentProps {
-  name?: string;
-  dimensions?: string;
+  name?: string[];
+  dimensions?: string[];
   photos?: string[];
   location?: string;
   dropOff?: boolean;
@@ -166,11 +166,11 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
               <b>Item Name(s):</b>{" "}
-              {Array.isArray(name) ? name.join(", ") : name}
+              {name.join(", ")}
             </p>
             <p id="itemDimensions">
               <b>Item Dimension(s): </b>
-              {Array.isArray(dimensions) ? dimensions.join(", ") : dimensions}
+              {dimensions.join(", ")}
             </p>
             <p id="itemPhotos">
               <b>Item Photos</b>

@@ -30,7 +30,7 @@ export interface TimeSlot {
 
 export function collectDates(timeSlots: TimeSlot[]) {
   const dates: string[] = [];
-  if (timeSlots[0].eventStart === undefined) return dates;
+  if (timeSlots[0] && timeSlots[0].eventStart === undefined) return dates;
   timeSlots.forEach((timeSlot) => {
     if (!dates.includes(timeSlot.dayString)) {
       dates.push(timeSlot.dayString);
@@ -125,11 +125,12 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
           Item Information
         </h2>
         <p id="itemName">
-          <b>Item Name:</b> {item.name}
+          <b>Item Name:</b>{" "}
+          {item.name.join(", ")}
         </p>
         <p id="itemDimensions">
           <b>Item Dimensions: </b>
-          {item.size}
+          {item.size.join(", ")}
         </p>
         <p id="itemPhotos">
           <b>Item Photos</b>

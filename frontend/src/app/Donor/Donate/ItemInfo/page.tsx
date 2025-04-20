@@ -128,7 +128,7 @@ function Donation(): React.ReactNode {
 
   // Auto-fill the input fields with stored values if they exist
   useEffect(() => {
-    if (Array.isArray(storedDesc) && Array.isArray(storedDims)) {
+    if (storedDesc && storedDims) {
       const autofilledItems = storedDesc.map(
         (description: string, index: number) => ({
           description,
