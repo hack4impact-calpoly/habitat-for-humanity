@@ -218,7 +218,23 @@ function DonatorSchedulePickUp(): React.ReactNode {
                 .format("hh:mm A")
                 .replace(/^(?:00:)?0?/, "");
               return (
-                <div className="donatorPickUpTime" key={idx}>
+                <div
+                  className="donatorPickUpTime"
+                  key={idx}
+                  onClick={() => {
+                    // Toggle the checkbox state manually when the entire div is clicked
+                    const currentChecked = evaluateEventPresence(
+                      availEvent.start,
+                      availEvent.end,
+                    );
+                    if (currentChecked) {
+                      removeEvent(availEvent.start, availEvent.end);
+                    } else {
+                      addEvent(availEvent.start, availEvent.end);
+                    }
+                  }}
+                  style={{ cursor: "pointer" }} // Optional: ensures the pointer cursor is displayed
+                >
                   <Checkbox
                     icon={<RadioButtonUncheckedIcon />}
                     checkedIcon={<CheckCircleIcon />}
