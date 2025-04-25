@@ -187,7 +187,7 @@ function CreateAccountPage(): React.ReactNode {
     Return: boolean (true if number successfuly processed, false if not)
     */
     try {
-      const processedString = phoneNumber.replace(/[^0-9]/g, "");
+      const processedString = phoneNumber.replace(/(?!^\+)[^\d]/g, "");
       if (!isMobilePhone(processedString, "en-US")) {
         setPhoneNumberError(
           "Please enter your phone number in the form XXX-XXX-XXXX",
