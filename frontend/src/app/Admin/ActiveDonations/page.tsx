@@ -15,6 +15,7 @@ import moment from "moment";
 import "moment-timezone";
 import { Item, getItems } from "../../../api/item";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
+import DownloadButton from "components/admin/DonationInfoPage/DownloadButton";
 
 require("../../../App.css");
 
@@ -64,11 +65,89 @@ export default function ActiveDonationPage(): React.ReactNode {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const exportCSV = () => {
+    const columnsToExport = [
+      "donorId",
+      "name",
+      "size",
+      "address",
+      "city",
+      "zipCode",
+      "scheduling",
+      "timeAvailability",
+      "timeSubmitted",
+      "status",
+    ];
+
+    const processedData = items?.map((row) => {
+      const newRow: Record<string, any> = {};
+      columnsToExport.forEach((col) => {
+        // Use keyof Item to tell TypeScript that col is a key of Item
+        if (
+          row[col as keyof Item] !== null &&
+          row[col as keyof Item] !== undefined
+        ) {
+          if (col === "timeAvailability" || col === "timeSubmitted") {
+            const date =
+              typeof row[col] === "string" ? new Date(row[col]) : row[col];
+            newRow[col] = convertTime(date);
+          } else if (col === "donorId") {
+            newRow[col] = getDonorName(row[col]);
+          } else {
+            newRow[col] = row[col as keyof Item];
+          }
+        }
+      });
+      return newRow;
+    });
+
+    // Helper function to convert snake case to human-readable format
+    const toTitleCase = (str: string): string =>
+      str
+        .replace(/([a-z])([A-Z])/g, "$1 $2") // Add space between camelCase words
+        .split(" ") // Split into words
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+        .join(" ");
+
+    const csvRows = [
+      columnsToExport
+        .map((col) => (col === "donorId" ? "Donor Name" : toTitleCase(col))) // Switch donorId to Donor Name
+        .join(","), // header
+      ...processedData.map((row) =>
+        columnsToExport
+          .map((col) => {
+            // Convert each value, handle donorId, and format for CSV
+            return `"${row[col] ?? "".toString().replace(/"/g, '""')}"`;
+          })
+          .join(","),
+      ),
+    ];
+
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "active_donations.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
       <AdminNavbar />
       <div id="activeDonPage">
-        <h1 id="activeDonHeader">Active Donations</h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <h1 id="activeDonHeader">Active Donations</h1>
+          <DownloadButton onClick={exportCSV} />
+        </div>
         <TableContainer>
           <Table>
             <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
@@ -82,8 +161,10 @@ export default function ActiveDonationPage(): React.ReactNode {
             </TableHead>
             <TableBody>
               {items
-                ?.filter((item) =>
-                  item.status === "Approved and Scheduled" || item.status === "Send Receipt"
+                ?.filter(
+                  (item) =>
+                    item.status === "Approved and Scheduled" ||
+                    item.status === "Send Receipt",
                 )
                 .sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
