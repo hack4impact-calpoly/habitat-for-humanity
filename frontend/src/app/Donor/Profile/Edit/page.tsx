@@ -24,7 +24,8 @@ export type UserInfo = {
 };
 
 function DonatorProfileEditPage(): React.ReactNode {
-  const { user } = useUser();
+  const { user, isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
   const initialFirstName = user?.firstName;
   const initialLastName = user?.lastName;
   const initialEmail = user?.primaryEmailAddress?.emailAddress;
@@ -37,38 +38,56 @@ function DonatorProfileEditPage(): React.ReactNode {
   const [isPhoneValid, setIsPhoneValid] = useState<boolean>(true);
 
   useEffect(() => {
+    // First check if auth is loaded and user is signed in
+    if (!isLoaded) return; // Wait until auth state is determined
+    
+    if (!isSignedIn) {
+      // If not signed in, redirect to login page
+      router.push('/');
+      return;
+    }
+    
+    // Only proceed if user is signed in and has an ID
     if (user?.id) {
-      const fetchData = async () => {
-        const response = await getUserByID(user.id);
-        const formattedPhone = response.phone
-          ? parsePhoneNumberFromString(response.phone, "US")?.format("E.164") ||
-            ""
-          : "";
-        setPhone(formattedPhone);
-      };
-
       setFirstName(user.firstName || "First Name Not Found");
       setLastName(user.lastName || "Last Name Not Found");
       setEmail(user.primaryEmailAddress?.emailAddress || "Email Not Found");
+      
+      const fetchData = async () => {
+        try {
+          const response = await getUserByID(user.id);
+          const formattedPhone = response.phone
+            ? parsePhoneNumberFromString(response.phone, "US")?.format("E.164") ||
+              ""
+            : "";
+          setPhone(formattedPhone);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          // Handle error gracefully
+        }
+      };
 
       fetchData();
     }
-  }, [user?.id]);
+  }, [user, isSignedIn, isLoaded, router]);
 
   const updateUserInfo = async (newUserInfo: UserInfo) => {
     if (!user) {
       console.error("User not found");
       return;
     }
-    updateUserInfoAPI(user.id, newUserInfo);
+    try {
+      await updateUserInfoAPI(user.id, newUserInfo);
+    } catch (error) {
+      console.error("Error updating user info:", error);
+      alert("Failed to update user information. Please try again.");
+    }
   };
 
   const capitalizeFirstLetter = (s: string) => {
     if (!s) return "";
     return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
   };
-
-  const router = useRouter();
 
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const backPath: string = "/Donor/Profile";
@@ -113,14 +132,19 @@ function DonatorProfileEditPage(): React.ReactNode {
     if (email && email !== initialEmail) {
       newUserInfo.email = email;
     }
-    if (phone && phone !== initialPhone) {
-      if (user) {
-        updateUserPhone(user.id, phone);
+    
+    try {
+      if (phone && phone !== initialPhone) {
+        if (user) {
+          updateUserPhone(user.id, phone);
+        }
       }
+      updateUserInfo(newUserInfo);
+      return true;
+    } catch (error) {
+      console.error("Error in submitData:", error);
+      return false;
     }
-    updateUserInfo(newUserInfo);
-
-    return true;
   };
 
   const handlePhoneChange = (value: string | undefined) => {
@@ -129,6 +153,16 @@ function DonatorProfileEditPage(): React.ReactNode {
   };
 
   const isMobile = useMediaQuery("(max-width: 640px)");
+
+  // If auth is still loading, show a loading state
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  // If not signed in, don't render anything (will redirect in useEffect)
+  if (!isSignedIn) {
+    return null;
+  }
 
   return (
     <div id="donatorProfileEditPage">
