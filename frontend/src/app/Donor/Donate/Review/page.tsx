@@ -5,12 +5,9 @@ import { updateDonorID } from "../../../../redux/donationSlice";
 import { useRouter } from "next/navigation";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Item, addItem } from "../../../../api/item";
-import { addImages, getImages, getImageByID } from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
-// import DonatorScheduleDropoff from "components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoff";
-import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@clerk/clerk-react";
 import { getUserByID } from "api/user";
 
@@ -34,14 +31,13 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   dropOff,
   component,
 }) => {
-
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
   });
-  
+
   const storedDonation = useSelector((state: RootState) => state.donation);
   const { user } = useUser();
   const storedName = useSelector((state: RootState) => state.donation.name);
@@ -49,6 +45,14 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     (state: RootState) => state.donation.dimensions,
   );
   const statePhotos = useSelector((state: RootState) => state.donation.photos);
+  // console.log(
+  //   "state.donation",
+  //   useSelector((state: RootState) => state.donation),
+  // );
+  const collectionType = useSelector(
+    (state: RootState) => state.donation.photos,
+  );
+  const stateTime = useSelector((state: RootState) => state.donation.photos);
 
   // storedPhotos is an array of images names,
   // if access is needed, images name can be used
@@ -77,43 +81,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   const [serverError, setServerError] = useState<string>("");
   const router = useRouter();
 
-  /* convert array of base64-encoded back into array of image files */
-  // const convertToFiles = (photos: string[] | undefined): File[] => {
-  //   const files: File[] = [];
-  //   const timestamp = new Date().getTime(); // Get the current timestamp
-  //   photos?.forEach((photo, index) => {
-  //     const byteString = atob(photo.split(",")[1]);
-  //     const mimeString = photo.split(",")[0].split(":")[1].split(";")[0];
-  //     const ab = new ArrayBuffer(byteString.length);
-  //     const ia = new Uint8Array(ab);
-  //     for (let i = 0; i < byteString.length; i++) {
-  //       ia[i] = byteString.charCodeAt(i);
-  //     }
-  //     const blob = new Blob([ab], { type: mimeString });
-  //     // Create a file object with a unique name
-  //     const fileName = `image-${timestamp}-${index}.${
-  //       mimeString.split("/")[1]
-  //     }`;
-  //     const file = new File([blob], fileName, { type: mimeString });
-  //     files.push(file);
-  //   });
-  //   return files;
-  // };
-
-  /* Send image files array to S3 */
-  // const sendImagesToS3 = async (): Promise<boolean> => {
-  //   const files = convertToFiles(photos);
-  //   console.log("Converted back to Files: ", files);
-  //   try {
-  //     await addImages(files);
-  //     console.log("Images uploaded successfully!");
-  //     return true;
-  //   } catch (error) {
-  //     console.error("Error: ", error);
-  //     return false;
-  //   }
-  // };
-
   const sendToDB = async () => {
     const donation: Item = {
       name: storedDonation.name,
@@ -135,14 +102,15 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     // const imagesUploaded = await sendImagesToS3();
     if (!response) {
       setServerError(
-        "There was an error sending your donation. Please try again later."
+        "There was an error sending your donation. Please try again later.",
       );
     }
     return response;
   };
 
   useEffect(() => {
-    if (user?.id) {  // Check if user.id is defined
+    if (user?.id) {
+      // Check if user.id is defined
       const fetchData = async () => {
         const response = await getUserByID(user.id);
         setUserData({
@@ -153,13 +121,13 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
         });
         storedDonation.donorID = user.id;
       };
-  
-      fetchData();  // Fetch user data whenever the component is re-entered
+
+      fetchData(); // Fetch user data whenever the component is re-entered
     }
-  }, [user]); 
+  }, [user]);
 
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     const backPath: string = "/Donor/Donate/ScheduleDropoffPickup";
     const nextPath: string = "/Donor/Donate/NextSteps";
@@ -186,8 +154,12 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p id="itemName">
               <b>Name:</b> {userData.firstName} {userData.lastName}
             </p>
-            <p id="itemDimensions"><b>Email: </b> {userData.email}</p>
-            <p id="itemPhotos"><b>Phone Number: </b> {userData.phone} </p>
+            <p id="itemDimensions">
+              <b>Email: </b> {userData.email}
+            </p>
+            <p id="itemPhotos">
+              <b>Phone Number: </b> {userData.phone}{" "}
+            </p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
               <b>Item Name:</b> {name}
@@ -195,9 +167,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p id="itemDimensions">
               <b>Item Dimensions: </b>
               {dimensions}
-            </p>
-            <p id="itemPhotos">
-              <b>Item Photos</b>
             </p>
             <div id="ProductImages">
               {statePhotos.map((imagePresignedUrl: any, i: any) => (
@@ -215,12 +184,8 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               {storedDonation.state} {storedDonation.zipCode}
             </h4>
           </div>
-          {/* <div id="SchedulingInfo">
+          <div id="SchedulingInfo">
             <h2 id="Scheduling">Scheduling</h2>
-            <h4 id="SchdulingDesc">
-              Does the donation need to be picked up or can you drop it off at
-              our ReStore?
-            </h4>
           </div>
           <div id="donPDOptions">
             <div>
@@ -243,11 +208,10 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
                 onChange={() => setDropOffOption(false)}
               />
               <p className="radioOptionLabel radioLabel">
-                I need the item to be picked up
+                The item will be picked up during
               </p>
             </div>
           </div>
-          {dropOffOption ? <DonatorScheduleDropoff /> : <></>} */}
           <div className="inputError">{serverError}</div>
           {!component && (
             <div

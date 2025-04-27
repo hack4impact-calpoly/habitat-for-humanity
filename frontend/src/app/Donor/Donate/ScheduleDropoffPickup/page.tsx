@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-// import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useDispatch, useSelector } from "react-redux";
 import { updateDropoff } from "../../../../redux/donationSlice";
@@ -14,16 +14,22 @@ import { RootState } from "../../../../redux/store";
 require("../../../../App.css");
 
 function DonatorScheduleDropoffPage(): React.ReactNode {
+  const router = useRouter();
   const storedDropoff = useSelector(
     (state: RootState) => state.donation.dropoff,
   );
   const [isDropoff, setIsDropoff] = useState<boolean>(storedDropoff);
   const dispatch = useDispatch();
+  const [hasMounted, setHasMounted] = useState(false);
 
   const flipDropoff = () => {
     dispatch(updateDropoff(!isDropoff));
     setIsDropoff(!isDropoff);
   };
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   return (
     <div style={{ paddingBottom: "4rem" }}>

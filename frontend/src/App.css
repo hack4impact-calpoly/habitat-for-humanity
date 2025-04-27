@@ -3088,3 +3088,35 @@ input[type="radio"] {
     font-size: 10px;
   }
 }
+
+
+.calendar-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+/* FullCalendar styles */
+.calendar-container .fc {
+  width: 100%;
+  height: 100%;
+}
+
+/* Adjustments for mobile view */
+@media (max-width: 768px) {
+  .calendar-container {
+    height: calc(100vh - 60px); /* Adjust for any mobile headers or toolbars */
+  }
+
+  .calendar-container .fc {
+    height: 100% !important;
+  }
+
+  .calendar-container .fc .fc-daygrid-body {
+    overflow: visible !important;
+  }
+}
+
