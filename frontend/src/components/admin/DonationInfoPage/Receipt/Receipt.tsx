@@ -21,7 +21,7 @@ const exportPdf = (id: string) => {
       const height = pdfDOC.internal.pageSize.getHeight();
       pdfDOC.addImage(imgData, "JPEG", 0, height / 50, width, height * 0.75);
       pdfDOC.save("receipt.pdf");
-    }
+    },
   );
 };
 interface ReceiptTabProps {
@@ -30,6 +30,7 @@ interface ReceiptTabProps {
 }
 function Receipt(props: ReceiptTabProps): React.ReactNode {
   const { item, donor } = props;
+  console.log("item name", item.name);
   const fullName = `${donor?.firstName} ${donor?.lastName}`;
   const fullZip = `${item?.city}, California ${item?.zipCode}`;
   const [contract, setContract] = useState({
@@ -42,7 +43,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
     phone: donor?.phone ?? "",
     cell: "",
     email: donor?.email ?? "",
-    donatedItems: item?.name ?? "",
+    donatedItems: item?.name.join(", ") ?? "",
     value: "",
     signature: "",
     date: moment().format("MM/DD/YYYY"),
@@ -57,7 +58,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
       phone: donor?.phone ?? "",
       address: item?.address ?? "",
       cityStateZipcode: fullZip ?? "",
-      donatedItems: item?.name ?? "",
+      donatedItems: item?.name.join(", ") ?? "",
     }));
   }, [props]);
   return (

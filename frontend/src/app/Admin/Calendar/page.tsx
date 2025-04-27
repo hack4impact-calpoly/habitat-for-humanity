@@ -1,8 +1,12 @@
 "use client";
 
 import FullCalendar from "@fullcalendar/react";
-import { EventClickArg, EventContentArg } from "@fullcalendar/core";
-import React, { useState, useEffect } from "react";
+import {
+  EventClickArg,
+  EventContentArg,
+  CalendarApi,
+} from "@fullcalendar/core";
+import React, { useState, useEffect, useRef } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Modal, Box, Typography } from "@mui/material";
@@ -96,7 +100,7 @@ const modalTitleText = {
   marginBottom: "5px",
 };
 
-const viewDonnationButton = {
+const viewDonationButton = {
   width: "112px",
   height: "30px",
   background: "#314D89",
@@ -118,7 +122,8 @@ function AdminCalendar() {
   const [open, setOpen] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState<DonationEvent[]>([]);
   const [clickedEvent, setClickedEvent] = useState<EventClickArg>();
-  const router = useRouter()
+  const router = useRouter();
+  const calendarRef = useRef<FullCalendar | null>(null);
 
   //  right now we are using an endpoint that does not filter by date
 
@@ -155,6 +160,67 @@ function AdminCalendar() {
       .catch((error) => console.error(error));
   }, []);
 
+  function downloadCSV(data: string, filename: string) {
+    const blob = new Blob([data], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const handleExportCSV = () => {
+    const calendarApi: CalendarApi | null | undefined =
+      calendarRef.current?.getApi();
+    if (!calendarApi) return;
+
+    const view = calendarApi.view;
+    const start = view.activeStart;
+    const end = view.activeEnd;
+
+    const filteredEvents = calendarApi.getEvents().filter((event) => {
+      const eventStart = new Date(event.start as unknown as string);
+      return eventStart >= start && eventStart < end;
+    });
+
+    console.log(filteredEvents);
+
+    const headers = [
+      "Donor First Name",
+      "Donor Last Name",
+      "Phone",
+      "Address",
+      "City",
+      "Zip Code",
+      "Start Time",
+      "End Time",
+    ];
+
+    const csvRows = [headers.join(",")];
+
+    filteredEvents.forEach((event) => {
+      const props = event.extendedProps;
+      const row = [
+        props.donorFirstName,
+        props.donorLastName,
+        props.phone,
+        props.address,
+        props.city,
+        props.zipCode,
+        new Date(event.start!).toLocaleString(),
+        new Date(event.end!).toLocaleString(),
+      ];
+      csvRows.push(row.map((field) => `"${field}"`).join(",")); // Quotes needed for csv formatting
+    });
+
+    const csvContent = csvRows.join("\n");
+
+    const formattedStartDate = start.toISOString().split("T")[0];
+    downloadCSV(csvContent, `donations-week-${formattedStartDate}.csv`);
+  };
+
   const renderModalComponent = (args: EventClickArg) => {
     //  sets a state var to true on click of an event
     //  we pass the information of any clicked event to a state var
@@ -168,15 +234,15 @@ function AdminCalendar() {
   };
 
   return (
-    <>
+    <div>
       {open && (
         <Modal open={open} onClose={closeModalComponent}>
           <Box sx={style}>
             <Typography style={modalAddressStyle}>
               {clickedEvent!.event.extendedProps.address}
             </Typography>
-            <Typography>
-              <p style={modalDefaultText}>
+            <Typography component="div">
+              <div style={modalDefaultText}>
                 {new Date(clickedEvent!.event.start!).toLocaleDateString(
                   "en-US",
                   {
@@ -205,7 +271,7 @@ function AdminCalendar() {
                     {clickedEvent!.event.extendedProps.volunteerLastName}
                   </span>
                 </p>
-              </p>
+              </div>
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
                 <span style={modalTitleText}>Donor </span>
                 <span style={modalDefaultText}>
@@ -230,7 +296,7 @@ function AdminCalendar() {
                 {/* prettier-ignore */}
                 <button
                   type="button"
-                  style={viewDonnationButton}
+                  style={viewDonationButton}
                   onClick={() => {
                     router.push(
                       `/Admin/DonationInfo/${clickedEvent!.event.extendedProps.itemId}/`,
@@ -244,10 +310,8 @@ function AdminCalendar() {
             </Typography>
           </Box>
         </Modal>
-      )};
-
+      )}
       <AdminNavbar />
-
       <div id="smallCalendar">
         {/* im not sure if i would need to pass props in the future
             so i created filler props */}
@@ -255,12 +319,13 @@ function AdminCalendar() {
 
         <div id="myCalendar" className="mainCalendarContainer">
           <FullCalendar
+            ref={calendarRef}
             plugins={[dayGridPlugin, timeGridPlugin]}
             initialView="timeGridWeek"
             slotLabelInterval="1:00"
             slotMinTime="08:00:00"
             allDaySlot={false}
-            slotMaxTime="18:00:00"
+            slotMaxTime="17:00:00"
             slotDuration="01:00:00"
             eventContent={customEvent}
             eventClick={renderModalComponent}
@@ -285,10 +350,18 @@ function AdminCalendar() {
               end: "prev,next",
             }}
             events={[...calendarEvents]}
+            slotEventOverlap={false}
+            height="auto"
+            contentHeight="auto"
           />
+          <div className="csvButton">
+            <button onClick={handleExportCSV} className="exportButton">
+              Export Week as CSV
+            </button>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 //  controls how the inside of an event cell looks

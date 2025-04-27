@@ -241,7 +241,7 @@ function DropZone(props: any): React.ReactNode {
             compressedFiles as File[],
           );
           console.log("starting sending to S3...");
-          return sendImagesToS3(compressedFiles as File[]);
+          return sendImagesToS3(compressedFiles as File[]);//compress image and save into redux instead
         })
         .then((imageUrls) => {
           console.log("imageUrls retrieved... setting state...");

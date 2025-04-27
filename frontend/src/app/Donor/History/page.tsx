@@ -103,7 +103,7 @@ function DonationHistory(): React.ReactNode {
                     }}
                     className="tableRow"
                   >
-                    <TableCell>{d.name}</TableCell>
+                    <TableCell scope="row">{d.name.join(", ")}</TableCell>
                     <TableCell>{d.scheduling}</TableCell>
                     <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
                     <TableCell>{convertTime(d.timeApproved)}</TableCell>
