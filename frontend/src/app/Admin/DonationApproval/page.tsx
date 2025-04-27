@@ -68,7 +68,7 @@ export default function ActiveDonationPage(): React.ReactNode {
     <div>
       <AdminNavbar />
       <div id="activeDonPage">
-        <h1 id="activeDonHeader">Active Donations</h1>
+        <h1 id="activeDonHeader">Donation Approvals</h1>
         <TableContainer>
           <Table>
             <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
@@ -81,9 +81,9 @@ export default function ActiveDonationPage(): React.ReactNode {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items
+            {items
                 ?.filter((item) =>
-                  item.status === "Approved and Scheduled" || item.status === "Send Receipt"
+                  item.status === "Needs Approval" || item.status === "Send Receipt"
                 )
                 .sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
