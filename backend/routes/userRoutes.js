@@ -16,6 +16,25 @@ router.post("/updateRole", async (req, res) => {
   res.status(200).json({ success: true });
 });
 
+// Get Clerk user info by userId
+router.get("/clerk/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await clerkClient.users.getUser(userId);
+    const { firstName, lastName, primaryEmailAddress } = user;
+
+    res.status(200).json({
+      firstName,
+      lastName,
+      email: primaryEmailAddress.emailAddress,
+    });
+  } catch (err) {
+    console.error("[CLERK_FETCH_ERROR]", err);
+    res.status(500).json({ error: "Failed to fetch Clerk user" });
+  }
+});
+
 //get all users
 router.get("/", async (req, res) => {
   try {
@@ -78,7 +97,6 @@ router.post("/", async (req, res) => {
       phone,
       id,
     });
-    // console.log(newUser);
     await newUser.save();
     res.send({ msg: `${firstName} ${lastName} added to the userDB` });
   } catch (error) {
@@ -86,7 +104,7 @@ router.post("/", async (req, res) => {
     if (error instanceof Error) {
       errorMessage = error.message;
     } else {
-      errorMessage = String(errorMessage);
+      errorMessage = String(error);
     }
     res.status(400).send(errorMessage);
     console.log(`Error: ${errorMessage}`);
@@ -96,16 +114,14 @@ router.post("/", async (req, res) => {
 //update user info
 router.put("/updateUserInfo/:userId", async (req, res) => {
   try {
-    // Extract userId from route params and user info from the request body
     const { userId } = req.params;
-    const userInfo = req.body; // This is the dictionary containing user info (firstName, lastName, email)
+    const userInfo = req.body;
 
-    // Update user info using Clerk's API
     const updatedUser = await clerkClient.users.updateUser(userId, userInfo);
 
     res.send({
       msg: `Updated user "${userId}" with new info:`,
-      updatedUser, 
+      updatedUser,
     });
   } catch (error) {
     console.error("Error updating user info:", error);
@@ -132,7 +148,7 @@ router.put("/lastName/:userId", async (req, res) => {
     if (error instanceof Error) {
       errorMessage = error.message;
     } else {
-      errorMessage = String(errorMessage);
+      errorMessage = String(error);
     }
     res.status(400).send(errorMessage);
     console.log(`Error: ${errorMessage}`);
@@ -155,7 +171,7 @@ router.put("/email/:userId", async (req, res) => {
     if (error instanceof Error) {
       errorMessage = error.message;
     } else {
-      errorMessage = String(errorMessage);
+      errorMessage = String(error);
     }
     res.status(400).send(errorMessage);
     console.log(`Error: ${errorMessage}`);
@@ -178,7 +194,7 @@ router.put("/phone/:userId", async (req, res) => {
     if (error instanceof Error) {
       errorMessage = error.message;
     } else {
-      errorMessage = String(errorMessage);
+      errorMessage = String(error);
     }
     res.status(400).send(errorMessage);
     console.log(`Error: ${errorMessage}`);
