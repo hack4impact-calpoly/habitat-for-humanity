@@ -10,45 +10,45 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
-import { User, getUserByID } from "api/user";
+import { User, getDonors } from "api/user";
 import moment from "moment";
 import "moment-timezone";
-import { useSelector, useDispatch } from "react-redux";
-import { updateDonorID } from "../../../redux/donationSlice";
-import { RootState } from "../../../redux/store";
-import { Item, getItemsByDonorID } from "../../../api/item";
-import DonorNavbar from "components/donor/DonorNavbar/DonorNavbar";
-import { useAuth } from "@clerk/clerk-react";
+import { Item, getItems } from "../../../api/item";
+import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
 
 require("../../../App.css");
 
 const header = [
-  "Donation Item",
+  "Donor",
   "Type",
   "Date/Time Received",
-  "Date/Time Approved",
+  "Date/Time Approved-Rejected",
   "Status",
 ];
 
-function DonationHistory(): React.ReactNode {
-  const { userId } = useAuth();
+export default function ActiveDonationPage(): React.ReactNode {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
+  const [donors, setDonors] = useState<User[]>([]);
 
   const router = useRouter();
-  
+
   useEffect(() => {
-    if (userId) {
-      getItemsByDonorID(userId).then((res) => setItems(res));
-    }  
-  }, [userId]);
+    getItems().then((res) => setItems(res));
+    getDonors().then((res) => setDonors(res));
+  }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
-  const convertTime = (time: Date | undefined) =>
+  const getDonorName = (id: string) => {
+    const donor = donors.find((d) => d.id === id);
+    return `${donor?.firstName} ${donor?.lastName}`;
+  };
+
+  const convertTime = (time: Date | undefined): string =>
     time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
 
   const sortReceivedTime = (don1: any, don2: any) => {
@@ -66,9 +66,9 @@ function DonationHistory(): React.ReactNode {
   };
   return (
     <div>
-      <DonorNavbar />
-      <div id="DonHistoryPage">
-        <h1 id="DonHistoryHeader">Donation History</h1>
+      <AdminNavbar />
+      <div id="activeDonPage">
+        <h1 id="activeDonHeader">Donation Approvals</h1>
         <TableContainer>
           <Table>
             <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
@@ -81,8 +81,11 @@ function DonationHistory(): React.ReactNode {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items
-                ?.sort((a, b) => sortReceivedTime(a, b))
+            {items
+                ?.filter((item) =>
+                  item.status === "Needs Approval" || item.status === "Send Receipt"
+                )
+                .sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
                   // TODO: wrap parent link to new page
@@ -90,18 +93,18 @@ function DonationHistory(): React.ReactNode {
                     key={index}
                     // to={`DonationInfo/${d._id}`}
                     onClick={() => {
-                      router.push(`/Donor/History/DonationInfo/${d._id}/`);
+                      router.push(`DonationInfo/${d._id}/`);
                     }}
                     style={{ textDecoration: "none" }}
                     className="tableRow"
                   >
-                    <TableCell scope="row">{d.name}</TableCell>
+                    <TableCell scope="row">{getDonorName(d.donorId)}</TableCell>
                     <TableCell>{d.scheduling}</TableCell>
                     <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
                     <TableCell>{convertTime(d.timeApproved)}</TableCell>
                     {d.status === "Approved and Scheduled" ? (
                       <TableCell>
-                        <p className="approved">{d.status}</p>
+                        <p style={{ margin: 0 }}>{d.status}</p>
                       </TableCell>
                     ) : (
                       <TableCell>
@@ -115,7 +118,7 @@ function DonationHistory(): React.ReactNode {
           <TablePagination
             rowsPerPageOptions={[8, 10, 15]}
             component="div"
-            count={items?.length}
+            count={items.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -126,5 +129,3 @@ function DonationHistory(): React.ReactNode {
     </div>
   );
 }
-
-export default DonationHistory;
