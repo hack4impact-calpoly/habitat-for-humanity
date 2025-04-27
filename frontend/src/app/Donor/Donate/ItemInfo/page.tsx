@@ -245,9 +245,17 @@ function Donation(): React.ReactNode {
               />
               <div className="inputError">{dimError}</div>
             </InputContainer>
-            <IconButton onClick={() => handleRemoveItem(index)}>
-              <Close />
-            </IconButton>
+            <div style={{ paddingTop: "40px" }}>
+              <IconButton
+                onClick={() => handleRemoveItem(index)}
+                style={{
+                  width: "45px",
+                  height: "45px",
+                }}
+              >
+                <Close />
+              </IconButton>
+            </div>
           </InputSectionContainer>
         ))}
         <button

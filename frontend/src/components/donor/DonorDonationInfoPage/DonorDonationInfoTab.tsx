@@ -65,9 +65,7 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
           <h2 style={{ marginTop: "3rem", color: "var(--orange)" }}>
             Admin Notes
           </h2>
-          <p id="notes">
-            {item.notes}
-          </p>
+          <p id="notes">{item.notes}</p>
         </Grid>
       )}
       <Grid item xs={12}>
@@ -89,11 +87,11 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
           Item Information
         </h2>
         <p id="itemName">
-          <b>Item Name:</b> {item.name}
+          <b>Item Name:</b> {item.name.join(", ")}
         </p>
         <p id="itemDimensions">
           <b>Item Dimensions: </b>
-          {item.size}
+          {item.size.join(", ")}
         </p>
         <p id="itemPhotos">
           <b>Item Photos</b>
