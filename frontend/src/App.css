@@ -489,6 +489,7 @@ code {
   display: flex;
 }
 
+.exportButton,
 .backButton,
 .rejectButton,
 .approveButton {
@@ -501,6 +502,20 @@ code {
   .approveButton {
     padding: 0px;
   }
+}
+
+.csvButton {
+  margin-top: 25px;
+  display: flex;
+  justify-content: right;
+}
+
+.exportButton {
+  color: var(--tertiary);
+  font-weight: bold;
+  background-color: var(--white);
+  border: 2px solid var(--tertiary);
+  cursor: pointer;
 }
 
 .backButton {
@@ -2354,7 +2369,7 @@ input[type="radio"] {
 
 @media (max-width: 768px) {
   #DonInfoBox {
-    padding: 0
+    padding: 0;
   }
 }
 
