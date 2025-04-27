@@ -10,7 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
-import { User, getDonors } from "api/user";
+import { User, getClerkUser, getDonors } from "api/user";
 import moment from "moment";
 import "moment-timezone";
 import { Item, getItems } from "../../../api/item";
@@ -31,21 +31,51 @@ export default function ActiveDonationPage(): React.ReactNode {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
   const [donors, setDonors] = useState<User[]>([]);
+  const [donorInfoMap, setDonorInfoMap] = useState<
+    Record<string, { firstName: string; lastName: string }>
+  >({});
 
   const router = useRouter();
 
   useEffect(() => {
     getItems().then((res) => setItems(res));
-    getDonors().then((res) => setDonors(res));
   }, []);
+
+  useEffect(() => {
+    const fetchDonorNames = async () => {
+      const uniqueDonorIds = Array.from(
+        new Set(items.map((item) => item.donorId)),
+      );
+      const map: Record<string, any> = { ...donorInfoMap };
+
+      await Promise.all(
+        uniqueDonorIds.map(async (id) => {
+          if (!map[id]) {
+            try {
+              const donor = await getClerkUser(id);
+              map[id] = donor;
+            } catch (e) {
+              console.error("Failed to fetch donor for id:", id);
+            }
+          }
+        }),
+      );
+
+      setDonorInfoMap(map);
+    };
+
+    if (items.length > 0) {
+      fetchDonorNames();
+    }
+  }, [items]); 
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
   const getDonorName = (id: string) => {
-    const donor = donors.find((d) => d.id === id);
-    return `${donor?.firstName} ${donor?.lastName}`;
+    const donor = donorInfoMap[id];
+    return donor ? `${donor.firstName} ${donor.lastName}` : "Loading...";
   };
 
   const convertTime = (time: Date | undefined): string =>
