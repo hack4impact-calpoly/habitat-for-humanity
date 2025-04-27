@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { getItemByID, Item, updateItem } from "api/item";
+import { deleteEventByItemId, Event } from "api/event";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
@@ -116,37 +117,48 @@ function DonationInfoPage() {
   const params = useParams();
   const slug = params.slug;
   const id = slug ? slug[0] : "";
-
+  
+  const nextPath: string = "/Admin";
   const router = useRouter();
-
+  const rejectItem = async () => {
+    updateItem({ ...item, status: "Rejected" });
+    sendUpdatedItemToDB("Rejected", false);
+    deleteEventByItemId(id);
+  }
+  const approveItem = async () => {
+    console.log("timeslots", storedTimeSlots);
+    if (
+      (await storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item))) &&
+      (await sendUpdatedItemToDB("Approved and Scheduled", true))
+    ) {
+      console.log("Success submitting events!");
+      clearTimeSlots(); // Clear time slots from redux
+      await router.push(nextPath);
+      router.refresh(); // Reload page after navigating back to fetch changes
+    }
+  }
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
-    const nextPath: string = "/Admin";
-
     if (e.currentTarget.value === "back") {
-      // sendUpdatedItemToDB(storedStatus, false, item.notes || "");
-      sendUpdatedItemToDB(status, false);
-      await router.back();
-      router.refresh();
-    } else if (e.currentTarget.value === "reject") {
-      updateItem({ ...item, status: storedStatus, notes });
-      await sendUpdatedItemToDB("Rejected", false);
-      await router.back();
-      router.refresh();
-    } else if (e.currentTarget.value === "approve") {
-      updateItem({ ...item, status: storedStatus, notes });
-      if (
-        (await storedTimeSlots.map((timeSlot) =>
-          sendEventToDB(timeSlot, item),
-        )) &&
-        (await sendUpdatedItemToDB("Approved and Scheduled", true))
-      ) {
-        console.log("Success submitting events!");
-        clearTimeSlots();
-        await router.push(nextPath);
-        router.refresh();
+      if (storedStatus === "Approved and Scheduled") {
+        await approveItem();
+      } else if (storedStatus === "Rejected") {
+        await rejectItem();
+        await router.back();
+        router.refresh(); // Reload page after navigating back to fetch changes
       }
+      else {
+        sendUpdatedItemToDB(storedStatus, false);
+        await router.back();
+        router.refresh(); // Reload page after navigating back to fetch changes
+      }
+    } else if (e.currentTarget.value === "reject") {
+      await rejectItem();
+      await router.back();  
+      router.refresh(); // Reload page after navigating back to fetch changes
+    } else if (e.currentTarget.value === "approve") {
+      await approveItem();
     }
   };
 
