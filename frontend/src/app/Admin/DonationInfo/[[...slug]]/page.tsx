@@ -20,15 +20,9 @@ import DonationInfoTab, {
 import AdminNavbar from "../../../../components/admin/AdminNavbar/AdminNavbar";
 import Receipt from "../../../../components/admin/DonationInfoPage/Receipt/Receipt";
 import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSchedule";
+import { getClerkUser, getUserByID } from "api/user";
 
 require("../../../../App.css");
-
-// Clerk fetch helper
-const getClerkUser = async (userId: string) => {
-  const res = await fetch(`/api/users/clerk/${userId}`);
-  if (!res.ok) throw new Error("Failed to fetch Clerk user");
-  return res.json();
-};
 
 function a11yProps(index: number) {
   return {
@@ -185,12 +179,19 @@ function DonationInfoPage() {
 
   useEffect(() => {
     if (item.donorId !== "") {
-      getClerkUser(item.donorId)
-        .then((donor) => setDonor(donor))
-        .catch((err) => {
-          console.error(err);
-          setDonor(emptyUser);
-        });
+      const getDonor = async () => {
+        await getClerkUser(item.donorId)
+          .then(async (clerkUser) => {
+            await getUserByID(item.donorId).then((user) => {
+              setDonor({ ...clerkUser, phone: user.phone });
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            setDonor(emptyUser);
+          });
+      };
+      getDonor();
     }
 
     if (item.timeAvailability) {

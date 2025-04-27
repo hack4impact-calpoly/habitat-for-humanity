@@ -14,13 +14,7 @@ import "moment-timezone";
 import { Item, getItems } from "../../../api/item";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
 import "../../../App.css";
-
-// Clerk API call to get donor info
-const getClerkUser = async (userId: string) => {
-  const res = await fetch(`/api/users/clerk/${userId}`);
-  if (!res.ok) throw new Error("Failed to fetch Clerk user");
-  return res.json();
-};
+import { getClerkUser } from "api/user";
 
 const header = [
   "Donor",
