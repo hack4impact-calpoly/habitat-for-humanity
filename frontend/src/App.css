@@ -91,6 +91,26 @@ code {
   font-weight: 600;
 }
 
+@media (max-width: 768px) {
+  .MuiTableCell-root {
+    font-size: 12px !important;
+    padding: 5px 3px !important;
+  }
+
+  .tableCell {
+    font-size: 13px;
+    line-height: 1.1;
+  }
+
+  .tableRow {
+    font-size: 13px;
+  }
+
+  #DonHistoryPage {
+    padding: 1rem 0.5rem;
+  }
+}
+
 .tableRow:hover {
   background-color: var(--gray-light);
   cursor: pointer;
@@ -466,7 +486,16 @@ code {
   box-shadow: 0px 8px 21px var(--box-shadow);
   padding: 62px 77px 68px 77px;
 }
+@media only screen and (max-width: 768px) {
+  #DonInfoPage {
+    padding: 3% 4%;
+    padding-bottom: 40px;
+  }
 
+  #DonInfoBox {
+    padding: 20px;
+  }
+}
 .IndividTabs {
   font-size: 20px;
   font-family: Rubik;
