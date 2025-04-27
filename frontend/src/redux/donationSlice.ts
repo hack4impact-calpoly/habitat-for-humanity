@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
 export interface DonationState {
-  name: string;
-  dimensions: string;
+  name: string[];
+  dimensions: string[];
   photos: string[];
   address: string;
   city: string;
@@ -21,10 +21,11 @@ export interface Event {
 }
 
 const initialState: DonationState = {
-  name: "",
-  dimensions: "",
+  name: [""],
+  dimensions: [""],
   photos: [],
   address: "",
+  donorID: "",
   city: "",
   state: "",
   zipCode: 0,
@@ -53,6 +54,9 @@ export const donationSlice = createSlice({
     },
     updateCity: (state, action) => {
       state.city = action.payload;
+    },
+    updateDonorID: (state, action) => {
+      state.donorID = action.payload;
     },
     updateState: (state, action) => {
       state.state = action.payload;

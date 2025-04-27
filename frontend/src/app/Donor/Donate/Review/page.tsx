@@ -17,8 +17,8 @@ import { getUserByID } from "api/user";
 require("../../../../App.css");
 
 interface DummyComponentProps {
-  name?: string;
-  dimensions?: string;
+  name?: string[];
+  dimensions?: string[];
   photos?: string[];
   location?: string;
   dropOff?: boolean;
@@ -190,11 +190,12 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p id="itemPhotos"><b>Phone Number: </b> {userData.phone} </p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
-              <b>Item Name:</b> {name}
+              <b>Item Name(s):</b>{" "}
+              {name.join(", ")}
             </p>
             <p id="itemDimensions">
-              <b>Item Dimensions: </b>
-              {dimensions}
+              <b>Item Dimension(s): </b>
+              {dimensions.join(", ")}
             </p>
             <p id="itemPhotos">
               <b>Item Photos</b>

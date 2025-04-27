@@ -15,7 +15,6 @@ export interface TimeSlot {
   eventEnd: string;
   timeSlotString: string;
   dayString: string;
-  volunteer: string;
 }
 
 const initialState: EventSlice = {
