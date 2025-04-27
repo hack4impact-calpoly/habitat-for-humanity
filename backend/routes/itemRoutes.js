@@ -130,6 +130,7 @@ router.put("/itemId/:itemId", async (req, res) => {
     if (req.body.timeSubmitted) {item.timeSubmitted = req.body.timeSubmitted;}
     if (req.body.timeApproved) {item.timeApproved = req.body.timeApproved;}
     if (req.body.status) {item.status = req.body.status;}
+    if (req.body.notes) {item.notes = req.body.notes;}
 
     await item.save();
     res.send({msg: `Updated item ${req.params.itemId} to: ${item}`});

@@ -7,10 +7,9 @@ require("../../../App.css");
 interface SmallCalendarProps {
   address: string;
 }
+
 function SmallCalendar({ address }: SmallCalendarProps): React.ReactNode {
   return (
-    /* 
-     <div id="smallCalendar" style={{ display: "flex", height: "100%" }}>   */
     <div className="smallCalendarContainer">
       <FullCalendar
         plugins={[dayGridPlugin]}
