@@ -116,11 +116,7 @@ export const getAdmins = async () =>
 
 // User data model
 export interface User {
-  firstName: string;
-  lastName: string;
   phone: string;
-  email: string;
-  userType: string;
   id: string;
 }
 
@@ -151,9 +147,9 @@ export const addUser = async (user: User) =>
 
     export const updateUserInfoAPI = async (
       userId: string,
-      params: { firstName?: string; lastName?: string; email?: string },
+      params: { firstName?: string; lastName?: string; },
     ) => {
-      console.log("Current environment:", process.env.NODE_ENV);
+      console.log("Current environment:", process.env.NODE_ENV, params?.firstName, params?.lastName);
     
       // Assuming the backend route is '/api/updateUserInfo/:userId' and you want to send a PUT request
       const response = await fetch(`${userURL}/updateUserInfo/${userId}`, {

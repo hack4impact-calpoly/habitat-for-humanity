@@ -32,6 +32,7 @@ function DonatorProfilePage(): React.ReactNode {
 
     // Only fetch data if user is signed in and has an ID
     if (user?.id) {
+      user?.reload()
       const fetchData = async () => {
         try {
           const response = await getUserByID(user.id);

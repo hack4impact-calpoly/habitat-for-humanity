@@ -111,6 +111,13 @@ code {
   padding-left: 3%;
 }
 
+@media (max-width: 768px) {
+  .mainCalendarContainer {
+    width: 100vw; /* 100% of the viewport width */
+    margin: 0;
+  }
+}
+
 .mainCalendarContainer .fc-timegrid-event-harness-inset .fc-timegrid-event,
 .mainCalendarContainer .fc-timegrid-event.fc-event-mirror,
 .mainCalendarContainer .fc-timegrid-more-link {
@@ -169,7 +176,7 @@ code {
 }
 
 .mainCalendarContainer .fc-header-toolbar {
-  margin-left: 55px;
+  margin-left: 18px;
 }
 
 .mainCalendarContainer .fc-timegrid-slot-label {
@@ -180,11 +187,23 @@ code {
   /* Make events fill the entire cell */
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 2px 4px;
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 
 .fc-event-time {
   /* Hide event time */
   display: none;
+}
+.fc-daygrid-event {
+  max-height: 3em;
+}
+
+.fc-daygrid-event-harness {
+  margin-bottom: 2px;
 }
 
 .mainCalendarContainer .fc .fc-col-header-cell-cushion {
@@ -232,10 +251,28 @@ code {
   color: grey;
 }
 
+#smallCalendar {
+  display: flex;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  #smallCalendar {
+    display: block;
+  }
+}
+
 .smallCalendarContainer {
   width: 30%;
   padding: 3%;
   height: 100%;
+}
+
+@media (max-width: 768px) {
+  .smallCalendarContainer {
+    width: 100vw; /* 100% of the viewport width */
+    margin: 0;
+  }
 }
 
 .smallCalendarContainer .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
@@ -448,10 +485,22 @@ code {
   justify-content: space-between;
 }
 
+#NextButtons {
+  display: flex;
+}
+
 .backButton,
 .rejectButton,
 .approveButton {
   padding: 10px 45px;
+}
+
+@media (max-width: 768px) {
+  .backButton,
+  .rejectButton,
+  .approveButton {
+    padding: 0px;
+  }
 }
 
 .backButton {
@@ -468,6 +517,12 @@ code {
   color: var(--red);
   border: 2px solid var(--red);
   margin-right: 12px;
+}
+
+@media (max-width: 768px) {
+  .rejectButton {
+    margin-left: 12px;
+  }
 }
 
 .approveButton {
@@ -835,7 +890,7 @@ code {
 }
 
 #forgotPasswordText {
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 40px;
@@ -882,10 +937,10 @@ code {
 #sendButton:hover {
   cursor: pointer;
   border: 3px solid rgba(2, 5, 12, 0.15);
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 500;
   font-style: normal;
-  background-color: #93aada; 
+  background-color: #93aada;
 }
 
 .inputBox {
@@ -899,7 +954,7 @@ code {
   width: 100%;
   border: 1.5px solid var(--input-box) !important;
   padding: 2% !important;
-  border-radius: 20; 
+  border-radius: 20;
 }
 
 .forgotPasswordMessage {
@@ -1870,7 +1925,7 @@ p {
   }
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 768px) {
   #donPDOptions {
     display: block;
   }
@@ -2297,6 +2352,12 @@ input[type="radio"] {
   padding: 62px 77px 68px 77px;
 }
 
+@media (max-width: 768px) {
+  #DonInfoBox {
+    padding: 0
+  }
+}
+
 .IndividTabs {
   font-size: 20px;
   font-family: Rubik;
@@ -2721,6 +2782,12 @@ input[type="radio"] {
   margin: 0px 0px 5px 0px;
 
   color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  #SchedulingRadio {
+    max-width: 100vw;
+  }
 }
 
 #DonorNameBox {
