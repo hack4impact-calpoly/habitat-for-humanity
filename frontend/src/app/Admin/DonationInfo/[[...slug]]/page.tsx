@@ -115,35 +115,48 @@ function DonationInfoPage() {
   const params = useParams();
   const slug = (params).slug;
   const id = slug ? slug[0] : "";
-
+  
+  const nextPath: string = "/Admin";
   const router = useRouter();
+  const rejectItem = async () => {
+    updateItem({ ...item, status: "Rejected" });
+    sendUpdatedItemToDB("Rejected", false);
+    deleteEventByItemId(id);
+  }
+  const approveItem = async () => {
+    console.log("timeslots", storedTimeSlots);
+    if (
+      (await storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item))) &&
+      (await sendUpdatedItemToDB("Approved and Scheduled", true))
+    ) {
+      console.log("Success submitting events!");
+      clearTimeSlots(); // Clear time slots from redux
+      await router.push(nextPath);
+      router.refresh(); // Reload page after navigating back to fetch changes
+    }
+  }
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
-    const nextPath: string = "/Admin";
-
     if (e.currentTarget.value === "back") {
-      sendUpdatedItemToDB(storedStatus, false);
-      await router.back();
-      router.refresh(); // Reload page after navigating back to fetch changes
+      if (storedStatus === "Approved and Scheduled") {
+        await approveItem();
+      } else if (storedStatus === "Rejected") {
+        await rejectItem();
+        await router.back();
+        router.refresh(); // Reload page after navigating back to fetch changes
+      }
+      else {
+        sendUpdatedItemToDB(storedStatus, false);
+        await router.back();
+        router.refresh(); // Reload page after navigating back to fetch changes
+      }
     } else if (e.currentTarget.value === "reject") {
-      updateItem({ ...item, status: "Rejected" });
-      sendUpdatedItemToDB("Rejected", false);
-      deleteEventByItemId(id);
+      await rejectItem();
       await router.back();  
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
-      if (
-        (await storedTimeSlots.map((timeSlot) =>
-          sendEventToDB(timeSlot, item),
-        )) &&
-        (await sendUpdatedItemToDB("Approved and Scheduled", true))
-      ) {
-        console.log("Success submitting events!");
-        clearTimeSlots(); // Clear time slots from redux
-        await router.push(nextPath);
-        router.refresh(); // Reload page after navigating back to fetch changes
-      }
+      await approveItem();
     }
   };
 

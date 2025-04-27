@@ -131,6 +131,8 @@ router.put("/eventId/:eventId", async (req, res) => {
 
 router.delete("/itemId/:itemId", async (req, res) => {
   try {
+    // If the event is not found, fails silently without error by returning null
+    // but we don't care since it would be deleted anyway
     await Event.findOneAndDelete({ itemId: req.params.itemId });
     res.status(200).send("Successfully deleted event");
   } catch(error) {
