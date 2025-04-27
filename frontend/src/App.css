@@ -2354,7 +2354,7 @@ input[type="radio"] {
 
 @media (max-width: 768px) {
   #DonInfoBox {
-    padding: 0
+    padding: 0;
   }
 }
 
@@ -3087,4 +3087,28 @@ input[type="radio"] {
   .fc .fc-button {
     font-size: 10px;
   }
+}
+
+.removeButtonContainer {
+  padding-top: 40px;
+}
+
+@media only screen and (max-width: 640px) {
+  .removeButtonContainer {
+    padding: 0px;
+  }
+}
+
+.removeButton {
+  width: 48px;
+  height: 48px;
+}
+
+.crossIcon {
+  color: var(--red);
+}
+
+.itemInputContainer {
+  border-bottom: 1px solid #000;
+  margin-bottom: 10px;
 }

@@ -66,6 +66,7 @@ const InputSectionContainer = styled.div`
 const StyledLabel = styled.label`
   font-size: 20px;
   margin-bottom: 0.5em;
+  white-space: nowrap;
   @media only screen and (max-width: 640px) {
     margin-bottom: 0em;
     margin-top: 0em;
@@ -220,7 +221,7 @@ function Donation(): React.ReactNode {
         <ProgressBar activeStep={1} />
         <ItemHeader>Item Information</ItemHeader>
         {items.map((item, index) => (
-          <InputSectionContainer key={index}>
+          <InputSectionContainer key={index} className="itemInputContainer">
             <InputContainer>
               <StyledLabel htmlFor={`item-description-${index}`}>
                 Item Description/Name
@@ -245,15 +246,12 @@ function Donation(): React.ReactNode {
               />
               <div className="inputError">{dimError}</div>
             </InputContainer>
-            <div style={{ paddingTop: "40px" }}>
+            <div className="removeButtonContainer">
               <IconButton
                 onClick={() => handleRemoveItem(index)}
-                style={{
-                  width: "45px",
-                  height: "45px",
-                }}
+                className="removeButton"
               >
-                <Close />
+                <Close className="crossIcon" />
               </IconButton>
             </div>
           </InputSectionContainer>
