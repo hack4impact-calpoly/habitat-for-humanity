@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-// import logo from "images/ReStoreLogo.png";
 import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useClerk } from "@clerk/nextjs";
@@ -10,8 +9,6 @@ require("../../../App.css");
 
 const navBarHeaders: string[] = ["Make a Donation", "Donations", "Profile"];
 
-// paths might change depending on how application routes are made
-// test underline by setting either variable to "/"
 const donatePath: string = "/Donor";
 const profilePath: string = "/Donor/Profile";
 const donationsPath: string = "/Donor/History";
@@ -41,21 +38,18 @@ function DonatorNavbar(): React.ReactNode {
       header === navBarHeaders[MAKE_DONATION_INDEX] &&
       (pagePath.includes(`${donatePath}/donate`) || pagePath === "/Donor")
     ) {
-      // For different donation pages
       return true;
     }
     if (
       header === navBarHeaders[DONATIONS_INDEX] &&
       pagePath.includes(donationsPath)
     ) {
-      // For different profile pages
       return true;
     }
     if (
       header === navBarHeaders[PROFILE_INDEX] &&
       pagePath.includes(profilePath)
     ) {
-      // For different profile pages
       return true;
     }
     return false;
@@ -71,9 +65,44 @@ function DonatorNavbar(): React.ReactNode {
     if (header === navBarHeaders[PROFILE_INDEX]) {
       return profilePath;
     }
-    // Sign Out to be implemented, just route to main page for now (login)
     return "/";
   };
+
+  // Handle sign out with proper cleanup
+  const handleSignOut = () => {
+    // Use the redirectUrl option to ensure clean navigation
+    signOut({ redirectUrl: "/" })
+      .catch(error => {
+        console.error("Error during sign out:", error);
+        // Fallback redirect in case the signOut method fails
+        router.push("/");
+      });
+  };
+
+  // Add sign out option to mobile menu
+  const renderMobileSignOutItem = () => (
+    <MenuItem
+      onClick={() => {
+        handleCloseNavMenu();
+        handleSignOut();
+      }}
+    >
+      <Box
+        textAlign="center"
+        component="a"
+        sx={{
+          m: 0,
+          textDecoration: "none", 
+          color: "#314d89",
+          fontSize: "17px",
+          fontWeight: "bold",
+          paddingBottom: "2px",
+        }}
+      >
+        Sign Out
+      </Box>
+    </MenuItem>
+  );
 
   const renderDesktopNavbar = () => (
     <Box sx={styles.donatorNavbar}>
@@ -106,7 +135,7 @@ function DonatorNavbar(): React.ReactNode {
         )}
         <Box className="donatorNavbarLink">
           <button
-            onClick={() => signOut({ redirectUrl: "/" })}
+            onClick={handleSignOut}
             className="signOutButton"
           >
             Sign Out
@@ -159,27 +188,7 @@ function DonatorNavbar(): React.ReactNode {
         TransitionProps={{ timeout: 0 }}
       >
         {navBarHeaders?.map((page, index) => navItem(page, index))}
-        <MenuItem
-          key="signout"
-          onClick={() => {
-            handleCloseNavMenu();
-            signOut({ redirectUrl: "/" });
-          }}
-        >
-          <Box
-            textAlign="center"
-            sx={{
-              m: 0,
-              textDecoration: "none",
-              color: "#314d89",
-              fontSize: "17px",
-              fontWeight: "bold",
-              paddingBottom: "2px",
-            }}
-          >
-            Sign Out
-          </Box>
-        </MenuItem>
+        {renderMobileSignOutItem()}
       </Menu>
     </Box>
   );

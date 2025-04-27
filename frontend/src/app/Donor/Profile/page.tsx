@@ -3,43 +3,66 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Box } from "@mui/material";
-// import pencil from "images/pencil.png";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import { getUserByID } from "api/user";
-
 
 require("../../../App.css");
 
 function DonatorProfilePage(): React.ReactNode {
-  const { user } = useUser();
-  user?.reload();
+  const { user, isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
   });
-  
+
   useEffect(() => {
-    if (user?.id) {  // Check if user.id is defined
-      const fetchData = async () => {
-        const response = await getUserByID(user.id);
-        setUserData({
-          firstName: user.firstName || "First Name Not Found",
-          lastName: user.lastName || "Last Name Not Found",
-          email: user.primaryEmailAddress?.emailAddress || "Email Not Found",
-          phone: response.phone || "Phone Not Found",
-        });
-      };
-  
-      fetchData();  // Fetch user data whenever the component is re-entered
+    // First check if auth is loaded and user is signed in
+    if (!isLoaded) return; // Wait until auth state is determined
+
+    if (!isSignedIn) {
+      // If not signed in, redirect to login page
+      router.push("/");
+      return;
     }
-  }, [user]); 
-  
+
+    // Only fetch data if user is signed in and has an ID
+    if (user?.id) {
+      user?.reload()
+      const fetchData = async () => {
+        try {
+          const response = await getUserByID(user.id);
+          setUserData({
+            firstName: user.firstName || "First Name Not Found",
+            lastName: user.lastName || "Last Name Not Found",
+            email: user.primaryEmailAddress?.emailAddress || "Email Not Found",
+            phone: response.phone || "Phone Not Found",
+          });
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          // Handle error gracefully - don't crash the app
+        }
+      };
+
+      fetchData();
+    }
+  }, [user, isSignedIn, isLoaded, router]);
+
   const donatorProfileEditPath = "/Donor/Profile/Edit";
 
-  
+  // If auth is still loading, show a loading state
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  // If not signed in, don't render anything (will redirect in useEffect)
+  if (!isSignedIn) {
+    return null;
+  }
 
   return (
     <div>
@@ -58,7 +81,6 @@ function DonatorProfilePage(): React.ReactNode {
             </div>
             <div id="editBox">
               <img alt="pencil" id="pencil" src="/images/pencil.png" />
-              {/* Need to Implement Link to DonatorProfileEditPage */}
               <Link href={donatorProfileEditPath} id="edit">
                 edit
               </Link>
@@ -69,7 +91,6 @@ function DonatorProfilePage(): React.ReactNode {
               <p className="infoHeader">Name</p>
             </div>
             <div className="infoBox">
-              {/* Need to implement displaying user data from backend */}
               <p id="name">
                 {userData.firstName} {userData.lastName}
               </p>
@@ -80,7 +101,6 @@ function DonatorProfilePage(): React.ReactNode {
               <p className="infoHeader">Email</p>
             </div>
             <div className="infoBox">
-              {/* Need to implement displaying user data from backend */}
               <p id="email">{userData.email}</p>
             </div>
           </div>
@@ -89,7 +109,6 @@ function DonatorProfilePage(): React.ReactNode {
               <p className="infoHeader">Phone</p>
             </div>
             <div className="infoBox">
-              {/* Need to implement displaying user data from backend */}
               <p id="phone">{userData.phone}</p>
             </div>
           </div>
