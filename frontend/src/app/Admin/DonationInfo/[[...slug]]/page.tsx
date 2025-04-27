@@ -23,7 +23,6 @@ import Receipt from "../../../../components/admin/DonationInfoPage/Receipt/Recei
 import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSchedule";
 import { updateNotes } from "../../../../redux/donationSlice";
 
-
 require("../../../../App.css");
 
 function a11yProps(index: number) {
@@ -134,7 +133,7 @@ function DonationInfoPage() {
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: storedStatus, notes });
       await sendUpdatedItemToDB("Rejected", false);
-      await router.back();  
+      await router.back();
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
       updateItem({ ...item, status: storedStatus, notes });
@@ -199,7 +198,7 @@ function DonationInfoPage() {
     const fetchedItem =
       typeof id === "string"
         ? getItemByID(id)
-            .then((item) =>  {
+            .then((item) => {
               setItem(item);
               setNotes(item.notes || "");
             })
@@ -236,6 +235,65 @@ function DonationInfoPage() {
     }
   }, [item]);
 
+  const getActionButtonText = () => {
+    if (storedStatus === "Rejected") return "Reject";
+    if (storedStatus === "Approved and Scheduled") return "Send Receipt";
+    if (storedStatus === "Completed") return "Save Changes";
+    if (storedStatus === "Needs Approval") {
+      if (item.scheduling === "Pickup") {
+        return "Schedule Pickup";
+      } else {
+        return "Approve";
+      }
+    }
+    return "Save Changes"; // Default for everyting else
+  };
+
+  const handleActionButtonClick = async () => {
+    if (storedStatus === "Rejected") {
+      await sendUpdatedItemToDB("Rejected", false);
+      router.back();
+      router.refresh();
+      return;
+    }
+
+    if (storedStatus === "Approved and Scheduled") {
+      setValue(2); // Go to Reciept Tab
+      return;
+    }
+
+    if (storedStatus === "Completed") {
+      // Completed — no action? jsut save and go back(this does get rid of the donation
+      //no clue where it sends it to)
+      await sendUpdatedItemToDB("Completed", false);
+      router.push("/Admin");
+      router.refresh();
+      return;
+    }
+
+    if (storedStatus === "Needs Approval") {
+      if (item.scheduling === "Pickup") {
+        setValue(1); // Go to Scheduling Tab
+        return;
+      } else {
+        await sendUpdatedItemToDB("Approved and Scheduled", true);
+        router.push("/Admin");
+        router.refresh();
+        return;
+      }
+    }
+
+    // Default Save Changes
+    await sendUpdatedItemToDB(storedStatus, false);
+    router.push("/Admin");
+    router.refresh();
+  };
+
+  const getActionButtonClass = () => {
+    if (storedStatus === "Rejected") return "rejectButton";
+    return "approveButton";
+  };
+
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue);
   };
@@ -243,7 +301,6 @@ function DonationInfoPage() {
   const handleNotesChange = (newNotes: string) => {
     setNotes(newNotes); // This will accept empty strings
   };
-  
 
   const storedStatus = useSelector(
     (state: RootState) => state.event.donationStatus,
@@ -304,38 +361,53 @@ function DonationInfoPage() {
           <button
             type="button"
             className="backButton"
-            value="back"
-            onClick={buttonNavigation}
+            value="cancel"
+            onClick={() => router.back()}
           >
-            Back
+            Cancel
           </button>
+          {/* OLD Approve/Reject Buttons */}
+          {/*
+  <div id="NextButtons">
+    <button
+      type="button"
+      className="rejectButton"
+      value="reject"
+      onClick={buttonNavigation}
+    >
+      Reject Donation
+    </button>
+    {value === 0 ? (
+      <button
+        type="button"
+        className="approveButton"
+        onClick={() => setValue(1)}
+      >
+        Schedule Pick Up
+      </button>
+    ) : (
+      <button
+        type="button"
+        className="approveButton"
+        value="approve"
+        onClick={buttonNavigation}
+      >
+        Approve and Schedule
+      </button>
+    )}
+  </div>
+  */}
+
+          {/* NEW Action Button (has all the old stuff but jsut one button) */}
           <div id="NextButtons">
             <button
               type="button"
-              className="rejectButton"
-              value="reject"
-              onClick={buttonNavigation}
+              //uses the old styles from reject and approve button
+              className={getActionButtonClass()}
+              onClick={handleActionButtonClick}
             >
-              Reject Donation
+              {getActionButtonText()}
             </button>
-            {value === 0 ? (
-              <button
-                type="button"
-                className="approveButton"
-                onClick={() => setValue(1)}
-              >
-                Schedule Pick Up
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="approveButton"
-                value="approve"
-                onClick={buttonNavigation}
-              >
-                Approve and Schedule
-              </button>
-            )}
           </div>
         </div>
       </div>
