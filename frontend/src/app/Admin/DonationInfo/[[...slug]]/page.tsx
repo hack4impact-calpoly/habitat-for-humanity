@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
-import { getUserByID, User } from "api/user";
 import { getItemByID, Item, updateItem } from "api/item";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -23,6 +22,7 @@ import Receipt from "../../../../components/admin/DonationInfoPage/Receipt/Recei
 import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSchedule";
 import { updateNotes } from "../../../../redux/donationSlice";
 
+import { getClerkUser, getUserByID } from "api/user";
 
 require("../../../../App.css");
 
@@ -62,10 +62,6 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-//const imagesPool: string[] = [sofa1];
-
-const date = new Date();
-
 const emptyItem: Item = {
   _id: "",
   name: "",
@@ -82,10 +78,14 @@ const emptyItem: Item = {
   status: "",
   notes: "",
   photos: [""],
+  notes: "",
 };
 
-const emptyUser: User = {
+const emptyUser = {
   id: "",
+  firstName: "",
+  lastName: "",
+  email: "",
   phone: "",
 };
 
@@ -105,18 +105,16 @@ const getTime = (time: string) =>
 
 const getDay = (time: string) =>
   time ? moment(time).utc().format("dddd, MMMM Do YYYY") : "N/A";
-const getDayShort = (time: string) =>
-  time ? moment(time).format("dddd, MMMM Do YYYY") : "N/A";
 
 function DonationInfoPage() {
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
-  const [donor, setDonor] = useState<User>(emptyUser);
+  const [donor, setDonor] = useState<any>(emptyUser);
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
   const [notes, setNotes] = useState<string>("");
   const params = useParams();
-  const slug = (params).slug;
+  const slug = params.slug;
   const id = slug ? slug[0] : "";
 
   const router = useRouter();
@@ -130,12 +128,12 @@ function DonationInfoPage() {
       // sendUpdatedItemToDB(storedStatus, false, item.notes || "");
       sendUpdatedItemToDB(status, false);
       await router.back();
-      router.refresh(); // Reload page after navigating back to fetch changes
+      router.refresh();
     } else if (e.currentTarget.value === "reject") {
       updateItem({ ...item, status: storedStatus, notes });
       await sendUpdatedItemToDB("Rejected", false);
-      await router.back();  
-      router.refresh(); // Reload page after navigating back to fetch changes
+      await router.back();
+      router.refresh();
     } else if (e.currentTarget.value === "approve") {
       updateItem({ ...item, status: storedStatus, notes });
       if (
@@ -145,9 +143,9 @@ function DonationInfoPage() {
         (await sendUpdatedItemToDB("Approved and Scheduled", true))
       ) {
         console.log("Success submitting events!");
-        clearTimeSlots(); // Clear time slots from redux
+        clearTimeSlots();
         await router.push(nextPath);
-        router.refresh(); // Reload page after navigating back to fetch changes
+        router.refresh();
       }
     }
   };
@@ -157,19 +155,12 @@ function DonationInfoPage() {
       title: `${item.name} ${item.scheduling}`,
       startTime: new Date(timeSlot.eventStart),
       endTime: new Date(timeSlot.eventEnd),
-      volunteerId: "dd9b6616-6353-438a-8bb8-a0b022c32b5e", // TODO add correct volunteer id
-      itemId: item._id === undefined ? "" : item._id,
+      volunteerId: "dd9b6616-6353-438a-8bb8-a0b022c32b5e", // TODO: Replace with actual volunteerId
+      itemId: item._id || "",
     };
-    console.log(event);
-    const response = addEvent(event);
-    if (!response) {
-      // "There was an error saving the events. Please try again later."
-      // TODO: add error message to user
-    }
-    return response;
+    return addEvent(event);
   };
 
-  // Update item status in DB TODO: add other statuses
   const sendUpdatedItemToDB = async (status: string, newApproval: boolean) => {
     let updatedItem: Item = {
       ...item,
@@ -177,22 +168,12 @@ function DonationInfoPage() {
       notes: notes,
     };
     if (newApproval) {
-      updatedItem = {
-        ...updatedItem,
-        timeApproved: new Date(),
-      };
+      updatedItem.timeApproved = new Date();
     } else {
-      updatedItem = {
-        ...updatedItem,
-        timeApproved: undefined,
-      };
+      updatedItem.timeApproved = undefined;
     }
-    const response = await updateItem(updatedItem);
-    if (!response) {
-      // "There was an error updating the item. Please try again later."
-      // TODO: add error message to user
-    }
-    return response;
+
+    return await updateItem(updatedItem);
   };
 
   useEffect(() => {
@@ -211,16 +192,23 @@ function DonationInfoPage() {
         : setItem(emptyItem);
   }, [id]);
 
-  // Fetch and set donor and available times on item change
   useEffect(() => {
     if (item.donorId !== "") {
-      const fetchedDonor = getUserByID(item.donorId)
-        .then((donor) => setDonor(donor))
-        .catch((err) => {
-          console.log(err);
-          setDonor(emptyUser);
-        });
+      const getDonor = async () => {
+        await getClerkUser(item.donorId)
+          .then(async (clerkUser) => {
+            await getUserByID(item.donorId).then((user) => {
+              setDonor({ ...clerkUser, phone: user.phone });
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            setDonor(emptyUser);
+          });
+      };
+      getDonor();
     }
+
     if (item.timeAvailability) {
       const newAvailableTimes: TimeSlot[] = item.timeAvailability.map(
         (event) => ({
@@ -228,7 +216,7 @@ function DonationInfoPage() {
           eventStart: event.start,
           eventEnd: event.end,
           timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
-          dayString: `${getDay(event.start)}`,
+          dayString: getDay(event.start),
           volunteer: "",
         }),
       );
@@ -236,7 +224,7 @@ function DonationInfoPage() {
     }
   }, [item]);
 
-  const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 

@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 const Event = require('../models/eventSchema.js');
 const Item = require('../models/itemSchema.js');
 const User = require('../models/userSchema.js');
+const { clerkClient } = require("@clerk/express");
 
 
 //get all events
@@ -63,6 +64,7 @@ router.post('/', async (req, res) => { //TODO add error handling
   const { title, startTime, endTime, itemId } = req.body;
   const item = await Item.findOne({ _id: itemId })
   const donor = await User.findOne({ id: item.donorId })
+  const clerkUser = await clerkClient.users.getUser(item.donorId);
 
   let newEvent = new Event({
     "title": title,
@@ -72,8 +74,8 @@ router.post('/', async (req, res) => { //TODO add error handling
     "address": item.address,
     "city": item.city,
     "zipCode": item.zipCode,
-    "donorFirstName": donor.firstName,
-    "donorLastName": donor.lastName,
+    "donorFirstName": clerkUser.firstName,
+    "donorLastName": clerkUser.lastName,
     "itemName": item.name,
     "phone": donor.phone,
   });
