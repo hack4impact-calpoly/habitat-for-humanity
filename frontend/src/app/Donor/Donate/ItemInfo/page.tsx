@@ -85,7 +85,6 @@ const SubHeader = styled.h1`
     margin-top: 0em;
   }
 `;
-
 const InputContainer = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -100,16 +99,6 @@ const UploadContainer = styled.div`
   flex-flow: column nowrap;
   width: 100%;
 `;
-const StyledButton = styled.button`
-  margin-top: 2em;
-  margin-bottom: 2em;
-  background-color: var(--button-blue);
-  width: 20%;
-  height: 3em;
-  border: 1px solid var(--button-blue);
-  font-size: 20px;
-  color: var(--white);
-`;
 
 function Donation(): React.ReactNode {
   const storedDesc = useSelector((state: RootState) => state.donation.name);
@@ -118,12 +107,9 @@ function Donation(): React.ReactNode {
   );
   const storedPhotos = useSelector((state: RootState) => state.donation.photos);
   const [items, setItems] = useState([{ description: "", dimensions: "" }]);
-  //const [itemDescription, setItemDescription] = useState<string[]>([]);
-  //const [itemDimensions, setItemDimensions] = useState<string[]>([]);
   const [photos, setPhotos] = useState(storedPhotos);
-  const [descError, setDescError] = useState("");
-  const [dimError, setDimError] = useState("");
-  //const [labels, setLabels] = useState<string[]>([""]);
+  const [descError, setDescError] = useState([""]);
+  const [dimError, setDimError] = useState([""]);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -136,6 +122,10 @@ function Donation(): React.ReactNode {
           dimensions: storedDims[index] || "",
         }),
       );
+      const descErrors = Array(storedDesc.length).fill("");
+      const dimErrors = Array(storedDesc.length).fill("");
+      setDescError(descErrors);
+      setDimError(dimErrors);
       setItems(autofilledItems);
     }
   }, [storedDesc, storedDims]);
@@ -153,16 +143,18 @@ function Donation(): React.ReactNode {
 
   const validInput = () => {
     let valid = true;
-    setDescError("");
-    setDimError("");
 
     for (let i = 0; i < items.length; i++) {
       if (!items[i].description.match(/\S/)) {
-        setDescError("Please enter an item description");
+        const newDescError = [...descError];
+        newDescError[i] = "Please enter item description";
+        setDescError(newDescError);
         valid = false;
       }
       if (!items[i].dimensions.match(/\S/)) {
-        setDimError("Please enter item dimensions");
+        const newDimError = [...dimError];
+        newDimError[i] = "Please enter item dimensions";
+        setDimError(newDimError);
         valid = false;
       }
     }
@@ -185,13 +177,21 @@ function Donation(): React.ReactNode {
 
   const handleAddItem = () => {
     setItems([...items, { description: "", dimensions: "" }]);
+    setDescError([...descError, ""]);
+    setDimError([...dimError, ""]);
   };
 
   const handleRemoveItem = (index: number) => {
     if (items.length > 1) {
       const newItems = [...items];
+      const newDescError = [...descError];
+      const newDimError = [...dimError];
       newItems.splice(index, 1);
+      newDescError.splice(index, 1);
+      newDimError.splice(index, 1);
       setItems(newItems);
+      setDescError(newDescError);
+      setDimError(newDimError);
     }
   };
 
@@ -229,10 +229,10 @@ function Donation(): React.ReactNode {
               <StyledInput
                 type="text"
                 id={`item-description-${index}`}
-                value={items[index].description}
+                value={item.description}
                 onChange={(event) => handleDescriptionChange(event, index)}
               />
-              <div className="inputError">{descError}</div>
+              <div className="inputError">{descError[index]}</div>
             </InputContainer>
             <InputContainer>
               <StyledLabel htmlFor={`item-dimension-${index}`}>
@@ -241,10 +241,10 @@ function Donation(): React.ReactNode {
               <StyledInput
                 type="text"
                 id={`item-dimension-${index}`}
-                value={items[index].dimensions}
+                value={item.dimensions}
                 onChange={(event) => handleDimensionChange(event, index)}
               />
-              <div className="inputError">{dimError}</div>
+              <div className="inputError">{dimError[index]}</div>
             </InputContainer>
             <div className="removeButtonContainer">
               <IconButton
