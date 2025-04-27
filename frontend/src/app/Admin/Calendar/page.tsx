@@ -100,7 +100,7 @@ const modalTitleText = {
   marginBottom: "5px",
 };
 
-const viewDonnationButton = {
+const viewDonationButton = {
   width: "112px",
   height: "30px",
   background: "#314D89",
@@ -185,6 +185,8 @@ function AdminCalendar() {
       return eventStart >= start && eventStart < end;
     });
 
+    console.log(filteredEvents);
+
     const headers = [
       "Donor First Name",
       "Donor Last Name",
@@ -215,7 +217,7 @@ function AdminCalendar() {
 
     const csvContent = csvRows.join("\n");
 
-    const formattedStartDate = start.toISOString().split("T")[0]; 
+    const formattedStartDate = start.toISOString().split("T")[0];
     downloadCSV(csvContent, `donations-week-${formattedStartDate}.csv`);
   };
 
@@ -232,15 +234,15 @@ function AdminCalendar() {
   };
 
   return (
-    <>
+    <div>
       {open && (
         <Modal open={open} onClose={closeModalComponent}>
           <Box sx={style}>
             <Typography style={modalAddressStyle}>
               {clickedEvent!.event.extendedProps.address}
             </Typography>
-            <Typography>
-              <p style={modalDefaultText}>
+            <Typography component="div">
+              <div style={modalDefaultText}>
                 {new Date(clickedEvent!.event.start!).toLocaleDateString(
                   "en-US",
                   {
@@ -269,7 +271,7 @@ function AdminCalendar() {
                     {clickedEvent!.event.extendedProps.volunteerLastName}
                   </span>
                 </p>
-              </p>
+              </div>
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
                 <span style={modalTitleText}>Donor </span>
                 <span style={modalDefaultText}>
@@ -294,7 +296,7 @@ function AdminCalendar() {
                 {/* prettier-ignore */}
                 <button
                   type="button"
-                  style={viewDonnationButton}
+                  style={viewDonationButton}
                   onClick={() => {
                     router.push(
                       `/Admin/DonationInfo/${clickedEvent!.event.extendedProps.itemId}/`,
@@ -309,7 +311,6 @@ function AdminCalendar() {
           </Box>
         </Modal>
       )}
-      ;
       <AdminNavbar />
       <div id="smallCalendar">
         {/* im not sure if i would need to pass props in the future
@@ -324,7 +325,7 @@ function AdminCalendar() {
             slotLabelInterval="1:00"
             slotMinTime="08:00:00"
             allDaySlot={false}
-            slotMaxTime="18:00:00"
+            slotMaxTime="17:00:00"
             slotDuration="01:00:00"
             eventContent={customEvent}
             eventClick={renderModalComponent}
@@ -350,15 +351,17 @@ function AdminCalendar() {
             }}
             events={[...calendarEvents]}
             slotEventOverlap={false}
+            height="auto"
+            contentHeight="auto"
           />
-          <div style={{ marginTop: "20px", textAlign: "center" }}>
-            <button onClick={handleExportCSV} style={viewDonnationButton}>
+          <div className="csvButton">
+            <button onClick={handleExportCSV} className="exportButton">
               Export Week as CSV
             </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 //  controls how the inside of an event cell looks
