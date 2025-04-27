@@ -55,28 +55,29 @@ export const getEventsByTitle = async (title: string) =>
       return result;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
-/*
-// Get ALL events with matching "startDate"
-export const getEventsByStartDate = (startDate : string) => {
-    fetch(eventURL + "location/" +startDate, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(async (res) => {
-        if(!res.ok){ // check server response
-            throw new Error(res.status + "-" + res.statusText)
-        }
-        return await res.text()
-    })
-    .then(events => {
-        console.log(events);
-        return events;
-    })
-    .catch(error => console.error("Error: ", error)) // handle error
-}
 
+// Get ALL events with matching "startDate"
+export const getEventsByStartDate = (startDate: string) => {
+  fetch(eventURL + "location/" + startDate, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        // check server response
+        throw new Error(res.status + "-" + res.statusText);
+      }
+      return await res.text();
+    })
+    .then((events) => {
+      console.log(events);
+      return events;
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error
+};
+/*
 // Get ALL events with matching "endDate"
 export const getEventsByEndDate = (endDate : string) => {
     fetch(eventURL + endDate, {
@@ -149,5 +150,6 @@ export const addEvent = async (event: Event) =>
       }
       const result = await res.json();
       console.log(result);
+      return res;
     })
     .catch((error) => console.error("Error: ", error)); // handle error

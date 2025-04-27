@@ -82,7 +82,10 @@ export default function ActiveDonationPage(): React.ReactNode {
             </TableHead>
             <TableBody>
               {items
-                ?.sort((a, b) => sortReceivedTime(a, b))
+                ?.filter((item) =>
+                  item.status === "Approved and Scheduled" || item.status === "Send Receipt"
+                )
+                .sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
                   // TODO: wrap parent link to new page

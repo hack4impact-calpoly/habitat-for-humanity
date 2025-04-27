@@ -1,17 +1,15 @@
 "use client";
 import "moment-timezone";
-// import "@fullcalendar/react/dist/vdom";
-
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { Event, updatePickupTimes } from "../../../redux/donationSlice";
 
-import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import FullCalendar, { DateSelectArg } from "@fullcalendar/react";
+import { DateSelectArg } from "@fullcalendar/core";
+import FullCalendar from "@fullcalendar/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import Checkbox from "@mui/material/Checkbox";
@@ -45,23 +43,48 @@ const monthNames = [
   "December",
 ];
 
-// returns hour intervals for calendarEdit given an ISO 8601 string
-const getHourIntervals = (curDay: string): { start: string; end: string }[] => {
-  const startDate = moment(curDay).tz("UTC").startOf("day").add(18, "hours");
-  const fourPM = moment(startDate).add(-18, "hours").toISOString();
-  const threePM = moment(startDate).add(5, "hours").toISOString();
-  const intervals: { start: string; end: string }[] = [];
-  for (let i = 0; i < 5; i++) {
-    const start = moment(startDate).add(i, "hours").toISOString();
-    const end = moment(startDate)
-      .add(i + 1, "hours")
-      .toISOString();
-    intervals.push({ start, end });
+const firstValidDate = (date: Date): Date => {
+  let copyDate = new Date(date);
+  while (copyDate.getDay() !== 3 && copyDate.getDay() !== 4) {
+    copyDate.setDate(copyDate.getDate() + 1);
   }
+  return copyDate;
+};
 
-  intervals.push({ start: threePM, end: fourPM });
+// returns the four fixed intervals for calendarEdit given an ISO 8601 string
+const getHourIntervals = (curDay: string): { start: string; end: string }[] => {
+  const localDate = moment(curDay).local().startOf("day");
 
-  return intervals;
+  return [
+    {
+      start: localDate.clone().hour(9).minute(0).second(0).utc().toISOString(),
+      end: localDate.clone().hour(10).minute(30).second(0).utc().toISOString(),
+    },
+    {
+      start: localDate
+        .clone()
+        .hour(10)
+        .minute(30)
+        .second(0)
+        .utc()
+        .toISOString(),
+      end: localDate.clone().hour(12).minute(0).second(0).utc().toISOString(),
+    },
+    {
+      start: localDate.clone().hour(13).minute(0).second(0).utc().toISOString(),
+      end: localDate.clone().hour(14).minute(30).second(0).utc().toISOString(),
+    },
+    {
+      start: localDate
+        .clone()
+        .hour(14)
+        .minute(30)
+        .second(0)
+        .utc()
+        .toISOString(),
+      end: localDate.clone().hour(16).minute(0).second(0).utc().toISOString(),
+    },
+  ];
 };
 
 function DonatorSchedulePickUp(): React.ReactNode {
@@ -70,9 +93,9 @@ function DonatorSchedulePickUp(): React.ReactNode {
     (state: RootState) => state.donation.pickupTimes,
   );
   const [header, setHeader] = useState<string>(
-    `${monthNames[today.getMonth()]}, ${weekdays[today.getDay()]} ${String(
-      today.getDate(),
-    )}`,
+    `${monthNames[firstValidDate(today).getMonth()]}, ${
+      weekdays[firstValidDate(today).getDay()]
+    } ${firstValidDate(today).getDate()}`,
   );
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState<Event[]>(storedEvents);
@@ -82,16 +105,16 @@ function DonatorSchedulePickUp(): React.ReactNode {
   const [pickupError, setPickupError] = useState<string>("");
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const onClickCalendar = (info: DateSelectArg): void => {
-    const startDate = info?.start;
+    const startDate = info.start;
     setSelectedDate(startDate);
     setHeader(
       `${monthNames[startDate.getMonth()]}, ${
         weekdays[startDate.getDay()]
-      } ${String(startDate.getDate())}`,
+      } ${startDate.getDate()}`,
     );
-    // Re render checked boxes
     setTimes(getHourIntervals(startDate.toISOString()));
   };
 
@@ -102,58 +125,42 @@ function DonatorSchedulePickUp(): React.ReactNode {
   const validInput = () => {
     let valid = true;
     setPickupError("");
-
-    if (events.length === 0) {
-      setPickupError("Please select at least one pickup time");
+    if (events.length < 2) {
+      setPickupError("Please select at least two pickup times");
       valid = false;
     }
     return valid;
   };
 
-  const router = useRouter();
-
   const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    const backPath: string = "/Donor/Donate/Location";
-    const nextPath: string = "/Donor/Donate/Review";
-
     if (e.currentTarget.value === "backButton") {
-      router.push(backPath);
+      router.push("/Donor/Donate/Location");
     } else if (e.currentTarget.value === "nextButton") {
       if (validInput()) {
         updateStore();
-        router.push(nextPath);
+        router.push("/Donor/Donate/Review");
       }
     }
   };
 
   const addEvent = (start: string, end: string) => {
-    const date: string = selectedDate.toISOString().split("T")[0];
-    const startTime: string = `${date}T${start.split("T")[1]}`;
-    const endTime: string = `${date}T${end.split("T")[1]}`;
-    // only add if events doesn't already contain the time
-    if (
-      events.filter((e) => e.start === startTime && e.end === endTime)
-        .length === 0
-    ) {
-      setEvents([
-        ...events,
-        {
-          start: startTime,
-          end: endTime,
-        },
-      ]);
+    const date = selectedDate.toISOString().split("T")[0];
+    const startTime = `${date}T${start.split("T")[1]}`;
+    const endTime = `${date}T${end.split("T")[1]}`;
+    if (!events.find((e) => e.start === startTime && e.end === endTime)) {
+      setEvents([...events, { start: startTime, end: endTime }]);
     }
   };
 
-  // removes all events from events with given start and end
   const removeEvent = (start: string, end: string) => {
-    const date: string = selectedDate.toISOString().split("T")[0];
-    const startTime: string = `${date}T${start.split("T")[1]}`;
-    const endTime: string = `${date}T${end.split("T")[1]}`;
-    setEvents(events.filter((e) => e.start !== startTime && e.end !== endTime));
+    const date = selectedDate.toISOString().split("T")[0];
+    const startTime = `${date}T${start.split("T")[1]}`;
+    const endTime = `${date}T${end.split("T")[1]}`;
+    setEvents(
+      events.filter((e) => !(e.start === startTime && e.end === endTime)),
+    );
   };
 
-  // evaluates event's presence in a list of events.
   const evaluateEventPresence = (startTime: string, endTime: string): boolean =>
     events.some((event) => event.start === startTime && event.end === endTime);
 
@@ -166,32 +173,40 @@ function DonatorSchedulePickUp(): React.ReactNode {
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             events={events}
-            slotMinTime="10:00:00"
-            slotMaxTime="18:00:00"
             selectable
+            selectConstraint={{ daysOfWeek: [3, 4] }}
             unselectAuto={false}
             longPressDelay={1}
             select={onClickCalendar}
             validRange={(now) => {
-              const copyNow = new Date();
-              const endDate = new Date(copyNow.setMonth(now.getMonth() + 1));
-              return {
-                start: now,
-                end: endDate,
-              };
+              const startDate = firstValidDate(new Date());
+              const endDate = new Date();
+              endDate.setMonth(endDate.getMonth() + 1);
+              return { start: startDate, end: endDate };
             }}
+            businessHours={{ daysOfWeek: [3, 4] }}
             windowResizeDelay={0}
           />
           <div className="inputError">{pickupError}</div>
         </div>
+
         <div id="calendarEdit">
           <h1 id="donatorPickupHeader">{header}</h1>
+          <h2 className="font-bold">
+            For donation pickups located in{" "}
+            <span className="underline">North County,</span> please select times
+            on <span className="underline">Wednesday.</span>
+            <br />
+            For donation pickups located in{" "}
+            <span className="underline">South County,</span> please select times
+            on <span className="underline">Thursday.</span>
+          </h2>
           <p id="donatorPickupDesc">
             Please select multiple dates and times you are available, and our
             staff will choose from your availability.
           </p>
           <div id="donatorPickupEvents">
-            {times.map((availEvent) => {
+            {times.map((availEvent, idx) => {
               const startTime = moment
                 .utc(availEvent.start)
                 .local()
@@ -203,7 +218,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
                 .format("hh:mm A")
                 .replace(/^(?:00:)?0?/, "");
               return (
-                <div className="donatorPickUpTime">
+                <div className="donatorPickUpTime" key={idx}>
                   <Checkbox
                     icon={<RadioButtonUncheckedIcon />}
                     checkedIcon={<CheckCircleIcon />}
@@ -224,6 +239,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
           </div>
         </div>
       </div>
+
       <div id="donPickupButtons">
         <button
           type="button"

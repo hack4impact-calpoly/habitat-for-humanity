@@ -12,6 +12,7 @@ export interface DonationState {
   dropoff: boolean;
   pickupTimes: Event[];
   donorID: string;
+  notes: string;
 }
 
 export interface Event {
@@ -30,6 +31,8 @@ const initialState: DonationState = {
   zipCode: 0,
   dropoff: true,
   pickupTimes: [],
+  donorID: "",
+  notes: "",
 };
 
 // state.donation.name
@@ -67,6 +70,12 @@ export const donationSlice = createSlice({
     updatePickupTimes: (state, action) => {
       state.pickupTimes = action.payload;
     },
+    updateDonorID: (state, action) => {
+      state.donorID = action.payload;
+    },
+    updateNotes: (state, action) => {
+      state.notes = action.payload;
+    },
     clearAll: () => {
       storage.removeItem("persist:donation");
       return initialState;
@@ -84,6 +93,7 @@ export const {
   updateDropoff,
   updatePickupTimes,
   updateDonorID,
+  updateNotes,
   clearAll,
 } = donationSlice.actions;
 

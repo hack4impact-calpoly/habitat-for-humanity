@@ -118,7 +118,7 @@ export interface Item {
   timeSubmitted: Date;
   timeApproved?: Date;
   status: string; // approved or needs approval
-  // notes: string
+  notes?: string;
   // timeAccepted: Date
 }
 
@@ -178,16 +178,16 @@ export const updateItem = async (item: Item) =>
       timeApproved: item.timeApproved,
       status: item.status,
       donorId: item.donorId,
+      notes: item.notes,
     }),
   })
     .then(async (res) => {
       const response = await res.json();
       console.log(res.ok);
       if (!res.ok) {
+        console.error("Error updating item:", res.status, res.statusText);
         // check server response
         return false;
-        console.log(response);
-        // throw new Error(res.status + "-" + res.statusText)
       }
       return true;
     })
