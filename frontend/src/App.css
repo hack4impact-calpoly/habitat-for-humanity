@@ -3103,3 +3103,27 @@ input[type="radio"] {
     font-size: 10px;
   }
 }
+
+.removeButtonContainer {
+  padding-top: 40px;
+}
+
+@media only screen and (max-width: 640px) {
+  .removeButtonContainer {
+    padding: 0px;
+  }
+}
+
+.removeButton {
+  width: 48px;
+  height: 48px;
+}
+
+.crossIcon {
+  color: var(--red);
+}
+
+.itemInputContainer {
+  border-bottom: 1px solid #000;
+  margin-bottom: 10px;
+}

@@ -65,8 +65,8 @@ TabPanel.propTypes = {
 
 const emptyItem: Item = {
   _id: "",
-  name: "",
-  size: "",
+  name: [""],
+  size: [""],
   address: "",
   city: "",
   state: "",
