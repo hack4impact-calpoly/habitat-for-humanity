@@ -107,7 +107,7 @@ function CreateAccountPage(): React.ReactNode {
         Return: boolean (true if valid, false if not)
         */
     // setErrorMessages({...errorMessagesInitial});
-    if (firstName.match("\\s+")) {
+    if (!firstName || firstName.match("\\s+")) {
       setNameError("Please enter your first name");
       return false;
     }
@@ -121,7 +121,7 @@ function CreateAccountPage(): React.ReactNode {
         Return: boolean (true if valid, false if not)
         */
     // setErrorMessages({...errorMessagesInitial});
-    if (lastName.match("\\s+")) {
+    if (!lastName || lastName.match("\\s+")) {
       setNameError("Please enter your last name");
       return false;
     }
@@ -194,7 +194,7 @@ function CreateAccountPage(): React.ReactNode {
         );
         return false;
       }
-      setPhoneNumber(processedString);
+      setPhoneNumber("+" + processedString);
     } catch (error) {
       console.error(error);
       setPhoneNumberError(
@@ -229,6 +229,13 @@ function CreateAccountPage(): React.ReactNode {
 
         setVerifying(true);
       } catch (err: any) {
+        if (err.errors?.some((e: any) => e.code === 'form_identifier_exists')) {
+          setEmailError('Email is taken, please try another.')
+        } else if (err.errors?.some((e: any) => e.code === 'form_password_length_too_short')) {
+          setEmailError('Password must be at least 8 characters or more.');
+        } else if (err.errors?.som((e: any) => e.code === 'form_password_pwned')) {
+          setPasswordError('Password has been found in an online data breach. For account safety, please use a different password.')
+        }
         console.error(JSON.stringify(err, null, 2));
       }
     }
@@ -248,7 +255,7 @@ function CreateAccountPage(): React.ReactNode {
       if (signUpAttempt.status === "complete") {
         await updateMetadata(userType, signUpAttempt.createdUserId);
         await setActive({ session: signUpAttempt.createdSessionId });
-
+        
         if (signUpAttempt.createdUserId != null) {
           const userData = {
             id: signUpAttempt.createdUserId,
@@ -260,6 +267,7 @@ function CreateAccountPage(): React.ReactNode {
         } else {
           console.error("Error userId not created.");
         }
+        router.push("/");
       } else {
         // If the status is not complete, check why. User may need to
         // complete further steps.
@@ -302,6 +310,7 @@ function CreateAccountPage(): React.ReactNode {
           <input
             value={code}
             className="inputBox"
+            id="code"
             name="code"
             onChange={(e) => setCode(e.target.value)}
           />
@@ -309,7 +318,7 @@ function CreateAccountPage(): React.ReactNode {
             Verify
           </button>
         </form>
-      </div>
+        </div>
     );
   }
 
