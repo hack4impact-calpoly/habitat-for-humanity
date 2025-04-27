@@ -124,7 +124,6 @@ export interface Event {
   title: string;
   startTime: Date;
   endTime: Date;
-  volunteerId: string;
   itemId: string;
 }
 
@@ -139,7 +138,6 @@ export const addEvent = async (event: Event) =>
       title: event.title,
       startTime: event.startTime,
       endTime: event.endTime,
-      volunteerId: event.volunteerId,
       itemId: event.itemId,
     }),
   })
