@@ -54,16 +54,19 @@ export const addImages = async (images: File[]): Promise<String[]> => {
 
   try {
     const results = await Promise.all(promises);
-    let imageNames: String[] = [];
-    results.forEach(async (res) => {
-      if (!res.ok) {
-        console.error(`Error: ${res.status} ${res.statusText}`);
-        throw new Error(`Error: ${res.status} ${res.statusText}`);
-      } else {
-        const body = await res.json();
-        imageNames.push(body.name);
-      }
-    });
+    const imageNames : String[] = await Promise.all(
+      results.map(async (res) => {
+        if (!res.ok) {
+          console.error(`Error: ${res.status} ${res.statusText}`);
+          throw new Error(`Error: ${res.status} ${res.statusText}`);
+        } else {
+          const body = await res.json();
+          console.log(body);
+          return body.name
+        }
+      })
+    );
+    
     console.log("(addImages) Images uploaded successfully");
     return imageNames;
   } catch (error) {

@@ -1,18 +1,18 @@
+// app/Donor/Donate/ItemInfo/page.tsx
+
 "use client";
 
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateDimensions,
-  updateName,
-  updatePhotos,
-} from "../../../../redux/donationSlice";
+import { updateDimensions, updateName } from "../../../../redux/donationSlice";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { RootState } from "../../../../redux/store";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import Dropzone from "components/donor/donation/Dropzone";
 import ProgressBar from "components/donor/donation/ProgressBar";
+// FileStore is under frontend/utils/FileStore.ts
+import { setFiles, clearFiles } from "../../../../../utils/FileStore";
 
 const ContentContainer = styled.div`
   margin-left: 20%;
@@ -35,7 +35,7 @@ const DonationHeader = styled.h1`
   @media only screen and (max-width: 640px) {
     margin-top: 1em;
     font-size: 24px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 `;
 
@@ -56,108 +56,90 @@ const InputSectionContainer = styled.div`
   justify-content: center;
 
   @media only screen and (max-width: 640px) {
-    gap: 0px;
+    gap: 0;
     justify-content: flex-start;
     flex-wrap: wrap;
   }
 `;
+
 const StyledInput = styled.input`
   width: 100%;
   height: 45px;
   border: 1px solid var(--input-box);
 `;
+
 const SubHeader = styled.h1`
   font-size: 20px;
   margin-top: 1em;
   @media only screen and (max-width: 640px) {
-    margin-bottom: 0em;
-    margin-top: 0em;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 `;
 
 const InputContainer = styled.div`
   display: flex;
-  flex-flow: column nowrap;
+  flex-direction: column;
   width: 50%;
   margin-bottom: 1em;
+
   @media only screen and (max-width: 640px) {
     width: 100%;
   }
 `;
+
 const UploadContainer = styled.div`
   display: flex;
-  flex-flow: column nowrap;
+  flex-direction: column;
   width: 100%;
 `;
-const StyledButton = styled.button`
-  margin-top: 2em;
-  margin-bottom: 2em;
-  background-color: var(--button-blue);
-  width: 20%;
-  height: 3em;
-  border: 1px solid var(--button-blue);
-  font-size: 20px;
-  color: var(--white);
+
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 2em 0;
 `;
 
-function Donation(): React.ReactNode {
-  const storedDesc = useSelector((state: RootState) => state.donation.name);
-  const storedDims = useSelector(
-    (state: RootState) => state.donation.dimensions,
-  );
-  const storedPhotos = useSelector((state: RootState) => state.donation.photos);
-  const [itemDescription, setItemDescription] = useState(storedDesc);
-  const [itemDimensions, setItemDimensions] = useState(storedDims);
-  const [photos, setPhotos] = useState(storedPhotos);
-  const [descError, setDescError] = useState("");
-  const [dimError, setDimError] = useState("");
-
-  const router = useRouter();
+export default function ItemInfoPage() {
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  const buttonNavigation = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    const nextPath: string = "/Donor/Donate/Location";
+  const storedDesc = useSelector((state: RootState) => state.donation.name);
+  const storedDims = useSelector((state: RootState) => state.donation.dimensions);
 
-    if (e.currentTarget.value === "nextButton") {
-      if (validInput()) {
-        updateStore();
-        router.push(nextPath);
-      }
-    }
-  };
+  const [itemDescription, setItemDescription] = useState<string>(storedDesc);
+  const [itemDimensions, setItemDimensions] = useState<string>(storedDims);
+  const [descError, setDescError] = useState<string>("");
+  const [dimError, setDimError] = useState<string>("");
 
-  const backButtonNavigation = (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): void => {
-    const nextPath: string = "/Donor/Donate/Disclosure";
-    router.push(nextPath);
-  };
-
-  const validInput = () => {
-    let valid = true;
+  const validInput = (): boolean => {
+    let ok = true;
     setDescError("");
     setDimError("");
-    if (!itemDescription?.match(/\S/)) {
+
+    if (!itemDescription.trim()) {
       setDescError("Please enter an item description");
-      valid = false;
+      ok = false;
     }
-    if (!itemDimensions?.match(/\S/)) {
+    if (!itemDimensions.trim()) {
       setDimError("Please enter item dimensions");
-      valid = false;
+      ok = false;
     }
-    return valid;
+    return ok;
   };
 
-  const updateStore = () => {
+  const updateStore = (): void => {
     dispatch(updateName(itemDescription));
     dispatch(updateDimensions(itemDimensions));
-    console.log(photos);
-    dispatch(updatePhotos(photos));
   };
 
-  const dropzoneProps = {
-    photos,
-    setPhotos,
+  const handleClick = (action: "back" | "next"): void => {
+    if (action === "back") {
+      router.push("/Donor/Donate/Disclosure");
+    } else if (action === "next" && validInput()) {
+      updateStore();
+      router.push("/Donor/Donate/Location");
+    }
   };
 
   return (
@@ -166,65 +148,46 @@ function Donation(): React.ReactNode {
       <ContentContainer>
         <DonationHeader>Make a donation</DonationHeader>
         <ProgressBar activeStep={1} />
+
         <ItemHeader>Item Information</ItemHeader>
+
         <InputSectionContainer>
           <InputContainer>
             <SubHeader>Item Description/Name</SubHeader>
             <StyledInput
               type="text"
               value={itemDescription}
-              onChange={(event) => {
-                setItemDescription(event.target.value);
-              }}
+              onChange={(e) => setItemDescription(e.target.value)}
             />
             <div className="inputError">{descError}</div>
           </InputContainer>
+
           <InputContainer>
             <SubHeader>Item Dimensions</SubHeader>
             <StyledInput
               type="text"
               value={itemDimensions}
-              onChange={(event) => {
-                setItemDimensions(event.target.value);
-              }}
+              onChange={(e) => setItemDimensions(e.target.value)}
             />
             <div className="inputError">{dimError}</div>
           </InputContainer>
         </InputSectionContainer>
+
         <UploadContainer>
           <SubHeader>Item Photos</SubHeader>
-          <Dropzone {...dropzoneProps} />
+          <Dropzone setFiles={setFiles} clearFiles={clearFiles} />
         </UploadContainer>
-        <div
-          id="donPickupButtons"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: "30px",
-            marginTop: "30px",
-          }}
-        >
-          <button
-            type="button"
-            value="backButton"
-            className="donPickupButton backButton"
-            onClick={backButtonNavigation}
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            value="nextButton"
-            className="donPickupButton nextButton"
-            onClick={buttonNavigation}
-          >
-            Next
-          </button>
-        </div>
+
+        <ButtonRow>
+          <button onClick={() => handleClick("back")}>Back</button>
+          <button onClick={() => handleClick("next")}>Next</button>
+        </ButtonRow>
       </ContentContainer>
     </>
   );
 }
 
-export default Donation;
+
+
+
+

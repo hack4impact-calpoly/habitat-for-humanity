@@ -106,7 +106,7 @@ export interface Item {
   name: string;
   // images: [mongoose.Schema.ObjectId]
   size: string;
-  images: string[];
+  images: String[];
   address: string;
   city: string;
   state: string;
