@@ -144,11 +144,12 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
           Item Information
         </h2>
         <p id="itemName">
-          <b>Item Name:</b> {item.name}
+          <b>Item Name:</b>{" "}
+          {item.name.join(", ")}
         </p>
         <p id="itemDimensions">
           <b>Item Dimensions: </b>
-          {item.size}
+          {item.size.join(", ")}
         </p>
         <p id="itemPhotos">
           <b>Item Photos</b>

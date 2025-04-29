@@ -37,11 +37,11 @@ function DonationHistory(): React.ReactNode {
   const [items, setItems] = useState<Item[]>([]);
 
   const router = useRouter();
-  
+
   useEffect(() => {
     if (userId) {
       getItemsByDonorID(userId).then((res) => setItems(res));
-    }  
+    }
   }, [userId]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -69,9 +69,20 @@ function DonationHistory(): React.ReactNode {
       <DonorNavbar />
       <div id="DonHistoryPage">
         <h1 id="DonHistoryHeader">Donation History</h1>
-        <TableContainer>
-          <Table>
-            <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableContainer
+          sx={{
+            width: "100%",
+            maxWidth: "100vw",
+            padding: 0,
+          }}
+        >
+          <Table
+            sx={{
+              minWidth: 100,
+              borderCollapse: "collapse",
+            }}
+          >
+            <TableHead aria-label="donation history table">
               <TableRow>
                 {header.map((h, index) => (
                   <TableCell key={index}>
@@ -85,29 +96,28 @@ function DonationHistory(): React.ReactNode {
                 ?.sort((a, b) => sortReceivedTime(a, b))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d, index) => (
-                  // TODO: wrap parent link to new page
                   <TableRow
                     key={index}
-                    // to={`DonationInfo/${d._id}`}
                     onClick={() => {
                       router.push(`/Donor/History/DonationInfo/${d._id}/`);
                     }}
-                    style={{ textDecoration: "none" }}
                     className="tableRow"
                   >
-                    <TableCell scope="row">{d.name}</TableCell>
+                    <TableCell scope="row">{d.name.join(", ")}</TableCell>
                     <TableCell>{d.scheduling}</TableCell>
                     <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
                     <TableCell>{convertTime(d.timeApproved)}</TableCell>
-                    {d.status === "Approved and Scheduled" ? (
-                      <TableCell>
-                        <p className="approved">{d.status}</p>
-                      </TableCell>
-                    ) : (
-                      <TableCell>
-                        <p className="needApproval">{d.status}</p>
-                      </TableCell>
-                    )}
+                    <TableCell>
+                      <p
+                        className={
+                          d.status === "Approved and Scheduled"
+                            ? "approved"
+                            : "needApproval"
+                        }
+                      >
+                        {d.status}
+                      </p>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
