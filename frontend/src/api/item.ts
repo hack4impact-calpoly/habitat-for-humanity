@@ -103,9 +103,9 @@ export const getItemsByDonorID = async (donorID: string) =>
 // Item data model
 export interface Item {
   _id?: string;
-  name: string;
+  name: string[];
   // images: [mongoose.Schema.ObjectId]
-  size: string;
+  size: string[];
   photos: string[];
   address: string;
   city: string;
@@ -179,6 +179,7 @@ export const updateItem = async (item: Item) =>
       status: item.status,
       donorId: item.donorId,
       notes: item.notes,
+      images: item.photos,
     }),
   })
     .then(async (res) => {

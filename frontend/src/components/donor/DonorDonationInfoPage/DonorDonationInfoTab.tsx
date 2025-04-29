@@ -65,9 +65,7 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
           <h2 style={{ marginTop: "3rem", color: "var(--orange)" }}>
             Admin Notes
           </h2>
-          <p id="notes">
-            {item.notes}
-          </p>
+          <p id="notes">{item.notes}</p>
         </Grid>
       )}
       <Grid item xs={12}>
@@ -89,11 +87,11 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
           Item Information
         </h2>
         <p id="itemName">
-          <b>Item Name:</b> {item.name}
+          <b>Item Name:</b> {item.name.join(", ")}
         </p>
         <p id="itemDimensions">
           <b>Item Dimensions: </b>
-          {item.size}
+          {item.size.join(", ")}
         </p>
         <p id="itemPhotos">
           <b>Item Photos</b>
@@ -150,7 +148,12 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
           <div id="availability" key={index}>
             <h3>{date}</h3>
             <div
-              style={{ display: "flex", flexDirection: "row", columnGap: 15 }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                rowGap: 10,
+                width: "100%",
+              }}
             >
               {timeSlots.map((timeSlot, index1) => {
                 if (timeSlot.dayString === date)
@@ -160,11 +163,13 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
                       style={{
                         border: "2px solid #acacac",
                         boxSizing: "border-box",
-                        width: 212,
-                        height: 49,
-                        display: "flex",
-                        paddingTop: 13,
-                        justifyContent: "center",
+                        width: "100%",
+                        padding: "12px",
+                        textAlign: "center",
+                        fontWeight: 500,
+                        whiteSpace: "normal",
+                        wordBreak: "break-word",
+                        margin: 0,
                       }}
                     >
                       {timeSlot.timeSlotString}

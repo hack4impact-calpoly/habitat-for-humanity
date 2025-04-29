@@ -124,7 +124,6 @@ export interface Event {
   title: string;
   startTime: Date;
   endTime: Date;
-  volunteerId: string;
   itemId: string;
 }
 
@@ -139,7 +138,6 @@ export const addEvent = async (event: Event) =>
       title: event.title,
       startTime: event.startTime,
       endTime: event.endTime,
-      volunteerId: event.volunteerId,
       itemId: event.itemId,
     }),
   })
@@ -153,3 +151,29 @@ export const addEvent = async (event: Event) =>
       return res;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
+
+export const deleteEventByItemId = async (itemId: string) =>
+  fetch(`${eventURL}itemId/${itemId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        // check server response
+        throw new Error(`${res.status}-${res.statusText}`);
+      }
+      const contentType = res.headers.get("Content-Type");
+      if (contentType && contentType.includes("application/json")) {
+        // If it's JSON, parse the response as JSON
+        const result = await res.json();
+        return result;
+      } else {
+        // If it's not JSON, handle the response as text (e.g., "Successful")
+        const result = await res.text();
+        console.log("Non-JSON response:", result);
+        return { message: result };
+      }
+    })
+    .catch((error) => console.error("Error: ", error));
