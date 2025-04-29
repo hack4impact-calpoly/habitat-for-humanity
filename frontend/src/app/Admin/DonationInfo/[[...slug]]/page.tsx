@@ -24,6 +24,7 @@ import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSc
 import { updateNotes } from "../../../../redux/donationSlice";
 
 import { getClerkUser, getUserByID } from "api/user";
+import { sendApproveEmail, sendRejectEmail } from "api/email";
 
 require("../../../../App.css");
 
@@ -107,6 +108,37 @@ const getTime = (time: string) =>
 const getDay = (time: string) =>
   time ? moment(time).utc().format("dddd, MMMM Do YYYY") : "N/A";
 
+const sendApprovalEmail = async (donor: any) => {
+  try {
+    await sendApproveEmail({
+      to: donor.email,
+      donationDetails: {
+        name: donor.firstName,
+        phone: "(805) 546-8699",
+        contactEmail: "restoreslo@habitatslo.org",
+        officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
+        officeHours: "Tuesday - Saturday, 10AM - 5PM",
+        website: "https://www.habitatslo.org",
+      },
+    });
+    console.log("Approval email sent!");
+  } catch (error) {
+    console.error("Error sending approval email:", error);
+  }
+};
+
+const sendRejectionEmail = async (donor: any) => {
+  try {
+    await sendRejectEmail({
+      to: donor.email,
+      firstName: donor.firstName,
+    });
+    console.log("Rejection email sent!");
+  } catch (error) {
+    console.error("Error sending rejection email:", error);
+  }
+};
+
 function DonationInfoPage() {
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
@@ -117,26 +149,40 @@ function DonationInfoPage() {
   const params = useParams();
   const slug = params.slug;
   const id = slug ? slug[0] : "";
-  
+
   const nextPath: string = "/Admin";
   const router = useRouter();
+
   const rejectItem = async () => {
     updateItem({ ...item, status: "Rejected" });
     sendUpdatedItemToDB("Rejected", false);
     deleteEventByItemId(id);
+
+    if (donor && donor.email) {
+      await sendRejectionEmail(donor);
+    }
   }
+
   const approveItem = async () => {
     console.log("timeslots", storedTimeSlots);
+  
     if (
       (await storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item))) &&
       (await sendUpdatedItemToDB("Approved and Scheduled", true))
     ) {
       console.log("Success submitting events!");
       clearTimeSlots(); // Clear time slots from redux
+  
+      if (donor && donor.email) {
+        await sendApprovalEmail(donor);
+      }
+  
       await router.push(nextPath);
       router.refresh(); // Reload page after navigating back to fetch changes
     }
-  }
+  };
+  
+
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
@@ -147,15 +193,14 @@ function DonationInfoPage() {
         await rejectItem();
         await router.back();
         router.refresh(); // Reload page after navigating back to fetch changes
-      }
-      else {
+      } else {
         sendUpdatedItemToDB(storedStatus, false);
         await router.back();
         router.refresh(); // Reload page after navigating back to fetch changes
       }
     } else if (e.currentTarget.value === "reject") {
       await rejectItem();
-      await router.back();  
+      await router.back();
       router.refresh(); // Reload page after navigating back to fetch changes
     } else if (e.currentTarget.value === "approve") {
       await approveItem();
@@ -192,7 +237,7 @@ function DonationInfoPage() {
     const fetchedItem =
       typeof id === "string"
         ? getItemByID(id)
-            .then((item) =>  {
+            .then((item) => {
               setItem(item);
               setNotes(item.notes || "");
             })
@@ -243,7 +288,6 @@ function DonationInfoPage() {
   const handleNotesChange = (newNotes: string) => {
     setNotes(newNotes); // This will accept empty strings
   };
-  
 
   const storedStatus = useSelector(
     (state: RootState) => state.event.donationStatus,
