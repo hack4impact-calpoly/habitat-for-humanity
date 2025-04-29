@@ -9,30 +9,25 @@ import { useClerk } from "@clerk/nextjs";
 require("../../../App.css");
 
 const CALENDAR_HEADER = 0;
-const AVAILABILITY_HEADER = 1;
-const DONATION_APPROVALS_HEADER = 2;
-const HISTORY_HEADER = 3;
-const PROFILE_HEADER = 4;
-const ACTIVE_DONATIONS_HEADER = 5;
-const SIGN_OUT_HEADER = 6;
+const DONATION_APPROVALS_HEADER = 1;
+const HISTORY_HEADER = 2;
+const ACTIVE_DONATIONS_HEADER = 3;
+const SIGN_OUT_HEADER = 4;
 
 const navBarHeaders: string[] = [
   "Calendar",
-  "Availablility",
   "Donation Approvals",
   "History",
-  "Profile",
   "Active Donations",
 ];
 
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
-const donationApprovalsPath: string = "/Admin/DonationApproval";
-const signoutPath: string = "/Auth/Login";
-const adminHomePath: string = "/Admin";
 const calendarPath: string = "/Admin/Calendar";
-const donationInfoPath: string = "/Admin/DonationInfo";
+const donationApprovalsPath: string = "/Admin/DonationApproval";
+const historyPath: string ="/Admin/History";
 const activePath: string = "/Admin/ActiveDonations";
+const signoutPath: string = "/Auth/Login";
 
 function AdminNavbar(): React.ReactNode {
   const router = useRouter();
@@ -55,7 +50,18 @@ function AdminNavbar(): React.ReactNode {
     ) {
       return true;
     }
-
+    if (
+      header === navBarHeaders[DONATION_APPROVALS_HEADER] &&
+      pagePath.includes(donationApprovalsPath)
+    ) {
+      return true;
+    }
+    if (
+      header === navBarHeaders[HISTORY_HEADER] &&
+      pagePath.includes(historyPath)
+    ) {
+      return true;
+    }
     if (
       header === navBarHeaders[ACTIVE_DONATIONS_HEADER] &&
       pagePath.includes(activePath)
@@ -64,8 +70,8 @@ function AdminNavbar(): React.ReactNode {
       return true;
     }
     if (
-      header === navBarHeaders[DONATION_APPROVALS_HEADER] &&
-      pagePath.includes(donationApprovalsPath)
+      header === navBarHeaders[SIGN_OUT_HEADER] &&
+      pagePath.includes(signoutPath)
     ) {
       return true;
     }
@@ -80,17 +86,14 @@ function AdminNavbar(): React.ReactNode {
     if (header === navBarHeaders[CALENDAR_HEADER]) {
       return calendarPath;
     }
-    if (header === navBarHeaders[AVAILABILITY_HEADER]) {
-      return adminHomePath;
-    }
     if (header === navBarHeaders[DONATION_APPROVALS_HEADER]) {
       return donationApprovalsPath;
     }
     if (header === navBarHeaders[HISTORY_HEADER]) {
-      return adminHomePath;
+      return historyPath;
     }
-    if (header === navBarHeaders[PROFILE_HEADER]) {
-      return adminHomePath;
+    if (header === navBarHeaders[ACTIVE_DONATIONS_HEADER]) {
+      return activePath;
     }
     if (header === navBarHeaders[ACTIVE_DONATIONS_HEADER]) {
       return activePath;
