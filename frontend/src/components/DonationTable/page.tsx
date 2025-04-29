@@ -1,3 +1,4 @@
+// components/admin/DonationsTable/DonationsTable.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -11,200 +12,181 @@ import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 import moment from "moment";
 import "moment-timezone";
-import { useAuth } from "@clerk/clerk-react";
+import { Item, getItems } from "api/item";
+import { getClerkUser } from "api/user";
 
-import AdminNavbar from "components/admin/AdminNavbar/AdminNavbar";
-import DonorNavbar from "components/donor/DonorNavbar/DonorNavbar";
-import { Item, getItems, getItemsByDonorID } from "api/item";
-import { User, getDonors, getClerkUser } from "api/user";
+type DonationViewType = "approvals" | "active" | "history";
 
-import "../../../App.css";
+const header = [
+  "Donor",
+  "Type",
+  "Date/Time Received",
+  "Date/Time Approved-Rejected",
+  "Status",
+];
 
-export type DonationTableMode = "approval" | "active" | "history";
-
-interface DonationTableProps {
-  mode: DonationTableMode;
+interface DonationsTableProps {
+  viewType: DonationViewType;
 }
 
-const headers = {
-  approval: 
-    ["Donor", 
-     "Type", 
-     "Date/Time Received", 
-     "Date/Time Approved-Rejected", 
-     "Status"],
-  active: 
-    ["Donor",
-     "Type",
-     "Date/Time Received",
-    "Date/Time Approved-Rejected",
-    "Status"],
-  history: 
-    ["Donation Item",
-     "Type", 
-     "Date/Time Received", 
-     "Date/Time Approved", 
-     "Status"],
-};
-
-export default function DonationTable({ mode }: DonationTableProps) {
-  const router = useRouter();
-  const { userId } = useAuth();
+export default function DonationsTable({ viewType }: DonationsTableProps): React.ReactNode {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(8);
   const [items, setItems] = useState<Item[]>([]);
-  const [donors, setDonors] = useState<User[]>([]);
-  const [donorInfoMap, setDonorInfoMap] = useState<Record<string, { firstName: string; lastName: string }>>({});
+  const [donorInfoMap, setDonorInfoMap] = useState<
+    Record<string, { firstName: string; lastName: string }>
+  >({});
+
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (mode === "history" && userId) {
-        const res = await getItemsByDonorID(userId);
-        setItems(res);
-      } else {
-        const res = await getItems();
-        setItems(res);
-        if (mode !== "history") {
-          const donorList = await getDonors();
-          setDonors(donorList);
-        }
-      }
-    };
-    fetchData();
-  }, [mode, userId]);
+    getItems().then((res) => setItems(res));
+  }, []);
 
   useEffect(() => {
     const fetchDonorNames = async () => {
-      const uniqueIds = Array.from(new Set(items.map((i) => i.donorId)));
+      const uniqueDonorIds = Array.from(
+        new Set(items.map((item) => item.donorId)),
+      );
       const map: Record<string, any> = { ...donorInfoMap };
+
       await Promise.all(
-        uniqueIds.map(async (id) => {
+        uniqueDonorIds.map(async (id) => {
           if (!map[id]) {
             try {
               const donor = await getClerkUser(id);
               map[id] = donor;
             } catch (e) {
-              console.error("Failed to fetch donor info for:", id);
+              console.error("Failed to fetch donor for id:", id);
             }
           }
-        })
+        }),
       );
+
       setDonorInfoMap(map);
     };
-    if (mode === "approval" && items.length > 0) {
+
+    if (items.length > 0) {
       fetchDonorNames();
     }
-  }, [items, mode, donorInfoMap]); // <--- added donorInfoMap to dependency
+  }, [items]);
 
-  const filteredItems = items.filter((item) => {
-    if (mode === "approval") {
-      return item.status === "Needs Approval" || item.status === "Send Receipt";
-    }
-    if (mode === "active") {
-      return item.status === "Approved and Scheduled" || item.status === "Send Receipt";
-    }
-    if (mode === "history") {
-        return item.status === "Completed" || item.status === "Rejected";
-    }
-    return true;
-  });
-
-  const titleMap = {
-    approval: "Donation Approvals",
-    active: "Active Donations",
-    history: "Donation History",
+  const getDonorName = (id: string) => {
+    const donor = donorInfoMap[id];
+    return donor ? `${donor.firstName} ${donor.lastName}` : "Loading...";
   };
+
+  const convertTime = (time: Date | undefined): string =>
+    time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
+
+  const sortReceivedTime = (don1: any, don2: any) =>
+    don1.timeSubmitted > don2.timeSubmitted ? -1 : 1;
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
-  const getDonorName = (id: string) => {
-    if (mode === "approval") {
-      const donor = donorInfoMap[id];
-      return donor ? `${donor.firstName} ${donor.lastName}` : "Loading...";
+  const getFilteredItems = () => {
+    switch (viewType) {
+      case "approvals":
+        return items.filter(item => 
+          item.status === "Needs Approval" || item.status === "Send Receipt"
+        );
+      case "active":
+        return items.filter(item =>
+          item.status === "Approved and Scheduled" || item.status === "Send Receipt"
+        );
+      case "history":
+        return items.filter(item =>
+          item.status === "Completed" || item.status === "Rejected"
+        );
+      default:
+        return [];
     }
-    const donor = donors.find((d) => d.id === id);
-    return donor ? `${donor.firstName} ${donor.lastName}` : "Unknown Donor";
   };
 
-  const convertTime = (time: Date | undefined) =>
-    time ? moment(time).format("MMM Do [at] h:mm A") : "N/A";
+  const getTitle = () => {
+    switch (viewType) {
+      case "approvals": return "Donation Approvals";
+      case "active": return "Active Donations";
+      case "history": return "Donation History";
+      default: return "";
+    }
+  };
 
-  const sortReceivedTime = (a: any, b: any) => (a.timeSubmitted > b.timeSubmitted ? -1 : 1);
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case "Completed":
+        return { margin: 0, color: "#4CAF50" };
+      case "Needs Approval":
+      case "Send Receipt":
+        return { margin: 0, color: "#FFA500" };
+      case "Approved and Scheduled":
+        return { margin: 0 };
+      case "Rejected":
+        return { margin: 0, color: "#FF0000" };
+      default:
+        return { margin: 0 };
+    }
+  };
+
+  const filteredItems = getFilteredItems();
 
   return (
-    <div>
-      {mode === "history" ? <DonorNavbar /> : <AdminNavbar />}
-      <div id={mode === "history" ? "DonHistoryPage" : "activeDonPage"}>
-        <h1 id={mode === "history" ? "DonHistoryHeader" : "activeDonHeader"}>
-          {titleMap[mode]}
-        </h1>
-        <TableContainer sx={{ width: "100%", maxWidth: "100vw", padding: 0 }}>
-          <Table sx={{ minWidth: 100, borderCollapse: "collapse" }}>
-            <TableHead>
-              <TableRow>
-                {headers[mode].map((h, index) => (
-                  <TableCell key={index}>
-                    <p className="tableCell">{h}</p>
+    <div id="activeDonPage">
+      <h1 id="activeDonHeader">{getTitle()}</h1>
+      <TableContainer>
+        <Table>
+          <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableRow>
+              {header.map((h, index) => (
+                <TableCell key={index}>
+                  <p className="tableCell">{h}</p>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredItems
+              .sort((a, b) => sortReceivedTime(a, b))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((d, index) => (
+                <TableRow
+                  key={index}
+                  onClick={() => {
+                    router.push(`DonationInfo/${d._id}/`);
+                  }}
+                  style={{ textDecoration: "none" }}
+                  className="tableRow"
+                >
+                  <TableCell scope="row">{getDonorName(d.donorId)}</TableCell>
+                  <TableCell>{d.scheduling}</TableCell>
+                  <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
+                  <TableCell>{convertTime(d.timeApproved)}</TableCell>
+                  <TableCell>
+                    <p style={getStatusStyle(d.status)}>{d.status}</p>
                   </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredItems
-                .sort((a, b) => sortReceivedTime(a, b))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((d, index) => (
-                  <TableRow
-                    key={index}
-                    className="tableRow"
-                  >
-                    {mode === "history" ? (
-                      <>
-                        <TableCell>{d.name?.join(", ")}</TableCell>
-                        <TableCell>{d.scheduling}</TableCell>
-                        <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
-                        <TableCell>{convertTime(d.timeApproved)}</TableCell>
-                        <TableCell>
-                          <p className={d.status === "Approved and Scheduled" ? "approved" : "needApproval"}>
-                            {d.status}
-                          </p>
-                        </TableCell>
-                      </>
-                    ) : (
-                      <>
-                        <TableCell>{getDonorName(d.donorId)}</TableCell>
-                        <TableCell>{d.scheduling}</TableCell>
-                        <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
-                        <TableCell>{convertTime(d.timeApproved)}</TableCell>
-                        <TableCell>
-                          <p className={d.status === "Approved and Scheduled" ? "" : "needApproval"}>
-                            {d.status}
-                          </p>
-                        </TableCell>
-                      </>
-                    )}
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-          <TablePagination
-            rowsPerPageOptions={[8, 10, 15]}
-            component="div"
-            count={filteredItems.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </TableContainer>
-      </div>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[8, 10, 15]}
+          component="div"
+          count={filteredItems.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </TableContainer>
     </div>
   );
 }
