@@ -5,13 +5,10 @@ const router = express.Router();
 const multer = require("multer"); // multer will be used to handle the form data.
 const Aws = require("aws-sdk"); // aws-sdk library will used to upload image to s3 bucket.
 Aws.config.update({ region: "us-west-1" });
-const Image = require("../models/imageSchema.js"); // our product model.
-
-// const fileSchema = require('../models/fileSchema.ts')  // our product model.
-require("dotenv/config"); // for using the environment variables that stores the confedential information.
+require("dotenv/config"); // for using the environment variables that store the confidential information.
 
 // creating the storage variable to upload the file and providing the destination folder,
-// if nothing is provided in the callback it will get uploaded in main directory
+// if nothing is provided in the callback, it will get uploaded in the main directory
 
 const storage = multer.memoryStorage({
   destination: function (req, file, cb) {
@@ -19,9 +16,9 @@ const storage = multer.memoryStorage({
   },
 });
 
-// below variable is define to check the type of file which is uploaded
+// below variable is defined to check the type of file being uploaded
 
-const filefilter = (req, file, cb) => {
+const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/jpeg" ||
     file.mimetype === "image/jpg" ||
@@ -33,18 +30,18 @@ const filefilter = (req, file, cb) => {
   }
 };
 
-// defining the upload variable for the configuration of photo being uploaded
-const upload = multer({ storage: storage, fileFilter: filefilter });
+// defining the upload variable for the configuration of the photo being uploaded
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-// Now creating the S3 instance which will be used in uploading photo to s3 bucket.
+// Now creating the S3 instance, which will be used in uploading photos to the s3 bucket.
 const s3 = new Aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID, // accessKeyId that is stored in .env file
-  secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET, // secretAccessKey is also store in .env file
+  secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET, // secretAccessKey is also stored in .env file
 });
 
-console.log("Connected to S3 bucket 'habitat4humanity-images'");
+console.log("Connected to S3 bucket 'habitat-photos-storage-2025'");
 
-// now how to handle the post request and to upload photo (upload photo using the key defined below in upload.single ie: productimage )
+// now handling the post request to upload photos
 router.post("/", upload.single("productImage"), async (req, res) => {
   console.log("This is the file %s", req.file); // to check the data in the console that is being uploaded
 
@@ -57,31 +54,20 @@ router.post("/", upload.single("productImage"), async (req, res) => {
 
   console.log(params);
 
-  // uploading the photo using s3 instance and saving the key in the database.
+  // uploading the photo using the s3 instance and saving the key in the database.
   s3.upload(params, async (error, data) => {
     if (error) {
-      res.status(500).send({ err: error }); // if we get any error while uploading error message will be returned.
+      res.status(500).send({ err: error }); // if we get any error while uploading, error message will be returned.
     }
-    console.log("DaTA", data);
+    console.log("Data:", data);
 
-    // If not then below code will be executed
+    // If not, then the below code will be executed
     let name = req.body.name || req.file.originalname;
     const { ETag, Bucket, Key } = data;
     const Location =
       data.Location || `https://${Bucket}.s3.amazonaws.com/${Key}`;
 
-    let newImage = new Image({
-      _id: mongoose.Types.ObjectId(),
-      key: Key,
-      name: name,
-      link: Location,
-    });
-    try {
-      await newImage.save();
-      res.send(newImage);
-    } catch (error) {
-      res.status(400).send(error);
-    }
+    res.send({ name });
   });
 });
 
@@ -106,36 +92,20 @@ router.get("/", async (req, res) => {
   }
 });
 
-//get image by key
-router.get("/:imageId", async (req, res) => {
-  try {
-    const image = await Image.findOne({ _id: req.params.imageId });
-
-    console.log(image);
-    const readStream = getFileStream(image.key);
-
-    readStream.pipe(res);
-    // s3.getObject()
-    // const item = await Item.findOne({ _id: req.params.itemId})
-    // res.send(item)
-    // console.log('Got item with id %s', req.params.itemId)
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
-
 // Route for getting a presigned URL
 router.get("/presigned-url/:filename", async (req, res) => {
   console.log("Processing GET request");
   try {
     const { filename } = req.params;
     console.log('Getting presigned URL for image with filename "%s"', filename);
-    // check if image exists in S3 bucket
+
+    // check if image exists in the S3 bucket
     const params = {
       Bucket: String(process.env.AWS_BUCKET_NAME),
       Key: String(filename),
     };
-    console.log("looking for param: ", params);
+
+    console.log("Looking for param: ", params);
     await s3.headObject(params).promise();
 
     console.log("Image exists in S3 bucket");
@@ -150,27 +120,26 @@ router.get("/presigned-url/:filename", async (req, res) => {
   }
 });
 
-// delete an image by filename
+// Delete an image by filename
 router.delete("/:filename", async (req, res) => {
   console.log("Processing DELETE request");
   try {
     const { filename } = req.params;
     console.log('Deleting image with filename "%s"', filename);
-    // check if image exists in S3 bucket
+
+    // check if image exists in the S3 bucket
     const params = {
       Bucket: String(process.env.AWS_BUCKET_NAME),
       Key: String(filename),
     };
-    console.log("looking for param: ", params);
+
+    console.log("Looking for param: ", params);
     await s3.headObject(params).promise();
 
     console.log("Image exists in S3 bucket");
 
     // delete image from S3 bucket
     await s3.deleteObject(params).promise();
-
-    // delete image from MongoDB
-    await Image.deleteOne({ filename: filename });
 
     res.send({ message: "Image deleted successfully" });
   } catch (error) {

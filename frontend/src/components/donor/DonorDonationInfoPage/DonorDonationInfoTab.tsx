@@ -7,6 +7,7 @@ import "moment-timezone";
 import { Item } from "api/item";
 import { User } from "api/user";
 import { updateDonationStatus } from "../../../redux/eventSlice";
+import { getPresignedImage } from "api/image";
 
 interface InfoTabProps {
   item: Item;
@@ -39,11 +40,21 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
   const { item, donor, timeSlots } = props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     setDonationStatus(item.status);
     updateDonationStatus(donationStatus);
     setPickup(item.scheduling === "Pickup");
+    const fetchUrls = async () => {
+      const urls = await Promise.all(
+        item.images.map((imageName: string) => getPresignedImage(imageName)),
+      );
+      setImages(urls);
+    };
+    if (item && item.images) {
+      fetchUrls();
+    }
   }, [item]);
 
   const dates = collectDates(timeSlots);
@@ -98,11 +109,15 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
         </p>
         <div id="ProductImages">
           {/* TODO: Add photos */}
-          {/* {photos?.map((imgSrc, index) => (
-            <div key={index} id="SingleImages">
-              <img src={imgSrc.src} alt="n" />
-            </div>
-          ))} */}
+          {images && images.length > 0 ? (
+            images.map((image, index) => (
+              <div key={index} id="ProductImage">
+                <img src={image || undefined} alt={`Item Image ${index + 1}`} />
+              </div>
+            ))
+          ) : (
+            <p>No images available</p> // If no images, display a fallback message
+          )}
         </div>
       </Grid>
       <Grid item xs={12}>

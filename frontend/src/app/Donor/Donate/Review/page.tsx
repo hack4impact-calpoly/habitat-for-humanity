@@ -1,18 +1,19 @@
+// app/Donor/Donate/Review/page.tsx
+
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { updateDonorID } from "../../../../redux/donationSlice";
 import { useRouter } from "next/navigation";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
-import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../../api/item";
-import { addImages, getImages, getImageByID } from "../../../../api/image";
+import { addImages } from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
-// import DonatorScheduleDropoff from "components/donor/DonorScheduleDropoffPickupPage/DonorScheduleDropoff";
-import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@clerk/clerk-react";
 import { getUserByID } from "api/user";
+import { getFiles, clearFiles } from "../../../../../utils/FileStore";
 
 require("../../../../App.css");
 
@@ -41,7 +42,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     email: "",
     phone: "",
   });
-  
+
   const storedDonation = useSelector((state: RootState) => state.donation);
   const { user } = useUser();
   const storedName = useSelector((state: RootState) => state.donation.name);
@@ -74,89 +75,78 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   dropOff = storedDropOff;
 
   const [dropOffOption, setDropOffOption] = useState(dropOff);
-  const [serverError, setServerError] = useState<string>("");
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [serverError, setServerError] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  /* convert array of base64-encoded back into array of image files */
-  // const convertToFiles = (photos: string[] | undefined): File[] => {
-  //   const files: File[] = [];
-  //   const timestamp = new Date().getTime(); // Get the current timestamp
-  //   photos?.forEach((photo, index) => {
-  //     const byteString = atob(photo.split(",")[1]);
-  //     const mimeString = photo.split(",")[0].split(":")[1].split(";")[0];
-  //     const ab = new ArrayBuffer(byteString.length);
-  //     const ia = new Uint8Array(ab);
-  //     for (let i = 0; i < byteString.length; i++) {
-  //       ia[i] = byteString.charCodeAt(i);
-  //     }
-  //     const blob = new Blob([ab], { type: mimeString });
-  //     // Create a file object with a unique name
-  //     const fileName = `image-${timestamp}-${index}.${
-  //       mimeString.split("/")[1]
-  //     }`;
-  //     const file = new File([blob], fileName, { type: mimeString });
-  //     files.push(file);
-  //   });
-  //   return files;
-  // };
-
-  /* Send image files array to S3 */
-  // const sendImagesToS3 = async (): Promise<boolean> => {
-  //   const files = convertToFiles(photos);
-  //   console.log("Converted back to Files: ", files);
-  //   try {
-  //     await addImages(files);
-  //     console.log("Images uploaded successfully!");
-  //     return true;
-  //   } catch (error) {
-  //     console.error("Error: ", error);
-  //     return false;
-  //   }
-  // };
-
-  const sendToDB = async () => {
-    const donation: Item = {
-      name: storedDonation.name,
-      size: storedDonation.dimensions,
-      photos: storedPhotos,
-      address: storedDonation.address,
-      city: storedDonation.city,
-      state: storedDonation.state,
-      zipCode: storedDonation.zipCode.toString(),
-      donorId: storedDonation.donorID,
-      timeApproved: new Date(),
-      scheduling: storedDonation.dropoff ? "Dropoff" : "Pickup",
-      timeAvailability: storedDonation.pickupTimes, // TODO
-      timeSubmitted: new Date(),
-      status: "Needs Approval",
-    };
-    const response = await addItem(donation);
-    console.log("To be sent to DB:", donation);
-    // const imagesUploaded = await sendImagesToS3();
-    if (!response) {
-      setServerError(
-        "There was an error sending your donation. Please try again later."
-      );
-    }
-    return response;
-  };
-
+  // 1) update donorID & fetch user info
   useEffect(() => {
-    if (user?.id) {  // Check if user.id is defined
-      const fetchData = async () => {
-        const response = await getUserByID(user.id);
+    if (user?.id) {
+      dispatch(updateDonorID(user.id));
+      getUserByID(user.id).then((resp) => {
         setUserData({
-          firstName: user.firstName || "First Name Not Found",
-          lastName: user.lastName || "Last Name Not Found",
-          email: user.primaryEmailAddress?.emailAddress || "Email Not Found",
-          phone: response.phone || "Phone Not Found",
+          firstName: user.firstName || "",
+          lastName: user.lastName || "",
+          email: user.primaryEmailAddress?.emailAddress || "",
+          phone: resp.phone || "",
         });
-        storedDonation.donorID = user.id;
-      };
-  
-      fetchData();  // Fetch user data whenever the component is re-entered
+      });
     }
-  }, [user]); 
+  }, [user, dispatch]);
+
+  // 2) build previews from FileStore
+  const files: File[] = getFiles();
+  useEffect(() => {
+    const urls = files.map((file) => URL.createObjectURL(file));
+    setImageUrls(urls);
+    return () => urls.forEach((url) => URL.revokeObjectURL(url));
+  }, [files]);
+
+  // 3) upload images & send donation
+  const sendToDB = async (): Promise<boolean> => {
+    try {
+      let images: String[] = [];
+      if (files.length > 0) {
+        const ts = Date.now();
+        const uniqueFiles = files.map((file, idx) => {
+          const ext = file.type.split("/")[1] || "jpg";
+          return new File([file], `image-${ts}-${idx}.${ext}`, {
+            type: file.type,
+          });
+        });
+        // Convert String[] to string[] by mapping each String to string
+        images = await addImages(uniqueFiles);
+      }
+
+      const donation: Item = {
+        name: storedDonation.name,
+        size: storedDonation.dimensions,
+        images,
+        address: storedDonation.address,
+        city: storedDonation.city,
+        state: storedDonation.state,
+        zipCode: storedDonation.zipCode.toString(),
+        donorId: storedDonation.donorID,
+        timeApproved: new Date(),
+        scheduling: storedDonation.dropoff ? "Dropoff" : "Pickup",
+        timeAvailability: storedDonation.pickupTimes,
+        timeSubmitted: new Date(),
+        status: "Needs Approval",
+      };
+
+      const ok = await addItem(donation);
+      if (!ok) {
+        setServerError("Error sending donation. Please try again.");
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error(error);
+      setServerError("Error sending donation. Please try again.");
+      return false;
+    }
+  };
 
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>
@@ -172,6 +162,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
       }
     }
   };
+
 
   return (
     <div>
@@ -201,13 +192,8 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               <b>Item Photos</b>
             </p>
             <div id="ProductImages">
-              {statePhotos.map((imagePresignedUrl: any, i: any) => (
-                <img
-                  src={imagePresignedUrl}
-                  alt="uploaded"
-                  key={i}
-                  id="ProductImage"
-                />
+              {imageUrls.map((url, idx) => (
+                <img key={idx} src={url} alt={`preview-${idx}`} id="ProductImage"/>
               ))}
             </div>
             <h2 id="Location">Location</h2>
@@ -216,39 +202,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               {storedDonation.state} {storedDonation.zipCode}
             </h4>
           </div>
-          {/* <div id="SchedulingInfo">
-            <h2 id="Scheduling">Scheduling</h2>
-            <h4 id="SchdulingDesc">
-              Does the donation need to be picked up or can you drop it off at
-              our ReStore?
-            </h4>
-          </div>
-          <div id="donPDOptions">
-            <div>
-              <input
-                type="radio"
-                className="radioOptionLabelCircle"
-                checked={dropOffOption}
-                onChange={() => setDropOffOption(true)}
-              />
-              <p id="radioDropoff" className="radioOptionLabel radioLabel">
-                I can drop off at the ReStore
-              </p>
-            </div>
-            <br />
-            <div id="radioPickUp">
-              <input
-                type="radio"
-                className="radioOptionLabelCircle"
-                checked={!dropOffOption}
-                onChange={() => setDropOffOption(false)}
-              />
-              <p className="radioOptionLabel radioLabel">
-                I need the item to be picked up
-              </p>
-            </div>
-          </div>
-          {dropOffOption ? <DonatorScheduleDropoff /> : <></>} */}
           <div className="inputError">{serverError}</div>
           {!component && (
             <div
