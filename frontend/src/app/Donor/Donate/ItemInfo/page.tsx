@@ -1,18 +1,18 @@
+// app/Donor/Donate/ItemInfo/page.tsx
+
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateDimensions,
-  updateName,
-  updatePhotos,
-} from "../../../../redux/donationSlice";
+import { updateDimensions, updateName } from "../../../../redux/donationSlice";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { RootState } from "../../../../redux/store";
-import DonatorNavbar from "../../../../components/donor/DonorNavbar/DonorNavbar";
-import Dropzone from "../../../../components/donor/donation/Dropzone";
-import ProgressBar from "../../../../components/donor/donation/ProgressBar";
+import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
+import Dropzone from "components/donor/donation/Dropzone";
+import ProgressBar from "components/donor/donation/ProgressBar";
+// FileStore is under frontend/utils/FileStore.ts
+import { setFiles, clearFiles } from "../../../../../utils/FileStore";
 import { Close } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
@@ -37,7 +37,7 @@ const DonationHeader = styled.h1`
   @media only screen and (max-width: 640px) {
     margin-top: 1em;
     font-size: 24px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 `;
 
@@ -58,11 +58,12 @@ const InputSectionContainer = styled.div`
   justify-content: center;
 
   @media only screen and (max-width: 640px) {
-    gap: 0px;
+    gap: 0;
     justify-content: flex-start;
     flex-wrap: wrap;
   }
 `;
+
 const StyledLabel = styled.label`
   font-size: 20px;
   margin-bottom: 0.5em;
@@ -72,35 +73,39 @@ const StyledLabel = styled.label`
     margin-top: 0em;
   }
 `;
+
 const StyledInput = styled.input`
   width: 100%;
   height: 45px;
   border: 1px solid var(--input-box);
 `;
+
 const SubHeader = styled.h1`
   font-size: 20px;
   margin-top: 1em;
   @media only screen and (max-width: 640px) {
-    margin-bottom: 0em;
-    margin-top: 0em;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 `;
 const InputContainer = styled.div`
   display: flex;
-  flex-flow: column nowrap;
+  flex-direction: column;
   width: 50%;
   margin-bottom: 1em;
+
   @media only screen and (max-width: 640px) {
     width: 100%;
   }
 `;
+
 const UploadContainer = styled.div`
   display: flex;
-  flex-flow: column nowrap;
+  flex-direction: column;
   width: 100%;
 `;
 
-function Donation(): React.ReactNode {
+export default function Donation(): React.ReactNode {
   const storedDesc = useSelector((state: RootState) => state.donation.name);
   const storedDims = useSelector(
     (state: RootState) => state.donation.dimensions,
@@ -167,12 +172,15 @@ function Donation(): React.ReactNode {
     const itemDimensions = items.map((item) => item.dimensions);
     dispatch(updateName(itemDescription));
     dispatch(updateDimensions(itemDimensions));
-    dispatch(updatePhotos(photos));
   };
 
-  const dropzoneProps = {
-    photos,
-    setPhotos,
+  const handleClick = (action: "back" | "next"): void => {
+    if (action === "back") {
+      router.push("/Donor/Donate/Disclosure");
+    } else if (action === "next" && validInput()) {
+      updateStore();
+      router.push("/Donor/Donate/Location");
+    }
   };
 
   const handleAddItem = () => {
@@ -219,6 +227,7 @@ function Donation(): React.ReactNode {
       <ContentContainer>
         <DonationHeader>Make a donation</DonationHeader>
         <ProgressBar activeStep={1} />
+
         <ItemHeader>Item Information</ItemHeader>
         {items.map((item, index) => (
           <InputSectionContainer key={index} className="itemInputContainer">
@@ -265,9 +274,8 @@ function Donation(): React.ReactNode {
         </button>
         <UploadContainer>
           <SubHeader>Item Photos</SubHeader>
-          <Dropzone {...dropzoneProps} />
+          <Dropzone setFiles={setFiles} clearFiles={clearFiles} />
         </UploadContainer>
-
         <div id="donPickupButtons">
           <button
             type="button"
@@ -283,4 +291,7 @@ function Donation(): React.ReactNode {
   );
 }
 
-export default Donation;
+
+
+
+

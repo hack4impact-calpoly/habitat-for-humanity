@@ -7,7 +7,6 @@ import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import ProgressBar from "components/donor/donation/ProgressBar";
 import { useSelector, useDispatch } from "react-redux";
 import { Item, addItem } from "../../../api/item";
-import { addImages, getImages, getImageByID } from "../../../api/image";
 import { RootState } from "../../../redux/store";
 
 require("../../../App.css");

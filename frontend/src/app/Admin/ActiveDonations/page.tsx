@@ -13,8 +13,11 @@ import moment from "moment";
 import "moment-timezone";
 import { Item, getItems } from "../../../api/item";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
-import "../../../App.css";
+import { useDispatch } from "react-redux";
+import { clearAll } from "../../../redux/eventSlice";
 import { getClerkUser } from "api/user";
+require("../../../App.css");
+
 
 const header = [
   "Donor",
@@ -31,6 +34,11 @@ export default function ActiveDonationPage(): React.ReactNode {
   const [donorInfoMap, setDonorInfoMap] = useState<
     Record<string, { firstName: string; lastName: string }>
   >({});
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearAll());
+  }, [dispatch]);
 
   const router = useRouter();
 

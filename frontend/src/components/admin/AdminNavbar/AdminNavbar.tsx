@@ -92,6 +92,9 @@ function AdminNavbar(): React.ReactNode {
     if (header === navBarHeaders[PROFILE_HEADER]) {
       return adminHomePath;
     }
+    if (header === navBarHeaders[ACTIVE_DONATIONS_HEADER]) {
+      return activePath;
+    }
     if (header === navBarHeaders[SIGN_OUT_HEADER]) {
       return signoutPath;
     }
