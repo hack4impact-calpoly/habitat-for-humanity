@@ -42,8 +42,43 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     email: "",
     phone: "",
   });
+
+  const storedDonation = useSelector((state: RootState) => state.donation);
+  const { user } = useUser();
+  const storedName = useSelector((state: RootState) => state.donation.name);
+  const storedDimensions = useSelector(
+    (state: RootState) => state.donation.dimensions,
+  );
+  const statePhotos = useSelector((state: RootState) => state.donation.photos);
+
+  // storedPhotos is an array of images names,
+  // if access is needed, images name can be used
+  // to generate presigned urls.
+  const storedPhotos = statePhotos.map((url) => {
+    const parts = url.split("/");
+    return parts[parts.length - 1].split("?")[0];
+  });
+  const storedLocation = useSelector(
+    (state: RootState) => state.donation.address,
+  );
+  const storedDropOff = useSelector(
+    (state: RootState) => state.donation.dropoff,
+  );
+  const storedEvents = useSelector(
+    (state: RootState) => state.donation.pickupTimes,
+  );
+
+  name = storedName;
+  dimensions = storedDimensions;
+  photos = storedPhotos;
+  location = storedLocation;
+  dropOff = storedDropOff;
+
+  const [dropOffOption, setDropOffOption] = useState(dropOff);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [serverError, setServerError] = useState("");
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   // 1) update donorID & fetch user info
   useEffect(() => {
@@ -113,15 +148,21 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     }
   };
 
-  const handleClick = async (value: string) => {
-    if (value === "back") {
-      router.push("/Donor/Donate/ScheduleDropoffPickup");
-    } else if (value === "next") {
+  const buttonNavigation = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): Promise<void> => {
+    const backPath: string = "/Donor/Donate/ScheduleDropoffPickup";
+    const nextPath: string = "/Donor/Donate/NextSteps";
+
+    if (e.currentTarget.value === "backButton") {
+      router.push(backPath);
+    } else if (e.currentTarget.value === "nextButton") {
       if (await sendToDB()) {
-        router.push("/Donor/Donate/NextSteps");
+        router.push(nextPath);
       }
     }
   };
+
 
   return (
     <div>
@@ -150,11 +191,11 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p id="itemPhotos">
               <b>Item Photos</b>
             </p>
-            <ProductImages>
+            <div id="ProductImages">
               {imageUrls.map((url, idx) => (
-                <img key={idx} src={url} alt={`preview-${idx}`} />
+                <img key={idx} src={url} alt={`preview-${idx}`} id="ProductImage"/>
               ))}
-            </ProductImages>
+            </div>
             <h2 id="Location">Location</h2>
             <h4 id="Address">
               {storedDonation.address} <br /> {storedDonation.city},{" "}
@@ -197,4 +238,4 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   );
 };
 
-export default ReviewPage;
+export default SubmitInfo;

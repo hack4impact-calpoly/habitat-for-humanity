@@ -105,7 +105,7 @@ const UploadContainer = styled.div`
   width: 100%;
 `;
 
-function Donation(): React.ReactNode {
+export default function Donation(): React.ReactNode {
   const storedDesc = useSelector((state: RootState) => state.donation.name);
   const storedDims = useSelector(
     (state: RootState) => state.donation.dimensions,
