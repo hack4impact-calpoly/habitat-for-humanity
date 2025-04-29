@@ -19,7 +19,7 @@ const eventSchema = new mongoose.Schema(
     zipCode: { type: String, required: true },
     donorFirstName: { type: String, required: true },
     donorLastName: { type: String, required: true },
-    itemName: { type: String, required: true },
+    itemName: { type: [String], required: true },
     phone: { type: String, required: true },
     pickupAvailability: { type: [[String]], required: true },
     location: { type: String, required: false },

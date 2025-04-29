@@ -554,6 +554,13 @@ code {
   border: 2px solid var(--tertiary);
 }
 
+.backButton:hover {
+  color: var(--white);
+  background-color: var(--red);
+  border: 2px solid var(--red);
+  cursor: pointer;
+}
+
 .rejectButton {
   background-color: var(--white);
   font-weight: bold;
@@ -561,6 +568,13 @@ code {
   color: var(--red);
   border: 2px solid var(--red);
   margin-right: 12px;
+}
+
+.rejectButton:hover {
+  color: var(--white);
+  background-color: var(--red);
+  border: 2px solid var(--red);
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -577,6 +591,12 @@ code {
   border: 2px solid var(--tertiary);
 }
 
+.approveButton:hover {
+  background-color: var(--white);
+  color: var(--tertiary);
+  border: 2px solid var(--tertiary);
+  cursor: pointer;
+}
 .backButton:hover,
 .rejectButton:hover .approveButton:hover {
   cursor: pointer;
