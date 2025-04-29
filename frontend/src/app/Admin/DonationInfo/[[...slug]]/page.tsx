@@ -26,6 +26,7 @@ import Receipt from "../../../../components/admin/DonationInfoPage/Receipt/Recei
 import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSchedule";
 import { updateNotes } from "../../../../redux/donationSlice";
 import { getClerkUser, getUserByID } from "api/user";
+import { sendApproveEmail, sendRejectEmail } from "api/email";
 
 require("../../../../App.css");
 
@@ -109,6 +110,37 @@ const getTime = (time: string) =>
 const getDay = (time: string) =>
   time ? moment(time).utc().format("dddd, MMMM Do YYYY") : "N/A";
 
+const sendApprovalEmail = async (donor: any) => {
+  try {
+    await sendApproveEmail({
+      to: donor.email,
+      donationDetails: {
+        name: donor.firstName,
+        phone: "(805) 546-8699",
+        contactEmail: "restoreslo@habitatslo.org",
+        officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
+        officeHours: "Tuesday - Saturday, 10AM - 5PM",
+        website: "https://www.habitatslo.org",
+      },
+    });
+    console.log("Approval email sent!");
+  } catch (error) {
+    console.error("Error sending approval email:", error);
+  }
+};
+
+const sendRejectionEmail = async (donor: any) => {
+  try {
+    await sendRejectEmail({
+      to: donor.email,
+      firstName: donor.firstName,
+    });
+    console.log("Rejection email sent!");
+  } catch (error) {
+    console.error("Error sending rejection email:", error);
+  }
+};
+
 function DonationInfoPage() {
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
@@ -125,9 +157,14 @@ function DonationInfoPage() {
   const dispatch = useDispatch();
 
   const rejectItem = async () => {
-    sendUpdatedItemToDB("Rejected", false);
+    const success = await sendUpdatedItemToDB("Rejected", false);
     deleteEventByItemId(id);
-  };
+
+    if (success && donor && donor.email) {
+      await sendRejectionEmail(donor);
+    }
+  }
+
   const approveItem = async () => {
     if (storedTimeSlots.length > 0) {
       await storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item));
@@ -135,7 +172,12 @@ function DonationInfoPage() {
       clearTimeSlots(); // Clear time slots from redux
     }
     if (item.scheduling !== "Pickup" || storedTimeSlots.length > 0) {
-      await sendUpdatedItemToDB("Approved and Scheduled", true);
+      const success = await sendUpdatedItemToDB("Approved and Scheduled", true);
+  
+      if (success && donor && donor.email) {
+        await sendApprovalEmail(donor);
+      }
+  
       await router.push(nextPath);
       router.refresh(); // Reload page after navigating back to fetch changes
     }
