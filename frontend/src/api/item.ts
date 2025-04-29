@@ -179,6 +179,7 @@ export const updateItem = async (item: Item) =>
       status: item.status,
       donorId: item.donorId,
       notes: item.notes,
+      images: item.photos,
     }),
   })
     .then(async (res) => {
