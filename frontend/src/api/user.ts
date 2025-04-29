@@ -131,8 +131,11 @@ export const getAdmins = async () =>
 
 // User data model
 export interface User {
-  phone: string;
   id: string;
+  phone: string;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 // Add a new User to User DB

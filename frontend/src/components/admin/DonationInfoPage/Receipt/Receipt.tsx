@@ -30,7 +30,6 @@ interface ReceiptTabProps {
 }
 function Receipt(props: ReceiptTabProps): React.ReactNode {
   const { item, donor } = props;
-  console.log("item name", item.name);
   const fullName = `${donor?.firstName} ${donor?.lastName}`;
   const fullZip = `${item?.city}, California ${item?.zipCode}`;
   const [contract, setContract] = useState({
