@@ -23,11 +23,11 @@ import { useAuth } from "@clerk/clerk-react";
 require("../../../App.css");
 
 const header = [
-  "Donation Item",
-  "Type",
-  "Date/Time Received",
-  "Date/Time Approved",
-  "Status",
+  { label: "Donation Item", key: "name" },
+  { label: "Type", key: "scheduling" },
+  { label: "Date/Time Received", key: "timeSubmitted" },
+  { label: "Date/Time Approved", key: "timeApproved" },
+  { label: "Status", key: "status" },
 ];
 
 function DonationHistory(): React.ReactNode {
@@ -35,13 +35,20 @@ function DonationHistory(): React.ReactNode {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [items, setItems] = useState<Item[]>([]);
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  }>({
+    key: "timeSubmitted",
+    direction: "desc",
+  });
 
   const router = useRouter();
-  
+
   useEffect(() => {
     if (userId) {
       getItemsByDonorID(userId).then((res) => setItems(res));
-    }  
+    }
   }, [userId]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -58,6 +65,25 @@ function DonationHistory(): React.ReactNode {
     return 1;
   };
 
+  const handleSort = (key: string) => {
+    setSortConfig((prevSort) => ({
+      key,
+      direction:
+        prevSort.key === key && prevSort.direction === "asc" ? "desc" : "asc",
+    }));
+  };
+
+  const sortedItems = [...items].sort((a, b) => {
+    const key = sortConfig.key as keyof Item;
+
+    const valueA = a[key] ?? ""; // Default to empty string if undefined
+    const valueB = b[key] ?? ""; // Default to empty string if undefined
+
+    if (valueA < valueB) return sortConfig.direction === "asc" ? -1 : 1;
+    if (valueA > valueB) return sortConfig.direction === "asc" ? 1 : -1;
+    return 0;
+  });
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -69,47 +95,83 @@ function DonationHistory(): React.ReactNode {
       <DonorNavbar />
       <div id="DonHistoryPage">
         <h1 id="DonHistoryHeader">Donation History</h1>
-        <TableContainer>
-          <Table>
-            <TableHead sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableContainer
+          sx={{
+            width: "100%",
+            maxWidth: "100vw",
+            padding: 0,
+          }}
+        >
+          <Table
+            sx={{
+              minWidth: 100,
+              borderCollapse: "collapse",
+            }}
+          >
+            <TableHead aria-label="donation history table">
               <TableRow>
                 {header.map((h, index) => (
-                  <TableCell key={index}>
-                    <p className="tableCell">{h}</p>
+                  <TableCell
+                    key={index}
+                    onClick={() => handleSort(h.key)}
+                    style={{
+                      cursor: "pointer",
+                      backgroundColor:
+                        sortConfig.key === h.key ? "#f0f0f0" : "inherit", // Highlight sorted column
+                    }}
+                  >
+                    <p className="tableCell">
+                      {h.label}
+                      <img
+                        src={"/images/arrow.png"}
+                        alt="Sort Icon"
+                        style={{
+                          width: 12,
+                          marginLeft: 5,
+                          opacity: 0.6, // Make arrows slightly faded
+                        }}
+                      />
+                    </p>
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {items
-                ?.sort((a, b) => sortReceivedTime(a, b))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((d, index) => (
-                  // TODO: wrap parent link to new page
-                  <TableRow
-                    key={index}
-                    // to={`DonationInfo/${d._id}`}
-                    onClick={() => {
-                      router.push(`/Donor/History/DonationInfo/${d._id}/`);
-                    }}
-                    style={{ textDecoration: "none" }}
-                    className="tableRow"
-                  >
-                    <TableCell scope="row">{d.name}</TableCell>
-                    <TableCell>{d.scheduling}</TableCell>
-                    <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
-                    <TableCell>{convertTime(d.timeApproved)}</TableCell>
-                    {d.status === "Approved and Scheduled" ? (
+              {sortedItems.length > 0 ? (
+                sortedItems
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((d, index) => (
+                    <TableRow
+                      key={index}
+                      onClick={() => {
+                        router.push(`/Donor/History/DonationInfo/${d._id}/`);
+                      }}
+                      className="tableRow"
+                    >
+                      <TableCell scope="row">{d.name.join(", ")}</TableCell>
+                      <TableCell>{d.scheduling}</TableCell>
+                      <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
+                      <TableCell>{convertTime(d.timeApproved)}</TableCell>
                       <TableCell>
-                        <p className="approved">{d.status}</p>
+                        <p
+                          className={
+                            d.status === "Approved and Scheduled"
+                              ? "approved"
+                              : "needApproval"
+                          }
+                        >
+                          {d.status}
+                        </p>
                       </TableCell>
-                    ) : (
-                      <TableCell>
-                        <p className="needApproval">{d.status}</p>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                ))}
+                    </TableRow>
+                  ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    No items found.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
           <TablePagination

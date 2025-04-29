@@ -103,10 +103,10 @@ export const getItemsByDonorID = async (donorID: string) =>
 // Item data model
 export interface Item {
   _id?: string;
-  name: string;
+  name: string[];
   // images: [mongoose.Schema.ObjectId]
-  size: string;
-  photos: string[];
+  size: string[];
+  images: String[];
   address: string;
   city: string;
   state: string;
@@ -132,7 +132,7 @@ export const addItem = async (item: Item) =>
     body: JSON.stringify({
       name: item.name,
       size: item.size,
-      photos: item.photos,
+      images: item.images,
       address: item.address,
       city: item.city,
       zipCode: item.zipCode,
@@ -179,6 +179,7 @@ export const updateItem = async (item: Item) =>
       status: item.status,
       donorId: item.donorId,
       notes: item.notes,
+      images: item.photos,
     }),
   })
     .then(async (res) => {

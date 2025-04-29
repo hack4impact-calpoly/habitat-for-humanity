@@ -55,6 +55,21 @@ export const getUserByID = async (userID: string) => {
     throw error;
   }
 };
+
+// Clerk API call to get donor info
+export const getClerkUser = async (userId: string) => {
+  try {
+    const response = await fetch(`${userURL}/clerk/${userId}`);
+    if (!response.ok) {
+      throw new Error(`${response.status}-${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+};
+
 // Get ALL volunteers
 export const getVolunteers = async () =>
   fetch(`${userURL}/volunteers`, {
@@ -116,8 +131,11 @@ export const getAdmins = async () =>
 
 // User data model
 export interface User {
-  phone: string;
   id: string;
+  phone: string;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 // Add a new User to User DB

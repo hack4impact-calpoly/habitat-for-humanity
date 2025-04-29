@@ -23,7 +23,7 @@ export type UserInfo = {
 };
 
 function DonatorProfileEditPage(): React.ReactNode {
-  const { user, isLoaded } = useUser();
+  const { user, isLoaded, isSignedIn } = useUser();
   const router = useRouter();
 
   const [verifying, setVerifying] = useState(false);
@@ -41,23 +41,51 @@ function DonatorProfileEditPage(): React.ReactNode {
   const [emailObject, setEmailObject] = useState<EmailAddressResource>();
 
   useEffect(() => {
+    // First check if auth is loaded and user is signed in
+    if (!isLoaded) return; // Wait until auth state is determined
+    
+    if (!isSignedIn) {
+      // If not signed in, redirect to login page
+      router.push('/');
+      return;
+    }
+    
+    // Only proceed if user is signed in and has an ID
     if (user?.id) {
-      const fetchData = async () => {
-        const response = await getUserByID(user.id);
-        const formattedPhone = response.phone
-          ? parsePhoneNumberFromString(response.phone, "US")?.format("E.164") ||
-            ""
-          : "";
-        setPhone(formattedPhone);
-      };
-
       setFirstName(user.firstName || "First Name Not Found");
       setLastName(user.lastName || "Last Name Not Found");
       setEmail(user.primaryEmailAddress?.emailAddress || "Email Not Found");
+      
+      const fetchData = async () => {
+        try {
+          const response = await getUserByID(user.id);
+          const formattedPhone = response.phone
+            ? parsePhoneNumberFromString(response.phone, "US")?.format("E.164") ||
+              ""
+            : "";
+          setPhone(formattedPhone);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          // Handle error gracefully
+        }
+      };
 
       fetchData();
     }
-  }, [user?.id]);
+  }, [user, isSignedIn, isLoaded, router]);
+
+  const updateUserInfo = async (newUserInfo: UserInfo) => {
+    if (!user) {
+      console.error("User not found");
+      return;
+    }
+    try {
+      await updateUserInfoAPI(user.id, newUserInfo);
+    } catch (error) {
+      console.error("Error updating user info:", error);
+      alert("Failed to update user information. Please try again.");
+    }
+  };
 
   const capitalizeFirstLetter = (s: string) => {
     if (!s) return "";
@@ -160,13 +188,15 @@ function DonatorProfileEditPage(): React.ReactNode {
     if (lastName && lastName !== initialLastName) {
       newUserInfo.lastName = capitalizeFirstLetter(lastName);
     }
-    if (phone && phone !== initialPhone) {
-      if (user) {
-        updateUserPhone(user.id, phone);
+    try {
+      if (phone && phone !== initialPhone) {
+        if (user) {
+          updateUserPhone(user.id, phone);
+        }
       }
-    }
-    if (user) {
-      updateUserInfoAPI(user.id, newUserInfo);
+      updateUserInfo(newUserInfo);
+    } catch (error) {
+      console.error("Error in submitData:", error);
     }
     if (email && email !== initialEmail) {
       try {
@@ -186,6 +216,16 @@ function DonatorProfileEditPage(): React.ReactNode {
   };
 
   const isMobile = useMediaQuery("(max-width: 640px)");
+
+  // If auth is still loading, show a loading state
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  // If not signed in, don't render anything (will redirect in useEffect)
+  if (!isSignedIn) {
+    return null;
+  }
 
   if (verifying && !emailVerified) {
     return (

@@ -1,14 +1,23 @@
-import React, { MutableRefObject, useCallback, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "redux/store";
+// Dropzone.tsx
+import React, {
+  MutableRefObject,
+  useCallback,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
 import styled from "styled-components";
-import { addImages, deleteImage, getImageByName } from "../../../api/image";
+
+type DropZoneProps = {
+  setFiles: (files: File[]) => void;
+  clearFiles: () => void;
+};
 
 const DropContainer = styled.div`
   height: 275px;
   border: 1px dashed var(--dashed-box);
   display: flex;
-  flex: column nowrap;
+  flex-direction: column;
   justify-content: center;
   align-content: center;
   background-color: var(--background);
@@ -44,22 +53,10 @@ const Message = styled.h1`
   text-align: center;
 `;
 
-const Input = styled.input`
-  height: 275px;
-  border: 1px dashed var(--dashed-box);
-  display: flex;
-  flex: column nowrap;
-  justify-content: center;
-  align-content: center;
-  background-color: var(--background);
-`;
-
 const ImageContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: center;
-  flex-gap: 10px;
+  gap: 10px;
   background-color: var(--background);
   border: 1px dashed var(--dashed-box);
 `;
@@ -75,216 +72,110 @@ const ClearMessage = styled.div`
   }
 `;
 
-const compressImage = async (file: Blob, quality: number) => {
-  // Create a new Image
+async function compressImage(file: Blob, quality: number): Promise<Blob> {
   const image = new Image();
   image.src = URL.createObjectURL(file);
   await new Promise((resolve) => {
     image.onload = resolve;
   });
 
-  // Create a canvas and draw the image on it
   const canvas = document.createElement("canvas");
   canvas.width = image.width;
   canvas.height = image.height;
-  const context = canvas.getContext("2d");
-  context?.drawImage(image, 0, 0, canvas.width, canvas.height);
+  const ctx = canvas.getContext("2d");
+  ctx?.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-  // Compress the image and return the compressed image as a Blob
   return new Promise((resolve) => {
     canvas.toBlob(
-      (blob) => {
-        resolve(blob);
-      },
+      (blob) => resolve(blob as Blob),
       "image/jpeg",
-      quality / 100,
+      quality / 100
     );
   });
-};
+}
 
-function DropZone(props: any): React.ReactNode {
-  const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
+const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [dropPhotos, setDropPhotos] = useState<File[]>([]);
+  const [preview, setPreview] = useState<string[]>([]);
 
-  // props destructuring
-  const { photos, setPhotos } = props;
-
-  // Set the maximum image size limit
-  const MAX_IMAGE_SIZE = 5000000; // 5 MB
-  // Set the maximum number of images to be uploaded
+  const MAX_IMAGE_SIZE = 5_000_000; // 5MB
   const MAX_IMAGE_COUNT = 10;
-  // Set the compressed image quality (1-100)
   const COMPRESSED_IMAGE_QUALITY = 40;
 
-  const handleDragOver = useCallback((e) => {
+  // build previews on dropPhotos change
+  useEffect(() => {
+    const urls = dropPhotos.map((f) => URL.createObjectURL(f));
+    setPreview(urls);
+    return () => urls.forEach((u) => URL.revokeObjectURL(u));
+  }, [dropPhotos]);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
   }, []);
 
-  const handleDrop = useCallback((e) => {
-    console.log("Dropped");
+  const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     processFilesInput(e.dataTransfer.files);
   }, []);
 
-  const clearImages = async (photos: string[]): Promise<void> => {
-    try {
-      // Delete each image from S3 using the deleteImage function
-      await Promise.all(
-        photos.map((photoUrl) => {
-          const filename = photoUrl.split("/").pop();
-          return deleteImage(filename);
-        }),
-      );
-    } catch (error) {
-      console.error("(clearImages) Error: ", error);
-      throw error;
-    }
-    setPhotos([]);
+  const clearImages = async () => {
+    setDropPhotos([]);
+    clearFiles();
   };
 
-  const getPresignedUrl = async (filename: string): Promise<string> => {
-    /* Get presigned URL form backend (router.get('/presigned-url/:filename')) using fetch directly: */
-    const response = await fetch(
-      `http://localhost:3001/api/images/presigned-url/${filename}`,
-    );
+  const processFilesInput = (files: FileList | null) => {
+    if (!files) return;
+    const arr = Array.from(files);
 
-    if (!response.ok) {
-      throw new Error("Error getting presigned URL");
+    if (arr.some((f) => f.size > MAX_IMAGE_SIZE)) {
+      alert("Some files exceed 5MB. Please choose smaller images.");
+      return;
+    }
+    if (arr.length > MAX_IMAGE_COUNT) {
+      alert(`You can only upload up to ${MAX_IMAGE_COUNT} images.`);
+      return;
     }
 
-    const presignedUrl = await response.json();
-    console.log("RETRIEVED PRESIGNED URL:", presignedUrl);
-    return presignedUrl.url;
-  };
-
-  /* Send image files array to S3 and receive URL */
-  const sendImagesToS3 = async (files: File[]): Promise<string[]> => {
-    // Generate a unique name for each file
-    const timestamp = new Date().getTime();
-    const newUniqueFiles = files.map((file, index) => {
-      const mimeString = file.type;
-      const fileName = `image-${timestamp}-${index}.${
-        mimeString.split("/")[1]
-      }`;
-      return new File([file], fileName, { type: mimeString });
-    });
-    try {
-      console.log(
-        "(sendImagesToS3) Uploading following images: ",
-        newUniqueFiles,
-      );
-      await addImages(newUniqueFiles);
-      console.log("(sendImagesToS3) Images uploaded successfully for state!");
-    } catch (error) {
-      console.error("Error: ", error);
-      throw error;
-    }
-
-    console.log("the files argument list in sendImagesToS3:", newUniqueFiles);
-
-    // generate presigned URLs for each image
-    const imageUrls = await Promise.all(
-      newUniqueFiles.map((file) => {
-        const fileName = file.name;
-        return getPresignedUrl(fileName);
-      }),
-    );
-
-    // const imageUrls = newUniqueFiles.map(
-    //   (file) =>
-    //     `https://habitat4humanity-images.s3.us-west-2.amazonaws.com/${file.name}`
-    // );
-
-    return imageUrls;
-  };
-
-  function processFilesInput(files: FileList | null) {
-    if (files) {
-      const filesRef = Array.from(files);
-      console.log("This fileRefs are:", filesRef);
-      const fileType: string = filesRef[0].type;
-      console.log("The first file upload is of type:", fileType);
-
-      // Check each file's size and return if it exceeds the limit
-      const tooLargeFiles = filesRef.filter(
-        (file) => file.size > MAX_IMAGE_SIZE,
-      );
-      if (tooLargeFiles.length) {
-        console.log("Too Large Files:", tooLargeFiles);
-        alert(
-          "Some files are too large. Please only upload files smaller than 5MB.",
+    Promise.all(arr.map((f) => compressImage(f, COMPRESSED_IMAGE_QUALITY)))
+      .then((blobs) => {
+        const compressedFiles = blobs.map(
+          (b, i) => new File([b], arr[i].name, { type: b.type })
         );
-        return;
-      }
-
-      if (filesRef.length > MAX_IMAGE_COUNT) {
-        alert(`Please only upload up to ${MAX_IMAGE_COUNT} images.`);
-        return;
-      }
-
-      // Convert the array of files into array of compressed Blob objects
-      Promise.all(
-        filesRef.map(async (file, index) => {
-          // Compress the file before uploading it to S3
-          console.log("compressing file...");
-          const compressedFile = await compressImage(
-            file,
-            COMPRESSED_IMAGE_QUALITY,
-          );
-          return compressedFile;
-        }),
-      )
-        .then((compressedFiles) => {
-          // Send the compressed image files to S3 and retrieve their URLs
-          console.log("a file compression done.");
-          console.log(
-            "compressedFiles as file[] ready for sending: ",
-            compressedFiles as File[],
-          );
-          console.log("starting sending to S3...");
-          return sendImagesToS3(compressedFiles as File[]);//compress image and save into redux instead
-        })
-        .then((imageUrls) => {
-          console.log("imageUrls retrieved... setting state...");
-          setPhotos(imageUrls);
-          console.log("New file state:", imageUrls);
-        })
-        .catch((error) => {
-          console.error("Error: ", error);
-          alert("An error occurred while uploading the images");
-        });
-    }
-  }
+        setFiles(compressedFiles);
+        setDropPhotos(compressedFiles);
+      })
+      .catch((err) => {
+        console.error("Image processing error:", err);
+        alert("Error processing images. Please try again.");
+      });
+  };
 
   return (
-    // prints out the images if props.photos is not empty, else drop container
     <div>
-      {photos.length > 0 ? (
-        <div>
-          <ClearMessage onClick={() => clearImages(photos)}>
-            Clear Images
-          </ClearMessage>
+      {preview.length ? (
+        <>
+          <ClearMessage onClick={clearImages}>Clear Images</ClearMessage>
           <ImageContainer>
-            {photos.map((url: any, i: any) => (
+            {preview.map((url, i) => (
               <img
-                src={url}
-                alt="uploaded"
                 key={i}
+                src={url}
+                alt={`preview-${i}`}
                 style={{
-                  height: "auto",
-                  width: "auto",
-                  margin: "10px",
                   maxWidth: "20%",
+                  margin: "10px",
                   objectFit: "cover",
                 }}
               />
             ))}
           </ImageContainer>
-        </div>
+        </>
       ) : (
         <DropContainer
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          onClick={() => inputRef.current.click()}
+          onClick={() => inputRef.current?.click()}
         >
           <DropMessage>
             Upload Your Images
@@ -292,28 +183,27 @@ function DropZone(props: any): React.ReactNode {
             <Message>
               drop your image files or <br />
               <span style={{ color: "var(--secondary)" }}>browse</span> to
-              choose a file
+              choose
               <br />
               <span style={{ color: "silver" }}>
-                maximum {(MAX_IMAGE_SIZE / 1000000).toFixed(0)}MB
+                max {Math.floor(MAX_IMAGE_SIZE / 1e6)}MB, up to{" "}
+                {MAX_IMAGE_COUNT} files
               </span>
-              <br />
-              <span style={{ color: "silver" }}>
-                limit of {MAX_IMAGE_COUNT} images
-              </span>
-              <input
-                type="file"
-                onChange={(e) => processFilesInput(e.target.files)}
-                hidden
-                multiple
-                accept="image/*"
-                ref={inputRef}
-              />
             </Message>
+            <input
+              type="file"
+              hidden
+              multiple
+              accept="image/*"
+              ref={inputRef}
+              onChange={(e) => processFilesInput(e.target.files)}
+            />
           </DropMessage>
         </DropContainer>
       )}
     </div>
   );
-}
-export default DropZone;
+};
+
+export default Dropzone;
+

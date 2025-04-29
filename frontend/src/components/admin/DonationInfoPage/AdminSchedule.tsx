@@ -32,19 +32,6 @@ function AdminSchedule(props: { timeSlots: TimeSlot[] }): React.ReactNode {
         );
       });
     };
-  const handleVolunteerInput =
-    (timeSlot: TimeSlot) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newTimeSlots = selectedTimeSlots.map((ts) => {
-        if (
-          ts.timeSlotString === timeSlot.timeSlotString &&
-          ts.dayString === timeSlot.dayString
-        ) {
-          return { ...ts, volunteer: event.target.value };
-        }
-        return ts;
-      });
-      setSelectedTimeSlots(newTimeSlots);
-    };
   const dispatch = useDispatch();
   const updateStore = () => {
     clearTimeSlots();
@@ -81,9 +68,6 @@ function AdminSchedule(props: { timeSlots: TimeSlot[] }): React.ReactNode {
                         <TableCell align="left" sx={{ width: "30%" }}>
                           <h3>Time</h3>
                         </TableCell>
-                        <TableCell align="left" sx={{ width: "70%" }}>
-                          <h3>Assign Staff/Volunteers</h3>
-                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -99,21 +83,6 @@ function AdminSchedule(props: { timeSlots: TimeSlot[] }): React.ReactNode {
                                 />
                               </TableCell>
                               <TableCell>{timeSlot.timeSlotString}</TableCell>
-                              <TableCell>
-                                <TextField
-                                  variant="outlined"
-                                  margin="none"
-                                  sx={{
-                                    width: {
-                                      sm: "100%",
-                                      md: "80%",
-                                      lg: "60%",
-                                    },
-                                  }}
-                                  onChange={handleVolunteerInput(timeSlot)}
-                                  disabled={!timeSlotIds.includes(timeSlot.id)}
-                                />
-                              </TableCell>
                             </TableRow>
                           );
                         }
