@@ -948,7 +948,7 @@ code {
   font-weight: 500;
   font-size: 17px;
   line-height: 25px;
-  margin: 0px 0px 34px 0px;
+  margin: 12px 0px 12px 0px;
   text-align: left;
   font-family: Rubik, sans-serif;
   color: var(--black);
@@ -999,13 +999,6 @@ code {
   border: 1.5px solid var(--input-box) !important;
   padding: 2% !important;
   border-radius: 20;
-}
-
-.forgotPasswordMessage {
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 25px;
-  margin: 0px 0px 12px 0px;
 }
 
 #loginBox {
@@ -1324,12 +1317,6 @@ img {
 }
 .passwordIcon {
   color: var(--primary);
-}
-.forgotPasswordMessage {
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 25px;
-  margin: 0px 0px 12px 0px;
 }
 
 @media only screen and (max-width: 640px) {
@@ -3155,4 +3142,10 @@ input[type="radio"] {
 .itemInputContainer {
   border-bottom: 1px solid #000;
   margin-bottom: 10px;
+}
+
+.toLogin {
+  text-align: center;
+  text-decoration: underline;
+  cursor: pointer;
 }
