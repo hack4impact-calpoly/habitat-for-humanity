@@ -89,6 +89,12 @@ code {
   margin: 0;
   line-height: 1;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
 }
 
 @media (max-width: 768px) {
@@ -108,6 +114,14 @@ code {
 
   #DonHistoryPage {
     padding: 1rem 0.5rem;
+  }
+
+  .MuiToolbar-root {
+    padding: 0 !important;
+  }
+
+  .MuiTablePagination-actions {
+    margin-left: 10px !important;
   }
 }
 
