@@ -264,13 +264,6 @@ function AdminCalendar() {
                     hour12: true,
                   },
                 )}
-                <p style={{ marginTop: "10px", marginBottom: "0px" }}>
-                  <span style={modalTitleText}>Volunteer </span>
-                  <span style={modalDefaultText}>
-                    {clickedEvent!.event.extendedProps.volunteerFirstName}{" "}
-                    {clickedEvent!.event.extendedProps.volunteerLastName}
-                  </span>
-                </p>
               </div>
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
                 <span style={modalTitleText}>Donor </span>
@@ -282,7 +275,7 @@ function AdminCalendar() {
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
                 <span style={modalTitleText}>Item </span>
                 <span style={modalDefaultText}>
-                  {clickedEvent!.event.extendedProps.itemName}
+                  {clickedEvent!.event.extendedProps.itemName.join(", ")}
                 </span>
               </p>
 

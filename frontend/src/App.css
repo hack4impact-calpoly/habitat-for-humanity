@@ -89,6 +89,12 @@ code {
   margin: 0;
   line-height: 1;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
 }
 
 @media (max-width: 768px) {
@@ -108,6 +114,14 @@ code {
 
   #DonHistoryPage {
     padding: 1rem 0.5rem;
+  }
+
+  .MuiToolbar-root {
+    padding: 0 !important;
+  }
+
+  .MuiTablePagination-actions {
+    margin-left: 10px !important;
   }
 }
 
@@ -554,6 +568,13 @@ code {
   border: 2px solid var(--tertiary);
 }
 
+.backButton:hover {
+  color: var(--white);
+  background-color: var(--red);
+  border: 2px solid var(--red);
+  cursor: pointer;
+}
+
 .rejectButton {
   background-color: var(--white);
   font-weight: bold;
@@ -561,6 +582,13 @@ code {
   color: var(--red);
   border: 2px solid var(--red);
   margin-right: 12px;
+}
+
+.rejectButton:hover {
+  color: var(--white);
+  background-color: var(--red);
+  border: 2px solid var(--red);
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -577,6 +605,12 @@ code {
   border: 2px solid var(--tertiary);
 }
 
+.approveButton:hover {
+  background-color: var(--white);
+  color: var(--tertiary);
+  border: 2px solid var(--tertiary);
+  cursor: pointer;
+}
 .backButton:hover,
 .rejectButton:hover .approveButton:hover {
   cursor: pointer;
@@ -948,7 +982,7 @@ code {
   font-weight: 500;
   font-size: 17px;
   line-height: 25px;
-  margin: 0px 0px 34px 0px;
+  margin: 12px 0px 12px 0px;
   text-align: left;
   font-family: Rubik, sans-serif;
   color: var(--black);
@@ -999,13 +1033,6 @@ code {
   border: 1.5px solid var(--input-box) !important;
   padding: 2% !important;
   border-radius: 20;
-}
-
-.forgotPasswordMessage {
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 25px;
-  margin: 0px 0px 12px 0px;
 }
 
 #loginBox {
@@ -1324,12 +1351,6 @@ img {
 }
 .passwordIcon {
   color: var(--primary);
-}
-.forgotPasswordMessage {
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 25px;
-  margin: 0px 0px 12px 0px;
 }
 
 @media only screen and (max-width: 640px) {
@@ -3155,4 +3176,10 @@ input[type="radio"] {
 .itemInputContainer {
   border-bottom: 1px solid #000;
   margin-bottom: 10px;
+}
+
+.toLogin {
+  text-align: center;
+  text-decoration: underline;
+  cursor: pointer;
 }

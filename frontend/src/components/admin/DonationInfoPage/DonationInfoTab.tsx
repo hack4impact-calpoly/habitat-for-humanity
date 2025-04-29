@@ -33,7 +33,11 @@ export interface TimeSlot {
 
 export function collectDates(timeSlots: TimeSlot[]) {
   const dates: string[] = [];
-  if (!timeSlots || timeSlots.length === 0 || timeSlots[0].eventStart === undefined) {
+  if (
+    !timeSlots ||
+    timeSlots.length === 0 ||
+    timeSlots[0].eventStart === undefined
+  ) {
     return dates;
   }
   timeSlots.forEach((timeSlot) => {
@@ -41,16 +45,17 @@ export function collectDates(timeSlots: TimeSlot[]) {
       dates.push(timeSlot.dayString);
     }
   });
+
   return dates;
 }
 
 function DonationInfoTab(props: InfoTabProps): React.ReactNode {
-  const { item, donor, timeSlots, notes }= props;
+  const { item, donor, timeSlots, notes } = props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
 
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     setDonationStatus(item.status);
     setPickup(item.scheduling === "Pickup");
