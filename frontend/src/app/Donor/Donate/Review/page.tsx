@@ -42,7 +42,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     phone: "",
   });
 
-
   const storedDonation = useSelector((state: RootState) => state.donation);
   const { user } = useUser();
   const storedName = useSelector((state: RootState) => state.donation.name);
@@ -171,7 +170,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     }
   };
 
-
   return (
     <div>
       {!component && <DonatorNavbar />}
@@ -193,19 +191,23 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             </p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
-              <b>Item Name(s):</b>{" "}
-              {name.join(", ")}
+              <b>Item Name(s):</b> {name.join(", ")}
             </p>
             <p id="itemDimensions">
               <b>Item Dimensions: </b>
-              {dimensions}
+              {dimensions.join(", ")}
             </p>
             <p id="itemPhotos">
               <b>Item Photos</b>
             </p>
             <div id="ProductImages">
               {imageUrls.map((url, idx) => (
-                <img key={idx} src={url} alt={`preview-${idx}`} id="ProductImage"/>
+                <img
+                  key={idx}
+                  src={url}
+                  alt={`preview-${idx}`}
+                  id="ProductImage"
+                />
               ))}
             </div>
             <h2 id="Location">Location</h2>
@@ -213,34 +215,56 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               {storedDonation.address} <br /> {storedDonation.city},{" "}
               {storedDonation.state} {storedDonation.zipCode}
             </h4>
-          </div>
-          <div id="SchedulingInfo">
             <h2 id="Scheduling">Scheduling</h2>
-          </div>
-          <div id="donPDOptions">
-            <div>
-              <input
-                type="radio"
-                className="radioOptionLabelCircle"
-                checked={dropOffOption}
-                onChange={() => setDropOffOption(true)}
-              />
-              <p id="radioDropoff" className="radioOptionLabel radioLabel">
-                I can drop off at the ReStore
-              </p>
+            <div id="donPDOptions">
+              <div>
+                <input
+                  type="radio"
+                  className="radioOptionLabelCircle"
+                  checked={dropOffOption}
+                  onChange={() => {}}
+                />
+                <p id="radioDropoff" className="radioOptionLabel radioLabel">
+                  I can drop off at the ReStore
+                </p>
+              </div>
+              <br />
+              <div id="radioPickUp">
+                <input
+                  type="radio"
+                  className="radioOptionLabelCircle"
+                  checked={!dropOffOption}
+                  onChange={() => {}}
+                />
+                <p className="radioOptionLabel radioLabel">
+                  I need the item to be picked up
+                </p>
+              </div>
             </div>
-            <br />
-            <div id="radioPickUp">
-              <input
-                type="radio"
-                className="radioOptionLabelCircle"
-                checked={!dropOffOption}
-                onChange={() => setDropOffOption(false)}
-              />
-              <p className="radioOptionLabel radioLabel">
-                The item will be picked up during
-              </p>
-            </div>
+            {!dropOffOption && (
+              <div id="SelectedTimes">
+                <h2>Selected Pickup Times</h2>
+                {storedEvents.map((event, idx) => (
+                  <p key={idx} style={{ marginBottom: "10px" }}>
+                    {new Date(event.start).toLocaleString("en-US", {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}{" "}
+                    -{" "}
+                    {new Date(event.end).toLocaleString("en-US", {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
           <div className="inputError">{serverError}</div>
           {!component && (
