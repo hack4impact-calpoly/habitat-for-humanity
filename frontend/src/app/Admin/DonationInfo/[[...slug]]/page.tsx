@@ -4,16 +4,19 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
-import { getUserByID, User } from "api/user";
 import { getItemByID, Item, updateItem } from "api/item";
+import { deleteEventByItemId, Event } from "api/event";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
 import { addEvent } from "api/event";
 import { Button } from "@mui/material";
-import { useSelector } from "react-redux";
-import { clearTimeSlots } from "../../../../redux/eventSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearTimeSlots,
+  updateDonationStatus,
+} from "../../../../redux/eventSlice";
 import { RootState } from "../../../../redux/store";
 import DonationInfoTab, {
   TimeSlot,
@@ -22,7 +25,8 @@ import AdminNavbar from "../../../../components/admin/AdminNavbar/AdminNavbar";
 import Receipt from "../../../../components/admin/DonationInfoPage/Receipt/Receipt";
 import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSchedule";
 import { updateNotes } from "../../../../redux/donationSlice";
-
+import { getClerkUser, getUserByID } from "api/user";
+import { sendApproveEmail, sendRejectEmail } from "api/email";
 
 require("../../../../App.css");
 
@@ -62,14 +66,10 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-//const imagesPool: string[] = [sofa1];
-
-const date = new Date();
-
 const emptyItem: Item = {
   _id: "",
-  name: "",
-  size: "",
+  name: [""],
+  size: [""],
   address: "",
   city: "",
   state: "",
@@ -81,11 +81,15 @@ const emptyItem: Item = {
   timeApproved: new Date(),
   status: "",
   notes: "",
-  photos: [""],
+  photos: [],
+  notes: "",
 };
 
-const emptyUser: User = {
+const emptyUser = {
   id: "",
+  firstName: "",
+  lastName: "",
+  email: "",
   phone: "",
 };
 
@@ -105,71 +109,90 @@ const getTime = (time: string) =>
 
 const getDay = (time: string) =>
   time ? moment(time).utc().format("dddd, MMMM Do YYYY") : "N/A";
-const getDayShort = (time: string) =>
-  time ? moment(time).format("dddd, MMMM Do YYYY") : "N/A";
+
+const sendApprovalEmail = async (donor: any) => {
+  try {
+    await sendApproveEmail({
+      to: donor.email,
+      donationDetails: {
+        name: donor.firstName,
+        phone: "(805) 546-8699",
+        contactEmail: "restoreslo@habitatslo.org",
+        officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
+        officeHours: "Tuesday - Saturday, 10AM - 5PM",
+        website: "https://www.habitatslo.org",
+      },
+    });
+    console.log("Approval email sent!");
+  } catch (error) {
+    console.error("Error sending approval email:", error);
+  }
+};
+
+const sendRejectionEmail = async (donor: any) => {
+  try {
+    await sendRejectEmail({
+      to: donor.email,
+      firstName: donor.firstName,
+    });
+    console.log("Rejection email sent!");
+  } catch (error) {
+    console.error("Error sending rejection email:", error);
+  }
+};
 
 function DonationInfoPage() {
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
-  const [donor, setDonor] = useState<User>(emptyUser);
+  const [donor, setDonor] = useState<any>(emptyUser);
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
   const [notes, setNotes] = useState<string>("");
   const params = useParams();
-  const slug = (params).slug;
+  const slug = params.slug;
   const id = slug ? slug[0] : "";
 
+  const nextPath: string = "/Admin";
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): Promise<void> => {
-    const nextPath: string = "/Admin";
+  const rejectItem = async () => {
+    const success = await sendUpdatedItemToDB("Rejected", false);
+    deleteEventByItemId(id);
 
-    if (e.currentTarget.value === "back") {
-      // sendUpdatedItemToDB(storedStatus, false, item.notes || "");
-      sendUpdatedItemToDB(status, false);
-      await router.back();
-      router.refresh(); // Reload page after navigating back to fetch changes
-    } else if (e.currentTarget.value === "reject") {
-      updateItem({ ...item, status: storedStatus, notes });
-      await sendUpdatedItemToDB("Rejected", false);
-      await router.back();  
-      router.refresh(); // Reload page after navigating back to fetch changes
-    } else if (e.currentTarget.value === "approve") {
-      updateItem({ ...item, status: storedStatus, notes });
-      if (
-        (await storedTimeSlots.map((timeSlot) =>
-          sendEventToDB(timeSlot, item),
-        )) &&
-        (await sendUpdatedItemToDB("Approved and Scheduled", true))
-      ) {
-        console.log("Success submitting events!");
-        clearTimeSlots(); // Clear time slots from redux
-        await router.push(nextPath);
-        router.refresh(); // Reload page after navigating back to fetch changes
+    if (success && donor && donor.email) {
+      await sendRejectionEmail(donor);
+    }
+  }
+
+  const approveItem = async () => {
+    if (storedTimeSlots.length > 0) {
+      await storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item));
+      console.log("Success submitting events!");
+      clearTimeSlots(); // Clear time slots from redux
+    }
+    if (item.scheduling !== "Pickup" || storedTimeSlots.length > 0) {
+      const success = await sendUpdatedItemToDB("Approved and Scheduled", true);
+  
+      if (success && donor && donor.email) {
+        await sendApprovalEmail(donor);
       }
+  
+      await router.push(nextPath);
+      router.refresh(); // Reload page after navigating back to fetch changes
     }
   };
 
   const sendEventToDB = (timeSlot: TimeSlot, item: Item) => {
     const event = {
-      title: `${item.name} ${item.scheduling}`,
+      title: `${item.name.join(", ")} ${item.scheduling}`,
       startTime: new Date(timeSlot.eventStart),
       endTime: new Date(timeSlot.eventEnd),
-      volunteerId: "dd9b6616-6353-438a-8bb8-a0b022c32b5e", // TODO add correct volunteer id
-      itemId: item._id === undefined ? "" : item._id,
+      itemId: item._id || "",
     };
-    console.log(event);
-    const response = addEvent(event);
-    if (!response) {
-      // "There was an error saving the events. Please try again later."
-      // TODO: add error message to user
-    }
-    return response;
+    return addEvent(event);
   };
 
-  // Update item status in DB TODO: add other statuses
   const sendUpdatedItemToDB = async (status: string, newApproval: boolean) => {
     let updatedItem: Item = {
       ...item,
@@ -177,29 +200,19 @@ function DonationInfoPage() {
       notes: notes,
     };
     if (newApproval) {
-      updatedItem = {
-        ...updatedItem,
-        timeApproved: new Date(),
-      };
+      updatedItem.timeApproved = new Date();
     } else {
-      updatedItem = {
-        ...updatedItem,
-        timeApproved: undefined,
-      };
+      updatedItem.timeApproved = undefined;
     }
-    const response = await updateItem(updatedItem);
-    if (!response) {
-      // "There was an error updating the item. Please try again later."
-      // TODO: add error message to user
-    }
-    return response;
+    console.log(updatedItem);
+    return await updateItem(updatedItem);
   };
 
   useEffect(() => {
     const fetchedItem =
       typeof id === "string"
         ? getItemByID(id)
-            .then((item) =>  {
+            .then((item) => {
               setItem(item);
               setNotes(item.notes || "");
             })
@@ -211,16 +224,23 @@ function DonationInfoPage() {
         : setItem(emptyItem);
   }, [id]);
 
-  // Fetch and set donor and available times on item change
   useEffect(() => {
     if (item.donorId !== "") {
-      const fetchedDonor = getUserByID(item.donorId)
-        .then((donor) => setDonor(donor))
-        .catch((err) => {
-          console.log(err);
-          setDonor(emptyUser);
-        });
+      const getDonor = async () => {
+        await getClerkUser(item.donorId)
+          .then(async (clerkUser) => {
+            await getUserByID(item.donorId).then((user) => {
+              setDonor({ ...clerkUser, phone: user.phone });
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            setDonor(emptyUser);
+          });
+      };
+      getDonor();
     }
+
     if (item.timeAvailability) {
       const newAvailableTimes: TimeSlot[] = item.timeAvailability.map(
         (event) => ({
@@ -228,22 +248,82 @@ function DonationInfoPage() {
           eventStart: event.start,
           eventEnd: event.end,
           timeSlotString: `${getTime(event.start)} - ${getTime(event.end)}`,
-          dayString: `${getDay(event.start)}`,
+          dayString: getDay(event.start),
           volunteer: "",
         }),
       );
       setAvailableTimes(newAvailableTimes);
     }
+
+    if (item.status) {
+      dispatch(updateDonationStatus(item.status));
+    }
   }, [item]);
 
-  const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
+  const getActionButtonText = () => {
+    if (storedStatus === "Rejected") return "Reject";
+    if (storedStatus === "Approved and Scheduled") return "Send Receipt";
+    if (storedStatus === "Completed") return "Save Changes";
+    if (storedStatus === "Needs Approval") {
+      if (item.scheduling === "Pickup") {
+        return "Schedule Pickup";
+      } else {
+        return "Approve";
+      }
+    }
+    return "Save Changes"; // Default for everyting else
+  };
+
+  const handleActionButtonClick = async () => {
+    if (storedStatus === "Rejected") {
+      rejectItem();
+      router.back();
+      router.refresh();
+      return;
+    }
+
+    if (storedStatus === "Approved and Scheduled") {
+      setValue(2); // Go to Reciept Tab
+      return;
+    }
+
+    if (storedStatus === "Completed") {
+      // Completed — no action? jsut save and go back(this does get rid of the donation
+      //no clue where it sends it to)
+      await sendUpdatedItemToDB("Completed", false);
+      router.push("/Admin");
+      router.refresh();
+      return;
+    }
+
+    if (storedStatus === "Needs Approval") {
+      if (item.scheduling === "Pickup" && value !== 1) {
+        setValue(1); // Go to Scheduling Tab
+        return;
+      } else {
+        approveItem();
+        return;
+      }
+    }
+
+    // Default Save Changes
+    await sendUpdatedItemToDB(storedStatus, false);
+    router.push("/Admin");
+    router.refresh();
+  };
+
+  const getActionButtonClass = () => {
+    if (storedStatus === "Rejected") return "rejectButton";
+    return "approveButton";
+  };
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   const handleNotesChange = (newNotes: string) => {
     setNotes(newNotes); // This will accept empty strings
   };
-  
 
   const storedStatus = useSelector(
     (state: RootState) => state.event.donationStatus,
@@ -304,27 +384,19 @@ function DonationInfoPage() {
           <button
             type="button"
             className="backButton"
-            value="back"
-            onClick={buttonNavigation}
+            value="cancel"
+            onClick={() => router.back()}
           >
-            Back
+            Cancel
           </button>
           <div id="NextButtons">
             <button
               type="button"
-              className="rejectButton"
-              value="reject"
-              onClick={buttonNavigation}
+              //uses the old styles from reject and approve button
+              className={getActionButtonClass()}
+              onClick={handleActionButtonClick}
             >
-              Reject Donation
-            </button>
-            <button
-              type="button"
-              className="approveButton"
-              value="approve"
-              onClick={buttonNavigation}
-            >
-              Approve and Schedule
+              {getActionButtonText()}
             </button>
           </div>
         </div>

@@ -12,15 +12,13 @@ import Typography from "@mui/material/Typography";
 import moment from "moment";
 import { addEvent } from "api/event";
 import { Button, dividerClasses } from "@mui/material";
-import { useSelector } from "react-redux";
-import { clearTimeSlots } from "../../../../../redux/eventSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/store";
 import DonorDonationInfoTab, {
   TimeSlot,
 } from "components/donor/DonorDonationInfoPage/DonorDonationInfoTab";
 import DonorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import { useUser } from "@clerk/nextjs";
-import { RedirectToSignIn, useAuth } from "@clerk/clerk-react";
 
 require("../../../../../App.css");
 
@@ -64,8 +62,8 @@ const date = new Date();
 
 const emptyItem: Item = {
   _id: "",
-  name: "",
-  size: "",
+  name: [""],
+  size: [""],
   address: "",
   city: "",
   state: "",
@@ -77,7 +75,7 @@ const emptyItem: Item = {
   timeApproved: new Date(),
   status: "",
   notes: "",
-  photos: [""],
+  images: [],
 };
 
 const emptyUser: User = {
@@ -120,38 +118,13 @@ function DonationInfoPage() {
   const id = slug ? slug[0] : "";
 
   const router = useRouter();
+
   const buttonNavigation = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     if (e.currentTarget.value === "back") {
-      sendUpdatedItemToDB(storedStatus, false);
       router.back();
     }
-  };
-
-  // Update item status in DB TODO: add other statuses
-  const sendUpdatedItemToDB = async (status: string, newApproval: boolean) => {
-    let updatedItem: Item = {
-      ...item,
-      status,
-    };
-    if (newApproval) {
-      updatedItem = {
-        ...updatedItem,
-        timeApproved: new Date(),
-      };
-    } else {
-      updatedItem = {
-        ...updatedItem,
-        timeApproved: undefined,
-      };
-    }
-    const response = await updateItem(updatedItem);
-    if (!response) {
-      // "There was an error updating the item. Please try again later."
-      // TODO: add error message to user
-    }
-    return response;
   };
 
   // Fetch and set item on load
@@ -206,7 +179,7 @@ function DonationInfoPage() {
   const storedTimeSlots = useSelector(
     (state: RootState) => state.event.timeSlots,
   );
-  console.log(availableTimes);
+
   return (
     <div>
       {/* <Button onClick={() => console.log(storedStatus)}>Check status</Button> */}

@@ -53,7 +53,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
     phone: donor?.phone ?? "",
     cell: "",
     email: donor?.email ?? "",
-    donatedItems: item?.name ?? "",
+    donatedItems: item?.name.join(", ") ?? "",
     value: "",
     signature: "",
     date: moment().format("MM/DD/YYYY"),
@@ -70,7 +70,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
       phone: donor?.phone ?? "",
       address: item?.address ?? "",
       cityStateZipcode: fullZip ?? "",
-      donatedItems: item?.name ?? "",
+      donatedItems: item?.name.join(", ") ?? "",
     }));
   }, [props]);
 

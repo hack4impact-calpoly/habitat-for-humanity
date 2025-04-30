@@ -12,6 +12,7 @@ import { Item } from "api/item";
 import { User } from "api/user";
 import { useDispatch } from "react-redux";
 import { updateDonationStatus } from "../../../redux/eventSlice";
+import { getPresignedImage } from "api/image";
 import { updateNotes } from "../../../redux/donationSlice";
 
 interface InfoTabProps {
@@ -33,7 +34,11 @@ export interface TimeSlot {
 
 export function collectDates(timeSlots: TimeSlot[]) {
   const dates: string[] = [];
-  if (!timeSlots || timeSlots.length === 0 || timeSlots[0].eventStart === undefined) {
+  if (
+    !timeSlots ||
+    timeSlots.length === 0 ||
+    timeSlots[0].eventStart === undefined
+  ) {
     return dates;
   }
   timeSlots.forEach((timeSlot) => {
@@ -41,19 +46,30 @@ export function collectDates(timeSlots: TimeSlot[]) {
       dates.push(timeSlot.dayString);
     }
   });
+
   return dates;
 }
 
 function DonationInfoTab(props: InfoTabProps): React.ReactNode {
-  const { item, donor, timeSlots, notes }= props;
+  const { item, donor, timeSlots, notes } = props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
+  const [images, setImages] = useState<string[]>([]);
 
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     setDonationStatus(item.status);
     setPickup(item.scheduling === "Pickup");
+    const fetchUrls = async () => {
+      const urls = await Promise.all(
+        item.images.map((imageName: string) => getPresignedImage(imageName)),
+      );
+      setImages(urls);
+    };
+    if (item && item.images) {
+      fetchUrls();
+    }
   }, [item]);
 
   const handleStatusChange = (event: SelectChangeEvent) => {
@@ -133,22 +149,26 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
           Item Information
         </h2>
         <p id="itemName">
-          <b>Item Name:</b> {item.name}
+          <b>Item Name:</b>{" "}
+          {item.name.join(", ")}
         </p>
         <p id="itemDimensions">
           <b>Item Dimensions: </b>
-          {item.size}
+          {item.size.join(", ")}
         </p>
         <p id="itemPhotos">
           <b>Item Photos</b>
         </p>
         <div id="ProductImages">
-          {/* TODO: Add photos */}
-          {/* {photos?.map((imgSrc, index) => (
-            <div key={index} id="SingleImages">
-              <img src={imgSrc.src} alt="n" />
-            </div>
-          ))} */}
+          {images && images.length > 0 ? (
+            images.map((image, index) => (
+              <div key={index} id="ProductImage">
+                <img src={image || undefined} alt={`Item Image ${index + 1}`} />
+              </div>
+            ))
+          ) : (
+            <p>No images available</p> // If no images, display a fallback message
+          )}
         </div>
       </Grid>
       <Grid item xs={12}>

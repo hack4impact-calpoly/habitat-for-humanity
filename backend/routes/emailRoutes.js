@@ -1,9 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const router = express.Router();
+const multer = require("multer");
 const nodemailer = require("nodemailer");
 const sgMail = require("@sendgrid/mail");
+const sgMail = require("@sendgrid/mail");
 
+require("dotenv").config();
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+/* ---------------------- Nodemailer Routes ---------------------- */
 require("dotenv").config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -11,10 +18,12 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // POST /api/email/
 router.post("/", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { recipientEmail, subject, body, isHTML } = req.body;
 
     const transporter = nodemailer.createTransport({
+      service: "Gmail",
       service: "Gmail",
       auth: {
         user: process.env.email_address,
@@ -29,9 +38,19 @@ router.post("/", async (req, res) => {
       ...(isHTML ? { html: body } : { text: body }),
     };
 
+    const mailOptions = {
+      from: process.env.email_address,
+      to: recipientEmail,
+      subject: subject,
+      ...(isHTML ? { html: body } : { text: body }),
+    };
+
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: "Custom email sent successfully" });
+    res.status(200).json({ message: "Custom email sent successfully" });
   } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "An error occurred while sending the custom email" });
     console.log(error);
     res.status(500).json({ error: "An error occurred while sending the custom email" });
   }
@@ -39,14 +58,17 @@ router.post("/", async (req, res) => {
 
 // POST /api/email/attach-files
 const storage = multer.memoryStorage();
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+router.post("/attach-files", upload.array("attachments"), async (req, res) => {
 router.post("/attach-files", upload.array("attachments"), async (req, res) => {
   try {
     const { recipientEmail, subject, body, isHTML } = req.body;
     const attachments = req.files;
 
     const transporter = nodemailer.createTransport({
+      service: "Gmail",
       service: "Gmail",
       auth: {
         user: process.env.email_address,
@@ -65,8 +87,20 @@ router.post("/attach-files", upload.array("attachments"), async (req, res) => {
         contentType: file.mimetype,
       })),
     };
+    const mailOptions = {
+      from: process.env.email_address,
+      to: recipientEmail,
+      subject: subject,
+      ...(isHTML === "true" ? { html: body } : { text: body }),
+      attachments: attachments.map((file) => ({
+        filename: file.originalname,
+        content: file.buffer,
+        contentType: file.mimetype,
+      })),
+    };
 
     await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: "Custom email sent successfully" });
     res.status(200).json({ message: "Custom email sent successfully" });
   } catch (error) {
     console.error("Email send error:", error);
@@ -188,6 +222,8 @@ router.post("/sendgrid-attachment", async (req, res) => {
     console.error("SendGrid error:", error.response?.body || error.message);
     res.status(500).json({ error: "SendGrid email failed" });
   }
+  
 });
 
+module.exports = router;
 module.exports = router;

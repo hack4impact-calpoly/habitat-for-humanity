@@ -63,6 +63,12 @@ function AdminNavbar(): React.ReactNode {
       // For different donation pages
       return true;
     }
+    if (
+      header === navBarHeaders[DONATION_APPROVALS_HEADER] &&
+      pagePath.includes(donationApprovalsPath)
+    ) {
+      return true;
+    }
     // Waiting for adding admin profile edit page
     // else if (header === navBarHeaders[1] && page_path.includes(profile_path)) { //For different profile pages
     //    return true;
@@ -78,13 +84,16 @@ function AdminNavbar(): React.ReactNode {
       return adminHomePath;
     }
     if (header === navBarHeaders[DONATION_APPROVALS_HEADER]) {
-      return adminHomePath;
+      return donationApprovalsPath;
     }
     if (header === navBarHeaders[HISTORY_HEADER]) {
       return adminHomePath;
     }
     if (header === navBarHeaders[PROFILE_HEADER]) {
       return adminHomePath;
+    }
+    if (header === navBarHeaders[ACTIVE_DONATIONS_HEADER]) {
+      return activePath;
     }
     if (header === navBarHeaders[SIGN_OUT_HEADER]) {
       return signoutPath;

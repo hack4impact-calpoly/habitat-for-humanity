@@ -7,6 +7,7 @@ import "moment-timezone";
 import { Item } from "api/item";
 import { User } from "api/user";
 import { updateDonationStatus } from "../../../redux/eventSlice";
+import { getPresignedImage } from "api/image";
 
 interface InfoTabProps {
   item: Item;
@@ -39,11 +40,21 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
   const { item, donor, timeSlots } = props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     setDonationStatus(item.status);
     updateDonationStatus(donationStatus);
     setPickup(item.scheduling === "Pickup");
+    const fetchUrls = async () => {
+      const urls = await Promise.all(
+        item.images.map((imageName: string) => getPresignedImage(imageName)),
+      );
+      setImages(urls);
+    };
+    if (item && item.images) {
+      fetchUrls();
+    }
   }, [item]);
 
   const dates = collectDates(timeSlots);
@@ -65,9 +76,7 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
           <h2 style={{ marginTop: "3rem", color: "var(--orange)" }}>
             Admin Notes
           </h2>
-          <p id="notes">
-            {item.notes}
-          </p>
+          <p id="notes">{item.notes}</p>
         </Grid>
       )}
       <Grid item xs={12}>
@@ -89,22 +98,26 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
           Item Information
         </h2>
         <p id="itemName">
-          <b>Item Name:</b> {item.name}
+          <b>Item Name:</b> {item.name.join(", ")}
         </p>
         <p id="itemDimensions">
           <b>Item Dimensions: </b>
-          {item.size}
+          {item.size.join(", ")}
         </p>
         <p id="itemPhotos">
           <b>Item Photos</b>
         </p>
         <div id="ProductImages">
           {/* TODO: Add photos */}
-          {/* {photos?.map((imgSrc, index) => (
-            <div key={index} id="SingleImages">
-              <img src={imgSrc.src} alt="n" />
-            </div>
-          ))} */}
+          {images && images.length > 0 ? (
+            images.map((image, index) => (
+              <div key={index} id="ProductImage">
+                <img src={image || undefined} alt={`Item Image ${index + 1}`} />
+              </div>
+            ))
+          ) : (
+            <p>No images available</p> // If no images, display a fallback message
+          )}
         </div>
       </Grid>
       <Grid item xs={12}>
@@ -150,7 +163,12 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
           <div id="availability" key={index}>
             <h3>{date}</h3>
             <div
-              style={{ display: "flex", flexDirection: "row", columnGap: 15 }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                rowGap: 10,
+                width: "100%",
+              }}
             >
               {timeSlots.map((timeSlot, index1) => {
                 if (timeSlot.dayString === date)
@@ -160,11 +178,13 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
                       style={{
                         border: "2px solid #acacac",
                         boxSizing: "border-box",
-                        width: 212,
-                        height: 49,
-                        display: "flex",
-                        paddingTop: 13,
-                        justifyContent: "center",
+                        width: "100%",
+                        padding: "12px",
+                        textAlign: "center",
+                        fontWeight: 500,
+                        whiteSpace: "normal",
+                        wordBreak: "break-word",
+                        margin: 0,
                       }}
                     >
                       {timeSlot.timeSlotString}
