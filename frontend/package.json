@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.802.0",
+    "@aws-sdk/s3-request-presigner": "^3.802.0",
     "@clerk/elements": "^0.22.20",
     "@clerk/nextjs": "^6.11.1",
     "@emotion/react": "^11.14.0",

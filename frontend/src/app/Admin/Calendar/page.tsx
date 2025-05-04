@@ -15,6 +15,7 @@ import moment from "moment";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
 import SmallCalendar from "../../../components/admin/AdminCalendar/SmallCalendar";
 import { useRouter } from "next/navigation";
+import { getEvents } from "../../../api/event"
 
 require("../../../App.css");
 
@@ -132,8 +133,8 @@ function AdminCalendar() {
   }, [calendarEvents]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/events/")
-      .then((response) => response.json())
+    const fetchEvents = (async () => {
+      await getEvents()
       .then((data) => {
         const updatedEvents = data.map((event: any) => {
           const strippedStart = moment
@@ -158,6 +159,8 @@ function AdminCalendar() {
         setCalendarEvents(updatedEvents);
       })
       .catch((error) => console.error(error));
+    })
+    fetchEvents();
   }, []);
 
   function downloadCSV(data: string, filename: string) {
