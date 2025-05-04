@@ -14,10 +14,6 @@ const DONATION_APPROVALS_HEADER = 1;
 const HISTORY_HEADER = 2;
 const ACTIVE_DONATIONS_HEADER = 3;
 const SIGN_OUT_HEADER = 4;
-const DONATION_APPROVALS_HEADER = 1;
-const HISTORY_HEADER = 2;
-const ACTIVE_DONATIONS_HEADER = 3;
-const SIGN_OUT_HEADER = 4;
 
 const navBarHeaders: string[] = [
   "Calendar",
@@ -29,12 +25,9 @@ const navBarHeaders: string[] = [
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
 const calendarPath: string = "/Admin/Calendar";
-const calendarPath: string = "/Admin/Calendar";
 const donationApprovalsPath: string = "/Admin/DonationApproval";
 const historyPath: string ="/Admin/History";
-const historyPath: string ="/Admin/History";
 const activePath: string = "/Admin/ActiveDonations";
-const signoutPath: string = "/Auth/Login";
 const signoutPath: string = "/Auth/Login";
 
 function AdminNavbar(): React.ReactNode {
@@ -71,18 +64,6 @@ function AdminNavbar(): React.ReactNode {
       return true;
     }
     if (
-      header === navBarHeaders[DONATION_APPROVALS_HEADER] &&
-      pagePath.includes(donationApprovalsPath)
-    ) {
-      return true;
-    }
-    if (
-      header === navBarHeaders[HISTORY_HEADER] &&
-      pagePath.includes(historyPath)
-    ) {
-      return true;
-    }
-    if (
       header === navBarHeaders[ACTIVE_DONATIONS_HEADER] &&
       pagePath.includes(activePath)
     ) {
@@ -90,8 +71,6 @@ function AdminNavbar(): React.ReactNode {
       return true;
     }
     if (
-      header === navBarHeaders[SIGN_OUT_HEADER] &&
-      pagePath.includes(signoutPath)
       header === navBarHeaders[SIGN_OUT_HEADER] &&
       pagePath.includes(signoutPath)
     ) {
@@ -114,11 +93,6 @@ function AdminNavbar(): React.ReactNode {
     if (header === navBarHeaders[HISTORY_HEADER]) {
       return historyPath;
     }
-    if (header === navBarHeaders[ACTIVE_DONATIONS_HEADER]) {
-      return activePath;
-    }
-    if (header === navBarHeaders[ACTIVE_DONATIONS_HEADER]) {
-      return activePath;
     if (header === navBarHeaders[ACTIVE_DONATIONS_HEADER]) {
       return activePath;
     }
