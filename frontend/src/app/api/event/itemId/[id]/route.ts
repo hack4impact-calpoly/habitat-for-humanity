@@ -7,6 +7,20 @@ type IParams = {
         id: string
     }
 }
+// Get event by itemID
+export async function GET(req: Request, { params }: IParams) {
+    const { id } = await params;
+
+    try {
+        await connect();
+        const event = await Events.findOne({ itemId: id });
+        return NextResponse.json(event, { status: 200 });
+    } catch (err) {
+        console.error("[EVENT_GET_ERROR]", err);
+        return NextResponse.json({ error: "Failed to get event" }, { status: 400 });
+    }
+}
+
 // Delete event by itemID
 export async function DELETE(req: Request, { params }: IParams) {
     const { id } = await params;

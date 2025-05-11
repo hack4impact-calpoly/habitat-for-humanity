@@ -8,6 +8,7 @@ import { Item } from "api/item";
 import { User } from "api/user";
 import { updateDonationStatus } from "../../../redux/eventSlice";
 import { getPresignedImage } from "api/image";
+import { getEventByItemId } from "api/event";
 
 interface InfoTabProps {
   item: Item;
@@ -23,6 +24,12 @@ export interface TimeSlot {
   dayString: string;
   volunteer: string;
 }
+
+type ScheduledEvent = {
+  id: string;
+  startTime: string;
+  endTime: string;
+};
 
 export function collectDates(timeSlots: TimeSlot[]) {
   if (!timeSlots || timeSlots.length === 0) return [];
@@ -41,6 +48,9 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
   const [images, setImages] = useState<string[]>([]);
+  const [scheduledEvent, setScheduledEvent] = useState<ScheduledEvent | null>(
+    null,
+  );
 
   useEffect(() => {
     setDonationStatus(item.status);
@@ -52,8 +62,34 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
       );
       setImages(urls);
     };
+    const fetchScheduledEvent = async () => {
+      if (
+        item.status === "Approved and Scheduled" &&
+        item.scheduling === "Pickup"
+      ) {
+        try {
+          if (item._id) {
+            const event = await getEventByItemId(item._id);
+
+            if (event) {
+              setScheduledEvent({
+                id: event._id,
+                startTime: event.startTime,
+                endTime: event.endTime,
+              });
+            }
+          }
+        } catch (err) {
+          console.error("Could not fetch scheduled event:", err);
+        }
+      }
+    };
+
     if (item && item.images) {
       fetchUrls();
+    }
+    if (item) {
+      fetchScheduledEvent();
     }
   }, [item]);
 
@@ -154,6 +190,19 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
             </RadioGroup>
           </FormControl>
         </Grid>
+      </Grid>
+      <Grid>
+        {donationStatus === "Approved and Scheduled" && scheduledEvent && (
+          <div style={{ marginTop: "1rem" }}>
+            <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
+              Scheduled Pick Up Time
+            </h2>
+            <p>
+              {new Date(scheduledEvent.startTime).toLocaleString()} -{" "}
+              {new Date(scheduledEvent.endTime).toLocaleString()}
+            </p>
+          </div>
+        )}
       </Grid>
       <Grid item xs={12} display={!pickup ? "none" : "block"}>
         <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
