@@ -192,7 +192,7 @@ function DonorDonationInfoTab(props: InfoTabProps): React.ReactNode {
         </Grid>
       </Grid>
       <Grid>
-        {donationStatus === "Approved and Scheduled" && scheduledEvent && (
+        {donationStatus === "Approved and Scheduled" && pickup && scheduledEvent && (
           <div style={{ marginTop: "1rem" }}>
             <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
               Scheduled Pick Up Time
