@@ -163,7 +163,7 @@ function DonationInfoPage() {
     if (success && donor && donor.email) {
       await sendRejectionEmail(donor);
     }
-  }
+  };
 
   const approveItem = async () => {
     if (storedTimeSlots.length > 0) {
@@ -173,11 +173,11 @@ function DonationInfoPage() {
     }
     if (item.scheduling !== "Pickup" || storedTimeSlots.length > 0) {
       const success = await sendUpdatedItemToDB("Approved and Scheduled", true);
-  
+
       if (success && donor && donor.email) {
         await sendApprovalEmail(donor);
       }
-  
+
       await router.push(nextPath);
       router.refresh(); // Reload page after navigating back to fetch changes
     }
@@ -332,6 +332,10 @@ function DonationInfoPage() {
     (state: RootState) => state.event.timeSlots,
   );
 
+  useEffect(() => {
+    console.log("🕒 Stored Time Slots:", storedTimeSlots);
+  }, [storedTimeSlots]);
+  
   return (
     <div>
       <AdminNavbar />
@@ -377,7 +381,15 @@ function DonationInfoPage() {
             <AdminSchedule timeSlots={availableTimes} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Receipt item={item} donor={donor} />
+            <Receipt
+              item={item}
+              donor={donor}
+              scheduledTimeSlot={
+                storedTimeSlots.length > 0
+                  ? `${moment(storedTimeSlots[0].eventStart).format("dddd, MMMM Do YYYY")} from ${moment(storedTimeSlots[0].eventStart).format("h:mm A")} to ${moment(storedTimeSlots[0].eventEnd).format("h:mm A")}`
+                  : "Not scheduled"
+              }
+            />
           </TabPanel>
         </div>
         <div id="DonInfoButtons">
