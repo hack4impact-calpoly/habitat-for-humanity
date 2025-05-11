@@ -16,6 +16,25 @@ export const getEvents = async () =>
         throw new Error(`${res.status}-${res.statusText}`);
       }
       const result = await res.json();
+      
+      return result;
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error*/
+
+export const getEventByItemId = async (itemId: string) =>
+   fetch(`${nextURL}/itemId/${itemId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        // check server response
+        throw new Error(`${res.status}-${res.statusText}`);
+      }
+      const result = await res.json();
+      
       return result;
     })
     .catch((error) => console.error("Error: ", error)); // handle error*/
