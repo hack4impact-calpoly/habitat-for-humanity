@@ -327,59 +327,8 @@ function CreateAccountPage(): React.ReactNode {
     <>
       <Box id="createAccountStyles" sx={styles.container}>
         <Box id="createAccountBox">
-          <p id="createAccountText">Create an Account</p>
+          <p id="createAccountText">Create a Donor Account</p>
           <form id="createAccountForm">
-            {/* Div for the user type section */}
-            <div id="accountTypeBox">
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: { xs: "column", md: "row" },
-                  width: "100%",
-                }}
-              >
-                <Box sx={{ marginBottom: { xs: "10px", md: "0rem" } }}>
-                  <p id="userTypeLabel"> I am a </p>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "left",
-                    gap: "0.5rem",
-                    width: "100%",
-                  }}
-                >
-                  <Box className="radioContainer">
-                    <input
-                      type="radio"
-                      className="userTypeButton"
-                      value="Donor" // Specifies the value for the useState
-                      name="userType" // connects all options under group "userType" -> only one can be selected at a time
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setUserType(e.target.value);
-                        validateUserType(e.target.value);
-                      }}
-                    />
-                    <span className="accountLabel">Donor</span>
-                  </Box>
-                  <Box className="radioContainer">
-                    <input
-                      type="radio"
-                      className="userTypeButton"
-                      value="Volunteer"
-                      name="userType"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setUserType(e.target.value);
-                        validateUserType(e.target.value);
-                      }}
-                    />
-                    <span className="accountLabel">Volunteer</span>
-                  </Box>
-                </Box>
-              </Box>
-            </div>
-
             <div className="inputError">{userTypeError}</div>
             <div id="nameBox">
               <Box
