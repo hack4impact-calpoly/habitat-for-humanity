@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Event, updatePickupTimes } from "../../../redux/donationSlice";
 
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { DateSelectArg } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -111,15 +111,14 @@ function DonatorSchedulePickUp(): React.ReactNode {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const onClickCalendar = (info: DateSelectArg): void => {
-    const startDate = info.start;
-    setSelectedDate(startDate);
+  const onClickCalendar = (date: Date): void => {
+    setSelectedDate(date);
     setHeader(
-      `${monthNames[startDate.getMonth()]}, ${
-        weekdays[startDate.getDay()]
-      } ${startDate.getDate()}`,
+      `${monthNames[date.getMonth()]}, ${
+        weekdays[date.getDay()]
+      } ${date.getDate()}`,
     );
-    setTimes(getHourIntervals(startDate.toISOString()));
+    setTimes(getHourIntervals(date.toISOString()));
   };
 
   const updateStore = () => {
@@ -178,16 +177,18 @@ function DonatorSchedulePickUp(): React.ReactNode {
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
               events={events}
-              selectable
-              unselectAuto={false}
-              longPressDelay={1}
-              selectConstraint={{ daysOfWeek: [3, 4] }} // Only Wed, Thu
-              selectAllow={(selectInfo) => {
-                return (
-                  selectInfo.start >= startDate && selectInfo.end <= endDate
-                );
+              dateClick={(info) => {
+                const clickedDate = info.date;
+                clickedDate.setHours(0, 0, 0, 0);
+                const day = clickedDate.getDay();
+                const isValidDay = day === 3 || day === 4;
+                const isInRange =
+                  clickedDate >= startDate && clickedDate <= endDate;
+
+                if (isValidDay && isInRange) {
+                  onClickCalendar(clickedDate);
+                }
               }}
-              select={onClickCalendar}
               businessHours={{ daysOfWeek: [3, 4] }}
               windowResizeDelay={0}
               fixedWeekCount={true}
@@ -196,9 +197,18 @@ function DonatorSchedulePickUp(): React.ReactNode {
                 today.setHours(0, 0, 0, 0); // midnight for accurate date comparison
                 const day = arg.date.getDay(); // 3 = Wednesday, 4 = Thursday
 
+                const classes = [];
                 const isPastWedOrThu =
                   arg.date < today && (day === 3 || day === 4);
-                return isPastWedOrThu ? ["fc-grayed-out"] : [];
+
+                if (isPastWedOrThu) classes.push("fc-grayed-out");
+                if (
+                  selectedDate &&
+                  arg.date.getTime() === selectedDate.getTime()
+                ) {
+                  classes.push("fc-selected-blue");
+                }
+                return classes;
               }}
             />
           </div>
@@ -252,7 +262,7 @@ function DonatorSchedulePickUp(): React.ReactNode {
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
-                  }} 
+                  }}
                 >
                   <Checkbox
                     icon={<RadioButtonUncheckedIcon />}
