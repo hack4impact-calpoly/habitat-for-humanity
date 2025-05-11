@@ -253,7 +253,9 @@ function CreateAccountPage(): React.ReactNode {
       });
 
       if (signUpAttempt.status === "complete") {
-        await updateMetadata(userType, signUpAttempt.createdUserId);
+        if (signUpAttempt.createdSessionId) {
+          await updateMetadata(signUpAttempt.createdUserId);
+        }
         await setActive({ session: signUpAttempt.createdSessionId });
         
         if (signUpAttempt.createdUserId != null) {

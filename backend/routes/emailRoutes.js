@@ -128,6 +128,8 @@ router.post("/approved-scheduled", async (req, res) => {
 
         <p>Your donation has been approved.</p>
 
+        <p><strong>${donationDetails.itemNotes}</strong></p>
+
         <h3>Habitat for Humanity Contact Information</h3>
         <ul>
           <li><strong>Phone:</strong> ${donationDetails.phone}</li>
@@ -159,7 +161,7 @@ router.post("/approved-scheduled", async (req, res) => {
 // POST /api/email/reject
 router.post("/reject", async (req, res) => {
   try {
-    const { to, firstName } = req.body;
+    const { to, firstName, itemNotes } = req.body;
 
     const msg = {
       to: to,
@@ -171,7 +173,7 @@ router.post("/reject", async (req, res) => {
       html: `
         <p>Hi ${firstName},</p>
     
-        <p>Unfortunately, your donation request has been rejected. We truly appreciate your generosity and support.</p>
+        <p>Unfortunately, your donation request has been rejected for this reason: ${itemNotes}. We truly appreciate your generosity and support.</p>
     
         <p>If you have any questions, please contact us:</p>
         <ul>

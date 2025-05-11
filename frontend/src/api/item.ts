@@ -1,12 +1,11 @@
 import { Event } from "redux/donationSlice";
 
-const itemURL: string = "http://localhost:3001/api/items/";
-
+const nextURL: string = "/api/item"
 /* ------------------GET Requests----------------- */
 
 // Get ALL items
 export const getItems = async () =>
-  fetch(itemURL, {
+  fetch(nextURL, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -25,7 +24,7 @@ export const getItems = async () =>
 
 // Get AN item by "itemID"
 export const getItemByID = async (itemID: string) =>
-  fetch(`${itemURL}itemId/${itemID}`, {
+  fetch(`${nextURL}/${itemID}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -42,47 +41,9 @@ export const getItemByID = async (itemID: string) =>
     })
     .catch((error) => console.error("Error: ", error)); // handle error
 
-// Get ALL items with matching "name"
-export const getItemsByName = async (name: string) =>
-  fetch(`${itemURL}name/${name}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then(async (res) => {
-      const items = await res.json();
-      if (!res.ok) {
-        // check server response
-        throw new Error(`${res.status}-${res.statusText}`);
-      }
-      console.log(items);
-      return items;
-    })
-    .catch((error) => console.error("Error: ", error)); // handle error
-
-// Get ALL items with matching "location"
-export const getItemsByLocation = async (address: string, city: string) =>
-  fetch(`${itemURL}location/${city}/${address}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then(async (res) => {
-      const items = await res.json();
-      if (!res.ok) {
-        // check server response
-        throw new Error(`${res.status}-${res.statusText}`);
-      }
-      console.log(items);
-      return items;
-    })
-    .catch((error) => console.error("Error: ", error)); // handle error
-
 // Get ALL items with matching "donorID"
 export const getItemsByDonorID = async (donorID: string) =>
-  fetch(`${itemURL}donorId/${donorID}`, {
+  fetch(`${nextURL}/donorId/${donorID}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -124,7 +85,7 @@ export interface Item {
 
 // Add a new Item to Item DB
 export const addItem = async (item: Item) =>
-  fetch(itemURL, {
+  fetch(nextURL, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -161,7 +122,7 @@ export const addItem = async (item: Item) =>
 
 // Update Item
 export const updateItem = async (item: Item) =>
-  fetch(`${itemURL}/itemId/${item._id}`, {
+  fetch(`${nextURL}/${item._id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

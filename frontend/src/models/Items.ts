@@ -1,0 +1,29 @@
+import mongoose from "mongoose";
+
+const itemSchema = new mongoose.Schema(
+  {
+    name: { type: [String], required: true },
+    images: { type: [String], required: true },
+    size: { type: [String], required: true },
+    address: { type: String, required: true },
+    city: { type: String, required: true },
+    zipCode: { type: String, required: true },
+    scheduling: { type: String, required: true },
+    timeAvailability: [
+      {
+        start: { type: String, required: false },
+        end: { type: String, required: false },
+      },
+    ],
+    donorId: { type: String, required: true },
+    timeSubmitted: { type: Date, required: true },
+    timeApproved: { type: Date, required: false },
+    status: { type: String, required: true },
+    notes: { type: String, required: false },
+    timeAccepted: { type: Date, required: false },
+  }
+);
+
+const Items = mongoose.models.Items || mongoose.model("Items", itemSchema);
+
+export default Items;
