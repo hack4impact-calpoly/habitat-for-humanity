@@ -82,7 +82,6 @@ const emptyItem: Item = {
   status: "",
   notes: "",
   photos: [],
-  notes: "",
 };
 
 const emptyUser = {
@@ -110,7 +109,7 @@ const getTime = (time: string) =>
 const getDay = (time: string) =>
   time ? moment(time).utc().format("dddd, MMMM Do YYYY") : "N/A";
 
-const sendApprovalEmail = async (donor: any) => {
+const sendApprovalEmail = async (donor: any, notes:string) => {
   try {
     await sendApproveEmail({
       to: donor.email,
@@ -121,6 +120,7 @@ const sendApprovalEmail = async (donor: any) => {
         officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
         officeHours: "Tuesday - Saturday, 10AM - 5PM",
         website: "https://www.habitatslo.org",
+        itemNotes: notes,
       },
     });
     console.log("Approval email sent!");
@@ -129,11 +129,12 @@ const sendApprovalEmail = async (donor: any) => {
   }
 };
 
-const sendRejectionEmail = async (donor: any) => {
+const sendRejectionEmail = async (donor: any, notes: string) => {
   try {
     await sendRejectEmail({
       to: donor.email,
       firstName: donor.firstName,
+      itemNotes: notes, 
     });
     console.log("Rejection email sent!");
   } catch (error) {
@@ -161,7 +162,7 @@ function DonationInfoPage() {
     deleteEventByItemId(id);
 
     if (success && donor && donor.email) {
-      await sendRejectionEmail(donor);
+      await sendRejectionEmail(donor, notes);
     }
   }
 
@@ -175,7 +176,7 @@ function DonationInfoPage() {
       const success = await sendUpdatedItemToDB("Approved and Scheduled", true);
   
       if (success && donor && donor.email) {
-        await sendApprovalEmail(donor);
+        await sendApprovalEmail(donor, notes);
       }
   
       await router.push(nextPath);
@@ -322,7 +323,7 @@ function DonationInfoPage() {
   };
 
   const handleNotesChange = (newNotes: string) => {
-    setNotes(newNotes); // This will accept empty strings
+    setNotes(newNotes);
   };
 
   const storedStatus = useSelector(

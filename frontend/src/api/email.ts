@@ -1,13 +1,17 @@
+const emailURL: string = "/api/email"
+
 // send rejection email
 export async function sendRejectEmail({
   to,
   firstName,
+  itemNotes,
 }: {
   to: string;
   firstName: string;
+  itemNotes: string;
 }) {
   try {
-    const response = await fetch("http://localhost:3001/api/email/reject", {
+    const response = await fetch(`${emailURL}/reject`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,6 +19,7 @@ export async function sendRejectEmail({
       body: JSON.stringify({
         to,
         firstName,
+        itemNotes,
       }),
     });
 
@@ -43,10 +48,11 @@ export async function sendApproveEmail({
     officeLocation: string;
     officeHours: string;
     website: string;
+    itemNotes: string;
   };
 }) {
   try {
-    const response = await fetch("http://localhost:3001/api/email/approved-scheduled", {
+    const response = await fetch(`${emailURL}/approve`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
