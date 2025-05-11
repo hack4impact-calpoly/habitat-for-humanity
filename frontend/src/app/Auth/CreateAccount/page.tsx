@@ -14,7 +14,7 @@ import isEmail from "validator/lib/isEmail";
 import isMobilePhone from "validator/lib/isMobilePhone";
 import { v4 as uuidv4 } from "uuid";
 import PhoneInput from "react-phone-number-input";
-import 'react-phone-number-input/style.css'
+import "react-phone-number-input/style.css";
 import {
   CountryCode,
   isValidPhoneNumber,
@@ -35,7 +35,6 @@ function CreateAccountPage(): React.ReactNode {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [verifying, setVerifying] = useState(false);
   const [code, setCode] = useState("");
-  const [userType, setUserType] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -65,25 +64,11 @@ function CreateAccountPage(): React.ReactNode {
         Desc: Validates all the form fields
         Return: boolean (true if all are valid, false if one is not)
         */
-    let valid: boolean = validateUserType(userType);
-    valid = validateName(firstName, lastName) && valid;
+    let valid: boolean = validateName(firstName, lastName);
     valid = validateEmail(email) && valid;
     valid = validatePhoneNumber(phoneNumber) && valid;
     valid = validatePassword(password) && valid;
     return valid;
-  };
-
-  const validateUserType = (userType: string): boolean => {
-    /*
-        Desc: Validates userTypes (donor, volunteer, administrator)
-        Return: boolean (true if valid, false if not)
-        */
-    if (userType === "") {
-      setUserTypeError("Please select an account type");
-      return false;
-    }
-    setUserTypeError("");
-    return true;
   };
 
   const validateName = (firstName: string, lastName: string): boolean => {
@@ -194,7 +179,7 @@ function CreateAccountPage(): React.ReactNode {
         );
         return false;
       }
-      setPhoneNumber("+" + processedString);
+      setPhoneNumber(processedString);
     } catch (error) {
       console.error(error);
       setPhoneNumberError(
@@ -229,12 +214,20 @@ function CreateAccountPage(): React.ReactNode {
 
         setVerifying(true);
       } catch (err: any) {
-        if (err.errors?.some((e: any) => e.code === 'form_identifier_exists')) {
-          setEmailError('Email is taken, please try another.')
-        } else if (err.errors?.some((e: any) => e.code === 'form_password_length_too_short')) {
-          setEmailError('Password must be at least 8 characters or more.');
-        } else if (err.errors?.som((e: any) => e.code === 'form_password_pwned')) {
-          setPasswordError('Password has been found in an online data breach. For account safety, please use a different password.')
+        if (err.errors?.some((e: any) => e.code === "form_identifier_exists")) {
+          setEmailError("Email is taken, please try another.");
+        } else if (
+          err.errors?.some(
+            (e: any) => e.code === "form_password_length_too_short",
+          )
+        ) {
+          setEmailError("Password must be at least 8 characters or more.");
+        } else if (
+          err.errors?.som((e: any) => e.code === "form_password_pwned")
+        ) {
+          setPasswordError(
+            "Password has been found in an online data breach. For account safety, please use a different password.",
+          );
         }
         console.error(JSON.stringify(err, null, 2));
       }
@@ -257,7 +250,7 @@ function CreateAccountPage(): React.ReactNode {
           await updateMetadata(signUpAttempt.createdUserId);
         }
         await setActive({ session: signUpAttempt.createdSessionId });
-        
+
         if (signUpAttempt.createdUserId != null) {
           const userData = {
             id: signUpAttempt.createdUserId,
@@ -296,9 +289,7 @@ function CreateAccountPage(): React.ReactNode {
     } else {
       setPhoneNumberError("Please enter a valid phone number");
     }
-  };  
-  
-  
+  };
 
   // Display the verification form to capture the OTP code
   if (verifying) {
@@ -320,7 +311,7 @@ function CreateAccountPage(): React.ReactNode {
             Verify
           </button>
         </form>
-        </div>
+      </div>
     );
   }
 
@@ -381,16 +372,18 @@ function CreateAccountPage(): React.ReactNode {
             </Box>
 
             <Box className="labelInputBox">
-            <p className="formLabel">Phone Number</p>
-            <PhoneInput
-              className="inputBox"
-              value={phoneNumber || ""}
-              onChange={handlePhoneChange}
-              defaultCountry="US"
-              international={false}
-              onCountryChange={(country) => setSelectedCountry(country || "US")} 
-            />
-          </Box>
+              <p className="formLabel">Phone Number</p>
+              <PhoneInput
+                className="inputBox"
+                value={phoneNumber || ""}
+                onChange={handlePhoneChange}
+                defaultCountry="US"
+                international={false}
+                onCountryChange={(country) =>
+                  setSelectedCountry(country || "US")
+                }
+              />
+            </Box>
 
             <Box className="labelInputBox">
               <p className="formLabel">Password</p>
