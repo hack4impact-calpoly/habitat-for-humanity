@@ -4,11 +4,15 @@ import { User } from "api/user";
 import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
 import moment from "moment";
+// import Tabs from "@mui/material/Tabs";
+// import Tab from "@mui/material/Tab";
+// import PropTypes from "prop-types";
+// import Typography from "@mui/material/Typography";
+// import Box from "@mui/material/Box";
 require("../../../../App.css");
-
 const logo = "/images/logo.png";
 
-const exportPdf = async (id: string): Promise<void> => {
+const exportPdf = async (id: string) => {
   const input = document.getElementById(id);
   if (!input) return;
   const canvas = await html2canvas(input, { scale: 5 });
@@ -23,11 +27,8 @@ const exportPdf = async (id: string): Promise<void> => {
 interface ReceiptTabProps {
   item: Item;
   donor: User;
+  scheduledTimeSlot: string;
 }
-
-// filler values for volunteer
-const volunteerName = "Jane";
-const volunteerEmail = "jane@gmail.com";
 
 const habitatContact = {
   phone: "(805) 546-8699",
@@ -39,9 +40,8 @@ const habitatContact = {
 
 function Receipt(props: ReceiptTabProps): React.ReactNode {
   const { item, donor } = props;
-
-  const fullName = `${donor?.firstName ?? ""} ${donor?.lastName ?? ""}`;
-  const fullZip = `${item?.city ?? ""}, California ${item?.zipCode ?? ""}`;
+  const fullName = `${donor?.firstName} ${donor?.lastName}`;
+  const fullZip = `${item?.city}, California ${item?.zipCode}`;
 
   const [contract, setContract] = useState({
     donationFor: fullName ?? "",
@@ -93,10 +93,8 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
      <br />Your donation has been approved.<br />
     
      <ul>
-     <li><strong>Date:</strong> ${contract.date}</li>
-     <li><strong>Time:</strong> ${contract.pickupTime}</li>
+     <li><strong>Pickup Date & Time:</strong> ${props.scheduledTimeSlot}</li>
      <li><strong>Location:</strong> ${contract.address}, ${contract.cityStateZipcode}</li>
-     <li><strong>Volunteer:</strong> ${volunteerName}</li>
      </ul>
     
      <p><strong>Digital Receipt</strong> is attached to this email.</p>
@@ -111,48 +109,43 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
      <li><strong>Website:</strong> ${habitatContact.website}</li>
      </ul>`;
 
-      const bodyForVolunteer = `Hi ${volunteerName}, <br />
-     <br />You are scheduled to assist with a donation pickup.<br />
-    
-     <ul>
-     <li><strong>Donor:</strong> ${contract.firstName} ${contract.lastName}</li>
-     <li><strong>Phone:</strong> ${contract.phone}</li>
-     <li><strong>Date:</strong> ${contract.date}</li>
-     <li><strong>Time:</strong> ${contract.pickupTime}</li>
-     <li><strong>Address:</strong> ${contract.address}, ${contract.cityStateZipcode}</li>
-    
-     </ul>
-    
-     <p><strong>Digital Receipt</strong> is attached to this email.</p>
-    
-     <h3>Habitat for Humanity Contact</h3>
-
-     <ul>
-     <li><strong>Phone:</strong> ${habitatContact.phone}</li>
-     <li><strong>Email:</strong> ${habitatContact.email}</li>
-     <li><strong>Location:</strong> ${habitatContact.location}</li>
-     <li><strong>Hours:</strong> ${habitatContact.hours}</li>
-     <li><strong>Website:</strong> ${habitatContact.website}</li>
-     </ul>`;
-
-      const sendEmail = async (recipientEmail: string, body: string) => {
+      const sendEmail = async () => {
+        const input = document.getElementById("receiptPage");
+        if (!input) return;
+      
+        const canvas = await html2canvas(input, { scale: 5 });
+        const imgData = canvas.toDataURL("image/jpeg");
+        const pdf = new JsPDF();
+        const width = pdf.internal.pageSize.getWidth();
+        const height = pdf.internal.pageSize.getHeight();
+        pdf.addImage(imgData, "JPEG", 0, height / 50, width, height * 0.75);
+        const receiptBase64 = pdf.output("datauristring").split(",")[1];
+      
         await fetch("http://localhost:3001/api/email/sendgrid-attachment", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            recipientEmail,
-            subject: "Donation Receipt",
-            body,
-            pdfBase64,
-            filename: "receipt.pdf",
+            recipientEmail: contract.email,
+            donationDetails: {
+              firstName: contract.firstName,
+              date: contract.date,
+              phone: habitatContact.phone,
+              contactEmail: habitatContact.email,
+              officeLocation: habitatContact.location,
+              officeHours: habitatContact.hours,
+              website: habitatContact.website,
+            },
+            scheduledTime: props.scheduledTimeSlot,
+            pickupAddress: contract.address,
+            receiptBase64,
           }),
         });
-      };
+      };      
 
-      await sendEmail(contract.email, bodyForDonor);
-      await sendEmail(volunteerEmail, bodyForVolunteer);
+      // await sendEmail(contract.email, bodyForDonor);
+      await sendEmail();
 
-      alert("Emails sent to donor and volunteer with PDF attachment.");
+      alert("Email sent to donor with PDF attachment.");
     } catch (error) {
       console.error("SendGrid email error:", error);
       alert("Failed to send email.");
