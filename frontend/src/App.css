@@ -700,6 +700,7 @@ code {
 
 .signature-field-flex {
   display: flex;
+  margin-top: 20px;
 }
 
 .signature-field input {
@@ -758,6 +759,16 @@ code {
   width: 100%;
   background-color: #d5f7ff;
   font-weight: 500;
+}
+
+.forFlex.pdf-export input {
+  background-color: transparent !important;
+}
+
+@media print {
+  .forFlex input {
+    background-color: transparent !important;
+  }
 }
 
 .forFlex input:focus {

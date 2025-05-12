@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { DeleteObjectCommand, GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const Bucket = process.env.AWS_BUCKET_NAME;
@@ -11,21 +15,30 @@ const s3 = new S3Client({
   },
 });
 
-export async function GET(req: NextRequest, { params }: { params: { filename: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { filename: string } },
+) {
   const { filename } = await params;
 
   try {
     const command = new GetObjectCommand({ Bucket, Key: filename });
-    const url = await getSignedUrl(s3, command, { expiresIn: 300})
+    const url = await getSignedUrl(s3, command, { expiresIn: 300 });
 
     return NextResponse.json({ url });
   } catch (error: any) {
     console.error("Error getting presigned URL:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { filename: string } }) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { filename: string } },
+) {
   const { filename } = await params;
 
   try {
@@ -35,6 +48,9 @@ export async function DELETE(req: NextRequest, { params }: { params: { filename:
     return NextResponse.json({ message: `Deleted ${filename} from bucket.` });
   } catch (error: any) {
     console.error("Error deleting file:", error);
-    return NextResponse.json({ error: "Failed to delete file from S3" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to delete file from S3" },
+      { status: 500 },
+    );
   }
 }

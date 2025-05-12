@@ -10,6 +10,7 @@ import "moment-timezone";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Item } from "api/item";
 import { User } from "api/user";
+import { Event } from "api/event";
 import { useDispatch } from "react-redux";
 import { updateDonationStatus } from "../../../redux/eventSlice";
 import { getPresignedImage } from "api/image";
@@ -21,6 +22,7 @@ interface InfoTabProps {
   donor: User;
   timeSlots: TimeSlot[];
   notes: string;
+  events: Event[];
   onNotesChange: (notes: string) => void;
 }
 
@@ -30,11 +32,9 @@ export interface TimeSlot {
   eventEnd: string;
   timeSlotString: string;
   dayString: string;
-  volunteer: string;
 }
 
 type ScheduledEvent = {
-  id: string;
   startTime: string;
   endTime: string;
 };
@@ -58,13 +58,11 @@ export function collectDates(timeSlots: TimeSlot[]) {
 }
 
 function DonationInfoTab(props: InfoTabProps): React.ReactNode {
-  const { item, donor, timeSlots, notes } = props;
+  const { item, donor, timeSlots, notes, events } = props;
   const [donationStatus, setDonationStatus] = useState<string>(item.status);
   const [pickup, setPickup] = useState<boolean>(true);
   const [images, setImages] = useState<string[]>([]);
-  const [scheduledEvent, setScheduledEvent] = useState<ScheduledEvent | null>(
-    null,
-  );
+  const [scheduledEvents, setScheduledEvents] = useState<ScheduledEvent[]>([]);
 
   const dispatch = useDispatch();
 
@@ -82,20 +80,17 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
         item.status === "Approved and Scheduled" &&
         item.scheduling === "Pickup"
       ) {
-        try {
-          if (item._id) {
-            const event = await getEventByItemId(item._id);
+        if (events) {
+          const newScheduledEvents = events.map((event: Event) => ({
+            startTime: new Date(event.startTime).toLocaleString("en-US", {
+              timeZone: "America/Los_Angeles",
+            }),
+            endTime: new Date(event.endTime).toLocaleString("en-US", {
+              timeZone: "America/Los_Angeles",
+            }),
+          }));
 
-            if (event) {
-              setScheduledEvent({
-                id: event._id,
-                startTime: event.startTime,
-                endTime: event.endTime,
-              });
-            }
-          }
-        } catch (err) {
-          console.error("Could not fetch scheduled event:", err);
+          setScheduledEvents(newScheduledEvents);
         }
       }
     };
@@ -106,7 +101,7 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
     if (item) {
       fetchScheduledEvent();
     }
-  }, [item]);
+  }, [item, events]);
 
   const handleStatusChange = (event: SelectChangeEvent) => {
     const newStatus = event.target.value;
@@ -242,17 +237,20 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
         </Grid>
       </Grid>
       <Grid>
-        {donationStatus === "Approved and Scheduled" && pickup && scheduledEvent && (
-          <div style={{ marginTop: "1rem" }}>
-            <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
-              Scheduled Pick Up Time
-            </h2>
-            <p>
-              {new Date(scheduledEvent.startTime).toLocaleString()} -{" "}
-              {new Date(scheduledEvent.endTime).toLocaleString()}
-            </p>
-          </div>
-        )}
+        {donationStatus === "Approved and Scheduled" &&
+          pickup &&
+          scheduledEvents && (
+            <div style={{ marginTop: "1rem" }}>
+              <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>
+                Scheduled Pick Up Time
+              </h2>
+              {scheduledEvents.map((scheduledEvent, index) => (
+                <div key={index}>
+                  {scheduledEvent.startTime} - {scheduledEvent.endTime}
+                </div>
+              ))}
+            </div>
+          )}
       </Grid>
       <Grid item xs={12} display={!pickup ? "none" : "block"}>
         <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>

@@ -1,4 +1,4 @@
-const nextURL: string = "/api/event"
+const nextURL: string = "/api/event";
 
 /* ------------------GET Requests-----------------*/
 
@@ -16,13 +16,13 @@ export const getEvents = async () =>
         throw new Error(`${res.status}-${res.statusText}`);
       }
       const result = await res.json();
-      
+
       return result;
     })
     .catch((error) => console.error("Error: ", error)); // handle error*/
 
 export const getEventByItemId = async (itemId: string) =>
-   fetch(`${nextURL}/itemId/${itemId}`, {
+  fetch(`${nextURL}/itemId/${itemId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -34,7 +34,7 @@ export const getEventByItemId = async (itemId: string) =>
         throw new Error(`${res.status}-${res.statusText}`);
       }
       const result = await res.json();
-      
+
       return result;
     })
     .catch((error) => console.error("Error: ", error)); // handle error*/

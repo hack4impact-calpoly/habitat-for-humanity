@@ -9,17 +9,40 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { clearAll, clearTimeSlots, updateTimeSlots } from "../../../redux/eventSlice";
+import {
+  clearAll,
+  clearTimeSlots,
+  updateTimeSlots,
+} from "../../../redux/eventSlice";
 import { collectDates, TimeSlot } from "./DonationInfoTab";
-function AdminSchedule(props: { timeSlots: TimeSlot[] }): React.ReactNode {
-  const { timeSlots } = props;
+import { Event, getEventByItemId } from "api/event";
+
+function AdminSchedule(props: {
+  timeSlots: TimeSlot[];
+  events: Event[];
+}): React.ReactNode {
+  const { timeSlots, events } = props;
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<TimeSlot[]>([]);
   const [timeSlotIds, setTimeSlotIds] = useState<string[]>([]);
   const dates = collectDates(timeSlots);
+
   useEffect(() => {
     setTimeSlotIds(selectedTimeSlots.map((ts) => ts.id));
     updateStore();
   }, [selectedTimeSlots]);
+
+  useEffect(() => {
+    if (events) {
+      const matchedSlots = timeSlots.filter((slot) =>
+        events.some(
+          (event: Event) =>
+            event.startTime.toLocaleString() === slot.eventStart,
+        ),
+      );
+      setSelectedTimeSlots(matchedSlots);
+    }
+  }, [events, timeSlots]);
+
   const handleCheckbox =
     (timeSlot: TimeSlot) => (event: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = event.target.checked;
