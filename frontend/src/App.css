@@ -761,16 +761,6 @@ code {
   font-weight: 500;
 }
 
-.forFlex.pdf-export input {
-  background-color: transparent !important;
-}
-
-@media print {
-  .forFlex input {
-    background-color: transparent !important;
-  }
-}
-
 .forFlex input:focus {
   outline: none;
   background-color: transparent;
