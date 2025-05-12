@@ -67,7 +67,7 @@ export interface Item {
   name: string[];
   // images: [mongoose.Schema.ObjectId]
   size: string[];
-  images: String[];
+  images: string[];
   address: string;
   city: string;
   state: string;
@@ -140,7 +140,7 @@ export const updateItem = async (item: Item) =>
       status: item.status,
       donorId: item.donorId,
       notes: item.notes,
-      images: item.photos,
+      images: item.images,
     }),
   })
     .then(async (res) => {

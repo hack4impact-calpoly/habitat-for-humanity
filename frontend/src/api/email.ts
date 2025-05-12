@@ -1,4 +1,4 @@
-const emailURL: string = "/api/email"
+const emailURL: string = "/api/email";
 
 // send rejection email
 export async function sendRejectEmail({
@@ -71,6 +71,45 @@ export async function sendApproveEmail({
     return response.json();
   } catch (error) {
     console.error("Error sending approval email:", error);
+    throw error;
+  }
+}
+
+// send receipt email
+export async function sendReceiptEmail({
+  to,
+  donationDetails,
+  receipt,
+}: {
+  to: string;
+  donationDetails: {
+    name: string;
+    phone: string;
+    contactEmail: string;
+    officeLocation: string;
+    officeHours: string;
+    website: string;
+  };
+  receipt: Blob;
+}) {
+  try {
+    const formData = new FormData();
+    formData.append("to", to);
+    formData.append("receipt", receipt);
+    formData.append("donationDetails", JSON.stringify(donationDetails));
+    const response = await fetch(`${emailURL}/receipt`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to send receipt email: ${response.statusText}`);
+    }
+
+    console.log("Receipt email successfully sent!");
+    return response.json();
+  } catch (error) {
+    console.error("Error sending receipt email:", error);
     throw error;
   }
 }

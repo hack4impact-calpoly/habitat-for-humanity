@@ -10,7 +10,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
-import { addEvent } from "api/event";
+import { Event, addEvent, getEventByItemId } from "api/event";
 import { Button, dividerClasses } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/store";
@@ -84,7 +84,6 @@ const emptyUser: User = {
   lastName: "",
   email: "",
   phone: "",
-  userType: "",
 };
 
 const emptyTimeSlots: TimeSlot[] = [
@@ -94,7 +93,6 @@ const emptyTimeSlots: TimeSlot[] = [
     eventEnd: "",
     timeSlotString: "",
     dayString: "",
-    volunteer: "",
   },
 ];
 
@@ -111,6 +109,7 @@ function DonationInfoPage() {
   const [phone, setPhone] = useState("");
   const [value, setValue] = useState<number>(0);
   const [item, setItem] = useState<Item>(emptyItem);
+  const [events, setEvents] = useState<Event[]>([]);
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
   const params = useParams();
@@ -167,6 +166,20 @@ function DonationInfoPage() {
       }
     };
     fetchData();
+
+    if (item) {
+      const getEvents = async () => {
+        if (item._id) {
+          try {
+            const matchedEvents = await getEventByItemId(item._id);
+            setEvents(matchedEvents);
+          } catch (err) {
+            console.error("Could not fetch scheduled event:", err);
+          }
+        }
+      };
+      getEvents();
+    }
   }, [item, user]);
 
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
@@ -214,9 +227,9 @@ function DonationInfoPage() {
                 lastName: user?.lastName || "user",
                 email: user?.primaryEmailAddress?.emailAddress || "",
                 phone: phone,
-                userType: "donor",
               }}
               timeSlots={availableTimes}
+              events={events}
             />
           </TabPanel>
         </div>

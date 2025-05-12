@@ -700,6 +700,7 @@ code {
 
 .signature-field-flex {
   display: flex;
+  margin-top: 20px;
 }
 
 .signature-field input {

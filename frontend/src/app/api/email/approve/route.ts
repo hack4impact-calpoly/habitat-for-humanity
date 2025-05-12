@@ -45,8 +45,8 @@ export async function POST(req: Request) {
         await sgMail.send(msg);
         return NextResponse.json({ message: "Approved email sent successfully!" }, { status: 200 });
     } catch (err) {
-        console.error("[EMAIL_APPROV_SEND_ERROR]", err);
-        return NextResponse.json({ error: "Failed to post event" }, { status: 400 });
+        console.error("[EMAIL_APPROVE_SEND_ERROR]", err);
+        return NextResponse.json({ error: "Failed to send approved email" }, { status: 400 });
     }
     
 }

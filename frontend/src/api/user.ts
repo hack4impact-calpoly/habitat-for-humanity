@@ -1,4 +1,4 @@
-const nextURL = "/api/user"
+const nextURL = "/api/user";
 /* ----------------------Clerk User Requests---------------------------*/
 export const updateMetadata = async (userId: string | null) =>
   fetch(`${nextURL}/clerk/updateRole`, {
@@ -88,7 +88,7 @@ export const addUser = async (user: User) =>
 
 export const updateUserInfoAPI = async (
   userId: string,
-  params: { firstName?: string; lastName?: string; },
+  params: { firstName?: string; lastName?: string },
 ) => {
   const response = await fetch(`${nextURL}/clerk/${userId}`, {
     method: "PUT",
@@ -106,7 +106,7 @@ export const updateUserInfoAPI = async (
 
   const updatedUser = await response.json();
   return updatedUser;
-};    
+};
 
 // Update User "phone" (given userID)
 export const updateUserPhone = async (userID: string, phone: string) =>

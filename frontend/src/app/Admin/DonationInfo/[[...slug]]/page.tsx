@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { getItemByID, Item, updateItem } from "api/item";
-import { deleteEventByItemId, Event } from "api/event";
+import { deleteEventByItemId, Event, getEventByItemId } from "api/event";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
@@ -15,18 +15,19 @@ import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearTimeSlots,
+  TimeSlot,
   updateDonationStatus,
 } from "../../../../redux/eventSlice";
 import { RootState } from "../../../../redux/store";
-import DonationInfoTab, {
-  TimeSlot,
-} from "../../../../components/admin/DonationInfoPage/DonationInfoTab";
+import DonationInfoTab from "../../../../components/admin/DonationInfoPage/DonationInfoTab";
 import AdminNavbar from "../../../../components/admin/AdminNavbar/AdminNavbar";
 import Receipt from "../../../../components/admin/DonationInfoPage/Receipt/Receipt";
 import AdminSchedule from "../../../../components/admin/DonationInfoPage/AdminSchedule";
 import { updateNotes } from "../../../../redux/donationSlice";
 import { getClerkUser, getUserByID } from "api/user";
-import { sendApproveEmail, sendRejectEmail } from "api/email";
+import { sendApproveEmail, sendReceiptEmail, sendRejectEmail } from "api/email";
+import html2canvas from "html2canvas";
+import JsPDF from "jspdf";
 
 require("../../../../App.css");
 
@@ -81,7 +82,7 @@ const emptyItem: Item = {
   timeApproved: new Date(),
   status: "",
   notes: "",
-  photos: [],
+  images: [],
 };
 
 const emptyUser = {
@@ -99,7 +100,6 @@ const emptyTimeSlots: TimeSlot[] = [
     eventEnd: "",
     timeSlotString: "",
     dayString: "",
-    volunteer: "",
   },
 ];
 
@@ -109,7 +109,7 @@ const getTime = (time: string) =>
 const getDay = (time: string) =>
   time ? moment(time).utc().format("dddd, MMMM Do YYYY") : "N/A";
 
-const sendApprovalEmail = async (donor: any, notes:string) => {
+const sendApprovalEmail = async (donor: any, notes: string) => {
   try {
     await sendApproveEmail({
       to: donor.email,
@@ -134,7 +134,7 @@ const sendRejectionEmail = async (donor: any, notes: string) => {
     await sendRejectEmail({
       to: donor.email,
       firstName: donor.firstName,
-      itemNotes: notes, 
+      itemNotes: notes,
     });
     console.log("Rejection email sent!");
   } catch (error) {
@@ -149,6 +149,7 @@ function DonationInfoPage() {
   const [availableTimes, setAvailableTimes] =
     useState<TimeSlot[]>(emptyTimeSlots);
   const [notes, setNotes] = useState<string>("");
+  const [events, setEvents] = useState<Event[]>([]);
   const params = useParams();
   const slug = params.slug;
   const id = slug ? slug[0] : "";
@@ -164,7 +165,7 @@ function DonationInfoPage() {
     if (success && donor && donor.email) {
       await sendRejectionEmail(donor, notes);
     }
-  }
+  };
 
   const approveItem = async () => {
     if (storedTimeSlots.length > 0) {
@@ -174,11 +175,11 @@ function DonationInfoPage() {
     }
     if (item.scheduling !== "Pickup" || storedTimeSlots.length > 0) {
       const success = await sendUpdatedItemToDB("Approved and Scheduled", true);
-  
+
       if (success && donor && donor.email) {
         await sendApprovalEmail(donor, notes);
       }
-  
+
       await router.push(nextPath);
       router.refresh(); // Reload page after navigating back to fetch changes
     }
@@ -202,11 +203,71 @@ function DonationInfoPage() {
     };
     if (newApproval) {
       updatedItem.timeApproved = new Date();
-    } else {
-      updatedItem.timeApproved = undefined;
     }
     console.log(updatedItem);
     return await updateItem(updatedItem);
+  };
+
+  const sendReceipt = async () => {
+    const receiptElement = document.getElementById("receiptPage");
+    if (!receiptElement) return;
+
+    document
+      .querySelectorAll(
+        ".forFlex input, .signature-field input, .value-div input",
+      )
+      .forEach((el) => {
+        if (el instanceof HTMLElement) {
+          el.style.backgroundColor = "transparent";
+        }
+      });
+    const canvas = await html2canvas(receiptElement, { scale: 5 });
+    const imgData = canvas.toDataURL("image/jpeg");
+    const pdfDOC = new JsPDF();
+    const pdfWidth = pdfDOC.internal.pageSize.getWidth();
+    const pdfHeight = pdfDOC.internal.pageSize.getHeight();
+
+    // Get image properties
+    const imgProps = pdfDOC.getImageProperties(imgData);
+    const imgWidth = imgProps.width;
+    const imgHeight = imgProps.height;
+
+    // Calculate scale factor to preserve aspect ratio
+    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+    const scaledWidth = imgWidth * ratio;
+    const scaledHeight = imgHeight * ratio;
+
+    pdfDOC.addImage(imgData, "JPEG", 0, 0, scaledWidth, scaledHeight);
+
+    const pdfBlob = pdfDOC.output("blob");
+
+    try {
+      await sendReceiptEmail({
+        to: donor.email,
+        donationDetails: {
+          name: donor.firstName,
+          phone: "(805) 546-8699",
+          contactEmail: "restoreslo@habitatslo.org",
+          officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
+          officeHours: "Tuesday - Saturday, 10AM - 5PM",
+          website: "https://www.habitatslo.org",
+        },
+        receipt: pdfBlob,
+      });
+      alert("Receipt sent!");
+    } catch (err) {
+      console.error("Failed to send receipt", err);
+      alert("Failed to send receipt.");
+    }
+    document
+      .querySelectorAll(
+        ".forFlex input, .signature-field input, .value-div input",
+      )
+      .forEach((el) => {
+        if (el instanceof HTMLElement) {
+          el.style.backgroundColor = "#d5f7ff";
+        }
+      });
   };
 
   useEffect(() => {
@@ -256,6 +317,20 @@ function DonationInfoPage() {
       setAvailableTimes(newAvailableTimes);
     }
 
+    if (item) {
+      const getEvents = async () => {
+        if (item._id) {
+          try {
+            const matchedEvents = await getEventByItemId(item._id);
+            setEvents(matchedEvents);
+          } catch (err) {
+            console.error("Could not fetch scheduled event:", err);
+          }
+        }
+      };
+      getEvents();
+    }
+
     if (item.status) {
       dispatch(updateDonationStatus(item.status));
     }
@@ -284,7 +359,14 @@ function DonationInfoPage() {
     }
 
     if (storedStatus === "Approved and Scheduled") {
-      setValue(2); // Go to Reciept Tab
+      if (value !== 2) {
+        setValue(2); // Go to Reciept Tab
+        return;
+      }
+      sendReceipt();
+      await sendUpdatedItemToDB("Completed", false);
+      router.push("/Admin");
+      router.refresh();
       return;
     }
 
@@ -371,14 +453,15 @@ function DonationInfoPage() {
               donor={donor}
               timeSlots={availableTimes}
               notes={notes || ""}
+              events={events}
               onNotesChange={handleNotesChange}
             />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <AdminSchedule timeSlots={availableTimes} />
+            <AdminSchedule timeSlots={availableTimes} events={events} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Receipt item={item} donor={donor} />
+            <Receipt item={item} donor={donor} events={events} />
           </TabPanel>
         </div>
         <div id="DonInfoButtons">
