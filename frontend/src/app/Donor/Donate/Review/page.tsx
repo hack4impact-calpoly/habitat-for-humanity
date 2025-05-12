@@ -35,7 +35,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   dropOff,
   component,
 }) => {
-
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
@@ -50,6 +49,14 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
     (state: RootState) => state.donation.dimensions,
   );
   const statePhotos = useSelector((state: RootState) => state.donation.photos);
+  // console.log(
+  //   "state.donation",
+  //   useSelector((state: RootState) => state.donation),
+  // );
+  const collectionType = useSelector(
+    (state: RootState) => state.donation.photos,
+  );
+  const stateTime = useSelector((state: RootState) => state.donation.photos);
 
   // storedPhotos is an array of images names,
   // if access is needed, images name can be used
@@ -149,7 +156,7 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
   };
 
   const buttonNavigation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     const backPath: string = "/Donor/Donate/ScheduleDropoffPickup";
     const nextPath: string = "/Donor/Donate/NextSteps";
@@ -162,7 +169,6 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
       }
     }
   };
-
 
   return (
     <div>
@@ -177,15 +183,18 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             <p id="itemName">
               <b>Name:</b> {userData.firstName} {userData.lastName}
             </p>
-            <p id="itemDimensions"><b>Email: </b> {userData.email}</p>
-            <p id="itemPhotos"><b>Phone Number: </b> {userData.phone} </p>
+            <p id="itemDimensions">
+              <b>Email: </b> {userData.email}
+            </p>
+            <p id="itemPhotos">
+              <b>Phone Number: </b> {userData.phone}{" "}
+            </p>
             <h2 id="ItemInfo">Item Information</h2>
             <p id="itemName">
-              <b>Item Name(s):</b>{" "}
-              {name.join(", ")}
+              <b>Item Name(s):</b> {name.join(", ")}
             </p>
             <p id="itemDimensions">
-              <b>Item Dimension(s): </b>
+              <b>Item Dimensions: </b>
               {dimensions.join(", ")}
             </p>
             <p id="itemPhotos">
@@ -193,7 +202,12 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
             </p>
             <div id="ProductImages">
               {imageUrls.map((url, idx) => (
-                <img key={idx} src={url} alt={`preview-${idx}`} id="ProductImage"/>
+                <img
+                  key={idx}
+                  src={url}
+                  alt={`preview-${idx}`}
+                  id="ProductImage"
+                />
               ))}
             </div>
             <h2 id="Location">Location</h2>
@@ -201,6 +215,56 @@ const SubmitInfo: React.FC<DummyComponentProps> = ({
               {storedDonation.address} <br /> {storedDonation.city},{" "}
               {storedDonation.state} {storedDonation.zipCode}
             </h4>
+            <h2 id="Scheduling">Scheduling</h2>
+            <div id="donPDOptions">
+              <div>
+                <input
+                  type="radio"
+                  className="radioOptionLabelCircle"
+                  checked={dropOffOption}
+                  onChange={() => {}}
+                />
+                <p id="radioDropoff" className="radioOptionLabel radioLabel">
+                  I can drop off at the ReStore
+                </p>
+              </div>
+              <br />
+              <div id="radioPickUp">
+                <input
+                  type="radio"
+                  className="radioOptionLabelCircle"
+                  checked={!dropOffOption}
+                  onChange={() => {}}
+                />
+                <p className="radioOptionLabel radioLabel">
+                  I need the item to be picked up
+                </p>
+              </div>
+            </div>
+            {!dropOffOption && (
+              <div id="SelectedTimes">
+                <h2>Selected Pickup Times</h2>
+                {storedEvents.map((event, idx) => (
+                  <p key={idx} style={{ marginBottom: "10px" }}>
+                    {new Date(event.start).toLocaleString("en-US", {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}{" "}
+                    -{" "}
+                    {new Date(event.end).toLocaleString("en-US", {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
           <div className="inputError">{serverError}</div>
           {!component && (

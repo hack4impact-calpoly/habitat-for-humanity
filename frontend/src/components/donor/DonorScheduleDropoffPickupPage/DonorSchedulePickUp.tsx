@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Event, updatePickupTimes } from "../../../redux/donationSlice";
 
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { DateSelectArg } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -103,19 +103,22 @@ function DonatorSchedulePickUp(): React.ReactNode {
     getHourIntervals(moment().toISOString()),
   );
   const [pickupError, setPickupError] = useState<string>("");
+  const startDate = firstValidDate(new Date());
+  startDate.setDate(startDate.getDate() - 1);
+  const endDate = new Date();
+  endDate.setMonth(endDate.getMonth() + 1);
 
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const onClickCalendar = (info: DateSelectArg): void => {
-    const startDate = info.start;
-    setSelectedDate(startDate);
+  const onClickCalendar = (date: Date): void => {
+    setSelectedDate(date);
     setHeader(
-      `${monthNames[startDate.getMonth()]}, ${
-        weekdays[startDate.getDay()]
-      } ${startDate.getDate()}`,
+      `${monthNames[date.getMonth()]}, ${
+        weekdays[date.getDay()]
+      } ${date.getDate()}`,
     );
-    setTimes(getHourIntervals(startDate.toISOString()));
+    setTimes(getHourIntervals(date.toISOString()));
   };
 
   const updateStore = () => {
@@ -169,24 +172,46 @@ function DonatorSchedulePickUp(): React.ReactNode {
       <h2 className="donDropoffPickupHeader">Time Availability</h2>
       <div id="donatorPickupPage">
         <div id="calendarView">
-          <FullCalendar
-            plugins={[dayGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            events={events}
-            selectable
-            selectConstraint={{ daysOfWeek: [3, 4] }}
-            unselectAuto={false}
-            longPressDelay={1}
-            select={onClickCalendar}
-            validRange={(now) => {
-              const startDate = firstValidDate(new Date());
-              const endDate = new Date();
-              endDate.setMonth(endDate.getMonth() + 1);
-              return { start: startDate, end: endDate };
-            }}
-            businessHours={{ daysOfWeek: [3, 4] }}
-            windowResizeDelay={0}
-          />
+          <div className="calendar-container">
+            <FullCalendar
+              plugins={[dayGridPlugin, interactionPlugin]}
+              initialView="dayGridMonth"
+              events={events}
+              dateClick={(info) => {
+                const clickedDate = info.date;
+                clickedDate.setHours(0, 0, 0, 0);
+                const day = clickedDate.getDay();
+                const isValidDay = day === 3 || day === 4;
+                const isInRange =
+                  clickedDate >= startDate && clickedDate <= endDate;
+
+                if (isValidDay && isInRange) {
+                  onClickCalendar(clickedDate);
+                }
+              }}
+              businessHours={{ daysOfWeek: [3, 4] }}
+              windowResizeDelay={0}
+              fixedWeekCount={true}
+              showNonCurrentDates={true}
+              dayCellClassNames={(arg) => {
+                today.setHours(0, 0, 0, 0); // midnight for accurate date comparison
+                const day = arg.date.getDay(); // 3 = Wednesday, 4 = Thursday
+
+                const classes = [];
+                const isPastWedOrThu =
+                  arg.date < today && (day === 3 || day === 4);
+
+                if (isPastWedOrThu) classes.push("fc-grayed-out");
+                if (
+                  selectedDate &&
+                  arg.date.getTime() === selectedDate.getTime()
+                ) {
+                  classes.push("fc-selected-blue");
+                }
+                return classes;
+              }}
+            />
+          </div>
           <div className="inputError">{pickupError}</div>
         </div>
 
@@ -218,19 +243,36 @@ function DonatorSchedulePickUp(): React.ReactNode {
                 .format("hh:mm A")
                 .replace(/^(?:00:)?0?/, "");
               return (
-                <div className="donatorPickUpTime" key={idx}>
+                <div
+                  className="donatorPickUpTime"
+                  key={idx}
+                  onClick={() => {
+                    // Toggle the checkbox state when the entire div is clicked
+                    const currentChecked = !evaluateEventPresence(
+                      availEvent.start,
+                      availEvent.end,
+                    );
+                    if (currentChecked) {
+                      addEvent(availEvent.start, availEvent.end);
+                    } else {
+                      removeEvent(availEvent.start, availEvent.end);
+                    }
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
                   <Checkbox
                     icon={<RadioButtonUncheckedIcon />}
                     checkedIcon={<CheckCircleIcon />}
-                    onChange={(e) =>
-                      e.target.checked
-                        ? addEvent(availEvent.start, availEvent.end)
-                        : removeEvent(availEvent.start, availEvent.end)
-                    }
+                    onChange={() => {}} // Prevent checkbox's default click behavior
                     checked={evaluateEventPresence(
                       availEvent.start,
                       availEvent.end,
                     )}
+                    style={{ marginRight: "8px" }} // Optional margin for better spacing
                   />
                   {`${startTime} to ${endTime}`}
                 </div>
