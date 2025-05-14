@@ -12,7 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 import moment from "moment";
 import "moment-timezone";
-import { Item, getItems } from "api/item";
+import { Item, getItemsByStatus } from "api/item";
 import { getClerkUser } from "api/user";
 
 type DonationViewType = "approvals" | "active" | "history";
@@ -40,7 +40,7 @@ export default function DonationsTable({ viewType }: DonationsTableProps): React
   const router = useRouter();
 
   useEffect(() => {
-    getItems().then((res) => setItems(res));
+    getItemsByStatus(viewType).then((res) => setItems(res));
   }, []);
 
   useEffect(() => {
@@ -93,25 +93,6 @@ export default function DonationsTable({ viewType }: DonationsTableProps): React
     setPage(0);
   };
 
-  const getFilteredItems = () => {
-    switch (viewType) {
-      case "approvals":
-        return items.filter(item => 
-          item.status === "Needs Approval" || item.status === "Send Receipt"
-        );
-      case "active":
-        return items.filter(item =>
-          item.status === "Approved and Scheduled" || item.status === "Send Receipt"
-        );
-      case "history":
-        return items.filter(item =>
-          item.status === "Completed" || item.status === "Rejected"
-        );
-      default:
-        return [];
-    }
-  };
-
   const getTitle = () => {
     switch (viewType) {
       case "approvals": return "Donation Approvals";
@@ -137,8 +118,6 @@ export default function DonationsTable({ viewType }: DonationsTableProps): React
     }
   };
 
-  const filteredItems = getFilteredItems();
-
   return (
     <div id="activeDonPage">
       <h1 id="activeDonHeader">{getTitle()}</h1>
@@ -154,7 +133,7 @@ export default function DonationsTable({ viewType }: DonationsTableProps): React
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredItems
+            {items
               .sort((a, b) => sortReceivedTime(a, b))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((d, index) => (
@@ -180,7 +159,7 @@ export default function DonationsTable({ viewType }: DonationsTableProps): React
         <TablePagination
           rowsPerPageOptions={[8, 10, 15]}
           component="div"
-          count={filteredItems.length}
+          count={items.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
