@@ -90,10 +90,6 @@ code {
   line-height: 1;
   font-weight: 600;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
   gap: 10px;
 }
 
@@ -106,6 +102,10 @@ code {
   .tableCell {
     font-size: 13px;
     line-height: 1.1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   .tableRow {
