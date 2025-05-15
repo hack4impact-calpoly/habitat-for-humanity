@@ -146,19 +146,13 @@ function DonatorSchedulePickUp(): React.ReactNode {
     }
   };
 
-  const addEvent = (start: string, end: string) => {
-    const date = selectedDate.toISOString().split("T")[0];
-    const startTime = `${date}T${start.split("T")[1]}`;
-    const endTime = `${date}T${end.split("T")[1]}`;
+  const addEvent = (startTime: string, endTime: string) => {
     if (!events.find((e) => e.start === startTime && e.end === endTime)) {
       setEvents([...events, { start: startTime, end: endTime }]);
     }
   };
 
-  const removeEvent = (start: string, end: string) => {
-    const date = selectedDate.toISOString().split("T")[0];
-    const startTime = `${date}T${start.split("T")[1]}`;
-    const endTime = `${date}T${end.split("T")[1]}`;
+  const removeEvent = (startTime: string, endTime: string) => {
     setEvents(
       events.filter((e) => !(e.start === startTime && e.end === endTime)),
     );
