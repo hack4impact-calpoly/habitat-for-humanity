@@ -161,7 +161,7 @@ function AdminNavbar(): React.ReactNode {
           component="img"
           src="/images/ReStoreLogo.png"
           alt="logo"
-          sx={{ width: { md: "12rem" } }}
+          sx={{ width: { xs: "10rem" } }}
         />
       </a>
       <IconButton
@@ -226,10 +226,10 @@ function AdminNavbar(): React.ReactNode {
     </MenuItem>
   );
   return (
-    <>
+    <div className="navbar">
       {renderDesktopNavbar()}
       {renderMobileNavbar()}
-    </>
+    </div>
   );
 }
 
