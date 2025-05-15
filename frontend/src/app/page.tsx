@@ -5,6 +5,6 @@ export default async function Page() {
   const { userId, sessionClaims } = await auth();
   if (!userId) return redirect("/Auth/Login");
 
-  const role = sessionClaims?.metadata.role || "Auth/Login";
+  const role = sessionClaims?.metadata.role || "setup-role";
   redirect(`/${role}`);
 }

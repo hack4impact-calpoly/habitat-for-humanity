@@ -4,26 +4,27 @@ import { NextResponse } from "next/server";
 const isAdminRoute = createRouteMatcher(["/Admin(.*)"]);
 const isDonorRoute = createRouteMatcher(["/Donor(.*)"]);
 const isAuthRoute = createRouteMatcher(["/Auth(.*)"]);
+const isRoleRoute = createRouteMatcher(["/setup-role(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  // Protect all routes starting with `/Admin`
-  if (
-    isAdminRoute(req) &&
-    (await auth()).sessionClaims?.metadata?.role !== "Admin"
-  ) {
-    const url = new URL("/", req.url);
-    return NextResponse.redirect(url);
+  const session = await auth();
+  const role = session.sessionClaims?.metadata?.role;
+  const userId = session.userId;
+
+  if (isAdminRoute(req) && role !== "Admin") {
+    return NextResponse.redirect(new URL("/", req.url));
   }
-  if (
-    isDonorRoute(req) &&
-    (await auth()).sessionClaims?.metadata?.role !== "Donor"
-  ) {
-    const url = new URL("/", req.url);
-    return NextResponse.redirect(url);
+
+  if (isDonorRoute(req) && role !== "Donor") {
+    return NextResponse.redirect(new URL("/", req.url));
   }
-  if (isAuthRoute(req) && (await auth()).userId) {
-    const url = new URL("/", req.url);
-    return NextResponse.redirect(url);
+
+  if (isRoleRoute(req) && role) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  if (isAuthRoute(req) && userId) {
+    return NextResponse.redirect(new URL("/", req.url));
   }
 });
 
