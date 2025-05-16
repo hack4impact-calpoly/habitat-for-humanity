@@ -37,7 +37,6 @@
     "npm": "^11.0.0",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",
-    "react-aws-s3": "^1.5.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
     "react-phone-number-input": "^3.4.12",
