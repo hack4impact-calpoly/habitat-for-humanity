@@ -34,7 +34,7 @@ export async function DELETE(req: Request, { params }: IParams) {
 
   try {
     await connect();
-    await Events.findOneAndDelete({ itemId: id });
+    await Events.deleteMany({ itemId: id });
     return NextResponse.json({ status: 200 });
   } catch (err) {
     console.error("[EVENT_DELETE_ERROR]", err);
