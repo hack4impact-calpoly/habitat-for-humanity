@@ -71,12 +71,14 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
+.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
 # Next.js build output
 .next
+next-env.d.ts
 
 # Nuxt.js build / generate output
 .nuxt
@@ -116,3 +118,6 @@ node_modules/
 **.sample
 #do-not-edit-end
 **/.DS_Store
+
+# clerk configuration (can include secrets)
+/.clerk/
