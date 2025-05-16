@@ -3174,3 +3174,7 @@ input[type="radio"] {
 .fc-grayed-out {
   background-color: var(--fc-non-business-color);
 }
+
+.fc-day-today {
+  background-color: inherit !important;
+} 

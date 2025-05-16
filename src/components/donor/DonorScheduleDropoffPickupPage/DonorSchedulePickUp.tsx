@@ -97,10 +97,10 @@ function DonatorSchedulePickUp(): React.ReactNode {
       weekdays[firstValidDate(today).getDay()]
     } ${firstValidDate(today).getDate()}`,
   );
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(firstValidDate(new Date()));
   const [events, setEvents] = useState<Event[]>(storedEvents);
   const [times, setTimes] = useState<Event[]>(
-    getHourIntervals(moment().toISOString()),
+    getHourIntervals(firstValidDate(new Date()).toISOString()),
   );
   const [pickupError, setPickupError] = useState<string>("");
   const startDate = firstValidDate(new Date());
