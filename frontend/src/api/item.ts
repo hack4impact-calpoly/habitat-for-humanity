@@ -3,25 +3,6 @@ import { Event } from "redux/donationSlice";
 const nextURL: string = "/api/item"
 /* ------------------GET Requests----------------- */
 
-// Get ALL items
-export const getItems = async () =>
-  fetch(nextURL, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then(async (res) => {
-      const items = await res.json();
-      if (!res.ok) {
-        // check server response
-        throw new Error(`${res.status}-${res.statusText}`);
-      }
-      // console.log(items);
-      return items;
-    })
-    .catch((error) => console.error("Error: ", error)); // handle error
-
 // Get AN item by "itemID"
 export const getItemByID = async (itemID: string) =>
   fetch(`${nextURL}/${itemID}`, {
@@ -57,6 +38,25 @@ export const getItemsByDonorID = async (donorID: string) =>
       }
       console.log(items);
       return items;
+    })
+    .catch((error) => console.error("Error: ", error)); // handle error
+
+// Get items by status
+export const getItemsByStatus = async (status: string) =>
+  fetch(`${nextURL}/status/${status}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then(async (res) => {
+      const item = await res.json();
+      if (!res.ok) {
+        // check server response
+        throw new Error(`${res.status}-${res.statusText}`);
+      }
+      // console.log(item);
+      return item;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
 

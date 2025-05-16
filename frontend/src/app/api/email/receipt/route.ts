@@ -1,7 +1,11 @@
 import * as sgMail from "@sendgrid/mail";
+import { verifyAdmin } from "hooks/verify";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  if (!(await verifyAdmin())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 401 });
+  }
   const formData = await req.formData();
   const recipientEmail = formData.get("to") as string;
   const donationDetails = JSON.parse(formData.get("donationDetails") as string);

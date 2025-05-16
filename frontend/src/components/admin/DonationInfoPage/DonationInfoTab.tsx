@@ -129,24 +129,32 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
             displayEmpty
             // inputProps={{ "aria-label": "Without label" }}
           >
-            <MenuItem value="Needs Approval" sx={{ color: "var(--orange)" }}>
+            <MenuItem value="Needs Approval" sx={{ color: "#FFA500" }}>
               <em>
                 <b>Needs Approval</b>
               </em>
             </MenuItem>
             <MenuItem value="Approved and Scheduled">
-              Approved and Scheduled
-            </MenuItem>
-            <MenuItem value="Send Receipt" sx={{ color: "var(--orange)" }}>
               <em>
-                <b>Send Receipt</b>
+                <b>Approved and Scheduled</b>
               </em>
             </MenuItem>
-            <MenuItem value="Completed">Completed</MenuItem>
-            <MenuItem value="Rejected">Rejected</MenuItem>
-            <MenuItem value="Soft Rejection">Soft Rejection</MenuItem>
+            <MenuItem value="Completed" sx={{ color: "var(--secondary)" }}>
+              <em>
+                <b>Completed</b>
+              </em>
+            </MenuItem>
+            <MenuItem value="Rejected" sx={{ color: "var(--orange)" }}>
+              <em>
+                <b>Rejected</b>
+              </em>
+            </MenuItem>
           </Select>
         </FormControl>
+        <h2 style={{ color: `var(--orange)` }}>
+          Changing the status begins the process that follows that stage — it
+          doesn't complete the step itself.
+        </h2>
       </Grid>
       <Grid item xs={12} sm={6}>
         {/* TODO: Implement notes functionality */}

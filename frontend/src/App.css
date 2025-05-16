@@ -90,10 +90,6 @@ code {
   line-height: 1;
   font-weight: 600;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
   gap: 10px;
 }
 
@@ -106,6 +102,10 @@ code {
   .tableCell {
     font-size: 13px;
     line-height: 1.1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   .tableRow {
@@ -788,7 +788,7 @@ code {
 }
 
 #createAccountStyles #createAccountText {
-  font-family: Rubik;
+  font-family: inherit;
   font-weight: 600;
   font-size: 36px;
   line-height: 10px;
@@ -862,13 +862,12 @@ code {
 }
 
 #createAccountStyles .formLabel {
-  font-family: Rubik;
   font-style: normal;
   font-weight: bolder;
   font-size: 13px;
   line-height: 18px;
 
-  color: var(--black);
+  color: var(--primary);
 
   margin: 21px 0px 5px 0px;
 }
@@ -891,17 +890,14 @@ code {
 }
 
 #createAccountStyles #signUpButton {
-  background: var(--primary);
-  border: none;
-
-  font-family: Rubik;
-  font-style: normal;
-  font-size: 17px;
-  line-height: 21px;
-  margin: 26px 0px 12px 0px;
-  height: 51px;
-  width: 100%;
-  color: var(--white);
+    margin-top: 20px;
+    width: 100%;
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 15px;
+    border: none;
+    font-weight: bold;
+    margin: 26px 0px 12px 0px;
 }
 #createAccountStyles .createAccountLogin {
   font-size: 13px;
@@ -1128,6 +1124,7 @@ code {
   display: inline;
   font-size: 13px;
   font-weight: 500;
+  font-family: inherit;
 }
 
 #createAccountLink {
@@ -1320,7 +1317,7 @@ img {
 }
 
 .createAccountLogin {
-  font-family: Rubik;
+  font-family: inherit;
   font-style: normal;
   font-weight: 500;
   font-size: 13px;
@@ -1333,6 +1330,7 @@ img {
 .logInBox {
   display: flex;
   justify-content: right;
+  align-items: center;
 }
 
 #logInLink {
@@ -1457,18 +1455,6 @@ img {
   text-align: left;
 }
 
-.formLabel {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: bolder;
-  font-size: 13px;
-  line-height: 18px;
-
-  color: var(--black);
-
-  margin: 21px 0px 5px 0px;
-}
-
 .clickable {
   cursor: pointer;
   color: var(--secondary);
@@ -1535,14 +1521,6 @@ img {
     font-size: 11px;
   }
 
-  /* .formLabel {
-        font-size: 10px;
-        line-height: 13px;
-
-
-        margin: 15px 0px 4px 0px;
-    } */
-
   .inputBox {
     height: 30px;
     width: 100%;
@@ -1551,11 +1529,13 @@ img {
   }
 
   #signUpButton {
-    font-size: 12px;
-    line-height: 14px;
-    margin: 18px 0px 9px 0px;
-    height: 36px;
+    margin-top: 20px;
     width: 100%;
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 15px;
+    border: none;
+    font-weight: bold;
   }
 
   .createAccountLogin {
@@ -1596,14 +1576,6 @@ img {
   #lastNameBox {
     width: 138px;
   }
-
-  /* .formLabel {
-        font-size: 10px;
-        line-height: 13px;
-
-
-        margin: 15px 0px 4px 0px;
-    } */
 
   .inputBox {
     height: 30px;
@@ -1647,14 +1619,6 @@ img {
     font-weight: 500;
     font-size: 16px;
     line-height: 22px;
-  }
-
-  .formLabel {
-    font-family: "Rubik";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
   }
 
   #sendNewCodeLink {
@@ -2874,18 +2838,6 @@ input[type="radio"] {
   display: flex;
   flex-direction: column;
   text-align: left;
-}
-
-.formLabel {
-  font-family: Rubik;
-  font-style: normal;
-  font-weight: bolder;
-  font-size: 14px;
-  line-height: 19px;
-
-  color: var(--black);
-
-  margin: 18px 0px 5px 0px;
 }
 
 .labelInputBox .inputBox {

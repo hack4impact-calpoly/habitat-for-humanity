@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  S3Client,
-  PutObjectCommand,
-} from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { verifyAdmin, verifyDonor } from "hooks/verify";
 
 const Bucket = process.env.AWS_BUCKET_NAME;
 const s3 = new S3Client({
@@ -13,12 +11,15 @@ const s3 = new S3Client({
   },
 });
 
-export async function POST (req: NextRequest) {
-  try{
+export async function POST(req: NextRequest) {
+  if (!((await verifyAdmin()) || (await verifyDonor()))) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 401 });
+  }
+  try {
     const formData = await req.formData();
     const files = formData.getAll("file") as File[];
 
-    const uploadedFileNames: string[] = []
+    const uploadedFileNames: string[] = [];
 
     await Promise.all(
       files.map(async (file) => {
@@ -30,18 +31,20 @@ export async function POST (req: NextRequest) {
             Bucket,
             Key: file.name,
             Body,
-          })
+          }),
         );
 
         uploadedFileNames.push(file.name); // collect the filename
         return result;
-      })
+      }),
     );
 
-    return NextResponse.json({ uploaded: uploadedFileNames })
+    return NextResponse.json({ uploaded: uploadedFileNames });
   } catch (err) {
     console.error("[IMAGE_POST_ERROR]", err);
-    return NextResponse.json({ error: "Failed to send image to s3" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Failed to send image to s3" },
+      { status: 400 },
+    );
   }
 }
-

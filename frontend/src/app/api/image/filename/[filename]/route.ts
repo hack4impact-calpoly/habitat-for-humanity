@@ -5,6 +5,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { verifyAdmin, verifyDonor } from "hooks/verify";
 
 const Bucket = process.env.AWS_BUCKET_NAME;
 const s3 = new S3Client({
@@ -19,6 +20,9 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { filename: string } },
 ) {
+  if (!((await verifyAdmin()) || (await verifyDonor()))) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 401 });
+  }
   const { filename } = await params;
 
   try {
@@ -39,6 +43,9 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { filename: string } },
 ) {
+  if (!(await verifyAdmin())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 401 });
+  }
   const { filename } = await params;
 
   try {

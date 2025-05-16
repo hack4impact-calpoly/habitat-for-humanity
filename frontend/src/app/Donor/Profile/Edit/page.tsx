@@ -43,25 +43,26 @@ function DonatorProfileEditPage(): React.ReactNode {
   useEffect(() => {
     // First check if auth is loaded and user is signed in
     if (!isLoaded) return; // Wait until auth state is determined
-    
+
     if (!isSignedIn) {
       // If not signed in, redirect to login page
-      router.push('/');
+      router.push("/");
       return;
     }
-    
+
     // Only proceed if user is signed in and has an ID
     if (user?.id) {
       setFirstName(user.firstName || "First Name Not Found");
       setLastName(user.lastName || "Last Name Not Found");
       setEmail(user.primaryEmailAddress?.emailAddress || "Email Not Found");
-      
+
       const fetchData = async () => {
         try {
           const response = await getUserByID(user.id);
           const formattedPhone = response.phone
-            ? parsePhoneNumberFromString(response.phone, "US")?.format("E.164") ||
-              ""
+            ? parsePhoneNumberFromString(response.phone, "US")?.format(
+                "E.164",
+              ) || ""
             : "";
           setPhone(formattedPhone);
         } catch (error) {
@@ -191,16 +192,16 @@ function DonatorProfileEditPage(): React.ReactNode {
     try {
       if (phone && phone !== initialPhone) {
         if (user) {
-          updateUserPhone(user.id, phone);
+          await updateUserPhone(user.id, phone);
         }
       }
-      updateUserInfo(newUserInfo);
+      await updateUserInfo(newUserInfo);
     } catch (error) {
       console.error("Error in submitData:", error);
     }
     if (email && email !== initialEmail) {
       try {
-        handleEmailVerificationSend(email);
+        await handleEmailVerificationSend(email);
       } catch (err) {
         setVerifying(false);
         alert(err);

@@ -1,19 +1,23 @@
-import * as sgMail from '@sendgrid/mail';
-import { NextResponse } from 'next/server';
+import * as sgMail from "@sendgrid/mail";
+import { verifyAdmin } from "hooks/verify";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-    const { recipientEmail, donationDetails } = await req.json();
-    try {
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+  if (!(await verifyAdmin())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 401 });
+  }
+  const { recipientEmail, donationDetails } = await req.json();
+  try {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
 
-        const msg = {
-            to: recipientEmail,
-            from: {
-            name: "Habitat for Humanity SLO County",
-            email: process.env.SENDGRID_SENDER_EMAIL as string,
-            },
-            subject: "Donation Approved!",
-            html: `
+    const msg = {
+      to: recipientEmail,
+      from: {
+        name: "Habitat for Humanity SLO County",
+        email: process.env.SENDGRID_SENDER_EMAIL as string,
+      },
+      subject: "Donation Approved!",
+      html: `
             <p>Hi ${donationDetails.name},</p>
     
             <p>Thank you for your generous donation to Habitat for Humanity!</p>
@@ -34,19 +38,24 @@ export async function POST(req: Request) {
             <p>Thank you again for supporting our mission!</p>
             <p>- Habitat for Humanity for San Luis Obispo County</p>
             `,
-            trackingSettings: {
-            clickTracking: {
-                enable: false,
-                enableText: false,
-            },
-            },
-        };
+      trackingSettings: {
+        clickTracking: {
+          enable: false,
+          enableText: false,
+        },
+      },
+    };
 
-        await sgMail.send(msg);
-        return NextResponse.json({ message: "Approved email sent successfully!" }, { status: 200 });
-    } catch (err) {
-        console.error("[EMAIL_APPROVE_SEND_ERROR]", err);
-        return NextResponse.json({ error: "Failed to send approved email" }, { status: 400 });
-    }
-    
+    await sgMail.send(msg);
+    return NextResponse.json(
+      { message: "Approved email sent successfully!" },
+      { status: 200 },
+    );
+  } catch (err) {
+    console.error("[EMAIL_APPROVE_SEND_ERROR]", err);
+    return NextResponse.json(
+      { error: "Failed to send approved email" },
+      { status: 400 },
+    );
+  }
 }
