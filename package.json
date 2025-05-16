@@ -55,8 +55,8 @@
   "scripts": {
     "dev": "next dev",
     "start": "next start",
-    "build": "GENERATE_SOURCEMAP=false next build",
-    "winBuild": "set \"GENERATE_SOURCEMAP=false\" && next build",
+    "build": "next build",
+    "winBuild": "next build",
     "test": "jest",
     "lint-check": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore . && prettier --check .",
     "lint-write": "npx lint-staged",
@@ -70,7 +70,7 @@
     ],
     "settings": {
       "next": {
-        "rootDir": "frontend/src/"
+        "rootDir": "src/"
       }
     }
   },
