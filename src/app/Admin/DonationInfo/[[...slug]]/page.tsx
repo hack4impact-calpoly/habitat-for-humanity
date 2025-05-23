@@ -169,6 +169,9 @@ function DonationInfoPage() {
 
   const approveItem = async () => {
     if (storedTimeSlots.length > 0) {
+      if (item._id) {
+        await deleteEventByItemId(item._id);
+      }
       await storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item));
       console.log("Success submitting events!");
       clearTimeSlots(); // Clear time slots from redux
