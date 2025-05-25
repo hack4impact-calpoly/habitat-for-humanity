@@ -4,14 +4,14 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
-import { getItemByID, Item, updateItem } from "api/item";
+import { deleteItemByItemId, getItemByID, Item, updateItem } from "api/item";
 import { deleteEventByItemId, Event, getEventByItemId } from "api/event";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
 import { addEvent } from "api/event";
-import { Button } from "@mui/material";
+import { Button, Modal } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearTimeSlots,
@@ -150,6 +150,7 @@ function DonationInfoPage() {
     useState<TimeSlot[]>(emptyTimeSlots);
   const [notes, setNotes] = useState<string>("");
   const [events, setEvents] = useState<Event[]>([]);
+  const [open, setOpen] = useState<boolean>(false);
   const params = useParams();
   const slug = params.slug;
   const id = slug ? slug[0] : "";
@@ -415,9 +416,47 @@ function DonationInfoPage() {
     (state: RootState) => state.event.timeSlots,
   );
 
+  const handleDeleteItem = async () => {
+    await deleteItemByItemId(id);
+    await deleteEventByItemId(id);
+    setOpen(false);
+    router.push("/Admin");
+    router.refresh();
+    return;
+  };
+
   return (
     <div>
       <AdminNavbar />
+      {open && (
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <Box className="modal-box">
+            <Typography component="div">
+              <h2 className="modal-title-text">Are you sure?</h2>
+              <p className="modal-default-text">
+                This action will permanently delete the item. You cannot undo
+                this.
+              </p>
+              <div className="modal-button-group">
+                <button
+                  type="button"
+                  className="view-donation-button cancel-button"
+                  onClick={() => setOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="view-donation-button delete-button"
+                  onClick={handleDeleteItem}
+                >
+                  Delete
+                </button>
+              </div>
+            </Typography>
+          </Box>
+        </Modal>
+      )}
       <div id="DonInfoPage">
         <div id="ActiveDonHeader">
           <h1>Donation Approval</h1>
@@ -474,6 +513,14 @@ function DonationInfoPage() {
             Cancel
           </button>
           <div id="NextButtons">
+            <button
+              type="button"
+              //uses the old styles from reject and approve button
+              className="deleteButton"
+              onClick={() => setOpen(true)}
+            >
+              Delete item
+            </button>
             <button
               type="button"
               //uses the old styles from reject and approve button
