@@ -88,7 +88,7 @@ router.get("/admins", async (req, res) => {
 //add new User to UsersDB
 router.post("/", async (req, res) => {
   try {
-    const { userType, firstName, lastName, email, phone, id } = req.body;
+    const { userType, firstName, lastName, email, phone, id, address, marketingOption } = req.body;
     const newUser = new User({
       userType,
       firstName,
@@ -96,6 +96,8 @@ router.post("/", async (req, res) => {
       email,
       phone,
       id,
+      address, // full object: { street, city, state, zip }
+      marketingOption,
     });
     await newUser.save();
     res.send({ msg: `${firstName} ${lastName} added to the userDB` });

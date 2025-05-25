@@ -13,26 +13,30 @@ require("../../../App.css");
 function DonatorProfilePage(): React.ReactNode {
   const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
+
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      zip: "",
+    },
   });
 
   useEffect(() => {
-    // First check if auth is loaded and user is signed in
-    if (!isLoaded) return; // Wait until auth state is determined
+    if (!isLoaded) return;
 
     if (!isSignedIn) {
-      // If not signed in, redirect to login page
       router.push("/");
       return;
     }
 
-    // Only fetch data if user is signed in and has an ID
     if (user?.id) {
-      user?.reload()
+      user?.reload();
       const fetchData = async () => {
         try {
           const response = await getUserByID(user.id);
@@ -41,10 +45,15 @@ function DonatorProfilePage(): React.ReactNode {
             lastName: user.lastName || "Last Name Not Found",
             email: user.primaryEmailAddress?.emailAddress || "Email Not Found",
             phone: response.phone || "Phone Not Found",
+            address: {
+              street: response.address?.street || "N/A",
+              city: response.address?.city || "N/A",
+              state: response.address?.state || "N/A",
+              zip: response.address?.zip || "N/A", 
+            },
           });
         } catch (error) {
           console.error("Error fetching user data:", error);
-          // Handle error gracefully - don't crash the app
         }
       };
 
@@ -54,15 +63,8 @@ function DonatorProfilePage(): React.ReactNode {
 
   const donatorProfileEditPath = "/Donor/Profile/Edit";
 
-  // If auth is still loading, show a loading state
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-
-  // If not signed in, don't render anything (will redirect in useEffect)
-  if (!isSignedIn) {
-    return null;
-  }
+  if (!isLoaded) return <div>Loading...</div>;
+  if (!isSignedIn) return null;
 
   return (
     <div>
@@ -86,6 +88,7 @@ function DonatorProfilePage(): React.ReactNode {
               </Link>
             </div>
           </div>
+
           <div id="nameBox">
             <div className="headerBox">
               <p className="infoHeader">Name</p>
@@ -96,6 +99,7 @@ function DonatorProfilePage(): React.ReactNode {
               </p>
             </div>
           </div>
+
           <div id="emailBox">
             <div className="headerBox">
               <p className="infoHeader">Email</p>
@@ -104,12 +108,24 @@ function DonatorProfilePage(): React.ReactNode {
               <p id="email">{userData.email}</p>
             </div>
           </div>
+
           <div id="phoneBox">
             <div className="headerBox">
               <p className="infoHeader">Phone</p>
             </div>
             <div className="infoBox">
               <p id="phone">{userData.phone}</p>
+            </div>
+          </div>
+          <hr style={{ margin: "1px 0", borderTop: "1px solid #ccc" }} />
+          <div id="addressBox">
+            <div className="headerBox">
+              <p className="infoHeader">Address</p>
+            </div>
+            <div className="infoBox">
+              <p id="address">
+                {userData.address.street}, {userData.address.city}, {userData.address.state} {userData.address.zip}
+              </p>
             </div>
           </div>
         </div>

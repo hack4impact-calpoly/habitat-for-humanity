@@ -1,6 +1,6 @@
 const userURL = "http://localhost:3001/api/users";
 /* ----------------------Clerk User Requests---------------------------*/
-export const updateMetadata = async (role: string, userId: string | null) =>
+export const updateMetadata = async (role: string, userId: string | null, metadata?: { address?: string; marketingOption: boolean }) =>
   fetch(`${userURL}/updateRole`, {
     method: "POST",
     headers: {
@@ -9,6 +9,7 @@ export const updateMetadata = async (role: string, userId: string | null) =>
     body: JSON.stringify({
       role,
       userId,
+      ...metadata,
     }),
   })
     .then(async (res) => {
@@ -136,6 +137,13 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
+  marketingOption: boolean;
 }
 
 // Add a new User to User DB
@@ -148,6 +156,11 @@ export const addUser = async (user: User) =>
     body: JSON.stringify({
       phone: user.phone,
       id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName, 
+      email: user.email,
+      address: user.address,
+      marketingOption: user.marketingOption
     }),
   })
     .then(async (res) => {
@@ -165,7 +178,7 @@ export const addUser = async (user: User) =>
 
     export const updateUserInfoAPI = async (
       userId: string,
-      params: { firstName?: string; lastName?: string; },
+      params: { firstName?: string; lastName?: string; address?: any },
     ) => {
       console.log("Current environment:", process.env.NODE_ENV, params?.firstName, params?.lastName);
     

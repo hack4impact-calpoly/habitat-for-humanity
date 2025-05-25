@@ -20,6 +20,12 @@ require("../../../../App.css");
 export type UserInfo = {
   firstName?: string;
   lastName?: string;
+  address?: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  }
 };
 
 function DonatorProfileEditPage(): React.ReactNode {
@@ -39,6 +45,11 @@ function DonatorProfileEditPage(): React.ReactNode {
   const [phone, setPhone] = useState("");
   const [isPhoneValid, setIsPhoneValid] = useState(true);
   const [emailObject, setEmailObject] = useState<EmailAddressResource>();
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState("");
+
 
   useEffect(() => {
     // First check if auth is loaded and user is signed in
@@ -60,14 +71,20 @@ function DonatorProfileEditPage(): React.ReactNode {
         try {
           const response = await getUserByID(user.id);
           const formattedPhone = response.phone
-            ? parsePhoneNumberFromString(response.phone, "US")?.format("E.164") ||
-              ""
+            ? parsePhoneNumberFromString(response.phone, "US")?.format("E.164") || ""
             : "";
           setPhone(formattedPhone);
+          if (response.address) {
+            setStreet(response.address.street || "");
+            setCity(response.address.city || "");
+            setState(response.address.state || "");
+            setZip(response.address.zip || "");
+          }
         } catch (error) {
           console.error("Error fetching user data:", error);
           // Handle error gracefully
         }
+        
       };
 
       fetchData();
@@ -188,6 +205,12 @@ function DonatorProfileEditPage(): React.ReactNode {
     if (lastName && lastName !== initialLastName) {
       newUserInfo.lastName = capitalizeFirstLetter(lastName);
     }
+    newUserInfo.address = {
+      street,
+      city,
+      state,
+      zip,
+    };
     try {
       if (phone && phone !== initialPhone) {
         if (user) {
@@ -307,6 +330,49 @@ function DonatorProfileEditPage(): React.ReactNode {
               defaultCountry="US"
             />
           </Box>
+                  {/* Street + City Row */}
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 2 }}>
+          <Box sx={{ flex: 2 }}>
+            <p className="formLabel">Street Address</p>
+            <input
+              className="inputBox"
+              type="text"
+              value={street}
+              onChange={(e) => setStreet(e.target.value)}
+            />
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <p className="formLabel">City</p>
+            <input
+              className="inputBox"
+              type="text"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+          </Box>
+        </Box>
+
+        {/* State + ZIP Row */}
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 2 }}>
+          <Box sx={{ flex: 1 }}>
+            <p className="formLabel">State</p>
+            <input
+              className="inputBox"
+              type="text"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+            />
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <p className="formLabel">ZIP Code</p>
+            <input
+              className="inputBox"
+              type="text"
+              value={zip}
+              onChange={(e) => setZip(e.target.value)}
+            />
+          </Box>
+        </Box>
         </form>
         <div id="buttonBox">
           <button
