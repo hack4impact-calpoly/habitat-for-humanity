@@ -228,10 +228,12 @@ function DonatorSchedulePickUp(): React.ReactNode {
             Grover Beach, Arroyo Grande, Oceano, Nipomo, Cambria, Cayucos, Los
             Osos, Morro Bay
           </div>
-          <p id="donatorPickupDesc">
+          <div>
+            <strong>
             Please select multiple dates and times you are available, and our
             staff will choose from your availability.
-          </p>
+            </strong>
+          </div>
           <div id="donatorPickupEvents">
             {times.map((availEvent, idx) => {
               const startTime = moment
