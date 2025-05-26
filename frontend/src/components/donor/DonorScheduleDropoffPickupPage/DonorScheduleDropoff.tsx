@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 const weeklyHours = [
   { day: "Monday", hours: "Closed" },
-  { day: "Tuesday", hours: "10:00 AM to 5:00 PM" },
+  { day: "Tuesday", hours: "11:00 AM to 4:00 PM" },
   { day: "Wednesday", hours: "Donations not accepted" },
   { day: "Thursday", hours: "Donations not accepted" },
-  { day: "Friday", hours: "10:00 AM to 5:00 PM" },
-  { day: "Saturday", hours: "10:00 AM to 5:00 PM" },
+  { day: "Friday", hours: "11:00 AM to 4:00 PM" },
+  { day: "Saturday", hours: "11:00 AM to 4:00 PM" },
   { day: "Sunday", hours: "Closed" },
 ];
 
