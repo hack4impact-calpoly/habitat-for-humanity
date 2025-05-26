@@ -220,6 +220,14 @@ function DonatorSchedulePickUp(): React.ReactNode {
             <span className="underline">South County,</span> please select times
             on <span className="underline">Thursday.</span>
           </h2>
+          <div>
+            <strong>North County:</strong> Creston, Paso Robles, Templeton,
+            Atascadero, Heritage Ranch, Santa Margarita, Shandon, San Miguel
+            <br />
+            <strong>South County:</strong> San Luis Obispo, Avila, Pismo Beach,
+            Grover Beach, Arroyo Grande, Oceano, Nipomo, Cambria, Cayucos, Los
+            Osos, Morro Bay
+          </div>
           <p id="donatorPickupDesc">
             Please select multiple dates and times you are available, and our
             staff will choose from your availability.
