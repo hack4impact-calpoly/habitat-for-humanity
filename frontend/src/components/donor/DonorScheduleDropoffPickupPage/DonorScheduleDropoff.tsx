@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 const weeklyHours = [
   { day: "Monday", hours: "Closed" },
   { day: "Tuesday", hours: "10:00 AM to 5:00 PM" },
-  { day: "Wednesday", hours: "10:00 AM to 5:00 PM" },
-  { day: "Thursday", hours: "10:00 AM to 5:00 PM" },
+  { day: "Wednesday", hours: "Donations not accepted" },
+  { day: "Thursday", hours: "Donations not accepted" },
   { day: "Friday", hours: "10:00 AM to 5:00 PM" },
   { day: "Saturday", hours: "10:00 AM to 5:00 PM" },
   { day: "Sunday", hours: "Closed" },
@@ -27,7 +27,7 @@ function DonatorScheduleDropoff(): JSX.Element {
 
   return (
     <div>
-      <h2 className="donDropoffPickupHeader">ReStore Drop Off Hours</h2>
+      <h2 className="donDropoffPickupHeader">Donation Drop-Off Schedule</h2>
       <table>
         <tbody>
           {weeklyHours.map((element, index) => {
