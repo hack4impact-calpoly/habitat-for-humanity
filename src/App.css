@@ -1049,6 +1049,8 @@ code {
 }
 
 #loginLogo {
+  display: block;
+  margin: 0 auto;
   height: 115px;
   width: auto;
 }
@@ -3040,8 +3042,9 @@ input[type="radio"] {
 }
 
 #donatorPickupDesc {
-  font-style: italic;
-  color: var(--dark-gray);
+  font-style: normal;
+  font-weight: bold;
+  color: black;
 }
 
 #donPickupButtons {

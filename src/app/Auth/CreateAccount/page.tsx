@@ -320,7 +320,7 @@ function CreateAccountPage(): React.ReactNode {
     <>
       <Box id="createAccountStyles" sx={styles.container}>
         <Box id="createAccountBox">
-          <p id="createAccountText">Create a Donor Account</p>
+          <img src="/images/ReStoreLogo.png" alt="logo" id="loginLogo" />
           <form id="createAccountForm">
             <div className="inputError">{userTypeError}</div>
             <div id="nameBox">

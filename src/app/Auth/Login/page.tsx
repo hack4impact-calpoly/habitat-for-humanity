@@ -12,7 +12,6 @@ import Input from "@mui/material/Input";
 import IconButton from "@mui/material/IconButton";
 import isEmail from "validator/lib/isEmail";
 
-// import logo from "images/logo.png";
 import "../../../App.css";
 import { useSignIn } from "@clerk/nextjs";
 
@@ -84,7 +83,7 @@ function LoginPage(): React.ReactNode {
 
   return (
     <div id="loginBox">
-      <img src="/images/logo.png" alt="logo" id="loginLogo" />
+      <img src="/images/ReStoreLogo.png" alt="logo" id="loginLogo" />
       <form id="loginForm">
         <p className="loginLabel">Email</p>
         <input
