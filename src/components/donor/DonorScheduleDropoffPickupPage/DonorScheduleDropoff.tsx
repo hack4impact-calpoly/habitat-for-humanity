@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 const pasoWeeklyHours = [
   { day: "Monday", hours: "Closed" },
   { day: "Tuesday", hours: "11:00 AM to 4:00 PM" },
-  { day: "Wednesday", hours: "Closed" },
+  { day: "Wednesday", hours: "Donations not accepted" },
   { day: "Thursday", hours: "11:00 AM to 4:00 PM" },
   { day: "Friday", hours: "11:00 AM to 4:00 PM" },
   { day: "Saturday", hours: "11:00 AM to 4:00 PM" },
@@ -16,7 +16,7 @@ const sloWeeklyHours = [
   { day: "Monday", hours: "Closed" },
   { day: "Tuesday", hours: "11:00 AM to 4:00 PM" },
   { day: "Wednesday", hours: "11:00 AM to 4:00 PM" },
-  { day: "Thursday", hours: "Closed" },
+  { day: "Thursday", hours: "Donations not accepted" },
   { day: "Friday", hours: "11:00 AM to 4:00 PM" },
   { day: "Saturday", hours: "11:00 AM to 4:00 PM" },
   { day: "Sunday", hours: "Closed" },
@@ -39,7 +39,7 @@ function DonatorScheduleDropoff(): React.ReactNode {
   return (
     <div>
       <h2 className="donDropoffPickupHeader">
-        Paso Robles ReStore Drop Off Hours
+        Paso Robles ReStore Donation Drop Off Schedule
       </h2>
       <table>
         <tbody>
@@ -59,7 +59,9 @@ function DonatorScheduleDropoff(): React.ReactNode {
           })}
         </tbody>
       </table>
-      <h2 className="donDropoffPickupHeader">SLO ReStore Drop Off Hours</h2>
+      <h2 className="donDropoffPickupHeader">
+        SLO ReStore Donation Drop Off Schedule
+      </h2>
       <table>
         <tbody>
           {sloWeeklyHours.map((element, index) => {
