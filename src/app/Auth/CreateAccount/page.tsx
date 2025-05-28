@@ -44,7 +44,11 @@ function CreateAccountPage(): React.ReactNode {
     showPassword: false,
   });
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>("US");
-  const [id, setID] = useState<string>(uuidv4());
+  const [street, setStreet] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [state, setState] = useState<string>("");
+  const [zip, setZip] = useState<string>("");
+  const [agreedToMarketing, setAgreedToMarketing] = useState<boolean>(false);
 
   // error messages
   const [userTypeError, setUserTypeError] = useState<string>("");
@@ -52,6 +56,7 @@ function CreateAccountPage(): React.ReactNode {
   const [emailError, setEmailError] = useState<string>("");
   const [phoneNumberError, setPhoneNumberError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
+  const [homeAddressError, setHomeAddressError] = useState<string>("");
   let processedPhoneNumber: number; // Phone number converted from string
 
   const router = useRouter();
@@ -68,6 +73,7 @@ function CreateAccountPage(): React.ReactNode {
     valid = validateEmail(email) && valid;
     valid = validatePhoneNumber(phoneNumber) && valid;
     valid = validatePassword(password) && valid;
+    valid = validateAddressFields() && valid;
     return valid;
   };
 
@@ -166,6 +172,15 @@ function CreateAccountPage(): React.ReactNode {
     return true;
   };
 
+  const validateAddressFields = (): boolean => {
+    if (!street || !city || !state || !zip) {
+      setHomeAddressError("Please enter your home address");
+      return false;
+    }
+    setHomeAddressError("");
+    return true;
+  };
+
   function processPhoneNumber(phoneNumber: string): boolean {
     /*
     Desc: Converts phoneNumber string to number. Saves it in global variable processedPhoneNumber
@@ -255,6 +270,13 @@ function CreateAccountPage(): React.ReactNode {
           const userData = {
             id: signUpAttempt.createdUserId,
             phone: phoneNumber,
+            address: {
+              street,
+              city,
+              state,
+              zip,
+            },
+            marketingOption: agreedToMarketing,
           };
           await addUser(userData);
           console.log("User data added successfully");
@@ -421,6 +443,62 @@ function CreateAccountPage(): React.ReactNode {
                 }
               />
               <div className="inputError">{passwordError}</div>
+            </Box>
+            {/* Street + City Row */}
+            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+              <Box sx={{ flex: 2 }}>
+                <p className="formLabel">Street Address</p>
+                <input
+                  className="inputBox"
+                  type="text"
+                  onChange={(e) => setStreet(e.target.value)}
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <p className="formLabel">City</p>
+                <input
+                  className="inputBox"
+                  type="text"
+                  onChange={(e) => setCity(e.target.value)}
+                />
+              </Box>
+            </Box>
+
+            {/* State + ZIP Row */}
+            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mt: 2 }}>
+              <Box sx={{ flex: 1 }}>
+                <p className="formLabel">State</p>
+                <input
+                  className="inputBox"
+                  type="text"
+                  onChange={(e) => setState(e.target.value)}
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <p className="formLabel">ZIP Code</p>
+                <input
+                  className="inputBox"
+                  type="text"
+                  onChange={(e) => setZip(e.target.value)}
+                />
+              </Box>
+            </Box>
+            <Box sx={{ mt: 2 }}>
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontSize: "0.95rem",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={agreedToMarketing}
+                  onChange={(e) => setAgreedToMarketing(e.target.checked)}
+                />
+                Receive marketing information from Habitat for Humanity
+              </label>
             </Box>
           </form>
           <div id="clerk-captcha"></div>

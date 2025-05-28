@@ -13,21 +13,24 @@ const CALENDAR_HEADER = 0;
 const DONATION_APPROVALS_HEADER = 1;
 const HISTORY_HEADER = 2;
 const ACTIVE_DONATIONS_HEADER = 3;
-const SIGN_OUT_HEADER = 4;
+const MARKETING_HEADER = 4;
+const SIGN_OUT_HEADER = 5;
 
 const navBarHeaders: string[] = [
   "Calendar",
   "Donation Approvals",
   "History",
   "Active Donations",
+  "Marketing",
 ];
 
 // paths might change depending on how application routes are made
 // test underline by setting either variable to "/"
 const calendarPath: string = "/Admin/Calendar";
 const donationApprovalsPath: string = "/Admin/DonationApproval";
-const historyPath: string ="/Admin/History";
+const historyPath: string = "/Admin/History";
 const activePath: string = "/Admin/ActiveDonations";
+const marketPath: string = "/Admin/Marketing";
 const signoutPath: string = "/Auth/Login";
 
 function AdminNavbar(): React.ReactNode {
@@ -71,6 +74,13 @@ function AdminNavbar(): React.ReactNode {
       return true;
     }
     if (
+      header === navBarHeaders[MARKETING_HEADER] &&
+      pagePath.includes(marketPath)
+    ) {
+      // For different donation pages
+      return true;
+    }
+    if (
       header === navBarHeaders[SIGN_OUT_HEADER] &&
       pagePath.includes(signoutPath)
     ) {
@@ -95,6 +105,9 @@ function AdminNavbar(): React.ReactNode {
     }
     if (header === navBarHeaders[ACTIVE_DONATIONS_HEADER]) {
       return activePath;
+    }
+    if (header === navBarHeaders[MARKETING_HEADER]) {
+      return marketPath;
     }
     if (header === navBarHeaders[SIGN_OUT_HEADER]) {
       return signoutPath;
