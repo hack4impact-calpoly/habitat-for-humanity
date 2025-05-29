@@ -36,6 +36,20 @@ export const getUserByID = async (userID: string) => {
   }
 };
 
+// Get users with marketing enabled
+export const getMarketingUsers = async () => {
+  try {
+    const response = await fetch(`${nextURL}/market`);
+    if (!response.ok) {
+      throw new Error(`${response.status}-${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+};
+
 // Clerk API call to get donor info
 export const getClerkUser = async (userId: string) => {
   try {
@@ -59,11 +73,21 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  address?: Address;
+}
+
+export interface Address {
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
 }
 
 export interface MongoUser {
   id: string;
   phone: string;
+  address: Address;
+  marketingOption: boolean;
 }
 
 // Add a new User to User DB
@@ -76,6 +100,8 @@ export const addUser = async (user: MongoUser) =>
     body: JSON.stringify({
       phone: user.phone,
       id: user.id,
+      address: user.address,
+      marketingOption: user.marketingOption,
     }),
   })
     .then(async (res) => {
@@ -113,8 +139,13 @@ export const updateUserInfoAPI = async (
   return updatedUser;
 };
 
-// Update User "phone" (given userID)
-export const updateUserPhone = async (userID: string, phone: string) =>
+// Update User Mongo data (given userID)
+export const updateUserMongo = async (
+  userID: string,
+  phone: string,
+  address: Address,
+  marketingOption: boolean,
+) =>
   fetch(`${nextURL}/${userID}`, {
     headers: {
       "Content-Type": "application/json",
@@ -122,6 +153,8 @@ export const updateUserPhone = async (userID: string, phone: string) =>
     method: "PUT",
     body: JSON.stringify({
       phone,
+      address,
+      marketingOption,
     }),
   })
     .then((res) => {

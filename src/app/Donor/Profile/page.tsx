@@ -18,6 +18,8 @@ function DonatorProfilePage(): React.ReactNode {
     lastName: "",
     email: "",
     phone: "",
+    address: "",
+    marketingOption: false,
   });
 
   useEffect(() => {
@@ -32,15 +34,20 @@ function DonatorProfilePage(): React.ReactNode {
 
     // Only fetch data if user is signed in and has an ID
     if (user?.id) {
-      user?.reload()
+      user?.reload();
       const fetchData = async () => {
         try {
           const response = await getUserByID(user.id);
+          const address = response.address;
           setUserData({
             firstName: user.firstName || "First Name Not Found",
             lastName: user.lastName || "Last Name Not Found",
             email: user.primaryEmailAddress?.emailAddress || "Email Not Found",
             phone: response.phone || "Phone Not Found",
+            address: address
+              ? `${address.street}, ${address.city}, ${address.state} ${address.zip}`
+              : "Address Not Found",
+            marketingOption: response.marketingOption,
           });
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -110,6 +117,22 @@ function DonatorProfilePage(): React.ReactNode {
             </div>
             <div className="infoBox">
               <p id="phone">{userData.phone}</p>
+            </div>
+          </div>
+          <div id="addressBox">
+            <div className="headerBox">
+              <p className="infoHeader">Address</p>
+            </div>
+            <div className="infoBox">
+              <p id="address">{userData.address}</p>
+            </div>
+          </div>
+          <div id="marketingBox">
+            <div className="headerBox">
+              <p className="infoHeader">Agreed to Marketing</p>
+            </div>
+            <div className="infoBox">
+              <p id="marketing">{userData.marketingOption ? "Yes" : "No"}</p>
             </div>
           </div>
         </div>

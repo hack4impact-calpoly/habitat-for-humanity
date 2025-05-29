@@ -3,7 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { updateUserInfoAPI, updateUserPhone, getUserByID } from "api/user";
+import {
+  updateUserInfoAPI,
+  updateUserMongo,
+  getUserByID,
+  Address,
+} from "api/user";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
 import { useUser } from "@clerk/nextjs";
 import { ClerkAPIError, EmailAddressResource } from "@clerk/types";
@@ -33,10 +38,19 @@ function DonatorProfileEditPage(): React.ReactNode {
   const initialLastName = user?.lastName;
   const initialEmail = user?.primaryEmailAddress?.emailAddress;
   let initialPhone: string | undefined = undefined;
+  let initialAddress: Address | undefined = undefined;
+  let initialMarketing: boolean = false;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState<Address>({
+    street: "",
+    city: "",
+    state: "",
+    zip: "",
+  });
+  const [marketing, setMarketing] = useState<boolean>(false);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
   const [emailObject, setEmailObject] = useState<EmailAddressResource>();
 
@@ -55,7 +69,6 @@ function DonatorProfileEditPage(): React.ReactNode {
       setFirstName(user.firstName || "First Name Not Found");
       setLastName(user.lastName || "Last Name Not Found");
       setEmail(user.primaryEmailAddress?.emailAddress || "Email Not Found");
-
       const fetchData = async () => {
         try {
           const response = await getUserByID(user.id);
@@ -65,6 +78,12 @@ function DonatorProfileEditPage(): React.ReactNode {
               ) || ""
             : "";
           setPhone(formattedPhone);
+          initialPhone = formattedPhone;
+          const address = response.address;
+          initialAddress = address;
+          setAddress(address);
+          initialMarketing = response.marketingOption;
+          setMarketing(response.marketingOption);
         } catch (error) {
           console.error("Error fetching user data:", error);
           // Handle error gracefully
@@ -113,7 +132,7 @@ function DonatorProfileEditPage(): React.ReactNode {
       } else {
         alert(`Failed to send verification email: ${err}`);
       }
-      
+
       console.error("Failed to send verification email:", err);
       return err;
     }
@@ -175,6 +194,10 @@ function DonatorProfileEditPage(): React.ReactNode {
     if (!lastName) alerts.push("Last name cannot be empty");
     if (!email) alerts.push("Email cannot be empty");
     if (!isPhoneValid) alerts.push("Phone number is invalid");
+    if (!address.street) alerts.push("Street address cannot be empty");
+    if (!address.city) alerts.push("City cannot be empty");
+    if (!address.state) alerts.push("State cannot be empty");
+    if (!address.zip) alerts.push("ZIP code cannot be empty");
 
     try {
       emailSchema.parse(email);
@@ -195,9 +218,13 @@ function DonatorProfileEditPage(): React.ReactNode {
       newUserInfo.lastName = capitalizeFirstLetter(lastName);
     }
     try {
-      if (phone && phone !== initialPhone) {
+      if (
+        (phone && phone !== initialPhone) ||
+        address !== initialAddress ||
+        marketing !== initialMarketing
+      ) {
         if (user) {
-          await updateUserPhone(user.id, phone);
+          await updateUserMongo(user.id, phone, address, marketing);
         }
       }
       await updateUserInfo(newUserInfo);
@@ -260,83 +287,155 @@ function DonatorProfileEditPage(): React.ReactNode {
   }
 
   return (
-    <div id="donatorProfileEditPage">
+    <>
       <DonatorNavbar />
-      <div id="editProfileBox">
-        <p id="editProfileText">Edit Profile</p>
-        <form id="form">
-          <div id="DonorNameBox">
-            <Box sx={{ display: isMobile ? "" : "flex", width: "80vw" }}>
-              <div className="labelInputBox" id="firstNameBox">
-                <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
-                  <p className="formLabel">First Name</p>
-                  <input
-                    className="inputBox"
-                    value={firstName}
-                    type="text"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setFirstName(e.target.value)
-                    }
-                  />
-                </Box>
-              </div>
-              <div className="labelInputBox" id="lastNameBox">
-                <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
-                  <p className="formLabel">Last Name</p>
-                  <input
-                    className="inputBox"
-                    value={lastName}
-                    type="text"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setLastName(e.target.value)
-                    }
-                  />
-                </Box>
-              </div>
+      <div id="donatorProfileEditPage">
+        <div id="editProfileBox">
+          <p id="editProfileText">Edit Profile</p>
+          <form id="form">
+            <div id="DonorNameBox">
+              <Box sx={{ display: isMobile ? "" : "flex", width: "80vw" }}>
+                <div className="labelInputBox" id="firstNameBox">
+                  <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
+                    <p className="formLabel">First Name</p>
+                    <input
+                      className="inputBox"
+                      value={firstName}
+                      type="text"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setFirstName(e.target.value)
+                      }
+                    />
+                  </Box>
+                </div>
+                <div className="labelInputBox" id="lastNameBox">
+                  <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
+                    <p className="formLabel">Last Name</p>
+                    <input
+                      className="inputBox"
+                      value={lastName}
+                      type="text"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setLastName(e.target.value)
+                      }
+                    />
+                  </Box>
+                </div>
+              </Box>
+            </div>
+            <Box className="labelInputBox">
+              <p className="formLabel">Email</p>
+              <input
+                className="inputBox"
+                value={email}
+                type="text"
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </Box>
+            <Box>
+              <p className="formLabel">Phone Number</p>
+              <PhoneInput
+                className="inputBox"
+                value={phone || ""}
+                onChange={handlePhoneChange}
+                defaultCountry="US"
+              />
+            </Box>
+            <Box className="labelInputBox">
+              <p className="formLabel">Street Address</p>
+              <input
+                className="inputBox"
+                value={address.street}
+                type="text"
+                onChange={(e) =>
+                  setAddress({ ...address, street: e.target.value })
+                }
+              />
+            </Box>
+            <Box className="labelInputBox">
+              <p className="formLabel">City</p>
+              <input
+                className="inputBox"
+                value={address.city}
+                type="text"
+                onChange={(e) =>
+                  setAddress({ ...address, city: e.target.value })
+                }
+              />
+            </Box>
+            <div id="DonorNameBox">
+              <Box sx={{ display: isMobile ? "" : "flex", width: "80vw" }}>
+                <div className="labelInputBox" id="firstNameBox">
+                  <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
+                    <p className="formLabel">State</p>
+                    <input
+                      className="inputBox"
+                      value={address.state}
+                      type="text"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setAddress({ ...address, state: e.target.value })
+                      }
+                    />
+                  </Box>
+                </div>
+                <div className="labelInputBox" id="lastNameBox">
+                  <Box sx={{ width: isMobile ? "80vw" : "200px" }}>
+                    <p className="formLabel">Zip</p>
+                    <input
+                      className="inputBox"
+                      value={address.zip}
+                      type="text"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setAddress({ ...address, zip: e.target.value })
+                      }
+                    />
+                  </Box>
+                </div>
+              </Box>
+            </div>
+            <Box className="labelInputBox">
+              <p
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontSize: "0.95rem",
+                  marginTop: "20px",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={marketing}
+                  onChange={(e) => setMarketing(e.target.checked)}
+                />
+                Receive marketing information from Habitat for Humanity
+              </p>
+            </Box>
+          </form>
+          <div id="buttonBox">
+            <button
+              type="button"
+              value="backButton"
+              className="buttons"
+              id="backButton"
+              onClick={buttonNavigation}
+            >
+              Back
+            </button>
+            <div id="spacing" className="buttons" />
+            <button
+              type="submit"
+              value="saveChangesButton"
+              className="buttons"
+              id="saveChangesButton"
+              onClick={buttonNavigation}
+            >
+              Save Changes
+            </button>
           </div>
-          <Box className="labelInputBox">
-            <p className="formLabel">Email</p>
-            <input
-              className="inputBox"
-              value={email}
-              type="text"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Box>
-          <Box>
-            <p className="formLabel">Phone Number</p>
-            <PhoneInput
-              className="inputBox"
-              value={phone || ""}
-              onChange={handlePhoneChange}
-              defaultCountry="US"
-            />
-          </Box>
-        </form>
-        <div id="buttonBox">
-          <button
-            type="button"
-            value="backButton"
-            className="buttons"
-            id="backButton"
-            onClick={buttonNavigation}
-          >
-            Back
-          </button>
-          <div id="spacing" className="buttons" />
-          <button
-            type="submit"
-            value="saveChangesButton"
-            className="buttons"
-            id="saveChangesButton"
-            onClick={buttonNavigation}
-          >
-            Save Changes
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
