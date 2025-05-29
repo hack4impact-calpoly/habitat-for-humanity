@@ -7,6 +7,7 @@ import React, {
   useEffect,
 } from "react";
 import styled from "styled-components";
+import { getFiles } from "../../../../utils/FileStore";
 
 type DropZoneProps = {
   setFiles: (files: File[]) => void;
@@ -86,17 +87,13 @@ async function compressImage(file: Blob, quality: number): Promise<Blob> {
   ctx?.drawImage(image, 0, 0, canvas.width, canvas.height);
 
   return new Promise((resolve) => {
-    canvas.toBlob(
-      (blob) => resolve(blob as Blob),
-      "image/jpeg",
-      quality / 100
-    );
+    canvas.toBlob((blob) => resolve(blob as Blob), "image/jpeg", quality / 100);
   });
 }
 
 const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [dropPhotos, setDropPhotos] = useState<File[]>([]);
+  const [dropPhotos, setDropPhotos] = useState<File[]>(getFiles());
   const [preview, setPreview] = useState<string[]>([]);
 
   const MAX_IMAGE_SIZE = 5_000_000; // 5MB
@@ -132,7 +129,7 @@ const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
       alert("Some files exceed 5MB. Please choose smaller images.");
       return;
     }
-    if (arr.length > MAX_IMAGE_COUNT) {
+    if (arr.length + dropPhotos.length > MAX_IMAGE_COUNT) {
       alert(`You can only upload up to ${MAX_IMAGE_COUNT} images.`);
       return;
     }
@@ -140,10 +137,11 @@ const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
     Promise.all(arr.map((f) => compressImage(f, COMPRESSED_IMAGE_QUALITY)))
       .then((blobs) => {
         const compressedFiles = blobs.map(
-          (b, i) => new File([b], arr[i].name, { type: b.type })
+          (b, i) => new File([b], arr[i].name, { type: b.type }),
         );
-        setFiles(compressedFiles);
-        setDropPhotos(compressedFiles);
+        const combinedFiles = [...dropPhotos, ...compressedFiles];
+        setFiles(combinedFiles);
+        setDropPhotos(combinedFiles);
       })
       .catch((err) => {
         console.error("Image processing error:", err);
@@ -156,7 +154,12 @@ const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
       {preview.length ? (
         <>
           <ClearMessage onClick={clearImages}>Clear Images</ClearMessage>
-          <ImageContainer>
+          <ImageContainer
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onClick={() => inputRef.current?.click()}
+            className="cursor-pointer"
+          >
             {preview.map((url, i) => (
               <img
                 key={i}
@@ -190,20 +193,19 @@ const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
                 {MAX_IMAGE_COUNT} files
               </span>
             </Message>
-            <input
-              type="file"
-              hidden
-              multiple
-              accept="image/*"
-              ref={inputRef}
-              onChange={(e) => processFilesInput(e.target.files)}
-            />
           </DropMessage>
         </DropContainer>
       )}
+      <input
+        type="file"
+        hidden
+        multiple
+        accept="image/*"
+        ref={inputRef}
+        onChange={(e) => processFilesInput(e.target.files)}
+      />
     </div>
   );
 };
 
 export default Dropzone;
-

@@ -130,6 +130,7 @@ function SubmitInfo(): React.ReactNode {
         setServerError("Error sending donation. Please try again.");
         return false;
       }
+      clearFiles();
       return true;
     } catch (error) {
       console.error(error);
@@ -250,37 +251,37 @@ function SubmitInfo(): React.ReactNode {
             )}
           </div>
           <div className="inputError">{serverError}</div>
-            <div
-              id="donPickupButtons"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
+          <div
+            id="donPickupButtons"
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <button
+              type="button"
+              value="backButton"
+              className="donPickupButton backButton"
+              onClick={buttonNavigation}
+              style={{ padding: "10px 45px" }}
             >
-              <button
-                type="button"
-                value="backButton"
-                className="donPickupButton backButton"
-                onClick={buttonNavigation}
-                style={{ padding: "10px 45px" }}
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                value="nextButton"
-                className="donPickupButton nextButton"
-                onClick={buttonNavigation}
-                style={{ padding: "10px 45px" }}
-              >
-                Next
-              </button>
-            </div>
+              Back
+            </button>
+            <button
+              type="button"
+              value="nextButton"
+              className="donPickupButton nextButton"
+              onClick={buttonNavigation}
+              style={{ padding: "10px 45px" }}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default SubmitInfo;
