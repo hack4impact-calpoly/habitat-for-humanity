@@ -3179,3 +3179,17 @@ input[type="radio"] {
 .fc-grayed-out {
   background-color: var(--fc-non-business-color);
 }
+
+.addressButton {
+  color: var(--tertiary);
+  font-weight: bold;
+  background-color: var(--white);
+  border: 2px solid var(--tertiary);
+  padding: 10px 45px;
+}
+
+.addressButton:hover {
+  color: var(--white);
+  background-color: var(--tertiary);
+  cursor: pointer;
+}

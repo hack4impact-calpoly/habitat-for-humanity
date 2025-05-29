@@ -12,10 +12,13 @@ import {
 
 import { RootState, store } from "../../../../redux/store";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
+import { useAuth } from "@clerk/nextjs";
+import { getUserByID } from "api/user";
 
 require("../../../../App.css");
 
 function DonatorLocationPage(): React.ReactNode {
+  const { userId } = useAuth();
   const storedAddr = useSelector((state: RootState) => state.donation.address);
   const storedCity = useSelector((state: RootState) => state.donation.city);
   const storedZip = useSelector((state: RootState) => state.donation.zipCode);
@@ -41,6 +44,17 @@ function DonatorLocationPage(): React.ReactNode {
       if (validInput()) {
         router.push(nextPath);
       }
+    }
+  };
+
+  const fillAddress = async () => {
+    if (userId) {
+      const { address: userAddress = {} } = await getUserByID(userId);
+      const { street, city, zip } = userAddress;
+
+      street ? setAddress(street) : setAddrError("Street address not found");
+      city ? setCity(city) : setCityError("City not found");
+      zip ? setZip(zip) : setZipError("ZIP code not found");
     }
   };
 
@@ -118,6 +132,14 @@ function DonatorLocationPage(): React.ReactNode {
             onClick={buttonNavigation}
           >
             Back
+          </button>
+          <button
+            type="button"
+            value="addressButton"
+            className="addressButton"
+            onClick={() => fillAddress()}
+          >
+            Auto-Fill Address
           </button>
           <button
             type="button"
