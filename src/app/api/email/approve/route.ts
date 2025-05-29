@@ -1,4 +1,4 @@
-import * as sgMail from "@sendgrid/mail";
+import { Resend } from "resend";
 import { verifyAdmin } from "hooks/verify";
 import { NextResponse } from "next/server";
 
@@ -8,14 +8,11 @@ export async function POST(req: Request) {
   }
   const { recipientEmail, donationDetails } = await req.json();
   try {
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+    const resend = new Resend(process.env.RESEND_API_KEY as string);
 
     const msg = {
-      to: recipientEmail,
-      from: {
-        name: "Habitat for Humanity SLO County",
-        email: process.env.SENDGRID_SENDER_EMAIL as string,
-      },
+      to: [recipientEmail],
+      from: `Habitat for Humanity SLO County <${process.env.RESEND_SENDER_EMAIL as string}>`,
       subject: "Donation Approved!",
       html: `
             <p>Hi ${donationDetails.name},</p>
@@ -38,15 +35,9 @@ export async function POST(req: Request) {
             <p>Thank you again for supporting our mission!</p>
             <p>- Habitat for Humanity for San Luis Obispo County</p>
             `,
-      trackingSettings: {
-        clickTracking: {
-          enable: false,
-          enableText: false,
-        },
-      },
     };
 
-    await sgMail.send(msg);
+    await resend.emails.send(msg);
     return NextResponse.json(
       { message: "Approved email sent successfully!" },
       { status: 200 },

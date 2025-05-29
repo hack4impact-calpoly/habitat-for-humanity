@@ -1,4 +1,4 @@
-import * as sgMail from "@sendgrid/mail";
+import { Resend } from "resend";
 import { verifyAdmin } from "hooks/verify";
 import { NextResponse } from "next/server";
 
@@ -12,17 +12,14 @@ export async function POST(req: Request) {
   const receipt = formData.get("receipt") as File;
 
   try {
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+    const resend = new Resend(process.env.RESEND_API_KEY as string);
 
     const attachment = await receipt.arrayBuffer();
     const attachmentBase64 = Buffer.from(attachment).toString("base64");
 
     const msg = {
-      to: recipientEmail,
-      from: {
-        name: "Habitat for Humanity SLO County",
-        email: process.env.SENDGRID_SENDER_EMAIL as string,
-      },
+      to: [recipientEmail],
+      from: `Habitat for Humanity SLO County <${process.env.RESEND_SENDER_EMAIL as string}>`,
       subject: "Donation Receipt",
       html: `
             <p>Hi ${donationDetails.name},</p>
@@ -45,19 +42,11 @@ export async function POST(req: Request) {
         {
           content: attachmentBase64,
           filename: "receipt.pdf",
-          type: "application/pdf",
-          disposition: "attachment",
         },
       ],
-      trackingSettings: {
-        clickTracking: {
-          enable: false,
-          enableText: false,
-        },
-      },
     };
 
-    await sgMail.send(msg);
+    await resend.emails.send(msg);
     return NextResponse.json(
       { message: "Receipt email sent successfully!" },
       { status: 200 },
