@@ -532,6 +532,7 @@ code {
   display: flex;
 }
 
+.deleteButton,
 .exportButton,
 .backButton,
 .rejectButton,
@@ -540,6 +541,7 @@ code {
 }
 
 @media (max-width: 768px) {
+  .deleteButton,
   .backButton,
   .rejectButton,
   .approveButton {
@@ -575,6 +577,7 @@ code {
   cursor: pointer;
 }
 
+.deleteButton,
 .rejectButton {
   background-color: var(--white);
   font-weight: bold;
@@ -584,6 +587,7 @@ code {
   margin-right: 12px;
 }
 
+.deleteButton:hover,
 .rejectButton:hover {
   color: var(--white);
   background-color: var(--red);
@@ -592,6 +596,7 @@ code {
 }
 
 @media (max-width: 768px) {
+  .deleteButton,
   .rejectButton {
     margin-left: 12px;
   }
@@ -3178,4 +3183,79 @@ input[type="radio"] {
 
 .fc-grayed-out {
   background-color: var(--fc-non-business-color);
+}
+
+.modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 380px;
+  height: auto;
+  background-color: var(--mui-palette-background-paper, #fff);
+  border: 1px solid #dfdfdf;
+  box-shadow: 10px 4px 20px rgba(49, 77, 137, 0.1);
+  padding: 32px;
+}
+
+.modal-address {
+  color: #314d89;
+  font-family: Rubik, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 15px;
+  margin-bottom: 10px;
+}
+
+.modal-default-text {
+  color: #000000;
+  font-family: Rubik, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.modal-title-text {
+  color: #011338;
+  font-family: Rubik, sans-serif;
+  font-style: normal;
+  font-weight: bolder;
+  font-size: 13px;
+  line-height: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.view-donation-button {
+  width: 112px;
+  height: 30px;
+  background: #314d89;
+  color: white;
+  font-family: Rubik, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15px;
+  margin-top: 15px;
+  box-shadow: none;
+  border: none;
+}
+
+.view-donation-button:hover {
+  cursor: pointer;
+}
+
+.delete-button {
+  background-color: var(--red);
+}
+
+.modal-button-group {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 }

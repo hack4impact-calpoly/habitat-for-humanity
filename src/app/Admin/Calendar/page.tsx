@@ -15,7 +15,7 @@ import moment from "moment";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
 import SmallCalendar from "../../../components/admin/AdminCalendar/SmallCalendar";
 import { useRouter } from "next/navigation";
-import { getEvents } from "../../../api/event"
+import { getEvents } from "../../../api/event";
 
 require("../../../App.css");
 
@@ -57,69 +57,6 @@ const eventDiv = {
   fontFamily: "Rubik",
 };
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 380,
-  height: 247,
-  bgcolor: "background.paper",
-  border: "1px solid #DFDFDF",
-  boxShadow: "10px 4px 20px rgba(49, 77, 137, 0.1)",
-  p: 4,
-};
-
-const modalAddressStyle = {
-  color: "#314D89",
-  fontFamily: "Rubik",
-  fontStyle: "normal",
-  fontWeight: "bold",
-  fontSize: "13px",
-  lineHeight: "15px",
-  marginBottom: "10px",
-};
-
-const modalDefaultText = {
-  color: "#000000",
-  fontFamily: "Rubik",
-  fontStyle: "normal",
-  fontWeight: "400",
-  fontSize: "13px",
-  lineHeight: "15px",
-  marginTop: "5px",
-  marginBottom: "5px",
-};
-
-const modalTitleText = {
-  color: "#011338",
-  fontFamily: "Rubik",
-  fontStyle: "normal",
-  fontWeight: "bolder",
-  fontSize: "13px",
-  lineHeight: "15px",
-  marginTop: "5px",
-  marginBottom: "5px",
-};
-
-const viewDonationButton = {
-  width: "112px",
-  height: "30px",
-  background: "#314D89",
-  color: "white",
-  fontFamily: "Rubik",
-  fontStyle: "normal",
-  fontWeight: "400",
-  fontSize: "13px",
-  lineHeight: "15px",
-  marginTop: "15px",
-  boxShadow: "none",
-  borderTopWidth: "0px",
-  borderBottomWidth: "0px",
-  borderRightWidth: "0px",
-  borderLeftWidth: "0px",
-};
-
 function AdminCalendar() {
   const [open, setOpen] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState<DonationEvent[]>([]);
@@ -134,33 +71,33 @@ function AdminCalendar() {
   }, [calendarEvents]);
 
   useEffect(() => {
-    const fetchEvents = (async () => {
+    const fetchEvents = async () => {
       await getEvents()
-      .then((data) => {
-        const updatedEvents = data.map((event: any) => {
-          const strippedStart = moment
-            .utc(event.startTime)
-            .utcOffset("-08:00")
-            .format();
-          const strippedEnd = moment
-            .utc(event.endTime)
-            .utcOffset("-08:00")
-            .format();
+        .then((data) => {
+          const updatedEvents = data.map((event: any) => {
+            const strippedStart = moment
+              .utc(event.startTime)
+              .utcOffset("-08:00")
+              .format();
+            const strippedEnd = moment
+              .utc(event.endTime)
+              .utcOffset("-08:00")
+              .format();
 
-          return {
-            ...event,
-            start: strippedStart,
-            end: strippedEnd,
-            emailAddress: event.emailAddress || event.donor?.emailAddress || "N/A",
-            textColor: "Black",
-            backgroundColor: "transparent",
-            borderColor: "transparent",
-          };
-        });
-        setCalendarEvents(updatedEvents);
-      })
-      .catch((error) => console.error(error));
-    })
+            return {
+              ...event,
+              start: strippedStart,
+              end: strippedEnd,
+              textColor: "Black",
+              backgroundColor: "transparent",
+              borderColor: "transparent",
+            };
+          });
+
+          setCalendarEvents(updatedEvents);
+        })
+        .catch((error) => console.error(error));
+    };
     fetchEvents();
   }, []);
 
@@ -247,12 +184,12 @@ function AdminCalendar() {
     <div>
       {open && (
         <Modal open={open} onClose={closeModalComponent}>
-          <Box sx={style}>
-            <Typography style={modalAddressStyle}>
+          <Box className="modal-box">
+            <Typography className="modal-address">
               {clickedEvent!.event.extendedProps.address}
             </Typography>
             <Typography component="div">
-              <div style={modalDefaultText}>
+              <div className="modal-default-text">
                 {new Date(clickedEvent!.event.start!).toLocaleDateString(
                   "en-US",
                   {
@@ -276,22 +213,22 @@ function AdminCalendar() {
                 )}
               </div>
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
-                <span style={modalTitleText}>Donor </span>
-                <span style={modalDefaultText}>
+                <span className="modal-title-text">Donor </span>
+                <span className="modal-default-text">
                   {clickedEvent!.event.extendedProps.donorFirstName}{" "}
                   {clickedEvent!.event.extendedProps.donorLastName}
                 </span>
               </p>
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
-                <span style={modalTitleText}>Item </span>
-                <span style={modalDefaultText}>
+                <span className="modal-title-text">Item </span>
+                <span className="modal-default-text">
                   {clickedEvent!.event.extendedProps.itemName.join(", ")}
                 </span>
               </p>
 
               <p style={{ marginTop: "0px", marginBottom: "0px" }}>
-                <span style={modalTitleText}>Phone </span>
-                <span style={modalDefaultText}>
+                <span className="modal-title-text">Phone </span>
+                <span className="modal-default-text">
                   {clickedEvent!.event.extendedProps.phone}
                 </span>
               </p>
@@ -299,7 +236,7 @@ function AdminCalendar() {
                 {/* prettier-ignore */}
                 <button
                   type="button"
-                  style={viewDonationButton}
+                  className="view-donation-button"
                   onClick={() => {
                     router.push(
                       `/Admin/DonationInfo/${clickedEvent!.event.extendedProps.itemId}/`,

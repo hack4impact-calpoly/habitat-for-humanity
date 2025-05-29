@@ -31,15 +31,13 @@ git checkout dev
 git pull
 ```
 
-3. Navigate to the `/frontend` and `/backend`
-
-4. Be sure to install any packages as a result of the previous sprint:
+3. Be sure to install any packages as a result of the previous sprint:
 
 ```bash
-npm i
+npm i --legacy-peer-deps
 ```
 
-5. Name the branch with the GitHub issue ID and a short description of the task:
+4. Name the branch with the GitHub issue ID and a short description of the task:
 
 ```bash
 git checkout -b 1-Login-Page
@@ -51,14 +49,13 @@ git checkout -b 1-Login-Page
 ```
 git clone https://github.com/hack4impact-calpoly/habitat-for-humanity.git
 ```
-2. Navigate to the `/frontend` or `/backend` folder
-3. Run...
+2. Run...
 ```
-npm i
+npm i --legacy-peer-deps
 ```
 4. Run...
 ```
-npm start
+npm run dev
 ```
 <br>
 <br>
@@ -72,9 +69,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm run dev`
 
 Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
+
+### `npm start`
+
+Runs the app in the production mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
@@ -130,8 +135,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 ### Deployment
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-TEST COMMIT
 
 ### `npm run build` fails to minify
 
