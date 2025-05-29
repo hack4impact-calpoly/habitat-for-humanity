@@ -48,6 +48,7 @@ export async function POST(req: Request) {
       donorLastName: clerkUser.lastName,
       itemName: item.name,
       phone: donor.phone,
+      emailAddress: clerkUser.primaryEmailAddress?.emailAddress,
     });
     await newEvent.save();
     return NextResponse.json({ msg: `${newEvent} added` }, { status: 200 });

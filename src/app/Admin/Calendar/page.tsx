@@ -34,6 +34,7 @@ interface DonationEvent {
   donorLastName: string;
   itemName: string;
   phone: string;
+  emailAddress: string;
   pickupAvailability: string[][];
   location: string;
 }
@@ -128,12 +129,15 @@ function AdminCalendar() {
     console.log(filteredEvents);
 
     const headers = [
+      "Event Title",
       "Donor First Name",
       "Donor Last Name",
       "Phone",
+      "Email",
       "Address",
       "City",
       "Zip Code",
+      "Item/s",
       "Start Time",
       "End Time",
     ];
@@ -143,12 +147,15 @@ function AdminCalendar() {
     filteredEvents.forEach((event) => {
       const props = event.extendedProps;
       const row = [
+        event.title,
         props.donorFirstName,
         props.donorLastName,
         props.phone,
+        props.emailAddress,
         props.address,
         props.city,
         props.zipCode,
+        props.itemName,
         new Date(event.start!).toLocaleString(),
         new Date(event.end!).toLocaleString(),
       ];
