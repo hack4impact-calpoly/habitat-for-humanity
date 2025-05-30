@@ -1,7 +1,7 @@
 "use client";
 
 import ProgressBar from "components/donor/donation/ProgressBar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import {
@@ -57,6 +57,10 @@ function DonatorLocationPage(): React.ReactNode {
       zip ? setZip(zip) : setZipError("ZIP code not found");
     }
   };
+
+  useEffect(() => {
+    if (!(storedAddr || storedCity || storedZip)) fillAddress();
+  }, [userId])
 
   const validInput = () => {
     let valid = true;
@@ -132,14 +136,6 @@ function DonatorLocationPage(): React.ReactNode {
             onClick={buttonNavigation}
           >
             Back
-          </button>
-          <button
-            type="button"
-            value="addressButton"
-            className="addressButton"
-            onClick={() => fillAddress()}
-          >
-            Auto-Fill Address
           </button>
           <button
             type="button"
