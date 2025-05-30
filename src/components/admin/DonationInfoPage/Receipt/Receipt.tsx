@@ -6,11 +6,6 @@ import Image from "next/image";
 import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
 import moment from "moment";
-// import Tabs from "@mui/material/Tabs";
-// import Tab from "@mui/material/Tab";
-// import PropTypes from "prop-types";
-// import Typography from "@mui/material/Typography";
-// import Box from "@mui/material/Box";
 require("../../../../App.css");
 
 interface ReceiptTabProps {
@@ -104,11 +99,18 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
         <div id="receiptPage" style={{ padding: "5%", maxWidth: "1190px" }}>
           <div id="receipt">
             <div className="head">
-              <Image
+              <img
                 alt="receipt"
-                src={"/images/logo.png"}
-                width={200}
-                height={200}
+                src="/images/logo.png"
+                style={{
+                  width: "25%",
+                  height: "auto",
+                  objectFit: "contain",
+                  objectPosition: "left",
+                  display: "block", // optional: remove inline gap
+                }}
+                width={445}
+                height={148}
               />
               <div className="logo-input">
                 <div className="header">
