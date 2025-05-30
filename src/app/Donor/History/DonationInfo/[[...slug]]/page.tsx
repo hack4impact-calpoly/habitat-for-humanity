@@ -195,12 +195,8 @@ function DonationInfoPage() {
 
   return (
     <div>
-      {/* <Button onClick={() => console.log(storedStatus)}>Check status</Button> */}
       <DonorNavbar />
       <div id="DonInfoPage">
-        <div id="ActiveDonHeader">
-          <h1>Donation Approval</h1>
-        </div>
         <div id="DonInfoBox">
           <div id="Tabs">
             <Box sx={{ borderBottom: 2, borderColor: "divider" }}>

@@ -2810,7 +2810,7 @@ input[type="radio"] {
 
 #editProfileBox {
   width: 420px;
-  height: 620px;
+  height: auto;
 }
 
 #editProfileText {
@@ -2911,7 +2911,7 @@ input[type="radio"] {
   }
 
   #buttonBox {
-    margin: 38px 0px 0px 0px;
+    margin: 38px 0px 33px 0px;
     height: 34px;
     display: flex;
     flex-direction: row;
