@@ -62,9 +62,6 @@ function AdminSchedule(props: {
   };
   return (
     <div id="DonInfo">
-      {/* <Button onClick={() => console.log(selectedTimeSlots)}>
-        Check timeslots
-      </Button> */}
       <div id="DonationInfoPage">
         <div id="TimeHours">
           <h2 style={{ marginTop: "3rem", color: `var(--orange)` }}>

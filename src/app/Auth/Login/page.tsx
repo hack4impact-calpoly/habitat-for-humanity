@@ -51,7 +51,7 @@ function LoginPage(): React.ReactNode {
         // See https://clerk.com/docs/custom-flows/error-handling
         // for more info on error handling
         console.error(JSON.stringify(err, null, 2));
-              // Check for specific error related to email not found
+          // Check for specific error related to email not found
         if (err.errors?.some((e: any) => e.code === 'form_identifier_not_found')) {
           setEmailError('Couldn\'t find your account, please create an account')
         } else if (err.errors?.some((e: any) => e.code === 'form_password_incorrect')) {

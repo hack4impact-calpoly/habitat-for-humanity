@@ -215,7 +215,6 @@ function CreateAccountPage(): React.ReactNode {
     const valid = validateForm();
     if (valid) {
       try {
-        console.log(phoneNumber);
         await signUp.create({
           firstName,
           lastName,
@@ -279,7 +278,6 @@ function CreateAccountPage(): React.ReactNode {
             marketingOption: agreedToMarketing,
           };
           await addUser(userData);
-          console.log("User data added successfully");
           router.push("/");
         } else {
           console.error("Error userId not created.");

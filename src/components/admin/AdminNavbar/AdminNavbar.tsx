@@ -86,10 +86,6 @@ function AdminNavbar(): React.ReactNode {
     ) {
       return true;
     }
-    // Waiting for adding admin profile edit page
-    // else if (header === navBarHeaders[1] && page_path.includes(profile_path)) { //For different profile pages
-    //    return true;
-    // }
     return false;
   };
 
@@ -113,7 +109,6 @@ function AdminNavbar(): React.ReactNode {
       return signoutPath;
     }
     // Sign Out to be implemented, just route to main page for now (login)
-    console.log("Error: Unknown Header", header);
     return "/Admin";
   };
 
@@ -161,6 +156,41 @@ function AdminNavbar(): React.ReactNode {
     </Box>
   );
 
+  // Handle sign out with proper cleanup
+  const handleSignOut = () => {
+    // Use the redirectUrl option to ensure clean navigation
+    signOut({ redirectUrl: "/" }).catch((error) => {
+      console.error("Error during sign out:", error);
+      // Fallback redirect in case the signOut method fails
+      router.push("/");
+    });
+  };
+
+  // Add sign out option to mobile menu
+  const renderMobileSignOutItem = () => (
+    <MenuItem
+      onClick={() => {
+        handleCloseNavMenu();
+        handleSignOut();
+      }}
+    >
+      <Box
+        textAlign="center"
+        component="a"
+        sx={{
+          m: 0,
+          textDecoration: "none",
+          color: "#314d89",
+          fontSize: "17px",
+          fontWeight: "bold",
+          paddingBottom: "2px",
+        }}
+      >
+        Sign Out
+      </Box>
+    </MenuItem>
+  );
+
   const renderMobileNavbar = () => (
     <Box
       sx={{
@@ -204,6 +234,7 @@ function AdminNavbar(): React.ReactNode {
         TransitionProps={{ timeout: 0 }}
       >
         {navBarHeaders?.map((page, index) => navItem(page, index))}
+        {renderMobileSignOutItem()}
       </Menu>
     </Box>
   );

@@ -57,9 +57,7 @@ function ForgotPasswordPage(): React.ReactNode {
           // the newly created session (user is now signed in)
           setActive({ session: result.createdSessionId });
           setError("");
-        } else {
-          console.log(result);
-        }
+        } 
       })
       .catch((err) => {
         console.error("error", err.errors[0].longMessage);

@@ -64,12 +64,6 @@ function AdminCalendar() {
   const router = useRouter();
   const calendarRef = useRef<FullCalendar | null>(null);
 
-  //  right now we are using an endpoint that does not filter by date
-
-  useEffect(() => {
-    console.log("calendar events updated", calendarEvents);
-  }, [calendarEvents]);
-
   useEffect(() => {
     const fetchEvents = async () => {
       await getEvents()
@@ -125,8 +119,6 @@ function AdminCalendar() {
       const eventStart = new Date(event.start as unknown as string);
       return eventStart >= start && eventStart < end;
     });
-
-    console.log(filteredEvents);
 
     const headers = [
       "Event Title",
