@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     const msg = {
       to: [to],
       from: `Habitat for Humanity SLO County <${process.env.RESEND_SENDER_EMAIL as string}>`,
-      subject: "Donation Rejection Notification",
+      subject: "DO NO REPLY - Donation Rejection Notification",
       html: `
               <p>Hi ${firstName},</p>
           
