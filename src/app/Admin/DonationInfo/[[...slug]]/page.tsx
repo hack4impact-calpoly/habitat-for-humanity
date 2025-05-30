@@ -365,7 +365,7 @@ function DonationInfoPage() {
         setValue(2); // Go to Reciept Tab
         return;
       }
-      sendReceipt();
+      await sendReceipt();
       await sendUpdatedItemToDB("Completed", false);
       router.push("/Admin");
       router.refresh();
@@ -459,9 +459,6 @@ function DonationInfoPage() {
         </Modal>
       )}
       <div id="DonInfoPage">
-        <div id="ActiveDonHeader">
-          <h1>Donation Approval</h1>
-        </div>
         <div id="DonInfoBox">
           <div id="Tabs">
             <Box sx={{ borderBottom: 2, borderColor: "divider" }}>
