@@ -17,7 +17,6 @@ export const getItemByID = async (itemID: string) =>
         // check server response
         throw new Error(`${res.status}-${res.statusText}`);
       }
-      // console.log(item);
       return item;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
@@ -36,7 +35,6 @@ export const getItemsByDonorID = async (donorID: string) =>
         // check server response
         throw new Error(`${res.status}-${res.statusText}`);
       }
-      console.log(items);
       return items;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
@@ -55,7 +53,6 @@ export const getItemsByStatus = async (status: string) =>
         // check server response
         throw new Error(`${res.status}-${res.statusText}`);
       }
-      // console.log(item);
       return item;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
@@ -106,12 +103,9 @@ export const addItem = async (item: Item) =>
   })
     .then(async (res) => {
       const response = await res.json();
-      console.log(res.ok);
       if (!res.ok) {
         // check server response
         return false;
-        console.log(response);
-        // throw new Error(res.status + "-" + res.statusText)
       }
       return true;
     })
@@ -145,7 +139,6 @@ export const updateItem = async (item: Item) =>
   })
     .then(async (res) => {
       const response = await res.json();
-      console.log(res.ok);
       if (!res.ok) {
         console.error("Error updating item:", res.status, res.statusText);
         // check server response
@@ -178,7 +171,6 @@ export const deleteItemByItemId = async (itemId: string) =>
       } else {
         // If it's not JSON, handle the response as text (e.g., "Successful")
         const result = await res.text();
-        console.log("Non-JSON response:", result);
         return { message: result };
       }
     })

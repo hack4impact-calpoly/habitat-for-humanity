@@ -113,7 +113,6 @@ function AdminNavbar(): React.ReactNode {
       return signoutPath;
     }
     // Sign Out to be implemented, just route to main page for now (login)
-    console.log("Error: Unknown Header", header);
     return "/Admin";
   };
 

@@ -123,7 +123,6 @@ const sendApprovalEmail = async (donor: any, notes: string) => {
         itemNotes: notes,
       },
     });
-    console.log("Approval email sent!");
   } catch (error) {
     console.error("Error sending approval email:", error);
   }
@@ -136,7 +135,6 @@ const sendRejectionEmail = async (donor: any, notes: string) => {
       firstName: donor.firstName,
       itemNotes: notes,
     });
-    console.log("Rejection email sent!");
   } catch (error) {
     console.error("Error sending rejection email:", error);
   }
@@ -171,8 +169,7 @@ function DonationInfoPage() {
   const approveItem = async () => {
     if (storedTimeSlots.length > 0) {
       await deleteEventByItemId(id);
-      await storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item));
-      console.log("Success submitting events!");
+      storedTimeSlots.map((timeSlot) => sendEventToDB(timeSlot, item));
       clearTimeSlots(); // Clear time slots from redux
     }
     if (item.scheduling !== "Pickup" || storedTimeSlots.length > 0) {
@@ -206,7 +203,6 @@ function DonationInfoPage() {
     if (newApproval) {
       updatedItem.timeApproved = new Date();
     }
-    console.log(updatedItem);
     return await updateItem(updatedItem);
   };
 
@@ -281,7 +277,6 @@ function DonationInfoPage() {
               setNotes(item.notes || "");
             })
             .catch((err) => {
-              console.log(err);
               setItem(emptyItem);
               setNotes("");
             })

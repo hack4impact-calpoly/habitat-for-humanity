@@ -6,7 +6,6 @@ export async function POST(req: Request) {
   try {
     await connect();
     const { id, phone, address, marketingOption } = await req.json();
-    console.log(id, phone, address, marketingOption);
     const newUser = new Users({ id, phone, address, marketingOption });
     await newUser.save();
 

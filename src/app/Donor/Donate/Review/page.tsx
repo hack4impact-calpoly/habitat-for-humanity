@@ -32,10 +32,6 @@ function SubmitInfo(): React.ReactNode {
     (state: RootState) => state.donation.dimensions,
   );
   const statePhotos = useSelector((state: RootState) => state.donation.photos);
-  // console.log(
-  //   "state.donation",
-  //   useSelector((state: RootState) => state.donation),
-  // );
   const collectionType = useSelector(
     (state: RootState) => state.donation.photos,
   );

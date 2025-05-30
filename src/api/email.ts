@@ -27,7 +27,6 @@ export async function sendRejectEmail({
       throw new Error(`Failed to send email: ${response.statusText}`);
     }
 
-    console.log("Rejection email successfully sent!");
     return response.json();
   } catch (error) {
     console.error("Error sending rejection email:", error);
@@ -67,7 +66,6 @@ export async function sendApproveEmail({
       throw new Error(`Failed to send approval email: ${response.statusText}`);
     }
 
-    console.log("Approval email successfully sent!");
     return response.json();
   } catch (error) {
     console.error("Error sending approval email:", error);
@@ -106,7 +104,6 @@ export async function sendReceiptEmail({
       throw new Error(`Failed to send receipt email: ${response.statusText}`);
     }
 
-    console.log("Receipt email successfully sent!");
     return response.json();
   } catch (error) {
     console.error("Error sending receipt email:", error);

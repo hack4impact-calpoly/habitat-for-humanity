@@ -69,7 +69,6 @@ export const addEvent = async (event: Event) =>
         throw new Error(`${res.status}-${res.statusText}`);
       }
       const result = await res.json();
-      console.log(result);
       return res;
     })
     .catch((error) => console.error("Error: ", error)); // handle error
@@ -94,7 +93,6 @@ export const deleteEventByItemId = async (itemId: string) =>
       } else {
         // If it's not JSON, handle the response as text (e.g., "Successful")
         const result = await res.text();
-        console.log("Non-JSON response:", result);
         return { message: result };
       }
     })
