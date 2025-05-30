@@ -183,7 +183,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
                   </div>
                 </div>
                 <div className="form-field">
-                  <div style={{ display: "flex" }}>
+                  <div style={{ display: "flex", width: "100%" }}>
                     <h4>Address:</h4>
                     <input
                       type="text"

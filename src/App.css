@@ -3259,3 +3259,17 @@ input[type="radio"] {
   justify-content: space-between;
   gap: 1rem;
 }
+
+.addressButton {
+  color: var(--tertiary);
+  font-weight: bold;
+  background-color: var(--white);
+  border: 2px solid var(--tertiary);
+  padding: 10px 45px;
+}
+
+.addressButton:hover {
+  color: var(--white);
+  background-color: var(--tertiary);
+  cursor: pointer;
+}
