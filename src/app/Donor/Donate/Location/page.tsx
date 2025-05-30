@@ -1,7 +1,7 @@
 "use client";
 
 import ProgressBar from "components/donor/donation/ProgressBar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import {
@@ -12,10 +12,13 @@ import {
 
 import { RootState, store } from "../../../../redux/store";
 import DonatorNavbar from "components/donor/DonorNavbar/DonorNavbar";
+import { useAuth } from "@clerk/nextjs";
+import { getUserByID } from "api/user";
 
 require("../../../../App.css");
 
 function DonatorLocationPage(): React.ReactNode {
+  const { userId } = useAuth();
   const storedAddr = useSelector((state: RootState) => state.donation.address);
   const storedCity = useSelector((state: RootState) => state.donation.city);
   const storedZip = useSelector((state: RootState) => state.donation.zipCode);
@@ -43,6 +46,21 @@ function DonatorLocationPage(): React.ReactNode {
       }
     }
   };
+
+  const fillAddress = async () => {
+    if (userId) {
+      const { address: userAddress = {} } = await getUserByID(userId);
+      const { street, city, zip } = userAddress;
+
+      street ? setAddress(street) : setAddrError("Street address not found");
+      city ? setCity(city) : setCityError("City not found");
+      zip ? setZip(zip) : setZipError("ZIP code not found");
+    }
+  };
+
+  useEffect(() => {
+    if (!(storedAddr || storedCity || storedZip)) fillAddress();
+  }, [userId])
 
   const validInput = () => {
     let valid = true;
