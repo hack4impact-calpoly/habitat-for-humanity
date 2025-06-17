@@ -139,7 +139,7 @@ const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
     const arr = Array.from(files);
 
     if (arr.some((f) => f.size > MAX_IMAGE_SIZE)) {
-      setErrorMessage("Some files exceed 5MB. Please choose smaller images.");
+      setErrorMessage(`Some files exceed ${MAX_IMAGE_SIZE / 1_000_000}MB. Please choose smaller images.`);
       return;
     }
     if (arr.length + dropPhotos.length > MAX_IMAGE_COUNT) {
