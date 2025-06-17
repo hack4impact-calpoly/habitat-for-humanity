@@ -73,6 +73,18 @@ const ClearMessage = styled.div`
   }
 `;
 
+const ErrorMessage = styled.div`
+  text-align: center;
+  color: var(--red, #ff4444);
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #ffe6e6;
+  border: 1px solid #ff9999;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 10px;
+`;
+
 async function compressImage(file: Blob, quality: number): Promise<Blob> {
   const image = new Image();
   image.src = URL.createObjectURL(file);
@@ -95,8 +107,9 @@ const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dropPhotos, setDropPhotos] = useState<File[]>(getFiles());
   const [preview, setPreview] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const MAX_IMAGE_SIZE = 5_000_000; // 5MB
+  const MAX_IMAGE_SIZE = 10_000_000; // 5MB
   const MAX_IMAGE_COUNT = 10;
   const COMPRESSED_IMAGE_QUALITY = 40;
 
@@ -126,11 +139,11 @@ const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
     const arr = Array.from(files);
 
     if (arr.some((f) => f.size > MAX_IMAGE_SIZE)) {
-      alert("Some files exceed 5MB. Please choose smaller images.");
+      setErrorMessage(`Some files exceed ${MAX_IMAGE_SIZE / 1_000_000}MB. Please choose smaller images.`);
       return;
     }
     if (arr.length + dropPhotos.length > MAX_IMAGE_COUNT) {
-      alert(`You can only upload up to ${MAX_IMAGE_COUNT} images.`);
+      setErrorMessage(`You can only upload up to ${MAX_IMAGE_COUNT} images.`);
       return;
     }
 
@@ -142,10 +155,11 @@ const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
         const combinedFiles = [...dropPhotos, ...compressedFiles];
         setFiles(combinedFiles);
         setDropPhotos(combinedFiles);
+        setErrorMessage(""); // Clear error on successful upload
       })
       .catch((err) => {
         console.error("Image processing error:", err);
-        alert("Error processing images. Please try again.");
+        setErrorMessage("Error processing images. Please try again.");
       });
   };
 
@@ -196,6 +210,7 @@ const Dropzone: React.FC<DropZoneProps> = ({ setFiles, clearFiles }) => {
           </DropMessage>
         </DropContainer>
       )}
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <input
         type="file"
         hidden
