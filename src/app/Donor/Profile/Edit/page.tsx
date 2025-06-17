@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery, Alert } from "@mui/material";
 import { useRouter } from "next/navigation";
 import {
   updateUserInfoAPI,
@@ -34,6 +34,8 @@ function DonatorProfileEditPage(): React.ReactNode {
   const [verifying, setVerifying] = useState(false);
   const [code, setCode] = useState("");
   const [emailVerified, setEmailVerified] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const initialFirstName = user?.firstName;
   const initialLastName = user?.lastName;
   const initialEmail = user?.primaryEmailAddress?.emailAddress;
@@ -101,9 +103,13 @@ function DonatorProfileEditPage(): React.ReactNode {
     }
     try {
       await updateUserInfoAPI(user.id, newUserInfo);
+      setErrorMessage(""); // Clear any previous errors
+      setSuccessMessage("Profile updated successfully!");
+      // Auto-clear success message after 3 seconds
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       console.error("Error updating user info:", error);
-      alert("Failed to update user information. Please try again.");
+      setErrorMessage("Failed to update user information. Please try again.");
     }
   };
 
@@ -125,12 +131,15 @@ function DonatorProfileEditPage(): React.ReactNode {
 
       await createdEmail.prepareVerification({ strategy: "email_code" });
       setVerifying(true);
+      setErrorMessage(""); // Clear any previous errors
     } catch (err) {
       setVerifying(false);
       if (err instanceof Error) {
-        alert(`Failed to send verification email: ${err.message || err}`);
+        setErrorMessage(
+          `Failed to send verification email: ${err.message || err}`,
+        );
       } else {
-        alert(`Failed to send verification email: ${err}`);
+        setErrorMessage(`Failed to send verification email: ${err}`);
       }
 
       console.error("Failed to send verification email:", err);
@@ -236,7 +245,7 @@ function DonatorProfileEditPage(): React.ReactNode {
         await handleEmailVerificationSend(email);
       } catch (err) {
         setVerifying(false);
-        alert(err);
+        setErrorMessage(String(err));
       }
     } else {
       router.push("/Donor/Profile");
@@ -412,6 +421,16 @@ function DonatorProfileEditPage(): React.ReactNode {
               </p>
             </Box>
           </form>
+          {errorMessage && (
+            <Alert severity="error" sx={{ margin: "20px 0" }}>
+              {errorMessage}
+            </Alert>
+          )}
+          {successMessage && (
+            <Alert severity="success" sx={{ margin: "20px 0" }}>
+              {successMessage}
+            </Alert>
+          )}
           <div id="buttonBox">
             <button
               type="button"

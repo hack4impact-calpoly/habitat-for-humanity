@@ -11,7 +11,7 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
 import { addEvent } from "api/event";
-import { Button, Modal } from "@mui/material";
+import { Button, Modal, Alert } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearTimeSlots,
@@ -148,6 +148,8 @@ function DonationInfoPage() {
     useState<TimeSlot[]>(emptyTimeSlots);
   const [notes, setNotes] = useState<string>("");
   const [events, setEvents] = useState<Event[]>([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [open, setOpen] = useState<boolean>(false);
   const params = useParams();
   const slug = params.slug;
@@ -252,10 +254,13 @@ function DonationInfoPage() {
         },
         receipt: pdfBlob,
       });
-      alert("Receipt sent!");
+      setSuccessMessage("Receipt sent!");
+      setErrorMessage(""); // Clear any previous errors
+      // Auto-clear success message after 5 seconds
+      setTimeout(() => setSuccessMessage(""), 5000);
     } catch (err) {
       console.error("Failed to send receipt", err);
-      alert("Failed to send receipt.");
+      setErrorMessage("Failed to send receipt.");
     }
     document
       .querySelectorAll(
@@ -496,6 +501,16 @@ function DonationInfoPage() {
             <Receipt item={item} donor={donor} events={events} />
           </TabPanel>
         </div>
+        {errorMessage && (
+          <Alert severity="error" sx={{ margin: "20px" }}>
+            {errorMessage}
+          </Alert>
+        )}
+        {successMessage && (
+          <Alert severity="success" sx={{ margin: "20px" }}>
+            {successMessage}
+          </Alert>
+        )}
         <div id="DonInfoButtons">
           <button
             type="button"
