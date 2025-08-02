@@ -109,7 +109,12 @@ const getTime = (time: string) =>
 const getDay = (time: string) =>
   time ? moment(time).utc().format("dddd, MMMM Do YYYY") : "N/A";
 
-const sendApprovalEmail = async (donor: any, notes: string) => {
+const sendApprovalEmail = async (
+  donor: any,
+  notes: string,
+  timeSlots: TimeSlot[],
+  type: string
+) => {
   try {
     await sendApproveEmail({
       to: donor.email,
@@ -121,6 +126,8 @@ const sendApprovalEmail = async (donor: any, notes: string) => {
         officeHours: "Tuesday - Saturday, 10AM - 5PM",
         website: "https://www.habitatslo.org",
         itemNotes: notes,
+        timeSlots,
+        type,
       },
     });
   } catch (error) {
@@ -178,7 +185,12 @@ function DonationInfoPage() {
       const success = await sendUpdatedItemToDB("Approved and Scheduled", true);
 
       if (success && donor && donor.email) {
-        await sendApprovalEmail(donor, notes);
+        await sendApprovalEmail(
+          donor,
+          notes,
+          storedTimeSlots,
+          item.scheduling
+        );
       }
 
       await router.push(nextPath);
@@ -197,11 +209,7 @@ function DonationInfoPage() {
   };
 
   const sendUpdatedItemToDB = async (status: string, newApproval: boolean) => {
-    let updatedItem: Item = {
-      ...item,
-      status,
-      notes: notes,
-    };
+    let updatedItem: Item = { ...item, status, notes: notes };
     if (newApproval) {
       updatedItem.timeApproved = new Date();
     }
