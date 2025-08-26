@@ -1,3 +1,5 @@
+import { TimeSlot } from "components/admin/DonationInfoPage/DonationInfoTab";
+
 const emailURL: string = "/api/email";
 
 // send rejection email
@@ -48,6 +50,8 @@ export async function sendApproveEmail({
     officeHours: string;
     website: string;
     itemNotes: string;
+    timeSlots: TimeSlot[];
+    type: string;
   };
 }) {
   try {

@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { verifyAdmin } from "hooks/verify";
 import { NextResponse } from "next/server";
+import { TimeSlot } from "components/admin/DonationInfoPage/DonationInfoTab";
 
 export async function POST(req: Request) {
   if (!(await verifyAdmin())) {
@@ -19,9 +20,21 @@ export async function POST(req: Request) {
     
             <p>Thank you for your generous donation to Habitat for Humanity!</p>
     
-            <p>Your donation has been approved.</p>
+            <p>Your donation has been approved for ${donationDetails.type}.</p>
     
             <p><strong>${donationDetails.itemNotes}</strong></p>
+
+            ${
+              donationDetails.type === "Pickup" &&
+              donationDetails.timeSlots.length > 0
+                ? `
+                <h3>Available Pick Up Time(s)</h3>
+                <ul>
+                  ${donationDetails.timeSlots.map((slot: TimeSlot) => `<li>${slot.dayString}: ${slot.timeSlotString}</li>`).join("")}
+                </ul>
+              `
+                : ""
+            }
     
             <h3>Habitat for Humanity Contact Information</h3>
             <ul>
