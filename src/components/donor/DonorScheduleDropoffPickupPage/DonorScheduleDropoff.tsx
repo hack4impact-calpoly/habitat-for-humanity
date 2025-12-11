@@ -90,7 +90,7 @@ function DonatorScheduleDropoff(): React.ReactNode {
           <a
             href="https://www.instagram.com/habitatslorestores/"
             target="_blank"
-            style={{ color: "blue", textDecoration: "underline" }}
+            style={{ color: "blue", textDecoration: "underline" }} rel="noreferrer"
           >
             @habitatslorestores
           </a>
