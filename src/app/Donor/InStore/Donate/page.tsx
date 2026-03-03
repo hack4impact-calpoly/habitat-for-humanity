@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../../redux/store";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   updateInStoreName,
   updateInStoreEmail,
@@ -14,6 +13,7 @@ import {
   updateInStoreCategories,
   updateInStoreItemDetails,
   updateInStoreEstimatedValue,
+  clearInStoreAll,
 } from "../../../../redux/inStoreDonorSlice";
 
 require("../../../../App.css");
@@ -71,27 +71,20 @@ const subLabelStyle: React.CSSProperties = {
 function InStoreDonatePage(): React.ReactNode {
   const dispatch = useDispatch();
 
-  const storedName = useSelector((state: RootState) => state.inStoreDonor.name);
-  const storedEmail = useSelector((state: RootState) => state.inStoreDonor.email);
-  const storedPhone = useSelector((state: RootState) => state.inStoreDonor.phone);
-  const storedAddress = useSelector((state: RootState) => state.inStoreDonor.address);
-  const storedCity = useSelector((state: RootState) => state.inStoreDonor.city);
-  const storedState = useSelector((state: RootState) => state.inStoreDonor.state);
-  const storedZipCode = useSelector((state: RootState) => state.inStoreDonor.zipCode);
-  const storedCategories = useSelector((state: RootState) => state.inStoreDonor.categories);
-  const storedItemDetails = useSelector((state: RootState) => state.inStoreDonor.itemDetails);
-  const storedEstimatedValue = useSelector((state: RootState) => state.inStoreDonor.estimatedValue);
+  useEffect(() => {
+    dispatch(clearInStoreAll());
+  }, []);
 
-  const [name, setName] = useState<string>(storedName);
-  const [email, setEmail] = useState<string>(storedEmail);
-  const [phone, setPhone] = useState<string>(storedPhone);
-  const [address, setAddress] = useState<string>(storedAddress);
-  const [city, setCity] = useState<string>(storedCity);
-  const [state, setState] = useState<string>(storedState);
-  const [zipCode, setZipCode] = useState<string>(storedZipCode);
-  const [categories, setCategories] = useState<string[]>(storedCategories);
-  const [itemDetails, setItemDetails] = useState<string>(storedItemDetails);
-  const [estimatedValue, setEstimatedValue] = useState<string>(storedEstimatedValue);
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [state, setState] = useState<string>("");
+  const [zipCode, setZipCode] = useState<string>("");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [itemDetails, setItemDetails] = useState<string>("");
+  const [estimatedValue, setEstimatedValue] = useState<string>("");
 
   const [nameError, setNameError] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
