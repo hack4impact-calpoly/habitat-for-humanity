@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 const isAdminRoute = createRouteMatcher(["/Admin(.*)"]);
 const isDonorRoute = createRouteMatcher(["/Donor(.*)"]);
+const isInStoreRoute = createRouteMatcher(["/Donor/InStore(.*)"]);
 const isAuthRoute = createRouteMatcher(["/Auth(.*)"]);
 const isRoleRoute = createRouteMatcher(["/setup-role(.*)"]);
 
@@ -15,7 +16,7 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  if (isDonorRoute(req) && role !== "Donor") {
+  if (isDonorRoute(req) && !isInStoreRoute(req) && role !== "Donor") {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
