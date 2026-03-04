@@ -3,6 +3,8 @@
 import React, { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
 
 const styles = {
   page: {
@@ -107,10 +109,16 @@ function ReceiptContent(): React.ReactNode {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const donorName = searchParams.get("donorName") ?? "";
-  const donorPhone = searchParams.get("donorPhone") ?? "";
-  const donorEmail = searchParams.get("donorEmail") ?? "";
-  const location = searchParams.get("location") ?? "";
+  const { name, email, phone, categories, estimatedValue } = useSelector(
+    (state: RootState) => ({
+      name: state.inStoreDonor.name,
+      email: state.inStoreDonor.email,
+      phone: state.inStoreDonor.phone,
+      categories: state.inStoreDonor.categories,
+      estimatedValue: state.inStoreDonor.estimatedValue
+    })
+  );
+
 
   let items: DonatedItem[] = [];
   try {
@@ -131,35 +139,37 @@ function ReceiptContent(): React.ReactNode {
 
         {/* Items */}
         <div style={styles.section}>
-          {items.map((item, idx) => (
+          <h2 style={styles.sectionHeading}>Items</h2>
+          {categories.map((item, idx) => (
             <div key={idx} style={styles.itemRow}>
-              <span style={styles.itemText}>{item.name}</span>
-              <span style={styles.itemText}>{item.estimatedValue}</span>
+              <span style={styles.itemText}>{item}</span>
             </div>
           ))}
         </div>
 
         <hr style={styles.divider} />
 
-        {/* Pickup Location */}
+        {/* Estimated Value */}
         <div style={styles.section}>
-          <h2 style={styles.sectionHeading}>Pickup Location</h2>
-          <p style={{ ...styles.bodyText, whiteSpace: "pre-line" }}>{location}</p>
+          <h2 style={styles.sectionHeading}>Estimated Value</h2>
+          <p style={styles.bodyText}>
+            ${estimatedValue}
+          </p>
         </div>
 
-        <hr style={styles.divider} />
+        <hr style = {styles.divider} />
 
         {/* Contact */}
         <div style={styles.section}>
           <h2 style={styles.sectionHeading}>Contact</h2>
           <p style={styles.bodyText}>
-            {donorName}<br />
-            {donorPhone}<br />
-            {donorEmail}
+            {name}<br />
+            {phone}<br />
+            {email}
           </p>
         </div>
 
-        <p style={styles.receiptNotice}>Receipt sent to {donorEmail}</p>
+        <p style={styles.receiptNotice}>Receipt sent to {email}</p>
 
         <div style={styles.buttonWrapper}>
           <button type="button" style={styles.button} onClick={() => router.push("/Donor/InStore/Donate")}>
