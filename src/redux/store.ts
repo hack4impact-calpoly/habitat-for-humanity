@@ -12,6 +12,7 @@ import {
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import donationReducer from "./donationSlice";
 import eventReducer from "./eventSlice";
+import inStoreDonorReducer from "./inStoreDonorSlice";
 
 const persistConfig = {
   key: "donation",
@@ -23,12 +24,19 @@ const persistConfig2 = {
   storage,
 };
 
+const persistConfig3 = {
+  key: "inStoreDonor",
+  storage,
+};
+
 const persistedReducer = persistReducer(persistConfig, donationReducer);
 const persistedReducer2 = persistReducer(persistConfig2, eventReducer);
+const persistedReducer3 = persistReducer(persistConfig3, inStoreDonorReducer);
 export const store = configureStore({
   reducer: {
     donation: persistedReducer,
     event: persistedReducer2,
+    inStoreDonor: persistedReducer3,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
