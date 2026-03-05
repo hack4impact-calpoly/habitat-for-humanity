@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import {
   updateInStoreName,
@@ -70,6 +71,7 @@ const subLabelStyle: React.CSSProperties = {
 
 function InStoreDonatePage(): React.ReactNode {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(clearInStoreAll());
@@ -143,10 +145,9 @@ function InStoreDonatePage(): React.ReactNode {
   };
 
   const handleSubmit = () => {
-    updateStore();
     if (validInput()) {
-      // submission logic not yet implemented
-      alert("Donation submitted!");
+      updateStore();
+      router.replace("/Donor/InStore/Receipt");
     }
   };
 
@@ -161,7 +162,7 @@ function InStoreDonatePage(): React.ReactNode {
 
       {/* Items Section */}
       <div style={{ padding: "27.7px 24.69px 0" }}>
-        <h2 style={sectionHeadingStyle}>Items?</h2>
+        <h2 style={sectionHeadingStyle}>Items</h2>
         <p style={subLabelStyle}>Select recommended items:</p>
 
         {/* Category Pills */}
