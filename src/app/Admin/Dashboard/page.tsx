@@ -1,16 +1,14 @@
 import Image from "next/image";
+import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar"
 
 export default function AdminDashboard(){
     return(
+    <div>
+    <AdminNavbar/>
     <div style={styles.container}>
         <div style = {styles.navbar}>
-        <Image
-        src="/images/ReStoreLogo.png"
-        alt="habitat logo"
-        width={500}
-        height={300}
-        />
         {/* TODO: Replace placeholder buttons*/}
+        <h2 style={styles.dash_title}>Dashboard</h2>
         <div style={styles.navButtons}>
         <button style={styles.navButton}> 
             Manage Pickups
@@ -20,8 +18,6 @@ export default function AdminDashboard(){
         </button>
         </div>
         </div>
-
-        <h2 style={styles.title}>Dashboard</h2>
 
         <div style = {styles.summaryCards}>
         {/* TODO: Replace placeholder summary cards*/}
@@ -72,10 +68,18 @@ export default function AdminDashboard(){
         </table>
         </div>
     </div>
+    </div>
     )
 }
 
 const styles: { [key: string]: React.CSSProperties } = {
+  dash_title: {
+    fontSize: "28px",
+    fontWeight: 600,
+    color: "#1F2937",
+    margin: 0,
+  },
+
   container: {
     backgroundColor: "#f4f4f4",
     minHeight: "100vh",
@@ -86,15 +90,16 @@ const styles: { [key: string]: React.CSSProperties } = {
   navbar: {
     display: "flex",
     justifyContent: "space-between",
+    alignItems: "center",
     backgroundColor: "#ffffff",
-    padding: "15px 25px",
+    padding: "15px 40px",
     borderRadius: "8px",
     marginBottom: "30px",
   },
 
   navButtons: {
     display: "flex",
-    gap: "20px",
+    gap: "40px",
   },
 
   navButton: {
