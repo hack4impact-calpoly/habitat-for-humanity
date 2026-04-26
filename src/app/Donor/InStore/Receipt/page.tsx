@@ -174,12 +174,14 @@ function ReceiptContent(): React.ReactNode {
       return;
     }
     try {
+      //note, currently have the emails just sent to 'h4ih4h@gmail.com' due to RESEND not accepting any other email in test mode,
+      //this needs to be changed later so that users can get their receipt emails
       await sendReceiptEmail({
-        to: email,
+        to: 'h4ih4h@gmail.com', //replace with email var (contains the user email)
         donationDetails: {
           name: name,
           phone: phone,
-          contactEmail: email,
+          contactEmail: 'h4ih4h@gmail.com',
           officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
           officeHours: "Tuesday - Saturday, 10AM - 5PM",
           website: "https://www.habitatslo.org",
@@ -188,11 +190,11 @@ function ReceiptContent(): React.ReactNode {
       });
       console.log("Donor Email sent");
       await sendReceiptEmail({
-        to: "h4ih4h+instore@gmail.com",
+        to: "h4ih4h@gmail.com", //replace with admin email
         donationDetails: {
           name: name,
           phone: phone,
-          contactEmail: email,
+          contactEmail: 'h4ih4h@gmail.com',
           officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
           officeHours: "Tuesday - Saturday, 10AM - 5PM",
           website: "https://www.habitatslo.org",
