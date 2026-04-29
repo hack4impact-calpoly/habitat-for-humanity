@@ -1,12 +1,12 @@
 // app/admin/history/page.tsx
 import AdminNavbar from "components/admin/AdminNavbar/AdminNavbar";
-import DonationDetails from "components/admin/DonationDetails/DonationDetails";
+import DonationsTable from "components/DonationTable/page";
 
 export default function DonationHistoryPage() {
   return (
     <div>
       <AdminNavbar />
-      <DonationDetails />
+      <DonationsTable viewType="history" />
     </div>
   );
 }
