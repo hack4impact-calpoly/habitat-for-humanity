@@ -8,6 +8,9 @@ import { RootState } from "redux/store";
 import { sendReceiptEmail } from "api/email";
 import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
+import Receipt from "components/admin/DonationInfoPage/Receipt/Receipt";
+import { User } from "api/user";
+import { Item } from "api/item";
 
 const styles = {
   page: {
@@ -112,30 +115,77 @@ function ReceiptContent(): React.ReactNode {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { name, email, phone, categories, estimatedValue } = useSelector(
-    (state: RootState) => ({
-      name: state.inStoreDonor.name,
-      email: state.inStoreDonor.email,
-      phone: state.inStoreDonor.phone,
-      categories: state.inStoreDonor.categories,
-      estimatedValue: state.inStoreDonor.estimatedValue,
-    }),
-  );
+  // 1. Single selector call for all donor data
+  const donorState = useSelector((state: RootState) => state.inStoreDonor);
 
-  let items: DonatedItem[] = [];
-  try {
-    const raw = searchParams.get("items");
-    if (raw) items = JSON.parse(raw) as DonatedItem[];
-  } catch {
-    items = [];
-  }
+  // 2. Destructure the specific fields needed for the UI and logic
+  const {
+    name,
+    email,
+    phone,
+    categories,
+    estimatedValue,
+    address,
+    city,
+    state,
+    zipCode,
+    itemDetails,
+  } = donorState;
+
+  // 3. Construct the User object
+  const nameParts = name.trim().split(/\s+/);
+  const firstName = nameParts[0] || "";
+  const lastName = nameParts.slice(1).join(" ") || "";
+
+  const donorUser: User = {
+    id: "",
+    firstName,
+    lastName,
+    email,
+    phone,
+    address: {
+      street: address,
+      city,
+      state,
+      zip: zipCode,
+    },
+  };
+
+  // 4. Construct the Item object
+  const donatedItem: Item = {
+    name: categories,
+    size: [],
+    images: [],
+    address,
+    city,
+    state,
+    zipCode,
+    scheduling: "InStore",
+    timeAvailability: [],
+    donorId: "",
+    timeSubmitted: new Date(),
+    status: "Completed",
+    notes: itemDetails,
+    value: estimatedValue,
+  };
 
   async function receiptBlob(): Promise<Blob | undefined> {
-    const receiptElement = document.getElementById("receiptPage");
+    const receiptElement = document.getElementById("formalReceiptCapture");
     if (!receiptElement) {
       console.log("ERROR");
       return;
     }
+
+    // 1. Target specific elements to hide
+    const elementsToHide = receiptElement.querySelectorAll(
+      ".signature-field-flex, button",
+    );
+
+    // 2. Set them to display none
+    elementsToHide.forEach((el) => {
+      if (el instanceof HTMLElement) el.style.display = "none";
+    });
+
     document
       .querySelectorAll(
         ".forFlex input, .signature-field input, .value-div input",
@@ -177,11 +227,11 @@ function ReceiptContent(): React.ReactNode {
       //note, currently have the emails just sent to 'h4ih4h@gmail.com' due to RESEND not accepting any other email in test mode,
       //this needs to be changed later so that users can get their receipt emails
       await sendReceiptEmail({
-        to: 'h4ih4h@gmail.com', //replace with email var (contains the user email)
+        to: "h4ih4h@gmail.com", //replace with email var (contains the user email)
         donationDetails: {
           name: name,
           phone: phone,
-          contactEmail: 'h4ih4h@gmail.com',
+          contactEmail: "h4ih4h@gmail.com",
           officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
           officeHours: "Tuesday - Saturday, 10AM - 5PM",
           website: "https://www.habitatslo.org",
@@ -194,7 +244,7 @@ function ReceiptContent(): React.ReactNode {
         donationDetails: {
           name: name,
           phone: phone,
-          contactEmail: 'h4ih4h@gmail.com',
+          contactEmail: "h4ih4h@gmail.com",
           officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
           officeHours: "Tuesday - Saturday, 10AM - 5PM",
           website: "https://www.habitatslo.org",
@@ -219,60 +269,73 @@ function ReceiptContent(): React.ReactNode {
   }, [email, categories]);
 
   return (
-    <div id = "receiptPage" style={styles.page}>
-      <div style={styles.cardWrapper}>
-        <div style={styles.card}>
-          <h1 style={styles.heading}>Donation Complete!</h1>
+    <>
+      <div id="receiptPage" style={styles.page}>
+        <div style={styles.cardWrapper}>
+          <div style={styles.card}>
+            <h1 style={styles.heading}>Donation Complete!</h1>
 
-          <hr style={styles.divider} />
+            <hr style={styles.divider} />
 
-          {/* Items */}
-          <div style={styles.section}>
-            <h2 style={styles.sectionHeading}>Items</h2>
-            {categories.map((item, idx) => (
-              <div key={idx} style={styles.itemRow}>
-                <span style={styles.itemText}>{item}</span>
-              </div>
-            ))}
+            {/* Items */}
+            <div style={styles.section}>
+              <h2 style={styles.sectionHeading}>Items</h2>
+              {categories.map((item, idx) => (
+                <div key={idx} style={styles.itemRow}>
+                  <span style={styles.itemText}>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            <hr style={styles.divider} />
+
+            {/* Estimated Value */}
+            <div style={styles.section}>
+              <h2 style={styles.sectionHeading}>Estimated Value</h2>
+              <p style={styles.bodyText}>${estimatedValue}</p>
+            </div>
+
+            <hr style={styles.divider} />
+
+            {/* Contact */}
+            <div style={styles.section}>
+              <h2 style={styles.sectionHeading}>Contact</h2>
+              <p style={styles.bodyText}>
+                {name}
+                <br />
+                {phone}
+                <br />
+                {email}
+              </p>
+            </div>
+
+            <p style={styles.receiptNotice}>Receipt sent to {email}</p>
+
+            <div style={styles.buttonWrapper}>
+              <button
+                type="button"
+                style={styles.button}
+                onClick={() => router.push("/Donor/InStore/Donate")}
+              >
+                Return to Homepage
+              </button>
+            </div>
           </div>
-
-          <hr style={styles.divider} />
-
-          {/* Estimated Value */}
-          <div style={styles.section}>
-            <h2 style={styles.sectionHeading}>Estimated Value</h2>
-            <p style={styles.bodyText}>${estimatedValue}</p>
-          </div>
-
-          <hr style={styles.divider} />
-
-          {/* Contact */}
-          <div style={styles.section}>
-            <h2 style={styles.sectionHeading}>Contact</h2>
-            <p style={styles.bodyText}>
-              {name}
-              <br />
-              {phone}
-              <br />
-              {email}
-            </p>
-          </div>
-
-          <p style={styles.receiptNotice}>Receipt sent to {email}</p>
-
-          <div style={styles.buttonWrapper}>
-            <button
-              type="button"
-              style={styles.button}
-              onClick={() => router.push("/Donor/InStore/Donate")}
-            >
-              Return to Homepage
-            </button>
-          </div>
+          <div style={styles.zigzag} />
         </div>
-        <div style={styles.zigzag} />
       </div>
-    </div>
+      <div
+        id="formalReceiptCapture"
+        style={{
+          position: "absolute",
+          top: "-9999px",
+          left: "-9999px",
+          width: "1190px",
+        }}
+      >
+        <Receipt donor={donorUser} item={donatedItem} events={[]} />
+      </div>
+    </>
   );
 }
 

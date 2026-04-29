@@ -78,6 +78,7 @@ export interface Item {
   status: string; // approved or needs approval
   notes?: string;
   // timeAccepted: Date
+  value?: string;
 }
 
 // Add a new Item to Item DB

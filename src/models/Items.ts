@@ -21,6 +21,7 @@ const itemSchema = new mongoose.Schema(
     status: { type: String, required: true },
     notes: { type: String, required: false },
     timeAccepted: { type: Date, required: false },
+    value: { type: String, required: false },
   }
 );
 
