@@ -1,9 +1,9 @@
 import { Resend } from "resend";
-import { verifyAdmin } from "hooks/verify";
+import { verifyAdmin, verifyInStore } from "hooks/verify";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  if (!(await verifyAdmin())) {
+  if (!(await verifyAdmin()) && !(await verifyInStore())) {
     return NextResponse.json({ error: "Forbidden" }, { status: 401 });
   }
   const formData = await req.formData();
@@ -46,7 +46,8 @@ export async function POST(req: Request) {
       ],
     };
 
-    await resend.emails.send(msg);
+     const result = await resend.emails.send(msg);
+    console.log("[RESEND_RECEIPT_RESULT]", result);
     return NextResponse.json(
       { message: "Receipt email sent successfully!" },
       { status: 200 },
