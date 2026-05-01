@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import { addItem } from "../../../../api/item";
 import {
   updateInStoreName,
   updateInStoreEmail,
@@ -144,10 +145,33 @@ function InStoreDonatePage(): React.ReactNode {
     return valid;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validInput()) {
       updateStore();
-      router.replace("/Donor/InStore/Receipt");
+      const success = await addItem({
+        name: categories,
+        size: [],
+        images: [],
+        address,
+        city,
+        state,
+        zipCode,
+        scheduling: "InStore",
+        timeAvailability: [],
+        timeSubmitted: new Date(),
+        status: "needs approval",
+        donorId: "",
+        donorName: name,
+        donorEmail: email,
+        donorPhone: phone,
+        estimatedValue,
+        itemDetails,
+      });
+      if (success) {
+        router.replace("/Donor/InStore/Receipt");
+      } else {
+        alert("Something went wrong submitting your donation. Please try again.");
+      }
     }
   };
 

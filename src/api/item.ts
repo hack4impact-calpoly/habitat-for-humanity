@@ -69,7 +69,7 @@ export interface Item {
   city: string;
   state: string;
   zipCode: string;
-  scheduling: string; // Pickup or Dropoff
+  scheduling: string; // Pickup, Dropoff, or InStore
   timeAvailability: Event[];
   donorId: string;
   // type: mongoose.Schema.Types.ObjectId
@@ -79,6 +79,11 @@ export interface Item {
   notes?: string;
   // timeAccepted: Date
   value?: string;
+  donorName?: string;
+  donorEmail?: string;
+  donorPhone?: string;
+  estimatedValue?: string;
+  itemDetails?: string;
 }
 
 // Add a new Item to Item DB
@@ -94,12 +99,18 @@ export const addItem = async (item: Item) =>
       images: item.images,
       address: item.address,
       city: item.city,
+      state: item.state,
       zipCode: item.zipCode,
       scheduling: item.scheduling,
       timeAvailability: item.timeAvailability,
       timeSubmitted: item.timeSubmitted,
       status: item.status,
       donorId: item.donorId,
+      donorName: item.donorName,
+      donorEmail: item.donorEmail,
+      donorPhone: item.donorPhone,
+      estimatedValue: item.estimatedValue,
+      itemDetails: item.itemDetails,
     }),
   })
     .then(async (res) => {
