@@ -5,7 +5,6 @@ export async function verifyAdmin() {
   return user?.publicMetadata.role === "Admin";
 }
 
-
 export async function verifyInStore() {
   const user = await currentUser();
   return user?.publicMetadata.role === "InStore";
@@ -14,9 +13,4 @@ export async function verifyInStore() {
 export async function verifyDonor() {
   const user = await currentUser();
   return user?.publicMetadata.role === "Donor";
-}
-
-export async function verifyInStore() {
-  const user = await currentUser();
-  return user?.publicMetadata.role === "InStore";
 }

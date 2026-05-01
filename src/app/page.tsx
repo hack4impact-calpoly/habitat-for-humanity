@@ -6,5 +6,10 @@ export default async function Page() {
   if (!userId) return redirect("/Auth/Login");
 
   const role = sessionClaims?.metadata.role || "setup-role";
+
+  if (role === 'InStore') {
+    return redirect("/Donor/InStore/Donate");
+  }
+  
   redirect(`/${role}`);
 }

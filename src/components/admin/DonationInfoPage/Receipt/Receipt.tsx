@@ -28,7 +28,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
     cell: "",
     email: donor?.email ?? "",
     donatedItems: item?.name.join(", ") ?? "",
-    value: item?.value ?? "",
+    value: item?.estimatedValue ?? "",
     signature: "",
     date: moment().format("MM/DD/YYYY"),
   });
@@ -44,7 +44,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
       address: item?.address ?? "",
       cityStateZipcode: fullZip ?? "",
       donatedItems: item?.name.join(", ") ?? "",
-      value: item?.value ?? "",
+      value: item?.estimatedValue ?? "",
     }));
   }, [props]);
 

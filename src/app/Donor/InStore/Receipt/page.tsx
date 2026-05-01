@@ -166,7 +166,7 @@ function ReceiptContent(): React.ReactNode {
     timeSubmitted: new Date(),
     status: "Completed",
     notes: itemDetails,
-    value: estimatedValue,
+    estimatedValue: estimatedValue,
   };
 
   async function receiptBlob(): Promise<Blob | undefined> {
