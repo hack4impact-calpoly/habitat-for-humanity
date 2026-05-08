@@ -46,7 +46,7 @@ export default function DonationsTable({ viewType }: DonationsTableProps): React
   useEffect(() => {
     const fetchDonorNames = async () => {
       const uniqueDonorIds = Array.from(
-        new Set(items.map((item) => item.donorId)),
+        new Set(items.map((item) => item.donorId).filter((id) => id !== "")),
       );
       const map: Record<string, any> = { ...donorInfoMap };
 
@@ -71,8 +71,9 @@ export default function DonationsTable({ viewType }: DonationsTableProps): React
     }
   }, [items]);
 
-  const getDonorName = (id: string) => {
-    const donor = donorInfoMap[id];
+  const getDonorName = (item: Item) => {
+    if (!item.donorId) return item.donorName ?? "Unknown";
+    const donor = donorInfoMap[item.donorId];
     return donor ? `${donor.firstName} ${donor.lastName}` : "Loading...";
   };
 
@@ -145,7 +146,7 @@ export default function DonationsTable({ viewType }: DonationsTableProps): React
                   style={{ textDecoration: "none" }}
                   className="tableRow"
                 >
-                  <TableCell scope="row">{getDonorName(d.donorId)}</TableCell>
+                  <TableCell scope="row">{getDonorName(d)}</TableCell>
                   <TableCell>{d.scheduling}</TableCell>
                   <TableCell>{convertTime(d.timeSubmitted)}</TableCell>
                   <TableCell>{convertTime(d.timeApproved)}</TableCell>

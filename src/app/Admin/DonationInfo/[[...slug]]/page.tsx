@@ -311,6 +311,15 @@ function DonationInfoPage() {
           });
       };
       getDonor();
+    } else if (item.scheduling === "InStore") {
+      const nameParts = (item.donorName ?? "").split(" ");
+      setDonor({
+        id: "",
+        firstName: nameParts[0] ?? "",
+        lastName: nameParts.slice(1).join(" ") ?? "",
+        email: item.donorEmail ?? "",
+        phone: item.donorPhone ?? "",
+      });
     }
 
     if (item.timeAvailability) {
