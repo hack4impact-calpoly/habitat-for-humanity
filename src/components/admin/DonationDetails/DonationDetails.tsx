@@ -22,7 +22,7 @@ export default function DonationDetails(): React.ReactNode {
 
   useEffect(() => {
     const fetchDonorNames = async () => {
-      const uniqueDonorIds = Array.from(new Set(items.map((item) => item.donorId)));
+      const uniqueDonorIds = Array.from(new Set(items.map((item) => item.donorId).filter((id) => id !== "")));
       const map: Record<string, { firstName: string; lastName: string }> = {};
 
       await Promise.all(
@@ -44,8 +44,9 @@ export default function DonationDetails(): React.ReactNode {
     }
   }, [items]);
 
-  const getDonorName = (id: string) => {
-    const donor = donorInfoMap[id];
+  const getDonorName = (item: Item) => {
+    if (!item.donorId) return item.donorName ?? "Unknown";
+    const donor = donorInfoMap[item.donorId];
     return donor ? `${donor.firstName} ${donor.lastName}` : "Loading...";
   };
 
@@ -96,7 +97,7 @@ export default function DonationDetails(): React.ReactNode {
           </div>
         </div>
 
-        <div>{getDonorName(item.donorId)}</div>
+        <div>{getDonorName(item)}</div>
 
         <div>{moment(item.timeSubmitted).format("MM.DD.YYYY - h:mm A")}</div>
       </div>
