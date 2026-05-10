@@ -159,7 +159,7 @@ function InStoreDonatePage(): React.ReactNode {
         scheduling: "InStore",
         timeAvailability: [],
         timeSubmitted: new Date(),
-        status: "needs approval",
+        status: "Completed",
         donorId: "",
         donorName: name,
         donorEmail: email,
