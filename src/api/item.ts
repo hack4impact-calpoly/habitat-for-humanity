@@ -85,8 +85,8 @@ export interface Item {
   itemDetails?: string;
 }
 
-// Add a new Item to Item DB
-export const addItem = async (item: Item) =>
+// Add a new Item to Item DB; returns created item ID string or null on failure
+export const addItem = async (item: Item): Promise<string | null> =>
   fetch(nextURL, {
     headers: {
       "Content-Type": "application/json",
@@ -115,14 +115,13 @@ export const addItem = async (item: Item) =>
     .then(async (res) => {
       const response = await res.json();
       if (!res.ok) {
-        // check server response
-        return false;
+        return null;
       }
-      return true;
+      return response.itemId as string;
     })
     .catch((error) => {
       console.error("Error: ", error);
-      return false;
+      return null;
     });
 
 // Update Item

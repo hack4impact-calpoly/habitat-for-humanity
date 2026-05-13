@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
 import { sendReceiptEmail } from "api/email";
+import { saveReceipt } from "api/receipt";
 import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
 import Receipt from "components/admin/DonationInfoPage/Receipt/Receipt";
@@ -130,6 +131,7 @@ function ReceiptContent(): React.ReactNode {
     state,
     zipCode,
     itemDetails,
+    itemId,
   } = donorState;
 
   // 3. Construct the User object
@@ -254,6 +256,15 @@ function ReceiptContent(): React.ReactNode {
       console.log("Admin email sent");
     } catch (error) {
       console.error("Error, receipts failed to send", error);
+    }
+
+    if (itemId) {
+      try {
+        await saveReceipt(receipt, itemId);
+        console.log("Receipt saved to DB");
+      } catch (error) {
+        console.error("Error saving receipt to DB", error);
+      }
     }
   }
 
