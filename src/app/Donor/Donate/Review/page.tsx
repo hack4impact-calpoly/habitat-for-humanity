@@ -11,7 +11,7 @@ import ProgressBar from "components/donor/donation/ProgressBar";
 import { Item, addItem } from "../../../../api/item";
 import { addImages } from "../../../../api/image";
 import { RootState } from "../../../../redux/store";
-import { useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/nextjs";
 import { getUserByID } from "api/user";
 import { getFiles, clearFiles } from "../../../../../utils/FileStore";
 

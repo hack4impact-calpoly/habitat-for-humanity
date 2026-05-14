@@ -18,7 +18,7 @@ import { updateDonorID } from "../../../redux/donationSlice";
 import { RootState } from "../../../redux/store";
 import { Item, getItemsByDonorID } from "../../../api/item";
 import DonorNavbar from "components/donor/DonorNavbar/DonorNavbar";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/nextjs";
 
 require("../../../App.css");
 
