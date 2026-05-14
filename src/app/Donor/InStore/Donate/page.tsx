@@ -15,6 +15,7 @@ import {
   updateInStoreCategories,
   updateInStoreItemDetails,
   updateInStoreEstimatedValue,
+  updateInStoreItemId,
   clearInStoreAll,
 } from "../../../../redux/inStoreDonorSlice";
 
@@ -148,7 +149,7 @@ function InStoreDonatePage(): React.ReactNode {
   const handleSubmit = async () => {
     if (validInput()) {
       updateStore();
-      const success = await addItem({
+      const itemId = await addItem({
         name: categories,
         size: [],
         images: [],
@@ -167,7 +168,8 @@ function InStoreDonatePage(): React.ReactNode {
         estimatedValue,
         itemDetails,
       });
-      if (success) {
+      if (itemId) {
+        dispatch(updateInStoreItemId(itemId));
         router.replace("/Donor/InStore/Receipt");
       } else {
         alert("Something went wrong submitting your donation. Please try again.");
