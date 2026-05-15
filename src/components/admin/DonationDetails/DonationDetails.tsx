@@ -31,7 +31,7 @@ export default function DonationDetails(): React.ReactNode {
   useEffect(() => {
     getItemsByStatus("Completed").then((res) => {
       const sorted = (res || []).sort(
-        (a, b) =>
+        (a: Item, b: Item) =>
           new Date(b.timeSubmitted).getTime() -
           new Date(a.timeSubmitted).getTime(),
       );
