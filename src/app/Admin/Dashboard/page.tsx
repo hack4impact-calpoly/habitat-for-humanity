@@ -1,6 +1,62 @@
+"use client";
+
 import Image from "next/image";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar"
 import DonationDetails from "../../../components/admin/DonationDetails/DonationDetails";
+import Items from "models/Items";
+
+function downloadCSV(data: string, filename: string) {
+    const blob = new Blob([data], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+const handleExportCSV = async () => {
+  const res = await fetch("../api/item/status/Completed", { cache: "no-store",});
+  const completedItems = await res.json();
+
+  const headers = [
+      "Item",
+      "Donor Name",
+      "Donor Email",
+      "Donor Phone",
+      "Address",
+      "City",
+      "State",
+      "Zip Code",
+      "Estimated Value",
+      "Time Submitted",
+      "Time Approved"
+    ];
+
+  const csvRows = [headers.join(",")];
+
+  completedItems.forEach((item) => {
+    const row = [
+      item.name,
+      item.donorName ?? "",
+      item.donorEmail ?? "",
+      item.donorPhone ?? "",
+      item.address,
+      item.city,
+      item.state ?? "",
+      item.zipCode,
+      item.estimatedValue ?? "",
+      item.timeSubmitted,
+      item.timeApproved ?? "",
+    ]
+    csvRows.push(row.map((field) => `"${field}"`).join(","));
+  });
+
+  const csvContent = csvRows.join("\n");
+  downloadCSV(csvContent, `completed-donations.csv`);
+}
+
 
 export default function AdminDashboard(){
     return(
@@ -16,6 +72,9 @@ export default function AdminDashboard(){
         </button>
         <button style={styles.navButton}>
             Pickup Requests
+        </button>
+        <button onClick={handleExportCSV} style={styles.navButton}>
+            Export Donations as CSV
         </button>
         </div>
         </div>
