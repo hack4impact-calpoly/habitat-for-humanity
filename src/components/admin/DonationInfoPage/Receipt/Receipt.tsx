@@ -29,6 +29,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
     cell: "",
     email: donor?.email ?? "",
     donatedItems: item?.name.join(", ") ?? "",
+    itemDetails: item?.itemDetails ?? "",
     value: item?.estimatedValue ?? "",
     signature: "",
     date: moment().format("MM/DD/YYYY"),
@@ -45,6 +46,7 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
       address: item?.address ?? "",
       cityStateZipcode: fullZip ?? "",
       donatedItems: item?.name.join(", ") ?? "",
+      itemDetails: item?.itemDetails ?? "",
       value: item?.estimatedValue ?? "",
     }));
   }, [props]);
@@ -261,6 +263,20 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
                       setContract((prevContract) => ({
                         ...prevContract,
                         donatedItems: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <h2>Item Details</h2>
+                <div className="form-field">
+                  <textarea
+                    rows={4}
+                    style={{ width: "100%", padding: "0.5rem", resize: "none" }}
+                    value={contract.itemDetails}
+                    onChange={(event) =>
+                      setContract((prevContract) => ({
+                        ...prevContract,
+                        itemDetails: event.target.value,
                       }))
                     }
                   />

@@ -167,7 +167,8 @@ function ReceiptContent(): React.ReactNode {
     donorId: "",
     timeSubmitted: new Date(),
     status: "Completed",
-    notes: itemDetails,
+    notes: "",
+    itemDetails: itemDetails,
     estimatedValue: estimatedValue,
   };
 
@@ -296,6 +297,18 @@ function ReceiptContent(): React.ReactNode {
                   <span style={styles.itemText}>{item}</span>
                 </div>
               ))}
+              {itemDetails && (
+                <p
+                  style={{
+                    ...styles.bodyText,
+                    fontSize: "16px",
+                    color: "#444",
+                    marginTop: "8px",
+                  }}
+                >
+                  {itemDetails}
+                </p>
+              )}
             </div>
 
             <hr style={styles.divider} />
