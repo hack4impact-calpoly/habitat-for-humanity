@@ -7,7 +7,7 @@ import DonationTrackerGraph from "../../../components/admin/DonationTrackerGraph
 import Items from "models/Items";
 import { getItemsByStatus, Item } from "api/item";
 import { getClerkUser, getUserByID } from "api/user";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getReceipts } from "api/receipt";
 import JSZip from "jszip";
 
@@ -164,6 +164,25 @@ export default function AdminDashboard() {
   const [status, setStatus] = useState("Completed");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [completedItems, setCompletedItems] = useState<Item[]>([]);
+  const [pendingItems, setPendingItems] = useState<Item[]>([]);
+
+  useEffect(() => {
+    Promise.all([
+      getItemsByStatus("Completed"),
+      getItemsByStatus("approvals"),
+      getItemsByStatus("active"),
+    ]).then(([completed, approvals, active]) => {
+      const sortedCompleted = (completed || []).sort(
+        (a: Item, b: Item) =>
+          new Date(b.timeSubmitted).getTime() -
+          new Date(a.timeSubmitted).getTime(),
+      );
+      const pending = [...(approvals || []), ...(active || [])];
+      setCompletedItems(sortedCompleted);
+      setPendingItems(pending);
+    });
+  }, []);
 
   const handleExport = async () => {
     if (exportModal === "csv") await handleExportCSV(status, dateFrom, dateTo);
@@ -180,8 +199,8 @@ export default function AdminDashboard() {
           {/* TODO: Replace placeholder buttons*/}
           <h2 style={styles.dash_title}>Dashboard</h2>
           <div style={styles.navButtons}>
-            <button style={styles.navButton}>Manage Pickups</button>
-            <button style={styles.navButton}>Pickup Requests</button>
+            {/* <button style={styles.navButton}>Manage Pickups</button>
+            <button style={styles.navButton}>Pickup Requests</button> */}
             <button
               onClick={() => setExportModal("csv")}
               style={styles.navButton}
@@ -201,26 +220,49 @@ export default function AdminDashboard() {
           {/* TODO: Replace placeholder summary cards*/}
           <div style={styles.card}>
             <h4 style={styles.cardTitle}>Total Donations</h4>
-            <p style={styles.cardValue}>0</p>
+            <p style={styles.cardValue}>{completedItems.length}</p>
           </div>
           <div style={styles.card}>
             <h4 style={styles.cardTitle}>Estimated Value</h4>
-            <p style={styles.cardValue}>0</p>
+            <p style={styles.cardValue}>
+              {completedItems
+                .reduce((sum, item) => {
+                  const val = parseFloat(item.estimatedValue ?? "0") || 0;
+                  return sum + val;
+                }, 0)
+                .toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                })}
+            </p>
           </div>
           <div style={styles.card}>
             <h4 style={styles.cardTitle}>Most Common</h4>
-            <p style={styles.cardValue}>0</p>
+            <p style={styles.cardValue}>
+              {(() => {
+                const counts: Record<string, number> = {};
+                completedItems.forEach((item) =>
+                  item.name.forEach((n) => {
+                    counts[n] = (counts[n] || 0) + 1;
+                  }),
+                );
+                return (
+                  Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ??
+                  "N/A"
+                );
+              })()}
+            </p>
           </div>
           <div style={styles.card}>
             <h4 style={styles.cardTitle}>Pending Donations</h4>
-            <p style={styles.cardValue}>0</p>
+            <p style={styles.cardValue}>{pendingItems.length}</p>
           </div>
         </div>
         <div style={styles.section}>
-          <DonationTrackerGraph />
+          <DonationTrackerGraph items={completedItems} />
         </div>
         <div style={styles.section}>
-          <DonationDetails />
+          <DonationDetails items={completedItems} />
         </div>
       </div>
 

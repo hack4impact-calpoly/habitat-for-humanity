@@ -17,8 +17,13 @@ import { useRouter } from "next/navigation";
 const headers = ["Item", "Location", "Donor", "Date - Time", "Receipt"];
 const gridCols = "1.2fr 1.8fr 1fr 1fr 0.8fr";
 
-export default function DonationDetails(): React.ReactNode {
-  const [items, setItems] = useState<Item[]>([]);
+interface DonationDetailsProps {
+  items: Item[];
+}
+
+export default function DonationDetails({
+  items,
+}: DonationDetailsProps): React.ReactNode {
   const [donorInfoMap, setDonorInfoMap] = useState<
     Record<string, { firstName: string; lastName: string }>
   >({});
@@ -29,14 +34,6 @@ export default function DonationDetails(): React.ReactNode {
   const router = useRouter();
 
   useEffect(() => {
-    getItemsByStatus("Completed").then((res) => {
-      const sorted = (res || []).sort(
-        (a: Item, b: Item) =>
-          new Date(b.timeSubmitted).getTime() -
-          new Date(a.timeSubmitted).getTime(),
-      );
-      setItems(sorted);
-    });
     getReceipts().then((receipts) => {
       const map: Record<string, Receipt> = {};
       receipts.forEach((r) => {
