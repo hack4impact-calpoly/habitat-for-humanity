@@ -6,6 +6,7 @@ import Image from "next/image";
 import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
 import moment from "moment";
+import { saveOrUpdateReceipt } from "api/receipt";
 require("../../../../App.css");
 
 interface ReceiptTabProps {
@@ -62,42 +63,36 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
         ".forFlex input, .signature-field input, .value-div input",
       )
       .forEach((el) => {
-        if (el instanceof HTMLElement) {
-          el.style.backgroundColor = "transparent";
-        }
+        if (el instanceof HTMLElement) el.style.backgroundColor = "transparent";
       });
-    html2canvas(input!, { scale: 5 }).then(
-      (canvas: { toDataURL: (arg0: string) => any }) => {
-        const imgData = canvas.toDataURL("image/jpeg");
 
-        const pdfDOC = new JsPDF();
-        const pdfWidth = pdfDOC.internal.pageSize.getWidth();
-        const pdfHeight = pdfDOC.internal.pageSize.getHeight();
+    const canvas = await html2canvas(input!, { scale: 5 });
+    const imgData = canvas.toDataURL("image/jpeg");
+    const pdfDOC = new JsPDF();
+    const pdfWidth = pdfDOC.internal.pageSize.getWidth();
+    const pdfHeight = pdfDOC.internal.pageSize.getHeight();
+    const imgProps = pdfDOC.getImageProperties(imgData);
+    const imgWidth = imgProps.width;
+    const imgHeight = imgProps.height;
+    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+    const scaledWidth = imgWidth * ratio;
+    const scaledHeight = imgHeight * ratio;
+    pdfDOC.addImage(imgData, "JPEG", 0, 0, scaledWidth, scaledHeight);
 
-        // Get image properties
-        const imgProps = pdfDOC.getImageProperties(imgData);
-        const imgWidth = imgProps.width;
-        const imgHeight = imgProps.height;
+    // Save to DB
+    const pdfBlob = pdfDOC.output("blob");
+    await saveOrUpdateReceipt(pdfBlob, item._id!);
 
-        // Calculate scale factor to preserve aspect ratio
-        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-        const scaledWidth = imgWidth * ratio;
-        const scaledHeight = imgHeight * ratio;
-
-        pdfDOC.addImage(imgData, "JPEG", 0, 0, scaledWidth, scaledHeight);
-        pdfDOC.save(
-          `${contract.firstName}_${contract.lastName}_${contract.date}_receipt.pdf`,
-        );
-      },
+    pdfDOC.save(
+      `${contract.firstName}_${contract.lastName}_${contract.date}_receipt.pdf`,
     );
+
     document
       .querySelectorAll(
         ".forFlex input, .signature-field input, .value-div input",
       )
       .forEach((el) => {
-        if (el instanceof HTMLElement) {
-          el.style.backgroundColor = "#d5f7ff";
-        }
+        if (el instanceof HTMLElement) el.style.backgroundColor = "#d5f7ff";
       });
   };
 
