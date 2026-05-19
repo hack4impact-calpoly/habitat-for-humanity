@@ -14,7 +14,13 @@ import { format, parseISO } from "date-fns";
 import "./DonationTrackerGraph.css";
 
 type Timeframe = "7d" | "30d" | "quarter" | "ytd" | "1y";
-type ClusterBy = "day" | "2d" | "week" | "2w" | "month";
+
+type ClusterBy =
+  | "day"
+  | "2d"
+  | "week"
+  | "2w"
+  | "month";
 
 type DataPoint = {
   date: string;
@@ -35,14 +41,29 @@ const clusterOptions: ClusterOption[] = [
   { value: "month", label: "Month", days: 30 },
 ];
 
-const fullYearSampleData: DataPoint[] = createFullYearSampleData();
+function getISODateDaysAgo(daysAgo: number): string {
+  const now = new Date();
 
+  const date = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() - daysAgo
+  );
+
+  return date.toISOString().substring(0, 10);
+}
+
+// Generate one stable year of sample data.
 function createFullYearSampleData(): DataPoint[] {
   const chartData: DataPoint[] = [];
 
-  for (let num = 364; num >= 0; num--) {
+  for (
+    let daysAgo = 364;
+    daysAgo >= 0;
+    daysAgo--
+  ) {
     chartData.push({
-      date: getISODateDaysAgo(num),
+      date: getISODateDaysAgo(daysAgo),
       value: Math.floor(Math.random() * 50),
     });
   }
@@ -50,7 +71,25 @@ function createFullYearSampleData(): DataPoint[] {
   return chartData;
 }
 
-function getTotalDays(timeframe: Timeframe): number {
+function getDayOfYear(): number {
+  const now = new Date();
+
+  const startOfYear = new Date(
+    now.getFullYear(),
+    0,
+    1
+  );
+
+  const diff =
+    now.getTime() - startOfYear.getTime();
+
+  return Math.floor(diff / 86400000) + 1;
+}
+
+// Determine how much data to show.
+function getTotalDays(
+  timeframe: Timeframe
+): number {
   switch (timeframe) {
     case "7d":
       return 7;
@@ -69,7 +108,10 @@ function getTotalDays(timeframe: Timeframe): number {
   }
 }
 
-function getAllowedClusters(timeframe: Timeframe): ClusterOption[] {
+// Only show grouping options that make sense.
+function getAllowedClusters(
+  timeframe: Timeframe
+): ClusterOption[] {
   switch (timeframe) {
     case "7d":
       return clusterOptions.filter((option) =>
@@ -78,70 +120,79 @@ function getAllowedClusters(timeframe: Timeframe): ClusterOption[] {
 
     case "30d":
       return clusterOptions.filter((option) =>
-        ["day", "2d", "week", "2w"].includes(option.value)
+        ["day", "2d", "week", "2w"].includes(
+          option.value
+        )
       );
 
     case "quarter":
-      return clusterOptions.filter((option) =>
-        ["day", "2d", "week", "2w", "month"].includes(option.value)
-      );
+      return clusterOptions;
 
     case "ytd":
     case "1y":
       return clusterOptions.filter((option) =>
-        ["week", "2w", "month"].includes(option.value)
+        ["week", "2w", "month"].includes(
+          option.value
+        )
       );
   }
 }
 
-function getClusterDays(clusterBy: ClusterBy): number {
-  return clusterOptions.find((option) => option.value === clusterBy)?.days ?? 1;
+function getClusterDays(
+  clusterBy: ClusterBy
+): number {
+  return (
+    clusterOptions.find(
+      (option) => option.value === clusterBy
+    )?.days ?? 1
+  );
 }
 
-function getDayOfYear(): number {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  const diff = now.getTime() - start.getTime();
+// Adjust x-axis formatting based on timeframe.
+function getDateFormat(
+  timeframe: Timeframe,
+  clusterBy: ClusterBy
+): string {
+  if (timeframe === "7d") return "EEE";
 
-  return Math.floor(diff / 86400000);
-}
-
-function getDateFormat(timeframe: Timeframe, clusterBy: ClusterBy): string {
-  if (timeframe === "7d") {
-    return "EEE";
-  }
-
-  if (clusterBy === "month") {
-    return "MMM";
-  }
+  if (clusterBy === "month") return "MMM";
 
   return "M/d";
 }
 
-function getISODateDaysAgo(daysAgo: number): string {
-  const date = new Date();
-  date.setDate(date.getDate() - daysAgo);
-
-  return date.toISOString().substring(0, 10);
-}
-
-function getTimeframeData(timeframe: Timeframe): DataPoint[] {
+// Get only the data needed for the selected timeframe.
+function getTimeframeData(
+  fullData: DataPoint[],
+  timeframe: Timeframe
+): DataPoint[] {
   const totalDays = getTotalDays(timeframe);
 
-  return fullYearSampleData.slice(-totalDays);
+  return fullData.slice(-totalDays);
 }
 
-function clusterData(data: DataPoint[], clusterDays: number): DataPoint[] {
-  if (clusterDays === 1) {
-    return data;
-  }
+// Combine nearby data points into grouped totals.
+function clusterData(
+  data: DataPoint[],
+  clusterDays: number
+): DataPoint[] {
+  if (clusterDays === 1) return data;
 
   const clusteredData: DataPoint[] = [];
 
-  for (let index = 0; index < data.length; index += clusterDays) {
-    const group = data.slice(index, index + clusterDays);
+  for (
+    let index = 0;
+    index < data.length;
+    index += clusterDays
+  ) {
+    const group = data.slice(
+      index,
+      index + clusterDays
+    );
 
-    const total = group.reduce((sum, point) => sum + point.value, 0);
+    const total = group.reduce(
+      (sum, point) => sum + point.value,
+      0
+    );
 
     clusteredData.push({
       date: group[0].date,
@@ -152,60 +203,108 @@ function clusterData(data: DataPoint[], clusterDays: number): DataPoint[] {
   return clusteredData;
 }
 
-function roundUpToNearestFive(value: number): number {
-  if (value <= 0) {
-    return 5;
-  }
-
-  return Math.ceil(value / 5) * 5;
+// Round axis max to a clean multiple of 5.
+function roundUpToNearestFive(
+  value: number
+): number {
+  return Math.max(
+    5,
+    Math.ceil(value / 5) * 5
+  );
 }
 
-function getYAxisMax(data: DataPoint[]): number {
-  const highestValue = Math.max(...data.map((point) => point.value));
+function getYAxisMax(
+  data: DataPoint[]
+): number {
+  const highestValue = Math.max(
+    ...data.map((point) => point.value)
+  );
 
   return roundUpToNearestFive(highestValue);
 }
 
+// Create evenly spaced y-axis labels.
+function getYAxisTicks(
+  yAxisMax: number
+): number[] {
+  const step = yAxisMax / 5;
+
+  return [
+    0,
+    step,
+    step * 2,
+    step * 3,
+    step * 4,
+    yAxisMax,
+  ];
+}
+
 type ToolProps = {
   active?: boolean;
+
   payload?: {
     value: number;
   }[];
+
   label?: string;
 };
 
-function CustomToolTip({ active, payload, label }: ToolProps) {
-  if (!active || !payload?.length || !label) {
+function CustomToolTip({
+  active,
+  payload,
+  label,
+}: ToolProps) {
+  if (
+    !active ||
+    !payload?.length ||
+    !label
+  ) {
     return null;
   }
 
   return (
     <div className="tooltip">
-      <h4>{format(parseISO(label), "eeee, MMM d")}</h4>
-      <p>Donations Received: {payload[0].value}</p>
+      <h4>
+        {format(
+          parseISO(label),
+          "eeee, MMM d"
+        )}
+      </h4>
+
+      <p>
+        Donations Received:{" "}
+        {payload[0].value}
+      </p>
     </div>
   );
 }
 
 function ResponsiveGraph({
+  data,
   timeframe,
   clusterBy,
 }: {
+  data: DataPoint[];
+
   timeframe: Timeframe;
+
   clusterBy: ClusterBy;
 }) {
-  const clusterDays = getClusterDays(clusterBy);
-  const dateFormat = getDateFormat(timeframe, clusterBy);
+  const dateFormat = getDateFormat(
+    timeframe,
+    clusterBy
+  );
 
-  const data = useMemo(() => {
-    const timeframeData = getTimeframeData(timeframe);
-    return clusterData(timeframeData, clusterDays);
-  }, [timeframe, clusterDays]);
+  const yAxisMax = getYAxisMax(data);
 
-  const yAxisMax = useMemo(() => getYAxisMax(data), [data]);
+  const yAxisTicks =
+    getYAxisTicks(yAxisMax);
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer
+      width="100%"
+      height="100%"
+    >
       <AreaChart
         data={data}
         margin={{
@@ -216,40 +315,66 @@ function ResponsiveGraph({
         }}
       >
         <defs>
-          <linearGradient id="donationColor" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#4379ee" stopOpacity={0.35} />
-            <stop offset="75%" stopColor="#4379ee" stopOpacity={0.03} />
+          <linearGradient
+            id="donationColor"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="1"
+          >
+            <stop
+              offset="0%"
+              stopColor="#4379ee"
+              stopOpacity={0.35}
+            />
+
+            <stop
+              offset="75%"
+              stopColor="#4379ee"
+              stopOpacity={0.03}
+            />
           </linearGradient>
         </defs>
 
-        <CartesianGrid stroke="#e5e7eb" vertical={false} />
+        <CartesianGrid
+          stroke="#e5e7eb"
+          vertical={false}
+        />
 
         <XAxis
           dataKey="date"
           axisLine={false}
           tickLine={false}
           tickMargin={16}
-          tick={{ fill: "#9ca3af", fontSize: 14 }}
-          tickFormatter={(str) => format(parseISO(str), dateFormat)}
+          tick={{
+            fill: "#9ca3af",
+            fontSize: 14,
+          }}
+          tickFormatter={(str) =>
+            format(
+              parseISO(str),
+              dateFormat
+            )
+          }
         />
 
         <YAxis
           axisLine={false}
           tickLine={false}
-          tickCount={6}
           domain={[0, yAxisMax]}
-          ticks={[
-            0,
-            yAxisMax * 0.2,
-            yAxisMax * 0.4,
-            yAxisMax * 0.6,
-            yAxisMax * 0.8,
-            yAxisMax,
-          ]}
-          tick={{ fill: "#9ca3af", fontSize: 14 }}
+          ticks={yAxisTicks}
+          tick={{
+            fill: "#9ca3af",
+            fontSize: 14,
+          }}
+          tickFormatter={(value) =>
+            Math.round(value).toString()
+          }
         />
 
-        <Tooltip content={<CustomToolTip />} />
+        <Tooltip
+          content={<CustomToolTip />}
+        />
 
         <Area
           type="linear"
@@ -260,10 +385,10 @@ function ResponsiveGraph({
           dot={{
             r: 4,
             fill: "#4379ee",
-            fillOpacity: 1,
           }}
           activeDot={{
             r: 5,
+            fill: "#4379ee",
           }}
         />
       </AreaChart>
@@ -272,20 +397,62 @@ function ResponsiveGraph({
 }
 
 export default function DonationTrackerGraph() {
-  const [timeframe, setTimeframe] = useState<Timeframe>("7d");
-  const [clusterBy, setClusterBy] = useState<ClusterBy>("day");
+  const [timeframe, setTimeframe] =
+    useState<Timeframe>("7d");
 
-  const allowedClusters = getAllowedClusters(timeframe);
+  const [clusterBy, setClusterBy] =
+    useState<ClusterBy>("day");
 
+  // Create sample data once.
+  const fullYearSampleData = useMemo(
+    () => createFullYearSampleData(),
+    []
+  );
+
+  const allowedClusters = useMemo(
+    () => getAllowedClusters(timeframe),
+    [timeframe]
+  );
+
+  // Reset grouping if current option becomes invalid.
   useEffect(() => {
-    const isCurrentClusterAllowed = allowedClusters.some(
-      (option) => option.value === clusterBy
-    );
+    const isAllowed =
+      allowedClusters.some(
+        (option) =>
+          option.value === clusterBy
+      );
 
-    if (!isCurrentClusterAllowed) {
-      setClusterBy(allowedClusters[0].value);
+    if (!isAllowed) {
+      setClusterBy(
+        allowedClusters[0].value
+      );
     }
-  }, [timeframe, clusterBy, allowedClusters]);
+  }, [
+    timeframe,
+    clusterBy,
+    allowedClusters,
+  ]);
+
+  // Build the displayed chart data.
+  const chartData = useMemo(() => {
+    const timeframeData =
+      getTimeframeData(
+        fullYearSampleData,
+        timeframe
+      );
+
+    const clusterDays =
+      getClusterDays(clusterBy);
+
+    return clusterData(
+      timeframeData,
+      clusterDays
+    );
+  }, [
+    fullYearSampleData,
+    timeframe,
+    clusterBy,
+  ]);
 
   return (
     <div className="chart-card">
@@ -296,33 +463,65 @@ export default function DonationTrackerGraph() {
           <select
             className="filter-select"
             value={clusterBy}
-            onChange={(event) => setClusterBy(event.target.value as ClusterBy)}
+            onChange={(event) =>
+              setClusterBy(
+                event.target
+                  .value as ClusterBy
+              )
+            }
           >
-            {allowedClusters.map((option) => (
-              <option key={option.value} value={option.value}>
-                Group by {option.label}
-              </option>
-            ))}
+            {allowedClusters.map(
+              (option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                >
+                  Group by {option.label}
+                </option>
+              )
+            )}
           </select>
 
           <select
             className="filter-select"
             value={timeframe}
-            onChange={(event) => setTimeframe(event.target.value as Timeframe)}
+            onChange={(event) =>
+              setTimeframe(
+                event.target
+                  .value as Timeframe
+              )
+            }
           >
-            <option value="7d">Last 7 Days</option>
-            <option value="30d">Last 30 Days</option>
-            <option value="quarter">This Quarter</option>
-            <option value="ytd">Year to Date</option>
-            <option value="1y">Last 12 Months</option>
+            <option value="7d">
+              Last 7 Days
+            </option>
+
+            <option value="30d">
+              Last 30 Days
+            </option>
+
+            <option value="quarter">
+              This Quarter
+            </option>
+
+            <option value="ytd">
+              Year to Date
+            </option>
+
+            <option value="1y">
+              Last 12 Months
+            </option>
           </select>
         </div>
       </div>
 
       <div className="chart-wrapper">
-        <ResponsiveGraph timeframe={timeframe} clusterBy={clusterBy} />
+        <ResponsiveGraph
+          data={chartData}
+          timeframe={timeframe}
+          clusterBy={clusterBy}
+        />
       </div>
     </div>
   );
 }
-
