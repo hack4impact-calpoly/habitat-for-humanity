@@ -36,7 +36,7 @@ const handleExportCSV = async () => {
 
   const csvRows = [headers.join(",")];
 
-  completedItems.forEach((item) => {
+  completedItems.forEach((item: any) => {
     const row = [
       item.name,
       item.donorName ?? "",
