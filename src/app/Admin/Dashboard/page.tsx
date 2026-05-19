@@ -3,6 +3,7 @@
 import Image from "next/image";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar";
 import DonationDetails from "../../../components/admin/DonationDetails/DonationDetails";
+import DonationTrackerGraph from "../../../components/admin/DonationTrackerGraph/DonationTrackerGraph";
 import Items from "models/Items";
 import { getItemsByStatus, Item } from "api/item";
 import { getClerkUser, getUserByID } from "api/user";
@@ -215,12 +216,8 @@ export default function AdminDashboard() {
             <p style={styles.cardValue}>0</p>
           </div>
         </div>
-        {/* TODO: Replace placeholder donation graph and table*/}
         <div style={styles.section}>
-          <h3 style={styles.title}>Donation Tracker</h3>
-          <div style={styles.graphPlaceholder}>
-            Donation Tracker Graph Placeholder
-          </div>
+          <DonationTrackerGraph />
         </div>
         <div style={styles.section}>
           <DonationDetails />
