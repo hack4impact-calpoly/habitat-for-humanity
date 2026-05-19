@@ -28,6 +28,7 @@ import { getClerkUser, getUserByID } from "api/user";
 import { sendApproveEmail, sendReceiptEmail, sendRejectEmail } from "api/email";
 import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
+import { saveReceipt } from "api/receipt";
 
 require("../../../../App.css");
 
@@ -113,7 +114,7 @@ const sendApprovalEmail = async (
   donor: any,
   notes: string,
   timeSlots: TimeSlot[],
-  type: string
+  type: string,
 ) => {
   try {
     await sendApproveEmail({
@@ -185,12 +186,7 @@ function DonationInfoPage() {
       const success = await sendUpdatedItemToDB("Approved and Scheduled", true);
 
       if (success && donor && donor.email) {
-        await sendApprovalEmail(
-          donor,
-          notes,
-          storedTimeSlots,
-          item.scheduling
-        );
+        await sendApprovalEmail(donor, notes, storedTimeSlots, item.scheduling);
       }
 
       await router.push(nextPath);
@@ -250,21 +246,23 @@ function DonationInfoPage() {
     const pdfBlob = pdfDOC.output("blob");
 
     try {
-      await sendReceiptEmail({
-        to: donor.email,
-        donationDetails: {
-          name: donor.firstName,
-          phone: "(805) 546-8699",
-          contactEmail: "restoreslo@habitatslo.org",
-          officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
-          officeHours: "Tuesday - Saturday, 10AM - 5PM",
-          website: "https://www.habitatslo.org",
-        },
-        receipt: pdfBlob,
-      });
+      await Promise.all([
+        sendReceiptEmail({
+          to: donor.email,
+          donationDetails: {
+            name: donor.firstName,
+            phone: "(805) 546-8699",
+            contactEmail: "restoreslo@habitatslo.org",
+            officeLocation: "2790 Broad St, San Luis Obispo, CA 93401",
+            officeHours: "Tuesday - Saturday, 10AM - 5PM",
+            website: "https://www.habitatslo.org",
+          },
+          receipt: pdfBlob,
+        }),
+        saveReceipt(pdfBlob, item._id!),
+      ]);
       setSuccessMessage("Receipt sent!");
-      setErrorMessage(""); // Clear any previous errors
-      // Auto-clear success message after 5 seconds
+      setErrorMessage("");
       setTimeout(() => setSuccessMessage(""), 5000);
     } catch (err) {
       console.error("Failed to send receipt", err);

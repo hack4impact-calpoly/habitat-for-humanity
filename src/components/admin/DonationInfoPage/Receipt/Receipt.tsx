@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Item } from "api/item";
+import { Item, updateItem } from "api/item";
 import { User } from "api/user";
 import { Event } from "api/event";
 import Image from "next/image";
@@ -48,7 +48,14 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
     }));
   }, [props]);
 
-  const exportPdf = (id: string) => {
+  const exportPdf = async (id: string) => {
+    if (contract.value !== item.estimatedValue) {
+      await updateItem({
+        ...item,
+        estimatedValue: contract.value,
+      });
+    }
+
     const input = document.getElementById(id);
     document
       .querySelectorAll(
