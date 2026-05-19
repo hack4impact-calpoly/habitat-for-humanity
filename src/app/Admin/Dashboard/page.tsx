@@ -1,6 +1,7 @@
 import Image from "next/image";
 import AdminNavbar from "../../../components/admin/AdminNavbar/AdminNavbar"
 import DonationDetails from "../../../components/admin/DonationDetails/DonationDetails";
+import DonationTrackerGraph from "../../../components/admin/DonationTrackerGraph/DonationTrackerGraph";
 
 export default function AdminDashboard(){
     return(
@@ -39,12 +40,15 @@ export default function AdminDashboard(){
             <p style={styles.cardValue}>0</p>
         </div>
         </div>
-        {/* TODO: Replace placeholder donation graph and table*/}
+        {/* TODO: Replace placeholder donation graph and table
         <div style={styles.section}>
             <h3 style={styles.title}>Donation Tracker</h3>
         <div style={styles.graphPlaceholder}>
         Donation Tracker Graph Placeholder
         </div>
+        </div> */}
+        <div style={styles.section}>
+          <DonationTrackerGraph />
         </div>
         <div style={styles.section}>
           <DonationDetails />
