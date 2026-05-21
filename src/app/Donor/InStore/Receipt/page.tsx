@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useRef, useEffect } from "react";
+import React, { Suspense, useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -114,7 +114,7 @@ interface DonatedItem {
 
 function ReceiptContent(): React.ReactNode {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const [countdown, setCountdown] = useState<number>(10);
 
   // 1. Single selector call for all donor data
   const donorState = useSelector((state: RootState) => state.inStoreDonor);
@@ -280,6 +280,22 @@ function ReceiptContent(): React.ReactNode {
     return () => clearTimeout(timer);
   }, [email, categories]);
 
+  // Effect 1: tick the countdown down every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Effect 2: redirect when countdown hits 0
+  useEffect(() => {
+    if (countdown === 0) {
+      router.push("/Donor/InStore/Donate");
+    }
+  }, [countdown]);
+
   return (
     <>
       <div id="receiptPage" style={styles.page}>
@@ -334,7 +350,16 @@ function ReceiptContent(): React.ReactNode {
             </div>
 
             <p style={styles.receiptNotice}>Receipt sent to {email}</p>
-
+            <p
+              style={{
+                ...styles.receiptNotice,
+                color: "#666",
+                fontSize: "14px",
+              }}
+            >
+              Redirecting to homepage in {countdown} second
+              {countdown !== 1 ? "s" : ""}...
+            </p>
             <div style={styles.buttonWrapper}>
               <button
                 type="button"

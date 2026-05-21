@@ -81,6 +81,8 @@ function InStoreDonatePage(): React.ReactNode {
   const [categoriesError, setCategoriesError] = useState<string>("");
   const [estimatedValueError, setEstimatedValueError] = useState<string>("");
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const toggleCategory = (category: string) => {
     setCategories((prev) =>
       prev.includes(category)
@@ -156,33 +158,38 @@ function InStoreDonatePage(): React.ReactNode {
 
   const handleSubmit = async () => {
     if (validInput()) {
+      setIsSubmitting(true);
       updateStore();
-      const itemId = await addItem({
-        name: categories,
-        size: [],
-        images: [],
-        address,
-        city,
-        state,
-        zipCode,
-        scheduling: "InStore",
-        timeAvailability: [],
-        timeSubmitted: new Date(),
-        status: "Completed",
-        donorId: "",
-        donorName: name,
-        donorEmail: email,
-        donorPhone: phone,
-        estimatedValue,
-        itemDetails,
-      });
-      if (itemId) {
-        dispatch(updateInStoreItemId(itemId));
-        router.replace("/Donor/InStore/Receipt");
-      } else {
-        alert(
-          "Something went wrong submitting your donation. Please try again.",
-        );
+      try {
+        const itemId = await addItem({
+          name: categories,
+          size: [],
+          images: [],
+          address,
+          city,
+          state,
+          zipCode,
+          scheduling: "InStore",
+          timeAvailability: [],
+          timeSubmitted: new Date(),
+          status: "Completed",
+          donorId: "",
+          donorName: name,
+          donorEmail: email,
+          donorPhone: phone,
+          estimatedValue,
+          itemDetails,
+        });
+        if (itemId) {
+          dispatch(updateInStoreItemId(itemId));
+          router.replace("/Donor/InStore/Receipt");
+        } else {
+          alert(
+            "Something went wrong submitting your donation. Please try again.",
+          );
+        }
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -434,10 +441,11 @@ function InStoreDonatePage(): React.ReactNode {
         <button
           type="button"
           onClick={handleSubmit}
+          disabled={isSubmitting}
           style={{
             width: "100%",
             height: isTablet ? "48px" : "29.32px",
-            background: "#005B99",
+            background: isSubmitting ? "#3A8FC7" : "#005B99",
             border: "none",
             borderRadius: "12px",
             color: "#FFFFFF",
@@ -445,10 +453,30 @@ function InStoreDonatePage(): React.ReactNode {
             fontWeight: 600,
             fontSize: isTablet ? "18px" : "13.89px",
             letterSpacing: "-0.34px",
-            cursor: "pointer",
+            cursor: isSubmitting ? "not-allowed" : "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+            transition: "background 0.2s",
+            opacity: isSubmitting ? 0.85 : 1,
           }}
         >
-          Submit Form
+          {isSubmitting && (
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              style={{ animation: "spin 0.75s linear infinite" }}
+            >
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+            </svg>
+          )}
+          {isSubmitting ? "Submitting..." : "Submit Form"}
         </button>
       </div>
     </div>
