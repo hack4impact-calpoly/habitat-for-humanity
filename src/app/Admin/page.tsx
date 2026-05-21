@@ -7,7 +7,7 @@ export default function RedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/Admin/ActiveDonations");
+    router.replace("/Admin/Dashboard");
   }, []);
 
   return <></>;
