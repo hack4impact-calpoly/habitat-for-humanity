@@ -27,6 +27,9 @@ export async function GET(req: Request, { params }: IParams) {
       case "history":
         statuses = ["Completed", "Rejected"];
         break;
+       case "Completed":
+        statuses = ["Completed"];
+        break;
       default:
         statuses = [];
     }

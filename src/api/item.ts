@@ -85,8 +85,8 @@ export interface Item {
   itemDetails?: string;
 }
 
-// Add a new Item to Item DB
-export const addItem = async (item: Item) =>
+// Add a new Item to Item DB; returns created item ID string or null on failure
+export const addItem = async (item: Item): Promise<string | null> =>
   fetch(nextURL, {
     headers: {
       "Content-Type": "application/json",
@@ -115,14 +115,13 @@ export const addItem = async (item: Item) =>
     .then(async (res) => {
       const response = await res.json();
       if (!res.ok) {
-        // check server response
-        return false;
+        return null;
       }
-      return true;
+      return response.itemId as string;
     })
     .catch((error) => {
       console.error("Error: ", error);
-      return false;
+      return null;
     });
 
 // Update Item
@@ -134,18 +133,24 @@ export const updateItem = async (item: Item) =>
     },
     body: JSON.stringify({
       name: item.name,
+      images: item.images,
       size: item.size,
       address: item.address,
       city: item.city,
+      state: item.state,
       zipCode: item.zipCode,
       scheduling: item.scheduling,
       timeAvailability: item.timeAvailability,
+      donorId: item.donorId,
       timeSubmitted: item.timeSubmitted,
       timeApproved: item.timeApproved,
       status: item.status,
-      donorId: item.donorId,
       notes: item.notes,
-      images: item.images,
+      donorName: item.donorName,
+      donorEmail: item.donorEmail,
+      donorPhone: item.donorPhone,
+      estimatedValue: item.estimatedValue,
+      itemDetails: item.itemDetails,
     }),
   })
     .then(async (res) => {

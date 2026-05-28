@@ -194,6 +194,12 @@ function DonationInfoTab(props: InfoTabProps): React.ReactNode {
           <b>Item Dimensions: </b>
           {item.size.join(", ")}
         </p>
+        {item.itemDetails && (
+          <p id="itemDetails">
+            <b>Item Details: </b>
+            {item.itemDetails}
+          </p>
+        )}
         <p id="itemPhotos">
           <b>Item Photos</b>
         </p>

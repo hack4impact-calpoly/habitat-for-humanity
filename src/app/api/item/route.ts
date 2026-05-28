@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     await connect();
     const newItem = new Items(item);
     await newItem.save();
-    return NextResponse.json({ msg: `${newItem} added` }, { status: 200 });
+    return NextResponse.json({ itemId: newItem._id.toString() }, { status: 200 });
   } catch (err) {
     console.error("[ITEM_POST_ERROR]", err);
     return NextResponse.json({ error: "Failed to post item" }, { status: 400 });

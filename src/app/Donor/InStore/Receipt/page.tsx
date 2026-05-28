@@ -1,10 +1,17 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
+import { sendReceiptEmail } from "api/email";
+import { saveReceipt } from "api/receipt";
+import html2canvas from "html2canvas";
+import JsPDF from "jspdf";
+import Receipt from "components/admin/DonationInfoPage/Receipt/Receipt";
+import { User } from "api/user";
+import { Item } from "api/item";
 
 const styles = {
   page: {
@@ -290,58 +297,94 @@ function ReceiptContent(): React.ReactNode {
   }, [countdown]);
 
   return (
-    <div style={styles.page}>
-      <div style={styles.cardWrapper}>
-      <div style={styles.card}>
+    <>
+      <div id="receiptPage" style={styles.page}>
+        <div style={styles.cardWrapper}>
+          <div style={styles.card}>
+            <h1 style={styles.heading}>Donation Complete!</h1>
 
-        <h1 style={styles.heading}>Donation Complete!</h1>
+            <hr style={styles.divider} />
 
-        <hr style={styles.divider} />
-
-        {/* Items */}
-        <div style={styles.section}>
-          <h2 style={styles.sectionHeading}>Items</h2>
-          {categories.map((item, idx) => (
-            <div key={idx} style={styles.itemRow}>
-              <span style={styles.itemText}>{item}</span>
+            {/* Items */}
+            <div style={styles.section}>
+              <h2 style={styles.sectionHeading}>Items</h2>
+              {categories.map((item, idx) => (
+                <div key={idx} style={styles.itemRow}>
+                  <span style={styles.itemText}>{item}</span>
+                </div>
+              ))}
+              {itemDetails && (
+                <p
+                  style={{
+                    ...styles.bodyText,
+                    fontSize: "16px",
+                    color: "#444",
+                    marginTop: "8px",
+                  }}
+                >
+                  {itemDetails}
+                </p>
+              )}
             </div>
-          ))}
+
+            <hr style={styles.divider} />
+
+            {/* Estimated Value */}
+            <div style={styles.section}>
+              <h2 style={styles.sectionHeading}>Estimated Value</h2>
+              <p style={styles.bodyText}>${estimatedValue}</p>
+            </div>
+
+            <hr style={styles.divider} />
+
+            {/* Contact */}
+            <div style={styles.section}>
+              <h2 style={styles.sectionHeading}>Contact</h2>
+              <p style={styles.bodyText}>
+                {name}
+                <br />
+                {phone}
+                <br />
+                {email}
+              </p>
+            </div>
+
+            <p style={styles.receiptNotice}>Receipt sent to {email}</p>
+            <p
+              style={{
+                ...styles.receiptNotice,
+                color: "#666",
+                fontSize: "14px",
+              }}
+            >
+              Redirecting to homepage in {countdown} second
+              {countdown !== 1 ? "s" : ""}...
+            </p>
+            <div style={styles.buttonWrapper}>
+              <button
+                type="button"
+                style={styles.button}
+                onClick={() => router.push("/Donor/InStore/Donate")}
+              >
+                Return to Homepage
+              </button>
+            </div>
+          </div>
+          <div style={styles.zigzag} />
         </div>
-
-        <hr style={styles.divider} />
-
-        {/* Estimated Value */}
-        <div style={styles.section}>
-          <h2 style={styles.sectionHeading}>Estimated Value</h2>
-          <p style={styles.bodyText}>
-            ${estimatedValue}
-          </p>
-        </div>
-
-        <hr style = {styles.divider} />
-
-        {/* Contact */}
-        <div style={styles.section}>
-          <h2 style={styles.sectionHeading}>Contact</h2>
-          <p style={styles.bodyText}>
-            {name}<br />
-            {phone}<br />
-            {email}
-          </p>
-        </div>
-
-        <p style={styles.receiptNotice}>Receipt sent to {email}</p>
-
-        <div style={styles.buttonWrapper}>
-          <button type="button" style={styles.button} onClick={() => router.push("/Donor/InStore/Donate")}>
-            Return to Homepage
-          </button>
-        </div>
-
       </div>
-      <div style={styles.zigzag} />
+      <div
+        id="formalReceiptCapture"
+        style={{
+          position: "absolute",
+          top: "-9999px",
+          left: "-9999px",
+          width: "1190px",
+        }}
+      >
+        <Receipt donor={donorUser} item={donatedItem} events={[]} />
       </div>
-    </div>
+    </>
   );
 }
 

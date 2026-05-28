@@ -12,6 +12,7 @@ export interface InStoreDonorState {
   categories: string[];
   itemDetails: string;
   estimatedValue: string;
+  itemId: string;
 }
 
 const initialState: InStoreDonorState = {
@@ -25,6 +26,7 @@ const initialState: InStoreDonorState = {
   categories: [],
   itemDetails: "",
   estimatedValue: "",
+  itemId: "",
 };
 
 export const inStoreDonorSlice = createSlice({
@@ -61,6 +63,9 @@ export const inStoreDonorSlice = createSlice({
     updateInStoreEstimatedValue: (state, action) => {
       state.estimatedValue = action.payload;
     },
+    updateInStoreItemId: (state, action) => {
+      state.itemId = action.payload;
+    },
     clearInStoreAll: () => {
       storage.removeItem("persist:inStoreDonor");
       return initialState;
@@ -79,6 +84,7 @@ export const {
   updateInStoreCategories,
   updateInStoreItemDetails,
   updateInStoreEstimatedValue,
+  updateInStoreItemId,
   clearInStoreAll,
 } = inStoreDonorSlice.actions;
 

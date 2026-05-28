@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Item } from "api/item";
+import { Item, updateItem } from "api/item";
 import { User } from "api/user";
 import { Event } from "api/event";
 import Image from "next/image";
 import html2canvas from "html2canvas";
 import JsPDF from "jspdf";
 import moment from "moment";
+import { saveOrUpdateReceipt } from "api/receipt";
 require("../../../../App.css");
 
 interface ReceiptTabProps {
@@ -28,7 +29,8 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
     cell: "",
     email: donor?.email ?? "",
     donatedItems: item?.name.join(", ") ?? "",
-    value: "",
+    itemDetails: item?.itemDetails ?? "",
+    value: item?.estimatedValue ?? "",
     signature: "",
     date: moment().format("MM/DD/YYYY"),
   });
@@ -44,52 +46,55 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
       address: item?.address ?? "",
       cityStateZipcode: fullZip ?? "",
       donatedItems: item?.name.join(", ") ?? "",
+      itemDetails: item?.itemDetails ?? "",
+      value: item?.estimatedValue ?? "",
     }));
   }, [props]);
 
-  const exportPdf = (id: string) => {
+  const exportPdf = async (id: string) => {
+    if (contract.value !== item.estimatedValue) {
+      await updateItem({
+        ...item,
+        estimatedValue: contract.value,
+      });
+    }
+
     const input = document.getElementById(id);
     document
       .querySelectorAll(
         ".forFlex input, .signature-field input, .value-div input",
       )
       .forEach((el) => {
-        if (el instanceof HTMLElement) {
-          el.style.backgroundColor = "transparent";
-        }
+        if (el instanceof HTMLElement) el.style.backgroundColor = "transparent";
       });
-    html2canvas(input!, { scale: 5 }).then(
-      (canvas: { toDataURL: (arg0: string) => any }) => {
-        const imgData = canvas.toDataURL("image/jpeg");
 
-        const pdfDOC = new JsPDF();
-        const pdfWidth = pdfDOC.internal.pageSize.getWidth();
-        const pdfHeight = pdfDOC.internal.pageSize.getHeight();
+    const canvas = await html2canvas(input!, { scale: 5 });
+    const imgData = canvas.toDataURL("image/jpeg");
+    const pdfDOC = new JsPDF();
+    const pdfWidth = pdfDOC.internal.pageSize.getWidth();
+    const pdfHeight = pdfDOC.internal.pageSize.getHeight();
+    const imgProps = pdfDOC.getImageProperties(imgData);
+    const imgWidth = imgProps.width;
+    const imgHeight = imgProps.height;
+    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+    const scaledWidth = imgWidth * ratio;
+    const scaledHeight = imgHeight * ratio;
+    pdfDOC.addImage(imgData, "JPEG", 0, 0, scaledWidth, scaledHeight);
 
-        // Get image properties
-        const imgProps = pdfDOC.getImageProperties(imgData);
-        const imgWidth = imgProps.width;
-        const imgHeight = imgProps.height;
+    // Save to DB
+    const pdfBlob = pdfDOC.output("blob");
+    await saveOrUpdateReceipt(pdfBlob, item._id!);
 
-        // Calculate scale factor to preserve aspect ratio
-        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-        const scaledWidth = imgWidth * ratio;
-        const scaledHeight = imgHeight * ratio;
-
-        pdfDOC.addImage(imgData, "JPEG", 0, 0, scaledWidth, scaledHeight);
-        pdfDOC.save(
-          `${contract.firstName}_${contract.lastName}_${contract.date}_receipt.pdf`,
-        );
-      },
+    pdfDOC.save(
+      `${contract.firstName}_${contract.lastName}_${contract.date}_receipt.pdf`,
     );
+
     document
       .querySelectorAll(
         ".forFlex input, .signature-field input, .value-div input",
       )
       .forEach((el) => {
-        if (el instanceof HTMLElement) {
-          el.style.backgroundColor = "#d5f7ff";
-        }
+        if (el instanceof HTMLElement) el.style.backgroundColor = "#d5f7ff";
       });
   };
 
@@ -261,6 +266,20 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
                       setContract((prevContract) => ({
                         ...prevContract,
                         donatedItems: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <h2>Item Details</h2>
+                <div className="form-field">
+                  <textarea
+                    rows={4}
+                    style={{ width: "100%", padding: "0.5rem", resize: "none" }}
+                    value={contract.itemDetails}
+                    onChange={(event) =>
+                      setContract((prevContract) => ({
+                        ...prevContract,
+                        itemDetails: event.target.value,
                       }))
                     }
                   />
