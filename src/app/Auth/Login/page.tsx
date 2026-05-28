@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-//import { CognitoUser } from "amazon-cognito-identity-js";
 
 import VisibilityIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
@@ -28,10 +27,9 @@ function LoginPage(): React.ReactNode {
 
   const forgotPasswordPath = "/Auth/ForgotPassword";
   const createAccountPath = "/Auth/CreateAccount";
-  const verifyAccountPath: string = "/VerifyAccountPage";
 
   const login = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // This safely kills the default mobile/browser reload
     if (!isLoaded) return;
     const valid = checkCredentials();
     if (valid) {
@@ -48,10 +46,7 @@ function LoginPage(): React.ReactNode {
           console.error(JSON.stringify(signInAttempt, null, 2));
         }
       } catch (err: any) {
-        // See https://clerk.com/docs/custom-flows/error-handling
-        // for more info on error handling
         console.error(JSON.stringify(err, null, 2));
-          // Check for specific error related to email not found
         if (err.errors?.some((e: any) => e.code === 'form_identifier_not_found')) {
           setEmailError('Couldn\'t find your account, please create an account')
         } else if (err.errors?.some((e: any) => e.code === 'form_password_incorrect')) {
@@ -60,8 +55,8 @@ function LoginPage(): React.ReactNode {
       }
     }
   };
+
   const checkCredentials = (): boolean => {
-    // reset error messages
     setEmailError("");
     setPasswordError("");
     let noErrors = true;
@@ -76,15 +71,14 @@ function LoginPage(): React.ReactNode {
     if (password.value === "") {
       setPasswordError("Please enter your password");
       noErrors = false;
-    } // check other invalid errors
+    }
     return noErrors;
-    // if no errors/valid login -> redirect to logged in page
   };
 
   return (
     <div id="loginBox">
       <img src="/images/ReStoreLogo.png" alt="logo" id="loginLogo" />
-      <form id="loginForm">
+      <form id="loginForm" onSubmit={login}>
         <p className="loginLabel">Email</p>
         <input
           className="loginInput"
@@ -133,10 +127,11 @@ function LoginPage(): React.ReactNode {
           }
         />
         <div className="inputError">{passwordError}</div>
-        <button type="button" id="loginSubmit" onClick={login}>
+        <button type="submit" id="loginSubmit">
           Log In
         </button>
       </form>
+      
       <div style={styles.createAccountText}>
         <p className="loginCreateAccount">{`Don't have an account? `}</p>
         <Link
