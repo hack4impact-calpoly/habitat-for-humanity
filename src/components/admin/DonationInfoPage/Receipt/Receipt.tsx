@@ -115,6 +115,9 @@ function Receipt(props: ReceiptTabProps): React.ReactNode {
               <div className="logo-input">
                 <div className="header">
                   <h1>Donation Receipt</h1>
+                  <h3 style={{ margin: "0 0 15px 0", color: "#555555", fontWeight: "normal" }}>
+                    Federal Tax ID #77-0434147
+                  </h3>
                 </div>
                 <div className="forFlex">
                   <div style={{ display: "flex", flex: 1 }}>
